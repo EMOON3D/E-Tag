@@ -255,8 +255,6 @@ button:active {
 
 <div class="container">
 
-<!-- BRAND -->
-
 <div class="logo">
 E-Tag
 </div>
@@ -1347,116 +1345,124 @@ div
 
 /* =========================================
    GET TAG FROM URL
+   FIXED:
+   Removes query parameters such as
+   ?utm_source=chatgpt.com
 ========================================= */
 
 function getTagCode() {
 
-const path =
-window.location.pathname;
+  const path =
+    window.location.pathname;
 
 
-/*
-DIRECT:
+  /*
+   * DIRECT URL
+   *
+   * /E-Tag/id/ABX729
+   */
 
-/E-Tag/id/ABX729
-*/
+  const marker =
+    "/E-Tag/id/";
 
-const marker =
-"/E-Tag/id/";
+  const position =
+    path.indexOf(marker);
 
-const position =
-path.indexOf(
-marker
-);
+  if (position !== -1) {
 
-if (position !== -1) {
+    let code =
+      path.substring(
+        position + marker.length
+      );
 
-let code =
-path.substring(
-position +
-marker.length
-);
+    code =
+      code
+        .split("/")[0]
+        .split("?")[0]
+        .trim();
 
-code =
-code.split("/")[0];
+    if (code) {
 
-if (code) {
+      return decodeURIComponent(
+        code
+      );
 
-return decodeURIComponent(
-code
-);
+    }
 
-}
-
-}
+  }
 
 
-/*
-404 REDIRECT:
+  /*
+   * 404 REDIRECT
+   *
+   * /E-Tag/?route=%2FE-Tag%2Fid%2FABX729
+   */
 
-/E-Tag/?route=%2FE-Tag%2Fid%2FABX729
-*/
+  const params =
+    new URLSearchParams(
+      window.location.search
+    );
 
-const params =
-new URLSearchParams(
-window.location.search
-);
+  const route =
+    params.get("route");
 
-const route =
-params.get("route");
+  if (route) {
 
-if (route) {
+    let decoded;
 
-let decoded;
+    try {
 
-try {
+      decoded =
+        decodeURIComponent(
+          route
+        );
 
-decoded =
-decodeURIComponent(
-route
-);
+    } catch {
 
-} catch {
+      decoded =
+        route;
 
-decoded =
-route;
+    }
 
-}
 
-const routeMarker =
-"/E-Tag/id/";
+    const routeMarker =
+      "/E-Tag/id/";
 
-const routePosition =
-decoded.indexOf(
-routeMarker
-);
+    const routePosition =
+      decoded.indexOf(
+        routeMarker
+      );
 
-if (
-routePosition !== -1
-) {
+    if (
+      routePosition !== -1
+    ) {
 
-let code =
-decoded.substring(
-routePosition +
-routeMarker.length
-);
+      let code =
+        decoded.substring(
+          routePosition +
+          routeMarker.length
+        );
 
-code =
-code.split("/")[0];
+      code =
+        code
+          .split("/")[0]
+          .split("?")[0]
+          .trim();
 
-if (code) {
+      if (code) {
 
-return decodeURIComponent(
-code
-);
+        return decodeURIComponent(
+          code
+        );
 
-}
+      }
 
-}
+    }
 
-}
+  }
 
-return null;
+
+  return null;
 
 }
 
@@ -1512,10 +1518,7 @@ tagCode;
 
 /*
 IMPORTANT:
-
-Do NOT use maybeSingle here.
-
-First get the rows.
+Only the cleaned tag code reaches this query.
 */
 
 const {
@@ -1531,6 +1534,7 @@ await supabase
 "tag_code",
 tagCode
 );
+
 
 document
 .getElementById("publicLoading")
