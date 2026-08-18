@@ -1,1 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>E-Tag</title>
+  <script>
+    const path = window.location.pathname;
+    const query = window.location.search;
+    const hash = window.location.hash;
 
+    window.location.replace(
+      "/E-Tag/" +
+      "?route=" +
+      encodeURIComponent(path) +
+      encodeURIComponent(query) +
+      encodeURIComponent(hash)
+    );
+  </script>
+</head>
+
+<body>
+  Loading E-Tag...
+</body>
+</html>
