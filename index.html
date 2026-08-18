@@ -4,7 +4,6 @@
 <head>
 
 <meta charset="UTF-8">
-
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>E-Tag | Mini Digital Identity</title>
@@ -68,8 +67,7 @@ label {
 }
 
 input,
-textarea,
-select {
+textarea {
   width: 100%;
   padding: 13px;
   border: 1px solid #d1d5db;
@@ -84,8 +82,7 @@ textarea {
 }
 
 input:focus,
-textarea:focus,
-select:focus {
+textarea:focus {
   border-color: #111827;
 }
 
@@ -238,15 +235,6 @@ button:active {
   font-weight: 700;
 }
 
-.debug {
-  margin-top: 15px;
-  padding: 10px;
-  background: #f3f4f6;
-  border-radius: 8px;
-  font-size: 12px;
-  word-break: break-all;
-}
-
 </style>
 
 </head>
@@ -264,9 +252,7 @@ Your Mini Digital Identity
 </div>
 
 
-<!-- ======================================
-     LOGIN
-====================================== -->
+<!-- LOGIN -->
 
 <section id="loginSection" class="card">
 
@@ -274,9 +260,7 @@ Your Mini Digital Identity
 Welcome back
 </h2>
 
-<label>
-Email
-</label>
+<label>Email</label>
 
 <input
 id="loginEmail"
@@ -284,9 +268,7 @@ type="email"
 placeholder="you@example.com"
 >
 
-<label>
-Password
-</label>
+<label>Password</label>
 
 <input
 id="loginPassword"
@@ -313,9 +295,7 @@ Create an E-Tag account
 </section>
 
 
-<!-- ======================================
-     SIGNUP
-====================================== -->
+<!-- SIGNUP -->
 
 <section
 id="signupSection"
@@ -326,9 +306,7 @@ class="card hidden"
 Create your E-Tag account
 </h2>
 
-<label>
-Email
-</label>
+<label>Email</label>
 
 <input
 id="signupEmail"
@@ -336,9 +314,7 @@ type="email"
 placeholder="you@example.com"
 >
 
-<label>
-Password
-</label>
+<label>Password</label>
 
 <input
 id="signupPassword"
@@ -365,9 +341,7 @@ Already have an account? Login
 </section>
 
 
-<!-- ======================================
-     EMAIL CONFIRMATION
-====================================== -->
+<!-- EMAIL CONFIRMATION -->
 
 <section
 id="confirmationSection"
@@ -397,9 +371,7 @@ Please confirm your email before logging in.
 </section>
 
 
-<!-- ======================================
-     DASHBOARD
-====================================== -->
+<!-- DASHBOARD -->
 
 <section
 id="dashboardSection"
@@ -431,9 +403,7 @@ Your digital identity
 My Digital Identity
 </h2>
 
-<label>
-Name
-</label>
+<label>Name</label>
 
 <input
 id="displayName"
@@ -441,18 +411,14 @@ type="text"
 placeholder="Your name"
 >
 
-<label>
-Bio
-</label>
+<label>Bio</label>
 
 <textarea
 id="bio"
 placeholder="Tell people about yourself"
 ></textarea>
 
-<label>
-Phone
-</label>
+<label>Phone</label>
 
 <input
 id="phone"
@@ -460,9 +426,7 @@ type="tel"
 placeholder="+94..."
 >
 
-<label>
-WhatsApp
-</label>
+<label>WhatsApp</label>
 
 <input
 id="whatsapp"
@@ -470,9 +434,7 @@ type="tel"
 placeholder="+94..."
 >
 
-<label>
-Public Email
-</label>
+<label>Public Email</label>
 
 <input
 id="publicEmail"
@@ -519,9 +481,7 @@ Logout
 </section>
 
 
-<!-- ======================================
-     PUBLIC TAG
-====================================== -->
+<!-- PUBLIC TAG -->
 
 <section
 id="publicTagSection"
@@ -530,9 +490,7 @@ class="hidden"
 
 <div class="card">
 
-<div
-id="publicLoading"
->
+<div id="publicLoading">
 Loading E-Tag...
 </div>
 
@@ -619,23 +577,12 @@ class="hidden"
 
 </div>
 
-
-<!-- DEBUG -->
-
-<div
-id="debugBox"
-class="debug hidden"
->
-</div>
-
 </div>
 
 </section>
 
 
-<!-- ======================================
-     NOT FOUND
-====================================== -->
+<!-- NOT FOUND -->
 
 <section
 id="notFoundSection"
@@ -664,18 +611,10 @@ style="display:block;"
 
 <script type="module">
 
-/* =========================================
-   SUPABASE
-========================================= */
-
 import {
   supabase
 } from "./supabase.js";
 
-
-/* =========================================
-   SITE URL
-========================================= */
 
 const SITE_URL =
 "https://emoon3d.github.io/E-Tag/";
@@ -686,53 +625,41 @@ const SITE_URL =
 ========================================= */
 
 const loginSection =
-document.getElementById(
-"loginSection"
-);
+document.getElementById("loginSection");
 
 const signupSection =
-document.getElementById(
-"signupSection"
-);
+document.getElementById("signupSection");
 
 const confirmationSection =
-document.getElementById(
-"confirmationSection"
-);
+document.getElementById("confirmationSection");
 
 const dashboardSection =
-document.getElementById(
-"dashboardSection"
-);
+document.getElementById("dashboardSection");
 
 const publicTagSection =
-document.getElementById(
-"publicTagSection"
-);
+document.getElementById("publicTagSection");
 
 const notFoundSection =
-document.getElementById(
-"notFoundSection"
-);
+document.getElementById("notFoundSection");
 
 
 /* =========================================
-   HIDE EVERYTHING
+   HIDE ALL
 ========================================= */
 
 function hideAll() {
 
-loginSection.classList.add("hidden");
+  loginSection.classList.add("hidden");
 
-signupSection.classList.add("hidden");
+  signupSection.classList.add("hidden");
 
-confirmationSection.classList.add("hidden");
+  confirmationSection.classList.add("hidden");
 
-dashboardSection.classList.add("hidden");
+  dashboardSection.classList.add("hidden");
 
-publicTagSection.classList.add("hidden");
+  publicTagSection.classList.add("hidden");
 
-notFoundSection.classList.add("hidden");
+  notFoundSection.classList.add("hidden");
 
 }
 
@@ -743,11 +670,9 @@ notFoundSection.classList.add("hidden");
 
 function showLogin() {
 
-hideAll();
+  hideAll();
 
-loginSection.classList.remove(
-"hidden"
-);
+  loginSection.classList.remove("hidden");
 
 }
 
@@ -758,11 +683,9 @@ loginSection.classList.remove(
 
 function showSignup() {
 
-hideAll();
+  hideAll();
 
-signupSection.classList.remove(
-"hidden"
-);
+  signupSection.classList.remove("hidden");
 
 }
 
@@ -772,28 +695,28 @@ signupSection.classList.remove(
 ========================================= */
 
 function showMessage(
-id,
-text,
-type = ""
+  id,
+  text,
+  type = ""
 ) {
 
-const el =
-document.getElementById(id);
+  const el =
+  document.getElementById(id);
 
-el.textContent =
-text;
+  el.textContent =
+  text;
 
-el.className =
-"message " + type;
+  el.className =
+  "message " + type;
 
-el.style.display =
-"block";
+  el.style.display =
+  "block";
 
 }
 
 
 /* =========================================
-   LOGIN / SIGNUP SWITCH
+   SWITCH
 ========================================= */
 
 document
@@ -821,92 +744,92 @@ document
 "click",
 async () => {
 
-const email =
-document
-.getElementById("signupEmail")
-.value
-.trim();
+  const email =
+  document
+  .getElementById("signupEmail")
+  .value
+  .trim();
 
-const password =
-document
-.getElementById("signupPassword")
-.value;
+  const password =
+  document
+  .getElementById("signupPassword")
+  .value;
 
-if (!email || !password) {
+  if (!email || !password) {
 
-showMessage(
-"signupMessage",
-"Please enter your email and password.",
-"error"
-);
+    showMessage(
+      "signupMessage",
+      "Please enter your email and password.",
+      "error"
+    );
 
-return;
+    return;
+  }
 
-}
+  if (password.length < 6) {
 
-if (password.length < 6) {
+    showMessage(
+      "signupMessage",
+      "Password must contain at least 6 characters.",
+      "error"
+    );
 
-showMessage(
-"signupMessage",
-"Password must contain at least 6 characters.",
-"error"
-);
+    return;
+  }
 
-return;
 
-}
+  const {
+    data,
+    error
+  } =
+  await supabase.auth.signUp({
 
-const {
-data,
-error
-} =
-await supabase.auth.signUp({
+    email: email,
 
-email: email,
+    password: password,
 
-password: password,
+    options: {
 
-options: {
+      emailRedirectTo:
+      SITE_URL
 
-emailRedirectTo:
-SITE_URL
+    }
 
-}
+  });
 
-});
 
-if (error) {
+  if (error) {
 
-showMessage(
-"signupMessage",
-error.message,
-"error"
-);
+    showMessage(
+      "signupMessage",
+      error.message,
+      "error"
+    );
 
-return;
+    return;
+  }
 
-}
 
-if (
-data.user &&
-!data.session
-) {
+  if (
+    data.user &&
+    !data.session
+  ) {
 
-hideAll();
+    hideAll();
 
-confirmationSection.classList.remove(
-"hidden"
-);
+    confirmationSection.classList.remove(
+      "hidden"
+    );
 
-return;
+    return;
+  }
 
-}
 
-if (data.session) {
+  if (data.session) {
 
-await loadDashboard();
+    await afterLogin();
 
-}
+  }
 
 }
 );
@@ -922,77 +845,540 @@ document
 "click",
 async () => {
 
-const email =
+  const email =
+  document
+  .getElementById("loginEmail")
+  .value
+  .trim();
+
+  const password =
+  document
+  .getElementById("loginPassword")
+  .value;
+
+
+  if (!email || !password) {
+
+    showMessage(
+      "loginMessage",
+      "Please enter your email and password.",
+      "error"
+    );
+
+    return;
+  }
+
+
+  const {
+    data,
+    error
+  } =
+  await supabase.auth.signInWithPassword({
+
+    email: email,
+
+    password: password
+
+  });
+
+
+  if (error) {
+
+    showMessage(
+      "loginMessage",
+      error.message,
+      "error"
+    );
+
+    return;
+  }
+
+
+  if (data.session) {
+
+    await afterLogin();
+
+  }
+
+}
+);
+
+
+/* =========================================
+   AFTER LOGIN
+========================================= */
+
+async function afterLogin() {
+
+  const {
+    data: {
+      user
+    }
+  } =
+  await supabase.auth.getUser();
+
+
+  if (!user) {
+
+    showLogin();
+
+    return;
+
+  }
+
+
+  /*
+   * IMPORTANT
+   *
+   * Check whether a tag was waiting
+   * for activation.
+   */
+
+  const pendingTag =
+  sessionStorage.getItem(
+    "pendingTag"
+  );
+
+
+  if (pendingTag) {
+
+    /*
+     * DO NOT remove it yet.
+     *
+     * First activate it successfully.
+     */
+
+    const result =
+    await activateTag(
+      pendingTag,
+      user
+    );
+
+
+    if (result.success) {
+
+      sessionStorage.removeItem(
+        "pendingTag"
+      );
+
+
+      await loadPublicTag(
+        pendingTag
+      );
+
+      return;
+
+    }
+
+
+    /*
+     * Activation failed.
+     */
+
+    hideAll();
+
+    publicTagSection.classList.remove(
+      "hidden"
+    );
+
+    document
+    .getElementById("publicLoading")
+    .classList.add("hidden");
+
+    document
+    .getElementById("activationBox")
+    .classList.remove("hidden");
+
+    document
+    .getElementById("activationTagId")
+    .textContent =
+    "E-Tag: " + pendingTag;
+
+
+    showMessage(
+      "activationMessage",
+      result.message,
+      "error"
+    );
+
+    return;
+
+  }
+
+
+  await loadDashboard();
+
+}
+
+
+/* =========================================
+   ACTIVATE TAG
+========================================= */
+
+async function activateTag(
+  tagCode,
+  user
+) {
+
+  if (!tagCode) {
+
+    return {
+      success: false,
+      message: "E-Tag code is missing."
+    };
+
+  }
+
+
+  if (!user) {
+
+    return {
+      success: false,
+      message: "You must login first."
+    };
+
+  }
+
+
+  /*
+   * Get tag first
+   */
+
+  const {
+    data: tags,
+    error: findError
+  } =
+  await supabase
+  .from("nfc_tags")
+  .select(
+    "id,tag_code,owner_id,active"
+  )
+  .eq(
+    "tag_code",
+    tagCode
+  );
+
+
+  if (findError) {
+
+    console.error(
+      "FIND TAG ERROR:",
+      findError
+    );
+
+    return {
+      success: false,
+      message:
+      "Could not find E-Tag: " +
+      findError.message
+    };
+
+  }
+
+
+  if (
+    !tags ||
+    tags.length === 0
+  ) {
+
+    return {
+      success: false,
+      message:
+      "E-Tag " +
+      tagCode +
+      " does not exist."
+    };
+
+  }
+
+
+  const tag =
+  tags[0];
+
+
+  /*
+   * Already activated by this user
+   */
+
+  if (
+    tag.owner_id === user.id &&
+    tag.active === true
+  ) {
+
+    return {
+      success: true,
+      message: "E-Tag already belongs to you."
+    };
+
+  }
+
+
+  /*
+   * Already belongs to somebody else
+   */
+
+  if (
+    tag.owner_id !== null &&
+    tag.owner_id !== user.id
+  ) {
+
+    return {
+      success: false,
+      message:
+      "This E-Tag has already been activated by another account."
+    };
+
+  }
+
+
+  /*
+   * Must be inactive
+   */
+
+  if (
+    tag.active !== false
+  ) {
+
+    return {
+      success: false,
+      message:
+      "This E-Tag cannot be activated."
+    };
+
+  }
+
+
+  /*
+   * ACTUAL DATABASE UPDATE
+   */
+
+  const {
+    data: updated,
+    error: updateError
+  } =
+  await supabase
+  .from("nfc_tags")
+  .update({
+
+    owner_id:
+    user.id,
+
+    active:
+    true
+
+  })
+  .eq(
+    "id",
+    tag.id
+  )
+  .is(
+    "owner_id",
+    null
+  )
+  .eq(
+    "active",
+    false
+  )
+  .select(
+    "id,tag_code,owner_id,active"
+  );
+
+
+  if (updateError) {
+
+    console.error(
+      "ACTIVATION UPDATE ERROR:",
+      updateError
+    );
+
+    return {
+      success: false,
+      message:
+      "Activation failed: " +
+      updateError.message
+    };
+
+  }
+
+
+  /*
+   * RLS may return zero rows
+   */
+
+  if (
+    !updated ||
+    updated.length === 0
+  ) {
+
+    return {
+      success: false,
+      message:
+      "Activation was not allowed. Please check your E-Tag activation policy."
+    };
+
+  }
+
+
+  /*
+   * SUCCESS
+   */
+
+  console.log(
+    "E-TAG ACTIVATED:",
+    updated[0]
+  );
+
+
+  /*
+   * Make sure profile exists
+   */
+
+  const {
+    data: profile
+  } =
+  await supabase
+  .from("profiles")
+  .select("id")
+  .eq(
+    "id",
+    user.id
+  )
+  .maybeSingle();
+
+
+  if (!profile) {
+
+    const {
+      error: profileError
+    } =
+    await supabase
+    .from("profiles")
+    .insert({
+
+      id:
+      user.id,
+
+      email:
+      user.email || ""
+
+    });
+
+
+    if (profileError) {
+
+      console.error(
+        "PROFILE CREATE ERROR:",
+        profileError
+      );
+
+    }
+
+  }
+
+
+  return {
+    success: true,
+    message: "E-Tag activated successfully."
+  };
+
+}
+
+
+/* =========================================
+   ACTIVATE BUTTON
+========================================= */
+
 document
-.getElementById("loginEmail")
-.value
-.trim();
+.getElementById("activateButton")
+.addEventListener(
+"click",
+async () => {
 
-const password =
-document
-.getElementById("loginPassword")
-.value;
+  const tag =
+  window.currentTag;
 
-if (!email || !password) {
 
-showMessage(
-"loginMessage",
-"Please enter your email and password.",
-"error"
-);
+  if (!tag) {
 
-return;
+    showMessage(
+      "activationMessage",
+      "E-Tag information is missing.",
+      "error"
+    );
 
-}
+    return;
 
-const {
-data,
-error
-} =
-await supabase.auth.signInWithPassword({
+  }
 
-email: email,
 
-password: password
+  const {
+    data: {
+      user
+    }
+  } =
+  await supabase.auth.getUser();
 
-});
 
-if (error) {
+  /*
+   * NOT LOGGED IN
+   */
 
-showMessage(
-"loginMessage",
-error.message,
-"error"
-);
+  if (!user) {
 
-return;
+    sessionStorage.setItem(
+      "pendingTag",
+      tag.tag_code
+    );
 
-}
 
-if (data.session) {
+    showLogin();
 
-const pendingTag =
-sessionStorage.getItem(
-"pendingTag"
-);
 
-if (pendingTag) {
+    showMessage(
+      "loginMessage",
+      "Login or create an account to activate E-Tag " +
+      tag.tag_code,
+      "error"
+    );
 
-sessionStorage.removeItem(
-"pendingTag"
-);
 
-await loadPublicTag(
-pendingTag
-);
+    return;
 
-} else {
+  }
 
-await loadDashboard();
 
-}
+  /*
+   * LOGGED IN
+   */
 
-}
+  const result =
+  await activateTag(
+    tag.tag_code,
+    user
+  );
+
+
+  if (!result.success) {
+
+    showMessage(
+      "activationMessage",
+      result.message,
+      "error"
+    );
+
+    return;
+
+  }
+
+
+  sessionStorage.removeItem(
+    "pendingTag"
+  );
+
+
+  await loadPublicTag(
+    tag.tag_code
+  );
 
 }
 );
@@ -1004,34 +1390,38 @@ await loadDashboard();
 
 async function loadDashboard() {
 
-const {
-data: {
-user
-}
-} =
-await supabase.auth.getUser();
+  const {
+    data: {
+      user
+    }
+  } =
+  await supabase.auth.getUser();
 
-if (!user) {
 
-showLogin();
+  if (!user) {
 
-return;
+    showLogin();
 
-}
+    return;
 
-hideAll();
+  }
 
-dashboardSection.classList.remove(
-"hidden"
-);
 
-await loadProfile(
-user.id
-);
+  hideAll();
 
-await loadTags(
-user.id
-);
+  dashboardSection.classList.remove(
+    "hidden"
+  );
+
+
+  await loadProfile(
+    user.id
+  );
+
+
+  await loadTags(
+    user.id
+  );
 
 }
 
@@ -1041,64 +1431,75 @@ user.id
 ========================================= */
 
 async function loadProfile(
-userId
+  userId
 ) {
 
-const {
-data,
-error
-} =
-await supabase
-.from("profiles")
-.select("*")
-.eq("id", userId)
-.maybeSingle();
+  const {
+    data,
+    error
+  } =
+  await supabase
+  .from("profiles")
+  .select("*")
+  .eq(
+    "id",
+    userId
+  )
+  .maybeSingle();
 
-if (error) {
 
-console.error(
-"PROFILE ERROR:",
-error
-);
+  if (error) {
 
-return;
+    console.error(
+      "PROFILE ERROR:",
+      error
+    );
 
-}
+    return;
 
-if (!data) {
+  }
 
-return;
 
-}
+  if (!data) {
 
-document
-.getElementById("displayName")
-.value =
-data.display_name || "";
+    return;
 
-document
-.getElementById("bio")
-.value =
-data.bio || "";
+  }
 
-document
-.getElementById("phone")
-.value =
-data.phone || "";
 
-document
-.getElementById("whatsapp")
-.value =
-data.whatsapp || "";
+  document
+  .getElementById("displayName")
+  .value =
+  data.display_name || "";
 
-document
-.getElementById("publicEmail")
-.value =
-data.email || "";
 
-updatePreview(
-data
-);
+  document
+  .getElementById("bio")
+  .value =
+  data.bio || "";
+
+
+  document
+  .getElementById("phone")
+  .value =
+  data.phone || "";
+
+
+  document
+  .getElementById("whatsapp")
+  .value =
+  data.whatsapp || "";
+
+
+  document
+  .getElementById("publicEmail")
+  .value =
+  data.email || "";
+
+
+  updatePreview(
+    data
+  );
 
 }
 
@@ -1113,90 +1514,97 @@ document
 "click",
 async () => {
 
-const {
-data: {
-user
-}
-} =
-await supabase.auth.getUser();
+  const {
+    data: {
+      user
+    }
+  } =
+  await supabase.auth.getUser();
 
-if (!user) {
 
-showLogin();
+  if (!user) {
 
-return;
+    showLogin();
 
-}
+    return;
 
-const profile = {
+  }
 
-id: user.id,
 
-display_name:
-document
-.getElementById("displayName")
-.value
-.trim(),
+  const profile = {
 
-bio:
-document
-.getElementById("bio")
-.value
-.trim(),
+    id:
+    user.id,
 
-phone:
-document
-.getElementById("phone")
-.value
-.trim(),
+    display_name:
+    document
+    .getElementById("displayName")
+    .value
+    .trim(),
 
-whatsapp:
-document
-.getElementById("whatsapp")
-.value
-.trim(),
+    bio:
+    document
+    .getElementById("bio")
+    .value
+    .trim(),
 
-email:
-document
-.getElementById("publicEmail")
-.value
-.trim()
+    phone:
+    document
+    .getElementById("phone")
+    .value
+    .trim(),
 
-};
+    whatsapp:
+    document
+    .getElementById("whatsapp")
+    .value
+    .trim(),
 
-const {
-error
-} =
-await supabase
-.from("profiles")
-.upsert(
-profile,
-{
-onConflict: "id"
-}
-);
+    email:
+    document
+    .getElementById("publicEmail")
+    .value
+    .trim()
 
-if (error) {
+  };
 
-showMessage(
-"profileMessage",
-error.message,
-"error"
-);
 
-return;
+  const {
+    error
+  } =
+  await supabase
+  .from("profiles")
+  .upsert(
+    profile,
+    {
+      onConflict: "id"
+    }
+  );
 
-}
 
-updatePreview(
-profile
-);
+  if (error) {
 
-showMessage(
-"profileMessage",
-"Profile saved successfully.",
-"success"
-);
+    showMessage(
+      "profileMessage",
+      error.message,
+      "error"
+    );
+
+    return;
+
+  }
+
+
+  updatePreview(
+    profile
+  );
+
+
+  showMessage(
+    "profileMessage",
+    "Profile saved successfully.",
+    "success"
+  );
 
 }
 );
@@ -1207,30 +1615,33 @@ showMessage(
 ========================================= */
 
 function updatePreview(
-data
+  data
 ) {
 
-const name =
-data.display_name ||
-"Your Name";
+  const name =
+  data.display_name ||
+  "Your Name";
 
-document
-.getElementById("previewName")
-.textContent =
-name;
 
-document
-.getElementById("previewBio")
-.textContent =
-data.bio ||
-"Your digital identity";
+  document
+  .getElementById("previewName")
+  .textContent =
+  name;
 
-document
-.getElementById("avatar")
-.textContent =
-name
-.charAt(0)
-.toUpperCase();
+
+  document
+  .getElementById("previewBio")
+  .textContent =
+  data.bio ||
+  "Your digital identity";
+
+
+  document
+  .getElementById("avatar")
+  .textContent =
+  name
+  .charAt(0)
+  .toUpperCase();
 
 }
 
@@ -1240,120 +1651,127 @@ name
 ========================================= */
 
 async function loadTags(
-userId
+  userId
 ) {
 
-const container =
-document.getElementById(
-"tagsContainer"
-);
+  const container =
+  document.getElementById(
+    "tagsContainer"
+  );
 
-const {
-data,
-error
-} =
-await supabase
-.from("nfc_tags")
-.select("*")
-.eq(
-"owner_id",
-userId
-)
-.order(
-"created_at",
-{
-ascending: false
-}
-);
 
-if (error) {
+  const {
+    data,
+    error
+  } =
+  await supabase
+  .from("nfc_tags")
+  .select("*")
+  .eq(
+    "owner_id",
+    userId
+  )
+  .order(
+    "created_at",
+    {
+      ascending: false
+    }
+  );
 
-container.textContent =
-"Unable to load E-Tags.";
 
-console.error(
-error
-);
+  if (error) {
 
-return;
+    container.textContent =
+    "Unable to load E-Tags.";
 
-}
+    console.error(
+      error
+    );
 
-if (
-!data ||
-data.length === 0
-) {
+    return;
 
-container.textContent =
-"No E-Tags assigned yet.";
+  }
 
-return;
 
-}
+  if (
+    !data ||
+    data.length === 0
+  ) {
 
-container.innerHTML = "";
+    container.textContent =
+    "No E-Tags assigned yet.";
 
-data.forEach(
-tag => {
+    return;
 
-const div =
-document.createElement(
-"div"
-);
+  }
 
-div.className =
-"tag";
 
-const status =
-tag.active
-? "Active"
-: "Inactive";
+  container.innerHTML =
+  "";
 
-const url =
-SITE_URL +
-"id/" +
-encodeURIComponent(
-tag.tag_code
-);
 
-div.innerHTML = `
+  data.forEach(
+    tag => {
 
-<div class="tag-code">
-${escapeHtml(
-tag.tag_code
-)}
-</div>
+      const div =
+      document.createElement(
+        "div"
+      );
 
-<div class="status">
-${status}
-</div>
 
-<div style="margin-top:8px;font-size:12px;word-break:break-all;">
-${escapeHtml(url)}
-</div>
+      div.className =
+      "tag";
 
-`;
 
-container.appendChild(
-div
-);
+      const url =
+      SITE_URL +
+      "id/" +
+      encodeURIComponent(
+        tag.tag_code
+      );
 
-});
+
+      div.innerHTML = `
+
+        <div class="tag-code">
+          ${escapeHtml(
+            tag.tag_code
+          )}
+        </div>
+
+        <div class="status">
+          ${tag.active ? "Active" : "Inactive"}
+        </div>
+
+        <div style="
+          margin-top:8px;
+          font-size:12px;
+          word-break:break-all;
+        ">
+          ${escapeHtml(url)}
+        </div>
+
+      `;
+
+
+      container.appendChild(
+        div
+      );
+
+    }
+  );
 
 }
 
 
 /* =========================================
-   GET TAG FROM URL
-   FIXED:
-   Removes query parameters such as
-   ?utm_source=chatgpt.com
+   GET TAG CODE
 ========================================= */
 
 function getTagCode() {
 
   const path =
-    window.location.pathname;
+  window.location.pathname;
 
 
   /*
@@ -1363,23 +1781,32 @@ function getTagCode() {
    */
 
   const marker =
-    "/E-Tag/id/";
+  "/E-Tag/id/";
+
 
   const position =
-    path.indexOf(marker);
+  path.indexOf(
+    marker
+  );
 
-  if (position !== -1) {
+
+  if (
+    position !== -1
+  ) {
 
     let code =
-      path.substring(
-        position + marker.length
-      );
+    path.substring(
+      position +
+      marker.length
+    );
+
 
     code =
-      code
-        .split("/")[0]
-        .split("?")[0]
-        .trim();
+    code
+    .split("/")[0]
+    .split("?")[0]
+    .trim();
+
 
     if (code) {
 
@@ -1393,61 +1820,68 @@ function getTagCode() {
 
 
   /*
-   * 404 REDIRECT
+   * GITHUB 404 REDIRECT
    *
    * /E-Tag/?route=%2FE-Tag%2Fid%2FABX729
    */
 
   const params =
-    new URLSearchParams(
-      window.location.search
-    );
+  new URLSearchParams(
+    window.location.search
+  );
+
 
   const route =
-    params.get("route");
+  params.get("route");
+
 
   if (route) {
 
     let decoded;
 
+
     try {
 
       decoded =
-        decodeURIComponent(
-          route
-        );
+      decodeURIComponent(
+        route
+      );
 
     } catch {
 
       decoded =
-        route;
+      route;
 
     }
 
 
     const routeMarker =
-      "/E-Tag/id/";
+    "/E-Tag/id/";
+
 
     const routePosition =
-      decoded.indexOf(
-        routeMarker
-      );
+    decoded.indexOf(
+      routeMarker
+    );
+
 
     if (
       routePosition !== -1
     ) {
 
       let code =
-        decoded.substring(
-          routePosition +
-          routeMarker.length
-        );
+      decoded.substring(
+        routePosition +
+        routeMarker.length
+      );
+
 
       code =
-        code
-          .split("/")[0]
-          .split("?")[0]
-          .trim();
+      code
+      .split("/")[0]
+      .split("?")[0]
+      .trim();
+
 
       if (code) {
 
@@ -1472,421 +1906,166 @@ function getTagCode() {
 ========================================= */
 
 async function loadPublicTag(
-tagCode
+  tagCode
 ) {
 
-hideAll();
-
-publicTagSection.classList.remove(
-"hidden"
-);
-
-document
-.getElementById("publicLoading")
-.classList.remove(
-"hidden"
-);
-
-document
-.getElementById("activationBox")
-.classList.add(
-"hidden"
-);
-
-document
-.getElementById("publicProfileBox")
-.classList.add(
-"hidden"
-);
-
-document
-.getElementById("debugBox")
-.classList.add(
-"hidden"
-);
+  hideAll();
 
 
-const debug =
-document.getElementById(
-"debugBox"
-);
-
-debug.textContent =
-"Looking for tag: " +
-tagCode;
+  publicTagSection.classList.remove(
+    "hidden"
+  );
 
 
-/*
-IMPORTANT:
-Only the cleaned tag code reaches this query.
-*/
-
-const {
-data,
-error
-} =
-await supabase
-.from("nfc_tags")
-.select(
-"id,tag_code,owner_id,active,created_at"
-)
-.eq(
-"tag_code",
-tagCode
-);
+  document
+  .getElementById("publicLoading")
+  .classList.remove(
+    "hidden"
+  );
 
 
-document
-.getElementById("publicLoading")
-.classList.add(
-"hidden"
-);
+  document
+  .getElementById("activationBox")
+  .classList.add(
+    "hidden"
+  );
 
 
-/* =========================================
-   ERROR
-========================================= */
-
-if (error) {
-
-console.error(
-"TAG QUERY ERROR:",
-error
-);
-
-debug.classList.remove(
-"hidden"
-);
-
-debug.textContent =
-"Supabase error: " +
-error.message;
-
-showNotFound(
-"Database error: " +
-error.message
-);
-
-return;
-
-}
+  document
+  .getElementById("publicProfileBox")
+  .classList.add(
+    "hidden"
+  );
 
 
-/* =========================================
-   NOT FOUND
-========================================= */
+  /*
+   * Get tag
+   */
 
-if (
-!data ||
-data.length === 0
-) {
-
-console.log(
-"No tag found:",
-tagCode
-);
-
-showNotFound(
-"No database row found for tag: " +
-tagCode
-);
-
-return;
-
-}
+  const {
+    data,
+    error
+  } =
+  await supabase
+  .from("nfc_tags")
+  .select(
+    "id,tag_code,owner_id,active,created_at"
+  )
+  .eq(
+    "tag_code",
+    tagCode
+  );
 
 
-/* =========================================
-   GET FIRST ROW
-========================================= */
-
-const tag =
-data[0];
-
-console.log(
-"TAG FOUND:",
-tag
-);
+  document
+  .getElementById("publicLoading")
+  .classList.add(
+    "hidden"
+  );
 
 
-/* =========================================
-   INACTIVE TAG
-========================================= */
+  if (error) {
 
-if (
-tag.active === false
-) {
+    console.error(
+      "TAG QUERY ERROR:",
+      error
+    );
 
-document
-.getElementById(
-"activationBox"
-)
-.classList.remove(
-"hidden"
-);
 
-document
-.getElementById(
-"activationTagId"
-)
-.textContent =
-"E-Tag: " +
-tag.tag_code;
+    showNotFound(
+      "Database error: " +
+      error.message
+    );
 
-window.currentTag =
-tag;
 
-return;
+    return;
+
+  }
+
+
+  if (
+    !data ||
+    data.length === 0
+  ) {
+
+    showNotFound(
+      "No database row found for tag: " +
+      tagCode
+    );
+
+
+    return;
+
+  }
+
+
+  const tag =
+  data[0];
+
+
+  window.currentTag =
+  tag;
+
+
+  /*
+   * INACTIVE
+   */
+
+  if (
+    tag.active === false &&
+    tag.owner_id === null
+  ) {
+
+    document
+    .getElementById(
+      "activationBox"
+    )
+    .classList.remove(
+      "hidden"
+    );
+
+
+    document
+    .getElementById(
+      "activationTagId"
+    )
+    .textContent =
+    "E-Tag: " +
+    tag.tag_code;
+
+
+    /*
+     * If logged in, we can show activation.
+     */
+
+    return;
+
+  }
+
+
+  /*
+   * ACTIVE
+   */
+
+  if (
+    tag.active === true &&
+    tag.owner_id !== null
+  ) {
+
+    await loadPublicProfile(
+      tag
+    );
+
+    return;
+
+  }
+
+
+  showNotFound(
+    "Invalid E-Tag status."
+  );
 
 }
-
-
-/* =========================================
-   ACTIVE TAG
-========================================= */
-
-if (
-tag.active === true
-) {
-
-await loadPublicProfile(
-tag
-);
-
-return;
-
-}
-
-
-/* =========================================
-   FALLBACK
-========================================= */
-
-showNotFound(
-"Invalid E-Tag status."
-);
-
-}
-
-
-/* =========================================
-   ACTIVATE BUTTON
-========================================= */
-
-document
-.getElementById("activateButton")
-.addEventListener(
-"click",
-async () => {
-
-const tag =
-window.currentTag;
-
-if (!tag) {
-
-showMessage(
-"activationMessage",
-"Tag information is missing.",
-"error"
-);
-
-return;
-
-}
-
-
-const {
-data: {
-user
-}
-} =
-await supabase.auth.getUser();
-
-
-/*
-NOT LOGGED IN
-*/
-
-if (!user) {
-
-sessionStorage.setItem(
-"pendingTag",
-tag.tag_code
-);
-
-showLogin();
-
-showMessage(
-"loginMessage",
-"Login or create an account to activate E-Tag " +
-tag.tag_code,
-"error"
-);
-
-return;
-
-}
-
-
-/*
-ALREADY ACTIVE
-*/
-
-if (
-tag.active === true ||
-tag.owner_id !== null
-) {
-
-showMessage(
-"activationMessage",
-"This E-Tag has already been activated.",
-"error"
-);
-
-return;
-
-}
-
-
-/*
-CLAIM TAG
-*/
-
-const {
-data,
-error
-} =
-await supabase
-.from("nfc_tags")
-.update({
-
-owner_id:
-user.id,
-
-active:
-true
-
-})
-.eq(
-"id",
-tag.id
-)
-.is(
-"owner_id",
-null
-)
-.eq(
-"active",
-false
-)
-.select(
-"id,tag_code,owner_id,active"
-);
-
-
-if (error) {
-
-console.error(
-"ACTIVATE ERROR:",
-error
-);
-
-showMessage(
-"activationMessage",
-"Activation failed: " +
-error.message,
-"error"
-);
-
-return;
-
-}
-
-
-if (
-!data ||
-data.length === 0
-) {
-
-showMessage(
-"activationMessage",
-"This E-Tag has already been activated by another account.",
-"error"
-);
-
-return;
-
-}
-
-
-/*
-SUCCESS
-*/
-
-const activatedTag =
-data[0];
-
-sessionStorage.removeItem(
-"pendingTag"
-);
-
-
-/*
-MAKE SURE PROFILE EXISTS
-*/
-
-const {
-data: profile
-} =
-await supabase
-.from("profiles")
-.select("id")
-.eq(
-"id",
-user.id
-)
-.maybeSingle();
-
-
-if (!profile) {
-
-const {
-error: profileError
-} =
-await supabase
-.from("profiles")
-.insert({
-
-id:
-user.id,
-
-email:
-user.email || ""
-
-});
-
-if (profileError) {
-
-console.error(
-"PROFILE CREATE ERROR:",
-profileError
-);
-
-}
-
-}
-
-
-/*
-SHOW PROFILE
-*/
-
-await loadPublicProfile(
-activatedTag
-);
-
-}
-);
 
 
 /* =========================================
@@ -1894,272 +2073,250 @@ activatedTag
 ========================================= */
 
 async function loadPublicProfile(
-tag
+  tag
 ) {
 
-if (!tag.owner_id) {
+  if (!tag.owner_id) {
 
-showNotFound(
-"This E-Tag has no owner."
-);
+    showNotFound(
+      "This E-Tag has no owner."
+    );
 
-return;
+    return;
 
-}
+  }
 
 
-const {
-data: profile,
-error
-} =
-await supabase
-.from("profiles")
-.select(
-"id,display_name,bio,phone,whatsapp,email"
-)
-.eq(
-"id",
-tag.owner_id
-)
-.maybeSingle();
+  const {
+    data: profile,
+    error
+  } =
+  await supabase
+  .from("profiles")
+  .select(
+    "id,display_name,bio,phone,whatsapp,email"
+  )
+  .eq(
+    "id",
+    tag.owner_id
+  )
+  .maybeSingle();
 
 
-if (error) {
+  if (error) {
 
-console.error(
-"PUBLIC PROFILE ERROR:",
-error
-);
+    console.error(
+      "PUBLIC PROFILE ERROR:",
+      error
+    );
 
-showNotFound(
-"Profile error: " +
-error.message
-);
 
-return;
+    showNotFound(
+      "Profile error: " +
+      error.message
+    );
 
-}
 
+    return;
 
-if (!profile) {
+  }
 
-showNotFound(
-"Owner profile not found."
-);
 
-return;
+  if (!profile) {
 
-}
+    showNotFound(
+      "Owner profile not found."
+    );
 
+    return;
 
-/*
-SHOW PUBLIC PROFILE
-*/
+  }
 
-document
-.getElementById(
-"activationBox"
-)
-.classList.add(
-"hidden"
-);
 
-document
-.getElementById(
-"publicProfileBox"
-)
-.classList.remove(
-"hidden"
-);
+  document
+  .getElementById(
+    "activationBox"
+  )
+  .classList.add(
+    "hidden"
+  );
 
 
-const name =
-profile.display_name ||
-"Unnamed E-Tag";
+  document
+  .getElementById(
+    "publicProfileBox"
+  )
+  .classList.remove(
+    "hidden"
+  );
 
-const bio =
-profile.bio ||
-"Digital Identity";
 
+  const name =
+  profile.display_name ||
+  "Unnamed E-Tag";
 
-document
-.getElementById(
-"publicName"
-)
-.textContent =
-name;
 
+  const bio =
+  profile.bio ||
+  "Digital Identity";
 
-document
-.getElementById(
-"publicBio"
-)
-.textContent =
-bio;
 
+  document
+  .getElementById(
+    "publicName"
+  )
+  .textContent =
+  name;
 
-document
-.getElementById(
-"publicAvatar"
-)
-.textContent =
-name
-.charAt(0)
-.toUpperCase();
 
+  document
+  .getElementById(
+    "publicBio"
+  )
+  .textContent =
+  bio;
 
-/*
-CONTACT BUTTONS
-*/
 
-const buttons =
-document.getElementById(
-"publicButtons"
-);
+  document
+  .getElementById(
+    "publicAvatar"
+  )
+  .textContent =
+  name
+  .charAt(0)
+  .toUpperCase();
 
-buttons.innerHTML = "";
 
+  /*
+   * CONTACT BUTTONS
+   */
 
-/*
-PHONE
-*/
+  const buttons =
+  document.getElementById(
+    "publicButtons"
+  );
 
-if (
-profile.phone
-) {
 
-const a =
-document.createElement(
-"a"
-);
+  buttons.innerHTML =
+  "";
 
-a.className =
-"info-button";
 
-a.href =
-"tel:" +
-profile.phone;
+  /*
+   * PHONE
+   */
 
-a.textContent =
-"📞 Call";
+  if (
+    profile.phone
+  ) {
 
-buttons.appendChild(
-a
-);
+    const a =
+    document.createElement(
+      "a"
+    );
 
-}
 
+    a.className =
+    "info-button";
 
-/*
-WHATSAPP
-*/
 
-if (
-profile.whatsapp
-) {
+    a.href =
+    "tel:" +
+    profile.phone;
 
-const clean =
-profile.whatsapp
-.replace(
-/[^0-9]/g,
-""
-);
 
-const a =
-document.createElement(
-"a"
-);
+    a.textContent =
+    "📞 Call";
 
-a.className =
-"info-button";
 
-a.href =
-"https://wa.me/" +
-clean;
+    buttons.appendChild(
+      a
+    );
 
-a.target =
-"_blank";
+  }
 
-a.rel =
-"noopener noreferrer";
 
-a.textContent =
-"💬 WhatsApp";
+  /*
+   * WHATSAPP
+   */
 
-buttons.appendChild(
-a
-);
+  if (
+    profile.whatsapp
+  ) {
 
-}
+    const clean =
+    profile.whatsapp
+    .replace(
+      /[^0-9]/g,
+      ""
+    );
 
 
-/*
-EMAIL
-*/
+    const a =
+    document.createElement(
+      "a"
+    );
 
-if (
-profile.email
-) {
 
-const a =
-document.createElement(
-"a"
-);
+    a.className =
+    "info-button";
 
-a.className =
-"info-button";
 
-a.href =
-"mailto:" +
-profile.email;
+    a.href =
+    "https://wa.me/" +
+    clean;
 
-a.textContent =
-"✉️ Email";
 
-buttons.appendChild(
-a
-);
+    a.target =
+    "_blank";
 
-}
 
+    a.rel =
+    "noopener noreferrer";
 
-/*
-OWNER CHECK
-*/
 
-const {
-data: {
-user
-}
-} =
-await supabase.auth.getUser();
+    a.textContent =
+    "💬 WhatsApp";
 
 
-const ownerButton =
-document.getElementById(
-"ownerEditButton"
-);
+    buttons.appendChild(
+      a
+    );
 
+  }
 
-if (
-user &&
-user.id === tag.owner_id
-) {
 
-ownerButton.classList.remove(
-"hidden"
-);
+  /*
+   * EMAIL
+   */
 
-window.currentPublicTag =
-tag;
+  if (
+    profile.email
+  ) {
 
-} else {
+    const a =
+    document.createElement(
+      "a"
+    );
 
-ownerButton.classList.add(
-"hidden"
-);
 
-}
+    a.className =
+    "info-button";
+
+
+    a.href =
+    "mailto:" +
+    profile.email;
+
+
+    a.textContent =
+    "✉️ Email";
+
+
+    buttons.appendChild(
+      a
+    );
+
+  }
 
 }
 
@@ -2174,7 +2331,7 @@ document
 "click",
 async () => {
 
-await loadDashboard();
+  await loadDashboard();
 
 }
 );
@@ -2188,20 +2345,21 @@ function showNotFound(
 message
 ) {
 
-hideAll();
+  hideAll();
 
-notFoundSection.classList.remove(
-"hidden"
-);
 
-const messageBox =
-document.getElementById(
-"notFoundMessage"
-);
+  notFoundSection.classList.remove(
+    "hidden"
+  );
 
-messageBox.textContent =
-message ||
-"This E-Tag does not exist.";
+
+  document
+  .getElementById(
+    "notFoundMessage"
+  )
+  .textContent =
+  message ||
+  "This E-Tag does not exist.";
 
 }
 
@@ -2214,27 +2372,32 @@ function escapeHtml(
 value
 ) {
 
-return String(value)
-.replaceAll(
-"&",
-"&amp;"
-)
-.replaceAll(
-"<",
-"&lt;"
-)
-.replaceAll(
-">",
-"&gt;"
-)
-.replaceAll(
-'"',
-"&quot;"
-)
-.replaceAll(
-"'",
-"&#039;"
-);
+  return String(value)
+
+  .replaceAll(
+    "&",
+    "&amp;"
+  )
+
+  .replaceAll(
+    "<",
+    "&lt;"
+  )
+
+  .replaceAll(
+    ">",
+    "&gt;"
+  )
+
+  .replaceAll(
+    '"',
+    "&quot;"
+  )
+
+  .replaceAll(
+    "'",
+    "&#039;"
+  );
 
 }
 
@@ -2249,9 +2412,13 @@ document
 "click",
 async () => {
 
-await supabase.auth.signOut();
+  await supabase.auth.signOut();
 
-showLogin();
+  sessionStorage.removeItem(
+    "pendingTag"
+  );
+
+  showLogin();
 
 }
 );
@@ -2265,49 +2432,28 @@ supabase
 .auth
 .onAuthStateChange(
 async (
-event,
-session
+  event,
+  session
 ) => {
 
-if (
-event === "SIGNED_OUT"
-) {
+  if (
+    event === "SIGNED_OUT"
+  ) {
 
-showLogin();
+    showLogin();
 
-return;
+    return;
 
-}
+  }
 
-if (
-event === "SIGNED_IN" &&
-session
-) {
 
-const pendingTag =
-sessionStorage.getItem(
-"pendingTag"
-);
-
-if (
-pendingTag
-) {
-
-sessionStorage.removeItem(
-"pendingTag"
-);
-
-await loadPublicTag(
-pendingTag
-);
-
-return;
-
-}
-
-await loadDashboard();
-
-}
+  /*
+   * We deliberately don't call
+   * loadDashboard here for SIGNED_IN.
+   *
+   * afterLogin() handles the pending
+   * E-Tag first.
+   */
 
 }
 );
@@ -2319,62 +2465,49 @@ await loadDashboard();
 
 async function startApp() {
 
-const tagCode =
-getTagCode();
+  const tagCode =
+  getTagCode();
 
 
-/*
-TAG URL
-*/
+  /*
+   * E-TAG URL
+   */
 
-if (
-tagCode
-) {
+  if (tagCode) {
 
-console.log(
-"E-TAG URL DETECTED:",
-tagCode
-);
+    await loadPublicTag(
+      tagCode
+    );
 
-await loadPublicTag(
-tagCode
-);
+    return;
 
-return;
-
-}
+  }
 
 
-/*
-NORMAL HOME PAGE
-*/
+  /*
+   * NORMAL HOME
+   */
 
-const {
-data: {
-session
-}
-} =
-await supabase.auth.getSession();
+  const {
+    data: {
+      session
+    }
+  } =
+  await supabase.auth.getSession();
 
 
-if (
-session
-) {
+  if (session) {
 
-await loadDashboard();
+    await loadDashboard();
 
-} else {
+  } else {
 
-showLogin();
+    showLogin();
+
+  }
 
 }
 
-}
-
-
-/* =========================================
-   START
-========================================= */
 
 startApp();
 
@@ -2383,3 +2516,4 @@ startApp();
 </body>
 
 </html>
+:::
