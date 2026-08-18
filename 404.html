@@ -1,21 +1,28 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>E-Tag</title>
-  <script>
-    const path = window.location.pathname;
-    const query = window.location.search;
-    const hash = window.location.hash;
 
-    window.location.replace(
-      "/E-Tag/" +
-      "?route=" +
-      encodeURIComponent(path) +
-      encodeURIComponent(query) +
-      encodeURIComponent(hash)
-    );
+  <script>
+    (function () {
+
+      const path = window.location.pathname;
+      const search = window.location.search;
+      const hash = window.location.hash;
+
+      const target =
+        "/E-Tag/?route=" +
+        encodeURIComponent(
+          path + search + hash
+        );
+
+      window.location.replace(target);
+
+    })();
   </script>
+
 </head>
 
 <body>
