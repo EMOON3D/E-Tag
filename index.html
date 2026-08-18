@@ -1,14 +1,1520 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>E-Tag</title>
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>E-Tag | Mini Digital Identity</title>
+
+  <style>
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+
+      margin: 0;
+
+      font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+      background: #f4f6f8;
+
+      color: #111827;
+    }
+
+
+    .container {
+
+      width: 100%;
+
+      max-width: 430px;
+
+      margin: auto;
+
+      padding: 25px 18px;
+    }
+
+
+    .logo {
+
+      text-align: center;
+
+      font-size: 34px;
+
+      font-weight: 800;
+
+      margin-top: 25px;
+    }
+
+
+    .tagline {
+
+      text-align: center;
+
+      color: #6b7280;
+
+      margin-top: 6px;
+
+      margin-bottom: 30px;
+    }
+
+
+    .card {
+
+      background: white;
+
+      border-radius: 18px;
+
+      padding: 22px;
+
+      margin-bottom: 18px;
+
+      box-shadow:
+        0 5px 25px
+        rgba(0,0,0,0.06);
+    }
+
+
+    h2 {
+
+      margin-top: 0;
+
+      margin-bottom: 20px;
+    }
+
+
+    label {
+
+      display: block;
+
+      margin-top: 15px;
+
+      margin-bottom: 6px;
+
+      font-weight: 600;
+    }
+
+
+    input,
+    textarea,
+    select {
+
+      width: 100%;
+
+      padding: 13px;
+
+      border:
+        1px solid #d1d5db;
+
+      border-radius: 10px;
+
+      font-size: 15px;
+
+      outline: none;
+    }
+
+
+    textarea {
+
+      min-height: 90px;
+
+      resize: vertical;
+    }
+
+
+    input:focus,
+    textarea:focus,
+    select:focus {
+
+      border-color: #111827;
+    }
+
+
+    button {
+
+      width: 100%;
+
+      border: none;
+
+      border-radius: 10px;
+
+      padding: 13px;
+
+      margin-top: 18px;
+
+      background: #111827;
+
+      color: white;
+
+      font-size: 16px;
+
+      font-weight: 700;
+    }
+
+
+    button:active {
+
+      transform: scale(0.98);
+    }
+
+
+    .link {
+
+      text-align: center;
+
+      margin-top: 18px;
+
+      color: #2563eb;
+
+      cursor: pointer;
+
+      font-weight: 600;
+    }
+
+
+    .hidden {
+
+      display: none !important;
+    }
+
+
+    .message {
+
+      margin-top: 15px;
+
+      padding: 10px;
+
+      border-radius: 8px;
+
+      background: #f3f4f6;
+
+      font-size: 14px;
+
+      display: none;
+    }
+
+
+    .profile {
+
+      text-align: center;
+
+      margin-bottom: 20px;
+    }
+
+
+    .avatar {
+
+      width: 90px;
+
+      height: 90px;
+
+      border-radius: 50%;
+
+      background: #111827;
+
+      color: white;
+
+      margin: auto;
+
+      display: flex;
+
+      align-items: center;
+
+      justify-content: center;
+
+      font-size: 36px;
+
+      font-weight: 700;
+    }
+
+
+    .profile h3 {
+
+      margin-bottom: 5px;
+    }
+
+
+    .profile p {
+
+      color: #6b7280;
+
+      margin-top: 5px;
+    }
+
+
+    .tag {
+
+      border:
+        1px solid #e5e7eb;
+
+      padding: 14px;
+
+      border-radius: 10px;
+
+      margin-top: 10px;
+    }
+
+
+    .tag-code {
+
+      font-weight: 700;
+
+      font-size: 15px;
+    }
+
+
+    .status {
+
+      font-size: 13px;
+
+      color: #16a34a;
+
+      margin-top: 5px;
+    }
+
+
+    .logout {
+
+      background: #dc2626;
+    }
+
+  </style>
+
 </head>
+
+
 <body>
 
-  <h1>E-Tag</h1>
-  <p>Mini Digital Identity</p>
+
+<div class="container">
+
+
+  <!-- BRAND -->
+
+  <div class="logo">
+    E-Tag
+  </div>
+
+  <div class="tagline">
+    Your Mini Digital Identity
+  </div>
+
+
+
+  <!-- ========================= -->
+  <!-- LOGIN -->
+  <!-- ========================= -->
+
+  <section
+    id="loginSection"
+    class="card"
+  >
+
+    <h2>
+      Welcome back
+    </h2>
+
+
+    <label>
+      Email
+    </label>
+
+    <input
+      id="loginEmail"
+      type="email"
+      placeholder="you@example.com"
+    >
+
+
+    <label>
+      Password
+    </label>
+
+    <input
+      id="loginPassword"
+      type="password"
+      placeholder="Your password"
+    >
+
+
+    <button
+      id="loginButton"
+    >
+      Login
+    </button>
+
+
+    <div
+      id="loginMessage"
+      class="message"
+    ></div>
+
+
+    <div
+      id="showSignup"
+      class="link"
+    >
+      Create an E-Tag account
+    </div>
+
+  </section>
+
+
+
+  <!-- ========================= -->
+  <!-- SIGNUP -->
+  <!-- ========================= -->
+
+  <section
+    id="signupSection"
+    class="card hidden"
+  >
+
+    <h2>
+      Create your E-Tag
+    </h2>
+
+
+    <label>
+      Email
+    </label>
+
+    <input
+      id="signupEmail"
+      type="email"
+      placeholder="you@example.com"
+    >
+
+
+    <label>
+      Password
+    </label>
+
+    <input
+      id="signupPassword"
+      type="password"
+      placeholder="Minimum 6 characters"
+    >
+
+
+    <button
+      id="signupButton"
+    >
+      Create Account
+    </button>
+
+
+    <div
+      id="signupMessage"
+      class="message"
+    ></div>
+
+
+    <div
+      id="showLogin"
+      class="link"
+    >
+      Already have an account?
+      Login
+    </div>
+
+  </section>
+
+
+
+  <!-- ========================= -->
+  <!-- DASHBOARD -->
+  <!-- ========================= -->
+
+  <section
+    id="dashboardSection"
+    class="hidden"
+  >
+
+
+    <!-- PROFILE -->
+
+    <div class="card">
+
+
+      <div class="profile">
+
+        <div
+          id="avatar"
+          class="avatar"
+        >
+          E
+        </div>
+
+
+        <h3
+          id="previewName"
+        >
+          Your Name
+        </h3>
+
+
+        <p
+          id="previewBio"
+        >
+          Your digital identity
+        </p>
+
+      </div>
+
+
+
+      <h2>
+        My Digital Identity
+      </h2>
+
+
+      <label>
+        Name
+      </label>
+
+      <input
+        id="displayName"
+        type="text"
+        placeholder="Your name"
+      >
+
+
+      <label>
+        Bio
+      </label>
+
+      <textarea
+        id="bio"
+        placeholder="Tell people about yourself"
+      ></textarea>
+
+
+      <label>
+        Phone
+      </label>
+
+      <input
+        id="phone"
+        type="tel"
+        placeholder="+94..."
+      >
+
+
+      <label>
+        WhatsApp
+      </label>
+
+      <input
+        id="whatsapp"
+        type="tel"
+        placeholder="+94..."
+      >
+
+
+      <label>
+        Public Email
+      </label>
+
+      <input
+        id="publicEmail"
+        type="email"
+        placeholder="contact@example.com"
+      >
+
+
+      <label>
+        Identity Type
+      </label>
+
+      <select
+        id="profileType"
+      >
+
+        <option value="personal">
+          Personal
+        </option>
+
+        <option value="business">
+          Business
+        </option>
+
+        <option value="vehicle">
+          Vehicle
+        </option>
+
+      </select>
+
+
+      <button
+        id="saveProfileButton"
+      >
+        Save Profile
+      </button>
+
+
+      <div
+        id="profileMessage"
+        class="message"
+      ></div>
+
+    </div>
+
+
+
+    <!-- NFC TAGS -->
+
+    <div class="card">
+
+      <h2>
+        My E-Tags
+      </h2>
+
+
+      <div id="tagsContainer">
+
+        Loading...
+
+      </div>
+
+    </div>
+
+
+
+    <!-- LOGOUT -->
+
+    <div class="card">
+
+      <button
+        id="logoutButton"
+        class="logout"
+      >
+        Logout
+      </button>
+
+    </div>
+
+
+  </section>
+
+
+</div>
+
+
+
+<script type="module">
+
+
+/* =========================================
+   SUPABASE
+   ========================================= */
+
+
+import {
+  supabase
+} from "./supabase.js";
+
+
+
+/* =========================================
+   ELEMENTS
+   ========================================= */
+
+
+const loginSection =
+  document.getElementById(
+    "loginSection"
+  );
+
+
+const signupSection =
+  document.getElementById(
+    "signupSection"
+  );
+
+
+const dashboardSection =
+  document.getElementById(
+    "dashboardSection"
+  );
+
+
+
+/* =========================================
+   MESSAGE
+   ========================================= */
+
+
+function message(
+  elementId,
+  text
+) {
+
+  const element =
+    document.getElementById(
+      elementId
+    );
+
+  element.textContent =
+    text;
+
+  element.style.display =
+    "block";
+}
+
+
+
+/* =========================================
+   SHOW LOGIN
+   ========================================= */
+
+
+document
+  .getElementById(
+    "showLogin"
+  )
+  .addEventListener(
+    "click",
+    () => {
+
+      signupSection
+        .classList
+        .add("hidden");
+
+      loginSection
+        .classList
+        .remove("hidden");
+
+    }
+  );
+
+
+
+/* =========================================
+   SHOW SIGNUP
+   ========================================= */
+
+
+document
+  .getElementById(
+    "showSignup"
+  )
+  .addEventListener(
+    "click",
+    () => {
+
+      loginSection
+        .classList
+        .add("hidden");
+
+      signupSection
+        .classList
+        .remove("hidden");
+
+    }
+  );
+
+
+
+/* =========================================
+   SIGNUP
+   ========================================= */
+
+
+document
+  .getElementById(
+    "signupButton"
+  )
+  .addEventListener(
+    "click",
+    async () => {
+
+
+      const email =
+        document
+          .getElementById(
+            "signupEmail"
+          )
+          .value
+          .trim();
+
+
+      const password =
+        document
+          .getElementById(
+            "signupPassword"
+          )
+          .value;
+
+
+      if (
+        !email ||
+        !password
+      ) {
+
+        message(
+          "signupMessage",
+          "Please enter your email and password."
+        );
+
+        return;
+      }
+
+
+      if (
+        password.length < 6
+      ) {
+
+        message(
+          "signupMessage",
+          "Password must contain at least 6 characters."
+        );
+
+        return;
+      }
+
+
+
+      const {
+        data,
+        error
+      } =
+        await supabase
+          .auth
+          .signUp({
+
+            email:
+              email,
+
+            password:
+              password
+
+          });
+
+
+
+      if (error) {
+
+        message(
+          "signupMessage",
+          error.message
+        );
+
+        return;
+      }
+
+
+
+      if (
+        data.user
+      ) {
+
+
+        /*
+          Create profile.
+
+          RLS ensures that the authenticated
+          user can only create their own row.
+        */
+
+
+        const {
+          error:
+            profileError
+        } =
+          await supabase
+            .from(
+              "profiles"
+            )
+            .insert({
+
+              id:
+                data.user.id,
+
+              email:
+                email,
+
+              profile_type:
+                "personal"
+
+            });
+
+
+        if (
+          profileError
+        ) {
+
+          console.error(
+            profileError
+          );
+
+        }
+
+      }
+
+
+
+      message(
+        "signupMessage",
+        "Account created. Check your email if email confirmation is enabled."
+      );
+
+    }
+  );
+
+
+
+/* =========================================
+   LOGIN
+   ========================================= */
+
+
+document
+  .getElementById(
+    "loginButton"
+  )
+  .addEventListener(
+    "click",
+    async () => {
+
+
+      const email =
+        document
+          .getElementById(
+            "loginEmail"
+          )
+          .value
+          .trim();
+
+
+      const password =
+        document
+          .getElementById(
+            "loginPassword"
+          )
+          .value;
+
+
+
+      const {
+        data,
+        error
+      } =
+        await supabase
+          .auth
+          .signInWithPassword({
+
+            email:
+              email,
+
+            password:
+              password
+
+          });
+
+
+
+      if (error) {
+
+        message(
+          "loginMessage",
+          error.message
+        );
+
+        return;
+      }
+
+
+
+      if (
+        data.session
+      ) {
+
+        await loadDashboard();
+
+      }
+
+    }
+  );
+
+
+
+/* =========================================
+   LOAD DASHBOARD
+   ========================================= */
+
+
+async function loadDashboard() {
+
+
+  const {
+    data: {
+      user
+    }
+  } =
+    await supabase
+      .auth
+      .getUser();
+
+
+  if (!user) {
+
+    return;
+
+  }
+
+
+  loginSection
+    .classList
+    .add("hidden");
+
+
+  signupSection
+    .classList
+    .add("hidden");
+
+
+  dashboardSection
+    .classList
+    .remove("hidden");
+
+
+
+  await loadProfile(
+    user.id
+  );
+
+
+  await loadTags(
+    user.id
+  );
+
+}
+
+
+
+/* =========================================
+   LOAD PROFILE
+   ========================================= */
+
+
+async function loadProfile(
+  userId
+) {
+
+
+  const {
+    data,
+    error
+  } =
+    await supabase
+      .from(
+        "profiles"
+      )
+      .select("*")
+      .eq(
+        "id",
+        userId
+      )
+      .maybeSingle();
+
+
+
+  if (error) {
+
+    console.error(
+      error
+    );
+
+    return;
+
+  }
+
+
+
+  if (!data) {
+
+    return;
+
+  }
+
+
+
+  document
+    .getElementById(
+      "displayName"
+    )
+    .value =
+      data.display_name ||
+      "";
+
+
+  document
+    .getElementById(
+      "bio"
+    )
+    .value =
+      data.bio ||
+      "";
+
+
+  document
+    .getElementById(
+      "phone"
+    )
+    .value =
+      data.phone ||
+      "";
+
+
+  document
+    .getElementById(
+      "whatsapp"
+    )
+    .value =
+      data.whatsapp ||
+      "";
+
+
+  document
+    .getElementById(
+      "publicEmail"
+    )
+    .value =
+      data.email ||
+      "";
+
+
+  document
+    .getElementById(
+      "profileType"
+    )
+    .value =
+      data.profile_type ||
+      "personal";
+
+
+  updatePreview(
+    data
+  );
+
+}
+
+
+
+/* =========================================
+   SAVE PROFILE
+   ========================================= */
+
+
+document
+  .getElementById(
+    "saveProfileButton"
+  )
+  .addEventListener(
+    "click",
+    async () => {
+
+
+      const {
+        data: {
+          user
+        }
+      } =
+        await supabase
+          .auth
+          .getUser();
+
+
+      if (!user) {
+
+        return;
+
+      }
+
+
+
+      const profile = {
+
+        display_name:
+          document
+            .getElementById(
+              "displayName"
+            )
+            .value
+            .trim(),
+
+        bio:
+          document
+            .getElementById(
+              "bio"
+            )
+            .value
+            .trim(),
+
+        phone:
+          document
+            .getElementById(
+              "phone"
+            )
+            .value
+            .trim(),
+
+        whatsapp:
+          document
+            .getElementById(
+              "whatsapp"
+            )
+            .value
+            .trim(),
+
+        email:
+          document
+            .getElementById(
+              "publicEmail"
+            )
+            .value
+            .trim(),
+
+        profile_type:
+          document
+            .getElementById(
+              "profileType"
+            )
+            .value,
+
+        updated_at:
+          new Date()
+            .toISOString()
+
+      };
+
+
+
+      const {
+        error
+      } =
+        await supabase
+          .from(
+            "profiles"
+          )
+          .update(
+            profile
+          )
+          .eq(
+            "id",
+            user.id
+          );
+
+
+
+      if (error) {
+
+        message(
+          "profileMessage",
+          error.message
+        );
+
+        return;
+
+      }
+
+
+
+      updatePreview(
+        profile
+      );
+
+
+      message(
+        "profileMessage",
+        "Profile saved successfully."
+      );
+
+    }
+  );
+
+
+
+/* =========================================
+   PROFILE PREVIEW
+   ========================================= */
+
+
+function updatePreview(
+  data
+) {
+
+
+  const name =
+    data.display_name ||
+    "Your Name";
+
+
+  document
+    .getElementById(
+      "previewName"
+    )
+    .textContent =
+      name;
+
+
+  document
+    .getElementById(
+      "previewBio"
+    )
+    .textContent =
+      data.bio ||
+      "Your digital identity";
+
+
+  document
+    .getElementById(
+      "avatar"
+    )
+    .textContent =
+      name
+        .charAt(0)
+        .toUpperCase();
+
+}
+
+
+
+/* =========================================
+   LOAD NFC TAGS
+   ========================================= */
+
+
+async function loadTags(
+  userId
+) {
+
+
+  const {
+    data,
+    error
+  } =
+    await supabase
+      .from(
+        "nfc_tags"
+      )
+      .select("*")
+      .eq(
+        "owner_id",
+        userId
+      )
+      .order(
+        "created_at",
+        {
+          ascending:
+            false
+        }
+      );
+
+
+  const container =
+    document.getElementById(
+      "tagsContainer"
+    );
+
+
+
+  if (error) {
+
+    container.textContent =
+      "Unable to load E-Tags.";
+
+    console.error(
+      error
+    );
+
+    return;
+
+  }
+
+
+
+  if (
+    !data ||
+    data.length === 0
+  ) {
+
+    container.textContent =
+      "No E-Tags assigned yet.";
+
+    return;
+
+  }
+
+
+
+  container.innerHTML =
+    "";
+
+
+
+  data.forEach(
+    tag => {
+
+
+      const div =
+        document.createElement(
+          "div"
+        );
+
+
+      div.className =
+        "tag";
+
+
+      div.innerHTML = `
+
+        <div class="tag-code">
+
+          ${escapeHtml(
+            tag.tag_code
+          )}
+
+        </div>
+
+        <div class="status">
+
+          ${
+            tag.active
+              ? "Active"
+              : "Inactive"
+          }
+
+        </div>
+
+      `;
+
+
+      container.appendChild(
+        div
+      );
+
+    }
+  );
+
+}
+
+
+
+/* =========================================
+   ESCAPE HTML
+   ========================================= */
+
+
+function escapeHtml(
+  value
+) {
+
+  return String(
+    value
+  )
+    .replaceAll(
+      "&",
+      "&amp;"
+    )
+    .replaceAll(
+      "<",
+      "&lt;"
+    )
+    .replaceAll(
+      ">",
+      "&gt;"
+    )
+    .replaceAll(
+      '"',
+      "&quot;"
+    )
+    .replaceAll(
+      "'",
+      "&#039;"
+    );
+
+}
+
+
+
+/* =========================================
+   LOGOUT
+   ========================================= */
+
+
+document
+  .getElementById(
+    "logoutButton"
+  )
+  .addEventListener(
+    "click",
+    async () => {
+
+
+      await supabase
+        .auth
+        .signOut();
+
+
+      dashboardSection
+        .classList
+        .add("hidden");
+
+
+      loginSection
+        .classList
+        .remove("hidden");
+
+    }
+  );
+
+
+
+/* =========================================
+   CHECK EXISTING SESSION
+   ========================================= */
+
+
+async function checkSession() {
+
+
+  const {
+    data: {
+      session
+    }
+  } =
+    await supabase
+      .auth
+      .getSession();
+
+
+  if (session) {
+
+    await loadDashboard();
+
+  }
+
+}
+
+
+checkSession();
+
+
+</script>
+
 
 </body>
+
 </html>
