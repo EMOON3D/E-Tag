@@ -1,1 +1,780 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+
+<title>E-Tag | Admin</title>
+
+<style>
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  background: #f4f6f8;
+  color: #111827;
+}
+
+.container {
+  width: 100%;
+  max-width: 430px;
+  margin: auto;
+  padding: 25px 18px;
+}
+
+.logo {
+  text-align: center;
+  font-size: 34px;
+  font-weight: 800;
+  margin-top: 25px;
+}
+
+.subtitle {
+  text-align: center;
+  color: #6b7280;
+  margin: 6px 0 30px;
+}
+
+.card {
+  background: white;
+  border-radius: 18px;
+  padding: 22px;
+  box-shadow: 0 5px 25px rgba(0,0,0,0.06);
+  margin-bottom: 18px;
+}
+
+h2 {
+  margin-top: 0;
+}
+
+label {
+  display: block;
+  margin-top: 15px;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+
+input {
+  width: 100%;
+  padding: 13px;
+  border: 1px solid #d1d5db;
+  border-radius: 10px;
+  font-size: 15px;
+}
+
+button {
+  width: 100%;
+  border: none;
+  border-radius: 10px;
+  padding: 13px;
+  margin-top: 18px;
+  background: #111827;
+  color: white;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+button:active {
+  transform: scale(.98);
+}
+
+.copy {
+  background: #2563eb;
+}
+
+.hidden {
+  display: none !important;
+}
+
+.message {
+  margin-top: 15px;
+  padding: 10px;
+  border-radius: 8px;
+  font-size: 14px;
+  display: none;
+  word-break: break-word;
+}
+
+.success {
+  display: block;
+  background: #ecfdf5;
+  color: #166534;
+}
+
+.error {
+  display: block;
+  background: #fef2f2;
+  color: #991b1b;
+}
+
+.result {
+  margin-top: 20px;
+}
+
+.result-row {
+  margin-top: 14px;
+}
+
+.result-label {
+  font-size: 13px;
+  color: #6b7280;
+  margin-bottom: 5px;
+}
+
+.result-value {
+  background: #f3f4f6;
+  padding: 12px;
+  border-radius: 9px;
+  word-break: break-all;
+  font-weight: 600;
+}
+
+.warning {
+  margin-top: 15px;
+  padding: 12px;
+  border-radius: 9px;
+  background: #fff7ed;
+  color: #9a3412;
+  font-size: 13px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="logo">
+E-Tag
+</div>
+
+<div class="subtitle">
+Admin • Create New E-Tag
+</div>
+
+
+<!-- ==============================
+     GENERATOR
+============================== -->
+
+<div class="card">
+
+<h2>
+Generate New E-Tag
+</h2>
+
+<label>
+Tag Code
+</label>
+
+<input
+id="tagCode"
+type="text"
+placeholder="Example: ABX729"
+maxlength="30"
+>
+
+<button id="generateButton">
+Generate E-Tag
+</button>
+
+<div
+id="message"
+class="message"
+></div>
+
+</div>
+
+
+<!-- ==============================
+     RESULT
+============================== -->
+
+<div
+id="resultCard"
+class="card hidden"
+>
+
+<h2>
+E-Tag Created
+</h2>
+
+
+<div class="result">
+
+
+<div class="result-row">
+
+<div class="result-label">
+Tag Code
+</div>
+
+<div
+id="resultTagCode"
+class="result-value"
+></div>
+
+</div>
+
+
+<div class="result-row">
+
+<div class="result-label">
+Username
+</div>
+
+<div
+id="resultUsername"
+class="result-value"
+></div>
+
+</div>
+
+
+<div class="result-row">
+
+<div class="result-label">
+Password
+</div>
+
+<div
+id="resultPassword"
+class="result-value"
+></div>
+
+</div>
+
+
+<div class="result-row">
+
+<div class="result-label">
+NFC URL
+</div>
+
+<div
+id="resultUrl"
+class="result-value"
+></div>
+
+</div>
+
+
+<button
+id="copyUrlButton"
+class="copy"
+>
+Copy NFC URL
+</button>
+
+
+<button
+id="copyCredentialsButton"
+class="copy"
+>
+Copy Username + Password
+</button>
+
+
+<div class="warning">
+
+⚠️ Save the generated username and password.
+The password will not be shown again after leaving this page.
+
+</div>
+
+
+</div>
+
+</div>
+
+</div>
+
+
+<script type="module">
+
+/* =========================================
+   SUPABASE
+========================================= */
+
+import {
+  supabase
+} from "./supabase.js";
+
+
+/* =========================================
+   SITE
+========================================= */
+
+const SITE_URL =
+"https://emoon3d.github.io/E-Tag/";
+
+
+/* =========================================
+   ELEMENTS
+========================================= */
+
+const tagCodeInput =
+document.getElementById(
+"tagCode"
+);
+
+const generateButton =
+document.getElementById(
+"generateButton"
+);
+
+const message =
+document.getElementById(
+"message"
+);
+
+const resultCard =
+document.getElementById(
+"resultCard"
+);
+
+const resultTagCode =
+document.getElementById(
+"resultTagCode"
+);
+
+const resultUsername =
+document.getElementById(
+"resultUsername"
+);
+
+const resultPassword =
+document.getElementById(
+"resultPassword"
+);
+
+const resultUrl =
+document.getElementById(
+"resultUrl"
+);
+
+
+/* =========================================
+   MESSAGE
+========================================= */
+
+function showMessage(
+text,
+type
+) {
+
+message.textContent =
+text;
+
+message.className =
+"message " + type;
+
+}
+
+
+/* =========================================
+   RANDOM STRING
+========================================= */
+
+function randomString(
+length
+) {
+
+const chars =
+"ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789";
+
+let result = "";
+
+const array =
+new Uint32Array(
+length
+);
+
+crypto.getRandomValues(
+array
+);
+
+for (
+let i = 0;
+i < length;
+i++
+) {
+
+result +=
+chars[
+array[i] %
+chars.length
+];
+
+}
+
+return result;
+
+}
+
+
+/* =========================================
+   GENERATE USERNAME
+========================================= */
+
+function generateUsername() {
+
+return "etag_" +
+randomString(8);
+
+}
+
+
+/* =========================================
+   GENERATE PASSWORD
+========================================= */
+
+function generatePassword() {
+
+return (
+randomString(5) +
+"!" +
+randomString(5)
+);
+
+}
+
+
+/* =========================================
+   GENERATE TAG
+========================================= */
+
+generateButton.addEventListener(
+"click",
+async () => {
+
+const tagCode =
+tagCodeInput
+.value
+.trim()
+.toUpperCase();
+
+
+/* VALIDATE */
+
+if (!tagCode) {
+
+showMessage(
+"Enter a tag code first.",
+"error"
+);
+
+return;
+
+}
+
+
+if (
+!/^[A-Z0-9_-]+$/.test(
+tagCode
+)
+) {
+
+showMessage(
+"Use only A-Z, 0-9, _ or - in the tag code.",
+"error"
+);
+
+return;
+
+}
+
+
+/* DISABLE BUTTON */
+
+generateButton.disabled =
+true;
+
+generateButton.textContent =
+"Creating...";
+
+
+try {
+
+
+/* =========================================
+   CHECK EXISTING TAG
+========================================= */
+
+const {
+data: existing,
+error: checkError
+} =
+await supabase
+.from("nfc_tags")
+.select(
+"id,tag_code,owner_id,active"
+)
+.eq(
+"tag_code",
+tagCode
+)
+.maybeSingle();
+
+
+if (checkError) {
+
+throw checkError;
+
+}
+
+
+if (existing) {
+
+showMessage(
+"This tag code already exists.",
+"error"
+);
+
+return;
+
+}
+
+
+/* =========================================
+   GENERATE CREDENTIALS
+========================================= */
+
+const username =
+generateUsername();
+
+const password =
+generatePassword();
+
+
+/*
+IMPORTANT:
+
+The password is currently generated
+for giving to the customer.
+
+We do NOT save the password in
+nfc_tags.
+*/
+
+
+/* =========================================
+   CREATE TAG
+========================================= */
+
+const {
+data,
+error
+} =
+await supabase
+.from("nfc_tags")
+.insert({
+
+tag_code:
+tagCode,
+
+tag_username:
+username,
+
+owner_id:
+null,
+
+active:
+false
+
+})
+.select(
+"id,tag_code,tag_username,owner_id,active"
+)
+.single();
+
+
+if (error) {
+
+throw error;
+
+}
+
+
+/* =========================================
+   NFC URL
+========================================= */
+
+const nfcUrl =
+SITE_URL +
+"id/" +
+encodeURIComponent(
+data.tag_code
+);
+
+
+/* =========================================
+   DISPLAY RESULT
+========================================= */
+
+resultTagCode.textContent =
+data.tag_code;
+
+resultUsername.textContent =
+username;
+
+resultPassword.textContent =
+password;
+
+resultUrl.textContent =
+nfcUrl;
+
+resultCard.classList.remove(
+"hidden"
+);
+
+
+showMessage(
+"E-Tag created successfully.",
+"success"
+);
+
+
+/*
+Clear input
+*/
+
+tagCodeInput.value = "";
+
+
+/*
+IMPORTANT:
+
+Keep password only in this page's
+current memory.
+*/
+
+window.currentCredentials = {
+
+username:
+username,
+
+password:
+password,
+
+url:
+nfcUrl
+
+};
+
+
+} catch (error) {
+
+console.error(
+error
+);
+
+showMessage(
+"Error: " +
+error.message,
+"error"
+);
+
+} finally {
+
+generateButton.disabled =
+false;
+
+generateButton.textContent =
+"Generate E-Tag";
+
+}
+
+}
+);
+
+
+/* =========================================
+   COPY URL
+========================================= */
+
+document
+.getElementById(
+"copyUrlButton"
+)
+.addEventListener(
+"click",
+async () => {
+
+if (
+!window.currentCredentials
+) {
+
+return;
+
+}
+
+await navigator.clipboard.writeText(
+window.currentCredentials.url
+);
+
+showMessage(
+"NFC URL copied.",
+"success"
+);
+
+}
+);
+
+
+/* =========================================
+   COPY CREDENTIALS
+========================================= */
+
+document
+.getElementById(
+"copyCredentialsButton"
+)
+.addEventListener(
+"click",
+async () => {
+
+if (
+!window.currentCredentials
+) {
+
+return;
+
+}
+
+const text =
+"Username: " +
+window.currentCredentials.username +
+"\nPassword: " +
+window.currentCredentials.password;
+
+await navigator.clipboard.writeText(
+text
+);
+
+showMessage(
+"Username and password copied.",
+"success"
+);
+
+}
+);
+
+</script>
+
+</body>
+
+</html>
+```
