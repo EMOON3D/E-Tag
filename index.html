@@ -103,6 +103,11 @@ button:active {
   transform: scale(0.98);
 }
 
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
 .link {
   text-align: center;
   margin-top: 18px;
@@ -252,7 +257,9 @@ Your Mini Digital Identity
 </div>
 
 
-<!-- LOGIN -->
+<!-- =====================================================
+     LOGIN
+===================================================== -->
 
 <section id="loginSection" class="card">
 
@@ -260,20 +267,26 @@ Your Mini Digital Identity
 Welcome back
 </h2>
 
-<label>Email</label>
+<label>
+Username
+</label>
 
 <input
-id="loginEmail"
-type="email"
-placeholder="you@example.com"
+id="loginUsername"
+type="text"
+placeholder="Your E-Tag username"
+autocomplete="username"
 >
 
-<label>Password</label>
+<label>
+Password
+</label>
 
 <input
 id="loginPassword"
 type="password"
 placeholder="Your password"
+autocomplete="current-password"
 >
 
 <button id="loginButton">
@@ -295,7 +308,9 @@ Create an E-Tag account
 </section>
 
 
-<!-- SIGNUP -->
+<!-- =====================================================
+     SIGNUP
+===================================================== -->
 
 <section
 id="signupSection"
@@ -306,20 +321,30 @@ class="card hidden"
 Create your E-Tag account
 </h2>
 
-<label>Email</label>
+<p style="color:#6b7280;font-size:14px;">
+Use your real email here for account confirmation.
+</p>
+
+<label>
+Email
+</label>
 
 <input
 id="signupEmail"
 type="email"
 placeholder="you@example.com"
+autocomplete="email"
 >
 
-<label>Password</label>
+<label>
+Password
+</label>
 
 <input
 id="signupPassword"
 type="password"
 placeholder="Minimum 6 characters"
+autocomplete="new-password"
 >
 
 <button id="signupButton">
@@ -341,7 +366,9 @@ Already have an account? Login
 </section>
 
 
-<!-- EMAIL CONFIRMATION -->
+<!-- =====================================================
+     EMAIL CONFIRMATION
+===================================================== -->
 
 <section
 id="confirmationSection"
@@ -371,7 +398,9 @@ Please confirm your email before logging in.
 </section>
 
 
-<!-- DASHBOARD -->
+<!-- =====================================================
+     DASHBOARD
+===================================================== -->
 
 <section
 id="dashboardSection"
@@ -403,7 +432,9 @@ Your digital identity
 My Digital Identity
 </h2>
 
-<label>Name</label>
+<label>
+Name
+</label>
 
 <input
 id="displayName"
@@ -411,14 +442,18 @@ type="text"
 placeholder="Your name"
 >
 
-<label>Bio</label>
+<label>
+Bio
+</label>
 
 <textarea
 id="bio"
 placeholder="Tell people about yourself"
 ></textarea>
 
-<label>Phone</label>
+<label>
+Phone
+</label>
 
 <input
 id="phone"
@@ -426,7 +461,9 @@ type="tel"
 placeholder="+94..."
 >
 
-<label>WhatsApp</label>
+<label>
+WhatsApp
+</label>
 
 <input
 id="whatsapp"
@@ -434,7 +471,9 @@ type="tel"
 placeholder="+94..."
 >
 
-<label>Public Email</label>
+<label>
+Public Email
+</label>
 
 <input
 id="publicEmail"
@@ -481,7 +520,9 @@ Logout
 </section>
 
 
-<!-- PUBLIC TAG -->
+<!-- =====================================================
+     PUBLIC TAG
+===================================================== -->
 
 <section
 id="publicTagSection"
@@ -495,7 +536,9 @@ Loading E-Tag...
 </div>
 
 
-<!-- ACTIVATION -->
+<!-- =====================================================
+     ACTIVATION
+===================================================== -->
 
 <div
 id="activationBox"
@@ -533,7 +576,9 @@ class="message"
 </div>
 
 
-<!-- PUBLIC PROFILE -->
+<!-- =====================================================
+     PUBLIC PROFILE
+===================================================== -->
 
 <div
 id="publicProfileBox"
@@ -582,7 +627,9 @@ class="hidden"
 </section>
 
 
-<!-- NOT FOUND -->
+<!-- =====================================================
+     NOT FOUND
+===================================================== -->
 
 <section
 id="notFoundSection"
@@ -616,13 +663,25 @@ import {
 } from "./supabase.js";
 
 
+/* =====================================================
+   SITE
+===================================================== */
+
 const SITE_URL =
 "https://emoon3d.github.io/E-Tag/";
 
 
-/* =========================================
+/* =====================================================
+   INTERNAL E-TAG EMAIL DOMAIN
+===================================================== */
+
+const ETAG_EMAIL_DOMAIN =
+"@etag.local";
+
+
+/* =====================================================
    ELEMENTS
-========================================= */
+===================================================== */
 
 const loginSection =
 document.getElementById("loginSection");
@@ -643,9 +702,9 @@ const notFoundSection =
 document.getElementById("notFoundSection");
 
 
-/* =========================================
+/* =====================================================
    HIDE ALL
-========================================= */
+===================================================== */
 
 function hideAll() {
 
@@ -664,9 +723,9 @@ function hideAll() {
 }
 
 
-/* =========================================
-   LOGIN
-========================================= */
+/* =====================================================
+   LOGIN SCREEN
+===================================================== */
 
 function showLogin() {
 
@@ -677,9 +736,9 @@ function showLogin() {
 }
 
 
-/* =========================================
-   SIGNUP
-========================================= */
+/* =====================================================
+   SIGNUP SCREEN
+===================================================== */
 
 function showSignup() {
 
@@ -690,9 +749,9 @@ function showSignup() {
 }
 
 
-/* =========================================
+/* =====================================================
    MESSAGE
-========================================= */
+===================================================== */
 
 function showMessage(
   id,
@@ -715,9 +774,9 @@ function showMessage(
 }
 
 
-/* =========================================
-   SWITCH
-========================================= */
+/* =====================================================
+   SWITCH LOGIN / SIGNUP
+===================================================== */
 
 document
 .getElementById("showSignup")
@@ -725,6 +784,7 @@ document
 "click",
 showSignup
 );
+
 
 document
 .getElementById("showLogin")
@@ -734,9 +794,9 @@ showLogin
 );
 
 
-/* =========================================
+/* =====================================================
    SIGNUP
-========================================= */
+===================================================== */
 
 document
 .getElementById("signupButton")
@@ -755,6 +815,7 @@ async () => {
   .getElementById("signupPassword")
   .value;
 
+
   if (!email || !password) {
 
     showMessage(
@@ -764,7 +825,9 @@ async () => {
     );
 
     return;
+
   }
+
 
   if (password.length < 6) {
 
@@ -775,59 +838,89 @@ async () => {
     );
 
     return;
+
   }
 
 
-  const {
-    data,
-    error
-  } =
-  await supabase.auth.signUp({
+  const signupButton =
+  document.getElementById(
+    "signupButton"
+  );
 
-    email: email,
 
-    password: password,
+  signupButton.disabled =
+  true;
 
-    options: {
+  signupButton.textContent =
+  "Creating...";
 
-      emailRedirectTo:
-      SITE_URL
+
+  try {
+
+    const {
+      data,
+      error
+    } =
+    await supabase.auth.signUp({
+
+      email:
+      email,
+
+      password:
+      password,
+
+      options: {
+
+        emailRedirectTo:
+        SITE_URL
+
+      }
+
+    });
+
+
+    if (error) {
+
+      showMessage(
+        "signupMessage",
+        error.message,
+        "error"
+      );
+
+      return;
 
     }
 
-  });
+
+    if (
+      data.user &&
+      !data.session
+    ) {
+
+      hideAll();
+
+      confirmationSection.classList.remove(
+        "hidden"
+      );
+
+      return;
+
+    }
 
 
-  if (error) {
+    if (data.session) {
 
-    showMessage(
-      "signupMessage",
-      error.message,
-      "error"
-    );
+      await afterLogin();
 
-    return;
-  }
+    }
 
+  } finally {
 
-  if (
-    data.user &&
-    !data.session
-  ) {
+    signupButton.disabled =
+    false;
 
-    hideAll();
-
-    confirmationSection.classList.remove(
-      "hidden"
-    );
-
-    return;
-  }
-
-
-  if (data.session) {
-
-    await afterLogin();
+    signupButton.textContent =
+    "Create Account";
 
   }
 
@@ -835,9 +928,10 @@ async () => {
 );
 
 
-/* =========================================
+/* =====================================================
    LOGIN
-========================================= */
+   USERNAME + PASSWORD
+===================================================== */
 
 document
 .getElementById("loginButton")
@@ -845,11 +939,12 @@ document
 "click",
 async () => {
 
-  const email =
+  const username =
   document
-  .getElementById("loginEmail")
+  .getElementById("loginUsername")
   .value
   .trim();
+
 
   const password =
   document
@@ -857,46 +952,93 @@ async () => {
   .value;
 
 
-  if (!email || !password) {
+  if (!username || !password) {
 
     showMessage(
       "loginMessage",
-      "Please enter your email and password.",
+      "Please enter your username and password.",
       "error"
     );
 
     return;
+
   }
 
 
-  const {
-    data,
-    error
-  } =
-  await supabase.auth.signInWithPassword({
+  /*
+   * Convert customer username
+   *
+   * etag_ABC123
+   *
+   * into internal Supabase email
+   *
+   * etag_ABC123@etag.local
+   */
 
-    email: email,
-
-    password: password
-
-  });
-
-
-  if (error) {
-
-    showMessage(
-      "loginMessage",
-      error.message,
-      "error"
-    );
-
-    return;
-  }
+  const internalEmail =
+  username.toLowerCase().endsWith(
+    ETAG_EMAIL_DOMAIN
+  )
+  ? username
+  : username + ETAG_EMAIL_DOMAIN;
 
 
-  if (data.session) {
+  const loginButton =
+  document.getElementById(
+    "loginButton"
+  );
 
-    await afterLogin();
+
+  loginButton.disabled =
+  true;
+
+  loginButton.textContent =
+  "Logging in...";
+
+
+  try {
+
+    const {
+      data,
+      error
+    } =
+    await supabase.auth.signInWithPassword({
+
+      email:
+      internalEmail,
+
+      password:
+      password
+
+    });
+
+
+    if (error) {
+
+      showMessage(
+        "loginMessage",
+        error.message,
+        "error"
+      );
+
+      return;
+
+    }
+
+
+    if (data.session) {
+
+      await afterLogin();
+
+    }
+
+  } finally {
+
+    loginButton.disabled =
+    false;
+
+    loginButton.textContent =
+    "Login";
 
   }
 
@@ -904,9 +1046,9 @@ async () => {
 );
 
 
-/* =========================================
+/* =====================================================
    AFTER LOGIN
-========================================= */
+===================================================== */
 
 async function afterLogin() {
 
@@ -928,10 +1070,7 @@ async function afterLogin() {
 
 
   /*
-   * IMPORTANT
-   *
-   * Check whether a tag was waiting
-   * for activation.
+   * Check pending E-Tag
    */
 
   const pendingTag =
@@ -941,12 +1080,6 @@ async function afterLogin() {
 
 
   if (pendingTag) {
-
-    /*
-     * DO NOT remove it yet.
-     *
-     * First activate it successfully.
-     */
 
     const result =
     await activateTag(
@@ -971,23 +1104,22 @@ async function afterLogin() {
     }
 
 
-    /*
-     * Activation failed.
-     */
-
     hideAll();
 
     publicTagSection.classList.remove(
       "hidden"
     );
 
+
     document
     .getElementById("publicLoading")
     .classList.add("hidden");
 
+
     document
     .getElementById("activationBox")
     .classList.remove("hidden");
+
 
     document
     .getElementById("activationTagId")
@@ -1011,9 +1143,9 @@ async function afterLogin() {
 }
 
 
-/* =========================================
+/* =====================================================
    ACTIVATE TAG
-========================================= */
+===================================================== */
 
 async function activateTag(
   tagCode,
@@ -1041,7 +1173,7 @@ async function activateTag(
 
 
   /*
-   * Get tag first
+   * Find tag
    */
 
   const {
@@ -1107,14 +1239,15 @@ async function activateTag(
 
     return {
       success: true,
-      message: "E-Tag already belongs to you."
+      message:
+      "E-Tag already belongs to you."
     };
 
   }
 
 
   /*
-   * Already belongs to somebody else
+   * Owned by another user
    */
 
   if (
@@ -1149,7 +1282,7 @@ async function activateTag(
 
 
   /*
-   * ACTUAL DATABASE UPDATE
+   * ACTIVATE
    */
 
   const {
@@ -1201,10 +1334,6 @@ async function activateTag(
   }
 
 
-  /*
-   * RLS may return zero rows
-   */
-
   if (
     !updated ||
     updated.length === 0
@@ -1217,16 +1346,6 @@ async function activateTag(
     };
 
   }
-
-
-  /*
-   * SUCCESS
-   */
-
-  console.log(
-    "E-TAG ACTIVATED:",
-    updated[0]
-  );
 
 
   /*
@@ -1278,15 +1397,16 @@ async function activateTag(
 
   return {
     success: true,
-    message: "E-Tag activated successfully."
+    message:
+    "E-Tag activated successfully."
   };
 
 }
 
 
-/* =========================================
+/* =====================================================
    ACTIVATE BUTTON
-========================================= */
+===================================================== */
 
 document
 .getElementById("activateButton")
@@ -1384,9 +1504,9 @@ async () => {
 );
 
 
-/* =========================================
+/* =====================================================
    DASHBOARD
-========================================= */
+===================================================== */
 
 async function loadDashboard() {
 
@@ -1426,9 +1546,9 @@ async function loadDashboard() {
 }
 
 
-/* =========================================
+/* =====================================================
    LOAD PROFILE
-========================================= */
+===================================================== */
 
 async function loadProfile(
   userId
@@ -1504,9 +1624,9 @@ async function loadProfile(
 }
 
 
-/* =========================================
+/* =====================================================
    SAVE PROFILE
-========================================= */
+===================================================== */
 
 document
 .getElementById("saveProfileButton")
@@ -1610,9 +1730,9 @@ async () => {
 );
 
 
-/* =========================================
+/* =====================================================
    PREVIEW
-========================================= */
+===================================================== */
 
 function updatePreview(
   data
@@ -1646,9 +1766,9 @@ function updatePreview(
 }
 
 
-/* =========================================
+/* =====================================================
    LOAD USER TAGS
-========================================= */
+===================================================== */
 
 async function loadTags(
   userId
@@ -1764,21 +1884,15 @@ async function loadTags(
 }
 
 
-/* =========================================
+/* =====================================================
    GET TAG CODE
-========================================= */
+===================================================== */
 
 function getTagCode() {
 
   const path =
   window.location.pathname;
 
-
-  /*
-   * DIRECT URL
-   *
-   * /E-Tag/id/ABX729
-   */
 
   const marker =
   "/E-Tag/id/";
@@ -1820,9 +1934,7 @@ function getTagCode() {
 
 
   /*
-   * GITHUB 404 REDIRECT
-   *
-   * /E-Tag/?route=%2FE-Tag%2Fid%2FABX729
+   * GitHub Pages 404 route
    */
 
   const params =
@@ -1901,9 +2013,9 @@ function getTagCode() {
 }
 
 
-/* =========================================
+/* =====================================================
    LOAD PUBLIC TAG
-========================================= */
+===================================================== */
 
 async function loadPublicTag(
   tagCode
@@ -1977,7 +2089,6 @@ async function loadPublicTag(
       error.message
     );
 
-
     return;
 
   }
@@ -1993,7 +2104,6 @@ async function loadPublicTag(
       tagCode
     );
 
-
     return;
 
   }
@@ -2008,7 +2118,7 @@ async function loadPublicTag(
 
 
   /*
-   * INACTIVE
+   * INACTIVE TAG
    */
 
   if (
@@ -2034,17 +2144,13 @@ async function loadPublicTag(
     tag.tag_code;
 
 
-    /*
-     * If logged in, we can show activation.
-     */
-
     return;
 
   }
 
 
   /*
-   * ACTIVE
+   * ACTIVE TAG
    */
 
   if (
@@ -2068,9 +2174,9 @@ async function loadPublicTag(
 }
 
 
-/* =========================================
+/* =====================================================
    PUBLIC PROFILE
-========================================= */
+===================================================== */
 
 async function loadPublicProfile(
   tag
@@ -2115,7 +2221,6 @@ async function loadPublicProfile(
       "Profile error: " +
       error.message
     );
-
 
     return;
 
@@ -2321,9 +2426,9 @@ async function loadPublicProfile(
 }
 
 
-/* =========================================
+/* =====================================================
    OWNER EDIT
-========================================= */
+===================================================== */
 
 document
 .getElementById("ownerEditButton")
@@ -2337,9 +2442,9 @@ async () => {
 );
 
 
-/* =========================================
+/* =====================================================
    NOT FOUND
-========================================= */
+===================================================== */
 
 function showNotFound(
 message
@@ -2364,9 +2469,9 @@ message
 }
 
 
-/* =========================================
+/* =====================================================
    ESCAPE HTML
-========================================= */
+===================================================== */
 
 function escapeHtml(
 value
@@ -2402,9 +2507,9 @@ value
 }
 
 
-/* =========================================
+/* =====================================================
    LOGOUT
-========================================= */
+===================================================== */
 
 document
 .getElementById("logoutButton")
@@ -2414,9 +2519,11 @@ async () => {
 
   await supabase.auth.signOut();
 
+
   sessionStorage.removeItem(
     "pendingTag"
   );
+
 
   showLogin();
 
@@ -2424,9 +2531,9 @@ async () => {
 );
 
 
-/* =========================================
+/* =====================================================
    AUTH STATE
-========================================= */
+===================================================== */
 
 supabase
 .auth
@@ -2446,22 +2553,13 @@ async (
 
   }
 
-
-  /*
-   * We deliberately don't call
-   * loadDashboard here for SIGNED_IN.
-   *
-   * afterLogin() handles the pending
-   * E-Tag first.
-   */
-
 }
 );
 
 
-/* =========================================
+/* =====================================================
    START APP
-========================================= */
+===================================================== */
 
 async function startApp() {
 
@@ -2516,4 +2614,3 @@ startApp();
 </body>
 
 </html>
-:::
