@@ -19,273 +19,181 @@
     }
 
     body {
-
       margin: 0;
-
-      font-family:
-        Arial,
-        Helvetica,
-        sans-serif;
-
+      font-family: Arial, Helvetica, sans-serif;
       background: #f4f6f8;
-
       color: #111827;
     }
 
-
     .container {
-
       width: 100%;
-
       max-width: 430px;
-
       margin: auto;
-
       padding: 25px 18px;
     }
 
-
     .logo {
-
       text-align: center;
-
       font-size: 34px;
-
       font-weight: 800;
-
       margin-top: 25px;
     }
 
-
     .tagline {
-
       text-align: center;
-
       color: #6b7280;
-
       margin-top: 6px;
-
       margin-bottom: 30px;
     }
 
-
     .card {
-
       background: white;
-
       border-radius: 18px;
-
       padding: 22px;
-
       margin-bottom: 18px;
-
-      box-shadow:
-        0 5px 25px
-        rgba(0,0,0,0.06);
+      box-shadow: 0 5px 25px rgba(0,0,0,0.06);
     }
 
-
     h2 {
-
       margin-top: 0;
-
       margin-bottom: 20px;
     }
 
-
     label {
-
       display: block;
-
       margin-top: 15px;
-
       margin-bottom: 6px;
-
       font-weight: 600;
     }
-
 
     input,
     textarea,
     select {
-
       width: 100%;
-
       padding: 13px;
-
-      border:
-        1px solid #d1d5db;
-
+      border: 1px solid #d1d5db;
       border-radius: 10px;
-
       font-size: 15px;
-
       outline: none;
     }
 
-
     textarea {
-
       min-height: 90px;
-
       resize: vertical;
     }
-
 
     input:focus,
     textarea:focus,
     select:focus {
-
       border-color: #111827;
     }
 
-
     button {
-
       width: 100%;
-
       border: none;
-
       border-radius: 10px;
-
       padding: 13px;
-
       margin-top: 18px;
-
       background: #111827;
-
       color: white;
-
       font-size: 16px;
-
       font-weight: 700;
+      cursor: pointer;
     }
 
-
     button:active {
-
       transform: scale(0.98);
     }
 
-
     .link {
-
       text-align: center;
-
       margin-top: 18px;
-
       color: #2563eb;
-
       cursor: pointer;
-
       font-weight: 600;
     }
 
-
     .hidden {
-
       display: none !important;
     }
 
-
     .message {
-
       margin-top: 15px;
-
       padding: 10px;
-
       border-radius: 8px;
-
       background: #f3f4f6;
-
       font-size: 14px;
-
       display: none;
     }
 
+    .success {
+      background: #ecfdf5;
+      color: #166534;
+    }
+
+    .error {
+      background: #fef2f2;
+      color: #991b1b;
+    }
 
     .profile {
-
       text-align: center;
-
       margin-bottom: 20px;
     }
 
-
     .avatar {
-
       width: 90px;
-
       height: 90px;
-
       border-radius: 50%;
-
       background: #111827;
-
       color: white;
-
       margin: auto;
-
       display: flex;
-
       align-items: center;
-
       justify-content: center;
-
       font-size: 36px;
-
       font-weight: 700;
     }
 
-
     .profile h3 {
-
       margin-bottom: 5px;
     }
 
-
     .profile p {
-
       color: #6b7280;
-
       margin-top: 5px;
     }
 
-
     .tag {
-
-      border:
-        1px solid #e5e7eb;
-
+      border: 1px solid #e5e7eb;
       padding: 14px;
-
       border-radius: 10px;
-
       margin-top: 10px;
     }
 
-
     .tag-code {
-
       font-weight: 700;
-
       font-size: 15px;
     }
 
-
     .status {
-
       font-size: 13px;
-
       color: #16a34a;
-
       margin-top: 5px;
     }
 
-
     .logout {
-
       background: #dc2626;
+    }
+
+    .verify-box {
+      text-align: center;
+      padding: 10px 0;
+    }
+
+    .verify-icon {
+      font-size: 45px;
+      margin-bottom: 10px;
     }
 
   </style>
@@ -324,7 +232,6 @@
       Welcome back
     </h2>
 
-
     <label>
       Email
     </label>
@@ -334,7 +241,6 @@
       type="email"
       placeholder="you@example.com"
     >
-
 
     <label>
       Password
@@ -346,19 +252,14 @@
       placeholder="Your password"
     >
 
-
-    <button
-      id="loginButton"
-    >
+    <button id="loginButton">
       Login
     </button>
-
 
     <div
       id="loginMessage"
       class="message"
     ></div>
-
 
     <div
       id="showSignup"
@@ -384,7 +285,6 @@
       Create your E-Tag
     </h2>
 
-
     <label>
       Email
     </label>
@@ -394,7 +294,6 @@
       type="email"
       placeholder="you@example.com"
     >
-
 
     <label>
       Password
@@ -406,26 +305,53 @@
       placeholder="Minimum 6 characters"
     >
 
-
-    <button
-      id="signupButton"
-    >
+    <button id="signupButton">
       Create Account
     </button>
-
 
     <div
       id="signupMessage"
       class="message"
     ></div>
 
-
     <div
       id="showLogin"
       class="link"
     >
-      Already have an account?
-      Login
+      Already have an account? Login
+    </div>
+
+  </section>
+
+
+
+  <!-- ========================= -->
+  <!-- EMAIL CONFIRMATION -->
+  <!-- ========================= -->
+
+  <section
+    id="confirmationSection"
+    class="card hidden"
+  >
+
+    <div class="verify-box">
+
+      <div class="verify-icon">
+        📧
+      </div>
+
+      <h2>
+        Check your email
+      </h2>
+
+      <p>
+        We've sent a confirmation link to your email address.
+      </p>
+
+      <p>
+        Please confirm your email before logging in.
+      </p>
+
     </div>
 
   </section>
@@ -446,7 +372,6 @@
 
     <div class="card">
 
-
       <div class="profile">
 
         <div
@@ -456,22 +381,15 @@
           E
         </div>
 
-
-        <h3
-          id="previewName"
-        >
+        <h3 id="previewName">
           Your Name
         </h3>
 
-
-        <p
-          id="previewBio"
-        >
+        <p id="previewBio">
           Your digital identity
         </p>
 
       </div>
-
 
 
       <h2>
@@ -537,9 +455,7 @@
         Identity Type
       </label>
 
-      <select
-        id="profileType"
-      >
+      <select id="profileType">
 
         <option value="personal">
           Personal
@@ -556,9 +472,7 @@
       </select>
 
 
-      <button
-        id="saveProfileButton"
-      >
+      <button id="saveProfileButton">
         Save Profile
       </button>
 
@@ -580,11 +494,8 @@
         My E-Tags
       </h2>
 
-
       <div id="tagsContainer">
-
         Loading...
-
       </div>
 
     </div>
@@ -619,7 +530,6 @@
    SUPABASE
    ========================================= */
 
-
 import {
   supabase
 } from "./supabase.js";
@@ -627,21 +537,32 @@ import {
 
 
 /* =========================================
-   ELEMENTS
+   PRODUCTION URL
    ========================================= */
 
+const SITE_URL =
+  "https://emoon3d.github.io/E-Tag/";
+
+
+
+/* =========================================
+   ELEMENTS
+   ========================================= */
 
 const loginSection =
   document.getElementById(
     "loginSection"
   );
 
-
 const signupSection =
   document.getElementById(
     "signupSection"
   );
 
+const confirmationSection =
+  document.getElementById(
+    "confirmationSection"
+  );
 
 const dashboardSection =
   document.getElementById(
@@ -654,10 +575,10 @@ const dashboardSection =
    MESSAGE
    ========================================= */
 
-
-function message(
+function showMessage(
   elementId,
-  text
+  text,
+  type = ""
 ) {
 
   const element =
@@ -668,8 +589,37 @@ function message(
   element.textContent =
     text;
 
+  element.className =
+    "message " + type;
+
   element.style.display =
     "block";
+}
+
+
+
+/* =========================================
+   HIDE ALL MAIN SECTIONS
+   ========================================= */
+
+function hideAllSections() {
+
+  loginSection
+    .classList
+    .add("hidden");
+
+  signupSection
+    .classList
+    .add("hidden");
+
+  confirmationSection
+    .classList
+    .add("hidden");
+
+  dashboardSection
+    .classList
+    .add("hidden");
+
 }
 
 
@@ -678,25 +628,15 @@ function message(
    SHOW LOGIN
    ========================================= */
 
+function showLogin() {
 
-document
-  .getElementById(
-    "showLogin"
-  )
-  .addEventListener(
-    "click",
-    () => {
+  hideAllSections();
 
-      signupSection
-        .classList
-        .add("hidden");
+  loginSection
+    .classList
+    .remove("hidden");
 
-      loginSection
-        .classList
-        .remove("hidden");
-
-    }
-  );
+}
 
 
 
@@ -704,6 +644,53 @@ document
    SHOW SIGNUP
    ========================================= */
 
+function showSignup() {
+
+  hideAllSections();
+
+  signupSection
+    .classList
+    .remove("hidden");
+
+}
+
+
+
+/* =========================================
+   SHOW CONFIRMATION
+   ========================================= */
+
+function showConfirmation() {
+
+  hideAllSections();
+
+  confirmationSection
+    .classList
+    .remove("hidden");
+
+}
+
+
+
+/* =========================================
+   SHOW DASHBOARD
+   ========================================= */
+
+function showDashboard() {
+
+  hideAllSections();
+
+  dashboardSection
+    .classList
+    .remove("hidden");
+
+}
+
+
+
+/* =========================================
+   LOGIN / SIGNUP SWITCH
+   ========================================= */
 
 document
   .getElementById(
@@ -711,17 +698,17 @@ document
   )
   .addEventListener(
     "click",
-    () => {
+    showSignup
+  );
 
-      loginSection
-        .classList
-        .add("hidden");
 
-      signupSection
-        .classList
-        .remove("hidden");
-
-    }
+document
+  .getElementById(
+    "showLogin"
+  )
+  .addEventListener(
+    "click",
+    showLogin
   );
 
 
@@ -729,7 +716,6 @@ document
 /* =========================================
    SIGNUP
    ========================================= */
-
 
 document
   .getElementById(
@@ -762,9 +748,10 @@ document
         !password
       ) {
 
-        message(
+        showMessage(
           "signupMessage",
-          "Please enter your email and password."
+          "Please enter your email and password.",
+          "error"
         );
 
         return;
@@ -775,15 +762,22 @@ document
         password.length < 6
       ) {
 
-        message(
+        showMessage(
           "signupMessage",
-          "Password must contain at least 6 characters."
+          "Password must contain at least 6 characters.",
+          "error"
         );
 
         return;
       }
 
 
+
+      /*
+       * IMPORTANT:
+       * This tells Supabase exactly where
+       * the confirmation email should return.
+       */
 
       const {
         data,
@@ -797,7 +791,14 @@ document
               email,
 
             password:
-              password
+              password,
+
+            options: {
+
+              emailRedirectTo:
+                SITE_URL
+
+            }
 
           });
 
@@ -805,9 +806,10 @@ document
 
       if (error) {
 
-        message(
+        showMessage(
           "signupMessage",
-          error.message
+          error.message,
+          "error"
         );
 
         return;
@@ -815,59 +817,37 @@ document
 
 
 
+      /*
+       * When email confirmation is enabled,
+       * Supabase normally returns a user
+       * without an active session.
+       */
+
       if (
-        data.user
+        data.user &&
+        !data.session
       ) {
 
+        showConfirmation();
 
-        /*
-          Create profile.
-
-          RLS ensures that the authenticated
-          user can only create their own row.
-        */
-
-
-        const {
-          error:
-            profileError
-        } =
-          await supabase
-            .from(
-              "profiles"
-            )
-            .insert({
-
-              id:
-                data.user.id,
-
-              email:
-                email,
-
-              profile_type:
-                "personal"
-
-            });
-
-
-        if (
-          profileError
-        ) {
-
-          console.error(
-            profileError
-          );
-
-        }
+        return;
 
       }
 
 
 
-      message(
-        "signupMessage",
-        "Account created. Check your email if email confirmation is enabled."
-      );
+      /*
+       * If confirmation is disabled,
+       * the user may get a session immediately.
+       */
+
+      if (
+        data.session
+      ) {
+
+        await loadDashboard();
+
+      }
 
     }
   );
@@ -877,7 +857,6 @@ document
 /* =========================================
    LOGIN
    ========================================= */
-
 
 document
   .getElementById(
@@ -906,6 +885,22 @@ document
 
 
 
+      if (
+        !email ||
+        !password
+      ) {
+
+        showMessage(
+          "loginMessage",
+          "Please enter your email and password.",
+          "error"
+        );
+
+        return;
+      }
+
+
+
       const {
         data,
         error
@@ -926,9 +921,10 @@ document
 
       if (error) {
 
-        message(
+        showMessage(
           "loginMessage",
-          error.message
+          error.message,
+          "error"
         );
 
         return;
@@ -953,7 +949,6 @@ document
    LOAD DASHBOARD
    ========================================= */
 
-
 async function loadDashboard() {
 
 
@@ -969,25 +964,14 @@ async function loadDashboard() {
 
   if (!user) {
 
+    showLogin();
+
     return;
 
   }
 
 
-  loginSection
-    .classList
-    .add("hidden");
-
-
-  signupSection
-    .classList
-    .add("hidden");
-
-
-  dashboardSection
-    .classList
-    .remove("hidden");
-
+  showDashboard();
 
 
   await loadProfile(
@@ -1006,7 +990,6 @@ async function loadDashboard() {
 /* =========================================
    LOAD PROFILE
    ========================================= */
-
 
 async function loadProfile(
   userId
@@ -1116,7 +1099,6 @@ async function loadProfile(
    SAVE PROFILE
    ========================================= */
 
-
 document
   .getElementById(
     "saveProfileButton"
@@ -1137,6 +1119,8 @@ document
 
 
       if (!user) {
+
+        showLogin();
 
         return;
 
@@ -1220,9 +1204,10 @@ document
 
       if (error) {
 
-        message(
+        showMessage(
           "profileMessage",
-          error.message
+          error.message,
+          "error"
         );
 
         return;
@@ -1236,9 +1221,10 @@ document
       );
 
 
-      message(
+      showMessage(
         "profileMessage",
-        "Profile saved successfully."
+        "Profile saved successfully.",
+        "success"
       );
 
     }
@@ -1249,7 +1235,6 @@ document
 /* =========================================
    PROFILE PREVIEW
    ========================================= */
-
 
 function updatePreview(
   data
@@ -1295,7 +1280,6 @@ function updatePreview(
    LOAD NFC TAGS
    ========================================= */
 
-
 async function loadTags(
   userId
 ) {
@@ -1329,7 +1313,6 @@ async function loadTags(
     );
 
 
-
   if (error) {
 
     container.textContent =
@@ -1361,7 +1344,6 @@ async function loadTags(
 
   container.innerHTML =
     "";
-
 
 
   data.forEach(
@@ -1416,7 +1398,6 @@ async function loadTags(
    ESCAPE HTML
    ========================================= */
 
-
 function escapeHtml(
   value
 ) {
@@ -1453,7 +1434,6 @@ function escapeHtml(
    LOGOUT
    ========================================= */
 
-
 document
   .getElementById(
     "logoutButton"
@@ -1468,14 +1448,45 @@ document
         .signOut();
 
 
-      dashboardSection
-        .classList
-        .add("hidden");
+      showLogin();
+
+    }
+  );
 
 
-      loginSection
-        .classList
-        .remove("hidden");
+
+/* =========================================
+   AUTH STATE
+   ========================================= */
+
+supabase
+  .auth
+  .onAuthStateChange(
+    async (
+      event,
+      session
+    ) => {
+
+
+      if (
+        event ===
+        "SIGNED_IN" &&
+        session
+      ) {
+
+        await loadDashboard();
+
+      }
+
+
+      if (
+        event ===
+        "SIGNED_OUT"
+      ) {
+
+        showLogin();
+
+      }
 
     }
   );
@@ -1485,7 +1496,6 @@ document
 /* =========================================
    CHECK EXISTING SESSION
    ========================================= */
-
 
 async function checkSession() {
 
@@ -1503,6 +1513,10 @@ async function checkSession() {
   if (session) {
 
     await loadDashboard();
+
+  } else {
+
+    showLogin();
 
   }
 
