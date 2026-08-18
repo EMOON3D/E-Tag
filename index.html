@@ -234,12 +234,6 @@ button:active {
   margin-bottom: 20px;
 }
 
-.small {
-  font-size: 13px;
-  color: #6b7280;
-  text-align: center;
-}
-
 </style>
 
 </head>
@@ -257,9 +251,7 @@ Your Mini Digital Identity
 </div>
 
 
-<!-- ================================= -->
 <!-- LOGIN -->
-<!-- ================================= -->
 
 <section id="loginSection" class="card">
 
@@ -267,9 +259,7 @@ Your Mini Digital Identity
 Welcome back
 </h2>
 
-<label>
-Email
-</label>
+<label>Email</label>
 
 <input
 id="loginEmail"
@@ -277,9 +267,7 @@ type="email"
 placeholder="you@example.com"
 >
 
-<label>
-Password
-</label>
+<label>Password</label>
 
 <input
 id="loginPassword"
@@ -300,9 +288,7 @@ Create an E-Tag account
 </section>
 
 
-<!-- ================================= -->
 <!-- SIGNUP -->
-<!-- ================================= -->
 
 <section id="signupSection" class="card hidden">
 
@@ -310,9 +296,7 @@ Create an E-Tag account
 Create your E-Tag account
 </h2>
 
-<label>
-Email
-</label>
+<label>Email</label>
 
 <input
 id="signupEmail"
@@ -320,9 +304,7 @@ type="email"
 placeholder="you@example.com"
 >
 
-<label>
-Password
-</label>
+<label>Password</label>
 
 <input
 id="signupPassword"
@@ -343,9 +325,7 @@ Already have an account? Login
 </section>
 
 
-<!-- ================================= -->
-<!-- EMAIL CONFIRMATION -->
-<!-- ================================= -->
+<!-- CONFIRMATION -->
 
 <section id="confirmationSection" class="card hidden">
 
@@ -372,12 +352,9 @@ Please confirm your email before logging in.
 </section>
 
 
-<!-- ================================= -->
 <!-- DASHBOARD -->
-<!-- ================================= -->
 
 <section id="dashboardSection" class="hidden">
-
 
 <div class="card">
 
@@ -401,9 +378,7 @@ Your digital identity
 My Digital Identity
 </h2>
 
-<label>
-Name
-</label>
+<label>Name</label>
 
 <input
 id="displayName"
@@ -411,18 +386,14 @@ type="text"
 placeholder="Your name"
 >
 
-<label>
-Bio
-</label>
+<label>Bio</label>
 
 <textarea
 id="bio"
 placeholder="Tell people about yourself"
 ></textarea>
 
-<label>
-Phone
-</label>
+<label>Phone</label>
 
 <input
 id="phone"
@@ -430,9 +401,7 @@ type="tel"
 placeholder="+94..."
 >
 
-<label>
-WhatsApp
-</label>
+<label>WhatsApp</label>
 
 <input
 id="whatsapp"
@@ -440,9 +409,7 @@ type="tel"
 placeholder="+94..."
 >
 
-<label>
-Public Email
-</label>
+<label>Public Email</label>
 
 <input
 id="publicEmail"
@@ -458,8 +425,6 @@ Save Profile
 
 </div>
 
-
-<!-- TAGS -->
 
 <div class="card">
 
@@ -485,12 +450,9 @@ Logout
 </section>
 
 
-<!-- ================================= -->
 <!-- PUBLIC TAG -->
-<!-- ================================= -->
 
 <section id="publicTagSection" class="hidden">
-
 
 <div class="card">
 
@@ -561,15 +523,12 @@ Digital Identity
 
 </div>
 
-
 </div>
 
 </section>
 
 
-<!-- ================================= -->
 <!-- NOT FOUND -->
-<!-- ================================= -->
 
 <section id="notFoundSection" class="card hidden">
 
@@ -589,7 +548,6 @@ This E-Tag does not exist.
 
 <script type="module">
 
-
 /* =========================================
    SUPABASE
 ========================================= */
@@ -600,7 +558,7 @@ import {
 
 
 /* =========================================
-   SITE URL
+   SITE
 ========================================= */
 
 const SITE_URL =
@@ -628,31 +586,6 @@ document.getElementById("publicTagSection");
 
 const notFoundSection =
 document.getElementById("notFoundSection");
-
-
-/* =========================================
-   MESSAGE
-========================================= */
-
-function showMessage(
-elementId,
-text,
-type = ""
-) {
-
-const element =
-document.getElementById(elementId);
-
-element.textContent =
-text;
-
-element.className =
-"message " + type;
-
-element.style.display =
-"block";
-
-}
 
 
 /* =========================================
@@ -716,7 +649,32 @@ dashboardSection.classList.remove("hidden");
 
 
 /* =========================================
-   SWITCH LOGIN / SIGNUP
+   MESSAGE
+========================================= */
+
+function showMessage(
+elementId,
+text,
+type = ""
+) {
+
+const element =
+document.getElementById(elementId);
+
+element.textContent =
+text;
+
+element.className =
+"message " + type;
+
+element.style.display =
+"block";
+
+}
+
+
+/* =========================================
+   LOGIN / SIGNUP SWITCH
 ========================================= */
 
 document
@@ -725,7 +683,6 @@ document
 "click",
 showSignup
 );
-
 
 document
 .getElementById("showLogin")
@@ -786,9 +743,8 @@ error
 } =
 await supabase.auth.signUp({
 
-email: email,
-
-password: password,
+email,
+password,
 
 options: {
 
@@ -812,18 +768,18 @@ return;
 
 }
 
-
 if (
 data.user &&
 !data.session
 ) {
 
-showConfirmation();
+hideAllSections();
+
+confirmationSection.classList.remove("hidden");
 
 return;
 
 }
-
 
 if (data.session) {
 
@@ -874,9 +830,8 @@ error
 } =
 await supabase.auth.signInWithPassword({
 
-email: email,
-
-password: password
+email,
+password
 
 });
 
@@ -893,10 +848,22 @@ return;
 
 }
 
-
 if (data.session) {
 
+const pendingTag =
+sessionStorage.getItem("pendingTag");
+
+if (pendingTag) {
+
+sessionStorage.removeItem("pendingTag");
+
+await loadPublicTag(pendingTag);
+
+} else {
+
 await loadDashboard();
+
+}
 
 }
 
@@ -916,7 +883,6 @@ user
 }
 } =
 await supabase.auth.getUser();
-
 
 if (!user) {
 
@@ -951,7 +917,6 @@ await supabase
 .eq("id", userId)
 .maybeSingle();
 
-
 if (error) {
 
 console.error(error);
@@ -966,36 +931,30 @@ return;
 
 }
 
-
 document
 .getElementById("displayName")
 .value =
 data.display_name || "";
-
 
 document
 .getElementById("bio")
 .value =
 data.bio || "";
 
-
 document
 .getElementById("phone")
 .value =
 data.phone || "";
-
 
 document
 .getElementById("whatsapp")
 .value =
 data.whatsapp || "";
 
-
 document
 .getElementById("publicEmail")
 .value =
 data.email || "";
-
 
 updatePreview(data);
 
@@ -1019,7 +978,6 @@ user
 } =
 await supabase.auth.getUser();
 
-
 if (!user) {
 
 showLogin();
@@ -1028,10 +986,10 @@ return;
 
 }
 
-
 const profile = {
 
-id: user.id,
+id:
+user.id,
 
 display_name:
 document
@@ -1065,14 +1023,17 @@ document
 
 };
 
-
 const {
 error
 } =
 await supabase
 .from("profiles")
-.upsert(profile);
-
+.upsert(
+profile,
+{
+onConflict:"id"
+}
+);
 
 if (error) {
 
@@ -1086,9 +1047,7 @@ return;
 
 }
 
-
 updatePreview(profile);
-
 
 showMessage(
 "profileMessage",
@@ -1110,19 +1069,16 @@ const name =
 data.display_name ||
 "Your Name";
 
-
 document
 .getElementById("previewName")
 .textContent =
 name;
-
 
 document
 .getElementById("previewBio")
 .textContent =
 data.bio ||
 "Your digital identity";
-
 
 document
 .getElementById("avatar")
@@ -1143,7 +1099,6 @@ async function loadTags(userId) {
 const container =
 document.getElementById("tagsContainer");
 
-
 const {
 data,
 error
@@ -1159,7 +1114,6 @@ ascending:false
 }
 );
 
-
 if (error) {
 
 container.textContent =
@@ -1171,7 +1125,6 @@ return;
 
 }
 
-
 if (!data || data.length === 0) {
 
 container.textContent =
@@ -1181,9 +1134,7 @@ return;
 
 }
 
-
 container.innerHTML = "";
-
 
 data.forEach(tag => {
 
@@ -1193,18 +1144,15 @@ document.createElement("div");
 div.className =
 "tag";
 
-
 const status =
 tag.active
 ? "Active"
 : "Inactive";
 
-
 const profileURL =
 SITE_URL +
 "id/" +
 encodeURIComponent(tag.tag_code);
-
 
 div.innerHTML = `
 
@@ -1222,7 +1170,6 @@ ${escapeHtml(profileURL)}
 
 `;
 
-
 container.appendChild(div);
 
 });
@@ -1231,7 +1178,7 @@ container.appendChild(div);
 
 
 /* =========================================
-   PUBLIC TAG ROUTE
+   GET TAG CODE
 ========================================= */
 
 function getTagCodeFromURL() {
@@ -1240,20 +1187,19 @@ const path =
 window.location.pathname;
 
 
+/*
+Normal URL:
+
+/E-Tag/id/ABX729
+*/
+
 const marker =
 "/E-Tag/id/";
-
 
 const index =
 path.indexOf(marker);
 
-
-if (index === -1) {
-
-return null;
-
-}
-
+if (index !== -1) {
 
 const code =
 path
@@ -1262,15 +1208,74 @@ index + marker.length
 )
 .split("/")[0];
 
+if (code) {
 
-if (!code) {
+return decodeURIComponent(code);
 
-return null;
+}
 
 }
 
 
+/*
+GitHub Pages 404 redirect:
+
+/E-Tag/?route=%2FE-Tag%2Fid%2FABX729
+*/
+
+const params =
+new URLSearchParams(
+window.location.search
+);
+
+const route =
+params.get("route");
+
+if (route) {
+
+let decodedRoute;
+
+try {
+
+decodedRoute =
+decodeURIComponent(route);
+
+} catch {
+
+decodedRoute =
+route;
+
+}
+
+const routeMarker =
+"/E-Tag/id/";
+
+const routeIndex =
+decodedRoute.indexOf(
+routeMarker
+);
+
+if (routeIndex !== -1) {
+
+const code =
+decodedRoute
+.substring(
+routeIndex +
+routeMarker.length
+)
+.split("/")[0];
+
+if (code) {
+
 return decodeURIComponent(code);
+
+}
+
+}
+
+}
+
+return null;
 
 }
 
@@ -1285,16 +1290,13 @@ hideAllSections();
 
 publicTagSection.classList.remove("hidden");
 
-
 document
 .getElementById("publicLoading")
 .classList.remove("hidden");
 
-
 document
 .getElementById("activationBox")
 .classList.add("hidden");
-
 
 document
 .getElementById("publicProfileBox")
@@ -1327,7 +1329,6 @@ return;
 
 }
 
-
 if (!tag) {
 
 showNotFound();
@@ -1338,7 +1339,7 @@ return;
 
 
 /*
-ACTIVE TAG
+ACTIVE
 */
 
 if (tag.active === true) {
@@ -1351,23 +1352,17 @@ return;
 
 
 /*
-INACTIVE TAG
+INACTIVE
 */
 
 document
 .getElementById("activationBox")
 .classList.remove("hidden");
 
-
 document
 .getElementById("activationTagId")
 .textContent =
 "E-Tag: " + tag.tag_code;
-
-
-/*
-Save current tag for activation
-*/
 
 window.currentTag =
 tag;
@@ -1376,7 +1371,7 @@ tag;
 
 
 /* =========================================
-   ACTIVATE TAG
+   ACTIVATE
 ========================================= */
 
 document
@@ -1388,13 +1383,11 @@ async () => {
 const tag =
 window.currentTag;
 
-
 if (!tag) {
 
 return;
 
 }
-
 
 const {
 data: {
@@ -1405,10 +1398,6 @@ await supabase.auth.getUser();
 
 
 if (!user) {
-
-/*
-Remember tag before login
-*/
 
 sessionStorage.setItem(
 "pendingTag",
@@ -1429,8 +1418,7 @@ return;
 
 
 /*
-Prevent someone from claiming
-an already-owned tag.
+Already owned
 */
 
 if (
@@ -1450,7 +1438,7 @@ return;
 
 
 /*
-Claim the tag.
+Claim tag
 */
 
 const {
@@ -1481,14 +1469,13 @@ console.error(error);
 
 showMessage(
 "activationMessage",
-"Unable to activate this E-Tag. Please try again.",
+error.message,
 "error"
 );
 
 return;
 
 }
-
 
 if (!data) {
 
@@ -1504,7 +1491,7 @@ return;
 
 
 /*
-Create profile if necessary.
+Create profile
 */
 
 const {
@@ -1519,6 +1506,9 @@ await supabase
 
 if (!existingProfile) {
 
+const {
+error: profileError
+} =
 await supabase
 .from("profiles")
 .insert({
@@ -1530,6 +1520,14 @@ email:
 user.email || ""
 
 });
+
+if (profileError) {
+
+console.error(
+profileError
+);
+
+}
 
 }
 
@@ -1554,7 +1552,7 @@ await loadPublicProfile(data);
 
 
 /* =========================================
-   LOAD PUBLIC PROFILE
+   PUBLIC PROFILE
 ========================================= */
 
 async function loadPublicProfile(tag) {
@@ -1567,7 +1565,6 @@ return;
 
 }
 
-
 const {
 data: profile,
 error
@@ -1577,7 +1574,6 @@ await supabase
 .select("*")
 .eq("id", tag.owner_id)
 .maybeSingle();
-
 
 if (error) {
 
@@ -1589,7 +1585,6 @@ return;
 
 }
 
-
 if (!profile) {
 
 showNotFound();
@@ -1599,14 +1594,9 @@ return;
 }
 
 
-/*
-Hide activation
-*/
-
 document
 .getElementById("activationBox")
 .classList.add("hidden");
-
 
 document
 .getElementById("publicProfileBox")
@@ -1617,23 +1607,19 @@ const name =
 profile.display_name ||
 "Unnamed E-Tag";
 
-
 const bio =
 profile.bio ||
 "Digital Identity";
-
 
 document
 .getElementById("publicName")
 .textContent =
 name;
 
-
 document
 .getElementById("publicBio")
 .textContent =
 bio;
-
 
 document
 .getElementById("publicAvatar")
@@ -1713,7 +1699,7 @@ buttons.appendChild(whatsapp);
 
 
 /*
-PUBLIC EMAIL
+EMAIL
 */
 
 if (profile.email) {
@@ -1737,7 +1723,7 @@ buttons.appendChild(email);
 
 
 /*
-OWNER CHECK
+OWNER
 */
 
 const {
@@ -1747,12 +1733,10 @@ user
 } =
 await supabase.auth.getUser();
 
-
 const ownerBox =
 document.getElementById(
 "ownerEditBox"
 );
-
 
 if (
 user &&
@@ -1766,11 +1750,6 @@ ownerBox.classList.remove("hidden");
 ownerBox.classList.add("hidden");
 
 }
-
-
-/*
-Save current tag
-*/
 
 window.currentPublicTag =
 tag;
@@ -1795,7 +1774,6 @@ user
 } =
 await supabase.auth.getUser();
 
-
 if (!user) {
 
 showLogin();
@@ -1803,7 +1781,6 @@ showLogin();
 return;
 
 }
-
 
 if (
 !window.currentPublicTag ||
@@ -1818,7 +1795,6 @@ alert(
 return;
 
 }
-
 
 await loadDashboard();
 
@@ -1840,7 +1816,7 @@ notFoundSection.classList.remove("hidden");
 
 
 /* =========================================
-   ESCAPE HTML
+   ESCAPE
 ========================================= */
 
 function escapeHtml(value) {
@@ -1898,16 +1874,10 @@ event === "SIGNED_IN" &&
 session
 ) {
 
-/*
-If user came from an E-Tag
-activation page, return there.
-*/
-
 const pendingTag =
 sessionStorage.getItem(
 "pendingTag"
 );
-
 
 if (pendingTag) {
 
@@ -1923,7 +1893,6 @@ return;
 
 }
 
-
 await loadDashboard();
 
 }
@@ -1933,7 +1902,7 @@ await loadDashboard();
 
 
 /* =========================================
-   INITIAL ROUTING
+   START
 ========================================= */
 
 async function startApp() {
@@ -1943,7 +1912,7 @@ getTagCodeFromURL();
 
 
 /*
-PUBLIC TAG URL
+PUBLIC NFC URL
 */
 
 if (tagCode) {
