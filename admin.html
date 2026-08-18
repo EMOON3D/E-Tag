@@ -1,12 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
 
 <title>E-Tag | Admin</title>
 
 <style>
+
 * {
   box-sizing: border-box;
 }
@@ -83,6 +88,10 @@ button:disabled {
   cursor: not-allowed;
 }
 
+button:active {
+  transform: scale(.98);
+}
+
 .copy {
   background: #2563eb;
 }
@@ -142,147 +151,156 @@ button:disabled {
   color: #9a3412;
   font-size: 13px;
 }
+
 </style>
+
 </head>
 
 <body>
 
 <div class="container">
 
-  <div class="logo">
-    E-Tag
-  </div>
+<div class="logo">
+E-Tag
+</div>
 
-  <div class="subtitle">
-    Admin • Create New E-Tag
-  </div>
-
-
-  <!-- GENERATOR -->
-
-  <div class="card">
-
-    <h2>
-      Generate New E-Tag
-    </h2>
-
-    <label>
-      Tag Code
-    </label>
-
-    <input
-      id="tagCode"
-      type="text"
-      placeholder="Example: CDX481"
-      maxlength="30"
-      autocomplete="off"
-    >
-
-    <button id="generateButton">
-      Generate E-Tag
-    </button>
-
-    <div
-      id="message"
-      class="message"
-    ></div>
-
-  </div>
+<div class="subtitle">
+Admin • Create New E-Tag
+</div>
 
 
-  <!-- RESULT -->
+<!-- ==============================
+     GENERATOR
+============================== -->
 
-  <div
-    id="resultCard"
-    class="card hidden"
-  >
+<div class="card">
 
-    <h2>
-      E-Tag Created
-    </h2>
+<h2>
+Generate New E-Tag
+</h2>
 
-    <div class="result">
+<label>
+Tag Code
+</label>
 
-      <div class="result-row">
+<input
+id="tagCode"
+type="text"
+placeholder="Example: ABX729"
+maxlength="30"
+>
 
-        <div class="result-label">
-          Tag Code
-        </div>
+<button id="generateButton">
+Generate E-Tag
+</button>
 
-        <div
-          id="resultTagCode"
-          class="result-value"
-        ></div>
+<div
+id="message"
+class="message"
+></div>
 
-      </div>
-
-
-      <div class="result-row">
-
-        <div class="result-label">
-          Username
-        </div>
-
-        <div
-          id="resultUsername"
-          class="result-value"
-        ></div>
-
-      </div>
+</div>
 
 
-      <div class="result-row">
+<!-- ==============================
+     RESULT
+============================== -->
 
-        <div class="result-label">
-          Password
-        </div>
+<div
+id="resultCard"
+class="card hidden"
+>
 
-        <div
-          id="resultPassword"
-          class="result-value"
-        ></div>
+<h2>
+E-Tag Created
+</h2>
 
-      </div>
-
-
-      <div class="result-row">
-
-        <div class="result-label">
-          NFC URL
-        </div>
-
-        <div
-          id="resultUrl"
-          class="result-value"
-        ></div>
-
-      </div>
+<div class="result">
 
 
-      <button
-        id="copyUrlButton"
-        class="copy"
-      >
-        Copy NFC URL
-      </button>
+<div class="result-row">
+
+<div class="result-label">
+Tag Code
+</div>
+
+<div
+id="resultTagCode"
+class="result-value"
+></div>
+
+</div>
 
 
-      <button
-        id="copyCredentialsButton"
-        class="copy"
-      >
-        Copy Username + Password
-      </button>
+<div class="result-row">
+
+<div class="result-label">
+Username
+</div>
+
+<div
+id="resultUsername"
+class="result-value"
+></div>
+
+</div>
 
 
-      <div class="warning">
-        ⚠️ Save the generated username and password.
-        The password will not be shown again after leaving this page.
-      </div>
+<div class="result-row">
 
-    </div>
+<div class="result-label">
+Password
+</div>
 
-  </div>
+<div
+id="resultPassword"
+class="result-value"
+></div>
+
+</div>
+
+
+<div class="result-row">
+
+<div class="result-label">
+NFC URL
+</div>
+
+<div
+id="resultUrl"
+class="result-value"
+></div>
+
+</div>
+
+
+<button
+id="copyUrlButton"
+class="copy"
+>
+Copy NFC URL
+</button>
+
+
+<button
+id="copyCredentialsButton"
+class="copy"
+>
+Copy Username + Password
+</button>
+
+
+<div class="warning">
+
+⚠️ Save the generated username and password.
+The password will not be shown again after leaving this page.
+
+</div>
+
+
+</div>
+
+</div>
 
 </div>
 
@@ -299,15 +317,7 @@ import {
 
 
 /* =========================================
-   EDGE FUNCTION
-========================================= */
-
-const EDGE_FUNCTION_URL =
-"https://zuptxhcjzhqynrquyray.supabase.co/functions/v1/create-etag-user";
-
-
-/* =========================================
-   SITE URL
+   SITE
 ========================================= */
 
 const SITE_URL =
@@ -320,42 +330,42 @@ const SITE_URL =
 
 const tagCodeInput =
 document.getElementById(
-  "tagCode"
+"tagCode"
 );
 
 const generateButton =
 document.getElementById(
-  "generateButton"
+"generateButton"
 );
 
 const message =
 document.getElementById(
-  "message"
+"message"
 );
 
 const resultCard =
 document.getElementById(
-  "resultCard"
+"resultCard"
 );
 
 const resultTagCode =
 document.getElementById(
-  "resultTagCode"
+"resultTagCode"
 );
 
 const resultUsername =
 document.getElementById(
-  "resultUsername"
+"resultUsername"
 );
 
 const resultPassword =
 document.getElementById(
-  "resultPassword"
+"resultPassword"
 );
 
 const resultUrl =
 document.getElementById(
-  "resultUrl"
+"resultUrl"
 );
 
 
@@ -369,10 +379,10 @@ function showMessage(
 ) {
 
   message.textContent =
-    text;
+  text;
 
   message.className =
-    "message " + type;
+  "message " + type;
 
 }
 
@@ -386,14 +396,14 @@ function randomString(
 ) {
 
   const chars =
-    "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789";
+  "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789";
 
   let result = "";
 
   const array =
-    new Uint32Array(
-      length
-    );
+  new Uint32Array(
+    length
+  );
 
   crypto.getRandomValues(
     array
@@ -406,9 +416,10 @@ function randomString(
   ) {
 
     result +=
-      chars[
-        array[i] % chars.length
-      ];
+    chars[
+      array[i] %
+      chars.length
+    ];
 
   }
 
@@ -418,19 +429,21 @@ function randomString(
 
 
 /* =========================================
-   USERNAME
+   GENERATE USERNAME
 ========================================= */
 
 function generateUsername() {
 
-  return "etag_" +
-    randomString(8);
+  return (
+    "etag_" +
+    randomString(8)
+  );
 
 }
 
 
 /* =========================================
-   PASSWORD
+   GENERATE PASSWORD
 ========================================= */
 
 function generatePassword() {
@@ -453,13 +466,15 @@ generateButton.addEventListener(
   async () => {
 
     const tagCode =
-      tagCodeInput
-        .value
-        .trim()
-        .toUpperCase();
+    tagCodeInput
+    .value
+    .trim()
+    .toUpperCase();
 
 
-    /* VALIDATE */
+    /* =====================================
+       VALIDATION
+    ===================================== */
 
     if (!tagCode) {
 
@@ -489,146 +504,151 @@ generateButton.addEventListener(
     }
 
 
-    /* RESET */
+    /* =====================================
+       GENERATE CREDENTIALS
+    ===================================== */
 
-    resultCard.classList.add(
-      "hidden"
-    );
+    const username =
+    generateUsername();
+
+    const password =
+    generatePassword();
 
 
-    /* DISABLE */
+    /* =====================================
+       BUTTON STATE
+    ===================================== */
 
     generateButton.disabled =
-      true;
+    true;
 
     generateButton.textContent =
-      "Creating...";
+    "Creating...";
 
 
     try {
 
-      /* =====================================
-         GENERATE CREDENTIALS
-      ===================================== */
 
-      const username =
-        generateUsername();
-
-      const password =
-        generatePassword();
-
-
-      /* =====================================
+      /* ===================================
          CALL EDGE FUNCTION
-      ===================================== */
+
+         IMPORTANT:
+
+         We DO NOT insert directly into
+         nfc_tags here.
+
+         Edge Function creates:
+
+         1. Supabase Auth user
+         2. nfc_tags row
+      =================================== */
 
       const {
-        data: {
-          session
-        }
+        data,
+        error
       } =
-      await supabase.auth.getSession();
+      await supabase.functions.invoke(
+        "create-etag-user",
+        {
+          body: {
 
+            tag_code:
+            tagCode,
 
-      /*
-       * The Edge Function uses the service
-       * role internally.
-       *
-       * We send the request directly.
-       */
+            username:
+            username,
 
-      const response =
-        await fetch(
-          EDGE_FUNCTION_URL,
-          {
-            method: "POST",
-
-            headers: {
-              "Content-Type":
-                "application/json",
-
-              "apikey":
-                "sb_publishable_1sa0MtE83MZXETR5JLakJA_fRVrjDJI"
-            },
-
-            body:
-              JSON.stringify({
-
-                tag_code:
-                  tagCode,
-
-                username:
-                  username,
-
-                password:
-                  password
-
-              })
+            password:
+            password
 
           }
+        }
+      );
+
+
+      /* ===================================
+         EDGE FUNCTION ERROR
+      =================================== */
+
+      if (error) {
+
+        console.error(
+          "EDGE FUNCTION ERROR:",
+          error
         );
 
-
-      /* =====================================
-         READ RESPONSE
-      ===================================== */
-
-      let result;
-
-      try {
-
-        result =
-          await response.json();
-
-      } catch {
-
         throw new Error(
-          "Invalid response from Edge Function."
+          error.message ||
+          "Failed to call create-etag-user."
         );
 
       }
 
 
+      /* ===================================
+         APPLICATION ERROR
+      =================================== */
+
       if (
-        !response.ok ||
-        !result.success
+        !data ||
+        data.success !== true
       ) {
 
         throw new Error(
-          result.error ||
+          data?.error ||
           "Failed to create E-Tag."
         );
 
       }
 
 
-      /* =====================================
-         NFC URL
-      ===================================== */
+      /* ===================================
+         CREATED TAG
+      =================================== */
 
-      const nfcUrl =
-        SITE_URL +
-        "id/" +
-        encodeURIComponent(
-          result.tag.tag_code
+      const createdTag =
+      data.tag;
+
+
+      if (!createdTag) {
+
+        throw new Error(
+          "E-Tag was created but tag data was not returned."
         );
 
+      }
 
-      /* =====================================
-         DISPLAY
-      ===================================== */
+
+      /* ===================================
+         NFC URL
+      =================================== */
+
+      const nfcUrl =
+      SITE_URL +
+      "id/" +
+      encodeURIComponent(
+        createdTag.tag_code
+      );
+
+
+      /* ===================================
+         DISPLAY RESULT
+      =================================== */
 
       resultTagCode.textContent =
-        result.tag.tag_code;
+      createdTag.tag_code;
+
 
       resultUsername.textContent =
-        username;
+      username;
+
 
       resultPassword.textContent =
-        password;
+      password;
+
 
       resultUrl.textContent =
-        nfcUrl;
+      nfcUrl;
 
 
       resultCard.classList.remove(
@@ -636,36 +656,51 @@ generateButton.addEventListener(
       );
 
 
-      /* =====================================
-         STORE TEMPORARILY
-      ===================================== */
+      /* ===================================
+         SAVE TEMPORARILY IN MEMORY
+      =================================== */
 
       window.currentCredentials = {
 
         username:
-          username,
+        username,
 
         password:
-          password,
+        password,
 
         url:
-          nfcUrl
+        nfcUrl
 
       };
 
 
-      /* =====================================
+      /* ===================================
          SUCCESS
-      ===================================== */
+      =================================== */
 
       showMessage(
-        "E-Tag created successfully. Auth user and tag were created.",
+        "E-Tag created successfully.",
         "success"
       );
 
 
-      tagCodeInput.value =
-        "";
+      /* ===================================
+         CLEAR INPUT
+      =================================== */
+
+      tagCodeInput.value = "";
+
+
+      console.log(
+        "Created E-Tag:",
+        createdTag
+      );
+
+
+      console.log(
+        "Created Auth User:",
+        data.user
+      );
 
 
     } catch (error) {
@@ -680,7 +715,7 @@ generateButton.addEventListener(
         "Error: " +
         (
           error?.message ||
-          "Unknown error."
+          "Unknown error"
         ),
         "error"
       );
@@ -689,10 +724,10 @@ generateButton.addEventListener(
     } finally {
 
       generateButton.disabled =
-        false;
+      false;
 
       generateButton.textContent =
-        "Generate E-Tag";
+      "Generate E-Tag";
 
     }
 
@@ -705,46 +740,56 @@ generateButton.addEventListener(
 ========================================= */
 
 document
-  .getElementById(
-    "copyUrlButton"
-  )
-  .addEventListener(
-    "click",
-    async () => {
+.getElementById(
+  "copyUrlButton"
+)
+.addEventListener(
+  "click",
+  async () => {
 
-      if (
-        !window.currentCredentials
-      ) {
+    if (
+      !window.currentCredentials
+    ) {
 
-        return;
+      showMessage(
+        "No E-Tag URL available.",
+        "error"
+      );
 
-      }
-
-
-      try {
-
-        await navigator.clipboard.writeText(
-          window.currentCredentials.url
-        );
-
-
-        showMessage(
-          "NFC URL copied.",
-          "success"
-        );
-
-
-      } catch {
-
-        showMessage(
-          "Could not copy URL.",
-          "error"
-        );
-
-      }
+      return;
 
     }
-  );
+
+
+    try {
+
+      await navigator.clipboard.writeText(
+        window.currentCredentials.url
+      );
+
+
+      showMessage(
+        "NFC URL copied.",
+        "success"
+      );
+
+
+    } catch (error) {
+
+      console.error(
+        error
+      );
+
+
+      showMessage(
+        "Could not copy URL.",
+        "error"
+      );
+
+    }
+
+  }
+);
 
 
 /* =========================================
@@ -752,55 +797,66 @@ document
 ========================================= */
 
 document
-  .getElementById(
-    "copyCredentialsButton"
-  )
-  .addEventListener(
-    "click",
-    async () => {
+.getElementById(
+  "copyCredentialsButton"
+)
+.addEventListener(
+  "click",
+  async () => {
 
-      if (
-        !window.currentCredentials
-      ) {
+    if (
+      !window.currentCredentials
+    ) {
 
-        return;
+      showMessage(
+        "No credentials available.",
+        "error"
+      );
 
-      }
-
-
-      const text =
-        "Username: " +
-        window.currentCredentials.username +
-        "\nPassword: " +
-        window.currentCredentials.password;
-
-
-      try {
-
-        await navigator.clipboard.writeText(
-          text
-        );
-
-
-        showMessage(
-          "Username and password copied.",
-          "success"
-        );
-
-
-      } catch {
-
-        showMessage(
-          "Could not copy credentials.",
-          "error"
-        );
-
-      }
+      return;
 
     }
-  );
+
+
+    const text =
+    "Username: " +
+    window.currentCredentials.username +
+    "\nPassword: " +
+    window.currentCredentials.password;
+
+
+    try {
+
+      await navigator.clipboard.writeText(
+        text
+      );
+
+
+      showMessage(
+        "Username and password copied.",
+        "success"
+      );
+
+
+    } catch (error) {
+
+      console.error(
+        error
+      );
+
+
+      showMessage(
+        "Could not copy credentials.",
+        "error"
+      );
+
+    }
+
+  }
+);
 
 </script>
 
 </body>
+
 </html>
