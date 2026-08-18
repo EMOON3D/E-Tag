@@ -88,8 +88,17 @@ button:active {
   transform: scale(.98);
 }
 
+button:disabled {
+  opacity: .6;
+  cursor: not-allowed;
+}
+
 .copy {
   background: #2563eb;
+}
+
+.logout {
+  background: #dc2626;
 }
 
 .hidden {
@@ -148,6 +157,13 @@ button:active {
   font-size: 13px;
 }
 
+.status {
+  text-align: center;
+  font-size: 13px;
+  color: #16a34a;
+  margin-top: 10px;
+}
+
 </style>
 
 </head>
@@ -165,11 +181,70 @@ Admin • Create New E-Tag
 </div>
 
 
-<!-- ==============================
-     GENERATOR
-============================== -->
+<!-- ======================================
+     LOGIN
+====================================== -->
+
+<div
+id="loginCard"
+class="card hidden"
+>
+
+<h2>
+Admin Login
+</h2>
+
+<p>
+Login with your E-Tag account before creating tags.
+</p>
+
+<label>
+Email
+</label>
+
+<input
+id="loginEmail"
+type="email"
+placeholder="admin@example.com"
+>
+
+<label>
+Password
+</label>
+
+<input
+id="loginPassword"
+type="password"
+placeholder="Password"
+>
+
+<button id="loginButton">
+Login
+</button>
+
+<div
+id="loginMessage"
+class="message"
+></div>
+
+</div>
+
+
+<!-- ======================================
+     ADMIN PANEL
+====================================== -->
+
+<div
+id="adminPanel"
+class="hidden"
+>
+
 
 <div class="card">
+
+<div class="status">
+✓ Logged in
+</div>
 
 <h2>
 Generate New E-Tag
@@ -182,7 +257,7 @@ Tag Code
 <input
 id="tagCode"
 type="text"
-placeholder="Example: ABX729"
+placeholder="Example: CDX481"
 maxlength="30"
 >
 
@@ -198,9 +273,9 @@ class="message"
 </div>
 
 
-<!-- ==============================
+<!-- ======================================
      RESULT
-============================== -->
+====================================== -->
 
 <div
 id="resultCard"
@@ -299,10 +374,25 @@ The password will not be shown again after leaving this page.
 
 </div>
 
+
+<div class="card">
+
+<button
+id="logoutButton"
+class="logout"
+>
+Logout
+</button>
+
+</div>
+
+</div>
+
 </div>
 
 
 <script type="module">
+
 
 /* =========================================
    SUPABASE
@@ -314,16 +404,50 @@ import {
 
 
 /* =========================================
-   SITE
+   SETTINGS
 ========================================= */
 
 const SITE_URL =
 "https://emoon3d.github.io/E-Tag/";
 
 
+const FUNCTION_URL =
+"https://zuptxhcjzhqynrquyray.supabase.co/functions/v1/create-etag-user";
+
+
 /* =========================================
    ELEMENTS
 ========================================= */
+
+const loginCard =
+document.getElementById(
+"loginCard"
+);
+
+const adminPanel =
+document.getElementById(
+"adminPanel"
+);
+
+const loginEmail =
+document.getElementById(
+"loginEmail"
+);
+
+const loginPassword =
+document.getElementById(
+"loginPassword"
+);
+
+const loginButton =
+document.getElementById(
+"loginButton"
+);
+
+const loginMessage =
+document.getElementById(
+"loginMessage"
+);
 
 const tagCodeInput =
 document.getElementById(
@@ -371,15 +495,50 @@ document.getElementById(
 ========================================= */
 
 function showMessage(
+element,
 text,
 type
 ) {
 
-message.textContent =
+element.textContent =
 text;
 
-message.className =
+element.className =
 "message " + type;
+
+}
+
+
+/* =========================================
+   SHOW LOGIN
+========================================= */
+
+function showLogin() {
+
+loginCard.classList.remove(
+"hidden"
+);
+
+adminPanel.classList.add(
+"hidden"
+);
+
+}
+
+
+/* =========================================
+   SHOW ADMIN
+========================================= */
+
+function showAdmin() {
+
+loginCard.classList.add(
+"hidden"
+);
+
+adminPanel.classList.remove(
+"hidden"
+);
 
 }
 
@@ -395,16 +554,16 @@ length
 const chars =
 "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789";
 
-let result = "";
-
-const array =
+const values =
 new Uint32Array(
 length
 );
 
 crypto.getRandomValues(
-array
+values
 );
+
+let result = "";
 
 for (
 let i = 0;
@@ -414,7 +573,7 @@ i++
 
 result +=
 chars[
-array[i] %
+values[i] %
 chars.length
 ];
 
@@ -426,19 +585,21 @@ return result;
 
 
 /* =========================================
-   GENERATE USERNAME
+   USERNAME
 ========================================= */
 
 function generateUsername() {
 
-return "etag_" +
-randomString(8);
+return (
+"etag_" +
+randomString(8)
+);
 
 }
 
 
 /* =========================================
-   GENERATE PASSWORD
+   PASSWORD
 ========================================= */
 
 function generatePassword() {
@@ -453,12 +614,116 @@ randomString(5)
 
 
 /* =========================================
-   GENERATE TAG
+   LOGIN
+========================================= */
+
+loginButton.addEventListener(
+"click",
+async () => {
+
+const email =
+loginEmail
+.value
+.trim();
+
+const password =
+loginPassword
+.value;
+
+
+if (
+!email ||
+!password
+) {
+
+showMessage(
+loginMessage,
+"Enter your email and password.",
+"error"
+);
+
+return;
+
+}
+
+
+loginButton.disabled =
+true;
+
+loginButton.textContent =
+"Logging in...";
+
+
+try {
+
+const {
+data,
+error
+} =
+await supabase.auth.signInWithPassword(
+{
+email:
+email,
+
+password:
+password
+}
+);
+
+
+if (error) {
+
+throw error;
+
+}
+
+
+if (!data.session) {
+
+throw new Error(
+"Login session was not created."
+);
+
+}
+
+
+showAdmin();
+
+
+} catch (error) {
+
+console.error(
+error
+);
+
+showMessage(
+loginMessage,
+error.message,
+"error"
+);
+
+} finally {
+
+loginButton.disabled =
+false;
+
+loginButton.textContent =
+"Login";
+
+}
+
+}
+);
+
+
+/* =========================================
+   GENERATE E-TAG
 ========================================= */
 
 generateButton.addEventListener(
 "click",
 async () => {
+
 
 const tagCode =
 tagCodeInput
@@ -467,11 +732,14 @@ tagCodeInput
 .toUpperCase();
 
 
-/* VALIDATE */
+/* -----------------------------------------
+   VALIDATION
+----------------------------------------- */
 
 if (!tagCode) {
 
 showMessage(
+message,
 "Enter a tag code first.",
 "error"
 );
@@ -488,6 +756,7 @@ tagCode
 ) {
 
 showMessage(
+message,
 "Use only A-Z, 0-9, _ or - in the tag code.",
 "error"
 );
@@ -497,60 +766,9 @@ return;
 }
 
 
-/* DISABLE BUTTON */
-
-generateButton.disabled =
-true;
-
-generateButton.textContent =
-"Creating...";
-
-
-try {
-
-
-/* =========================================
-   CHECK EXISTING TAG
-========================================= */
-
-const {
-data: existing,
-error: checkError
-} =
-await supabase
-.from("nfc_tags")
-.select(
-"id,tag_code,owner_id,active"
-)
-.eq(
-"tag_code",
-tagCode
-)
-.maybeSingle();
-
-
-if (checkError) {
-
-throw checkError;
-
-}
-
-
-if (existing) {
-
-showMessage(
-"This tag code already exists.",
-"error"
-);
-
-return;
-
-}
-
-
-/* =========================================
-   GENERATE CREDENTIALS
-========================================= */
+/* -----------------------------------------
+   GENERATE CUSTOMER CREDENTIALS
+----------------------------------------- */
 
 const username =
 generateUsername();
@@ -559,51 +777,114 @@ const password =
 generatePassword();
 
 
-/*
-IMPORTANT:
+/* -----------------------------------------
+   BUTTON
+----------------------------------------- */
 
-The password is currently generated
-for giving to the customer.
+generateButton.disabled =
+true;
 
-We do NOT save the password in
-nfc_tags.
-*/
+generateButton.textContent =
+"Creating E-Tag...";
+
+
+try {
 
 
 /* =========================================
-   CREATE TAG
+   GET CURRENT SESSION
 ========================================= */
 
 const {
-data,
-error
+data: {
+session
+}
 } =
-await supabase
-.from("nfc_tags")
-.insert({
+await supabase.auth.getSession();
+
+
+if (!session) {
+
+showLogin();
+
+throw new Error(
+"Your admin session has expired. Please login again."
+);
+
+}
+
+
+/* =========================================
+   CALL EDGE FUNCTION
+========================================= */
+
+const response =
+await fetch(
+FUNCTION_URL,
+{
+
+method:
+"POST",
+
+headers:
+{
+
+"Content-Type":
+"application/json",
+
+"apikey":
+"sb_publishable_1sa0MtE83MZXETR5JLakJA_fRVrjDJI",
+
+"Authorization":
+"Bearer " +
+session.access_token
+
+},
+
+body:
+JSON.stringify(
+{
 
 tag_code:
 tagCode,
 
-tag_username:
+username:
 username,
 
-owner_id:
-null,
+password:
+password
 
-active:
-false
-
-})
-.select(
-"id,tag_code,tag_username,owner_id,active"
+}
 )
-.single();
+
+}
+);
 
 
-if (error) {
+/* =========================================
+   READ RESPONSE
+========================================= */
 
-throw error;
+const result =
+await response.json();
+
+
+if (!response.ok) {
+
+throw new Error(
+result.error ||
+"Failed to create E-Tag."
+);
+
+}
+
+
+if (!result.success) {
+
+throw new Error(
+result.error ||
+"Failed to create E-Tag."
+);
 
 }
 
@@ -616,16 +897,16 @@ const nfcUrl =
 SITE_URL +
 "id/" +
 encodeURIComponent(
-data.tag_code
+tagCode
 );
 
 
 /* =========================================
-   DISPLAY RESULT
+   DISPLAY
 ========================================= */
 
 resultTagCode.textContent =
-data.tag_code;
+tagCode;
 
 resultUsername.textContent =
 username;
@@ -636,32 +917,18 @@ password;
 resultUrl.textContent =
 nfcUrl;
 
+
 resultCard.classList.remove(
 "hidden"
 );
 
 
-showMessage(
-"E-Tag created successfully.",
-"success"
-);
+/* =========================================
+   SAVE CURRENT CREDENTIALS
+========================================= */
 
-
-/*
-Clear input
-*/
-
-tagCodeInput.value = "";
-
-
-/*
-IMPORTANT:
-
-Keep password only in this page's
-current memory.
-*/
-
-window.currentCredentials = {
+window.currentCredentials =
+{
 
 username:
 username,
@@ -675,13 +942,30 @@ nfcUrl
 };
 
 
+showMessage(
+message,
+"E-Tag created successfully.",
+"success"
+);
+
+
+/* =========================================
+   CLEAR
+========================================= */
+
+tagCodeInput.value =
+"";
+
+
 } catch (error) {
 
 console.error(
+"CREATE E-TAG ERROR:",
 error
 );
 
 showMessage(
+message,
 "Error: " +
 error.message,
 "error"
@@ -713,6 +997,7 @@ document
 "click",
 async () => {
 
+
 if (
 !window.currentCredentials
 ) {
@@ -721,14 +1006,28 @@ return;
 
 }
 
+
+try {
+
 await navigator.clipboard.writeText(
 window.currentCredentials.url
 );
 
 showMessage(
+message,
 "NFC URL copied.",
 "success"
 );
+
+} catch {
+
+showMessage(
+message,
+"Could not copy URL.",
+"error"
+);
+
+}
 
 }
 );
@@ -746,6 +1045,7 @@ document
 "click",
 async () => {
 
+
 if (
 !window.currentCredentials
 ) {
@@ -754,23 +1054,121 @@ return;
 
 }
 
+
 const text =
 "Username: " +
 window.currentCredentials.username +
 "\nPassword: " +
 window.currentCredentials.password;
 
+
+try {
+
 await navigator.clipboard.writeText(
 text
 );
 
 showMessage(
+message,
 "Username and password copied.",
 "success"
 );
 
+} catch {
+
+showMessage(
+message,
+"Could not copy credentials.",
+"error"
+);
+
+}
+
 }
 );
+
+
+/* =========================================
+   LOGOUT
+========================================= */
+
+document
+.getElementById(
+"logoutButton"
+)
+.addEventListener(
+"click",
+async () => {
+
+await supabase.auth.signOut();
+
+resultCard.classList.add(
+"hidden"
+);
+
+showLogin();
+
+}
+);
+
+
+/* =========================================
+   CHECK SESSION ON LOAD
+========================================= */
+
+async function startAdmin() {
+
+const {
+data: {
+session
+}
+} =
+await supabase.auth.getSession();
+
+
+if (session) {
+
+showAdmin();
+
+} else {
+
+showLogin();
+
+}
+
+}
+
+
+/* =========================================
+   AUTH STATE
+========================================= */
+
+supabase
+.auth
+.onAuthStateChange(
+(event, session) => {
+
+if (
+session
+) {
+
+showAdmin();
+
+} else {
+
+showLogin();
+
+}
+
+}
+);
+
+
+/* =========================================
+   START
+========================================= */
+
+startAdmin();
 
 </script>
 
