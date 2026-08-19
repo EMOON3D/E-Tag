@@ -287,18 +287,12 @@ button:disabled {
   margin-top: 4px;
 }
 
-
-/* PUBLIC TEMPLATE */
-
 .public-template {
   min-height: 300px;
   border-radius: 18px;
   overflow: hidden;
   padding: 28px 20px;
 }
-
-
-/* BOY */
 
 .template-boy {
   background: linear-gradient(145deg, #111827, #374151);
@@ -313,9 +307,6 @@ button:disabled {
   background: #2563eb;
 }
 
-
-/* GIRL */
-
 .template-girl {
   background: linear-gradient(145deg, #831843, #ec4899);
   color: white;
@@ -329,9 +320,6 @@ button:disabled {
   background: #f9a8d4;
   color: #831843;
 }
-
-
-/* BUSINESS */
 
 .template-business {
   background: white;
@@ -348,9 +336,6 @@ button:disabled {
   font-size: 24px;
 }
 
-
-/* COUPLE */
-
 .template-couple {
   background: linear-gradient(145deg, #7f1d1d, #be123c);
   color: white;
@@ -364,9 +349,6 @@ button:disabled {
   background: #fecdd3;
   color: #9f1239;
 }
-
-
-/* BADGE */
 
 .template-badge {
   display: inline-block;
@@ -383,9 +365,6 @@ button:disabled {
   color: #374151;
 }
 
-
-/* CONTACT BUTTONS */
-
 .template-boy .info-button,
 .template-girl .info-button,
 .template-couple .info-button {
@@ -399,10 +378,15 @@ button:disabled {
   color: white;
 }
 
+.edit-button {
+  background: white;
+  color: #111827;
+  border: 2px solid #111827;
+}
+
 </style>
 
 </head>
-
 
 <body>
 
@@ -511,7 +495,7 @@ Already have an account? Login
 </section>
 
 
-<!-- EMAIL CONFIRMATION -->
+<!-- CONFIRMATION -->
 
 <section
 id="confirmationSection"
@@ -573,7 +557,6 @@ Your digital identity
 My Digital Identity
 </h2>
 
-
 <label>
 Profile Template
 </label>
@@ -599,7 +582,6 @@ Modern dark style
 
 </div>
 
-
 <div
 class="template-option"
 data-template="girl"
@@ -619,7 +601,6 @@ Pink elegant style
 
 </div>
 
-
 <div
 class="template-option"
 data-template="business"
@@ -638,7 +619,6 @@ Professional style
 </div>
 
 </div>
-
 
 <div
 class="template-option"
@@ -660,7 +640,6 @@ Romantic style
 </div>
 
 </div>
-
 
 <label>
 Name
@@ -847,7 +826,7 @@ Digital Identity
 
 <button
 id="ownerEditButton"
-class="hidden"
+class="hidden edit-button"
 >
 ✏️ Edit Profile
 </button>
@@ -884,7 +863,6 @@ style="display:block;"
 
 </section>
 
-
 </div>
 
 
@@ -895,10 +873,6 @@ import {
 } from "./supabase.js";
 
 
-/* =====================================================
-   SITE
-===================================================== */
-
 const SITE_URL =
 "https://emoon3d.github.io/E-Tag/";
 
@@ -906,10 +880,6 @@ const SITE_URL =
 const ETAG_EMAIL_DOMAIN =
 "@etag.local";
 
-
-/* =====================================================
-   ELEMENTS
-===================================================== */
 
 const loginSection =
 document.getElementById("loginSection");
@@ -930,17 +900,9 @@ const notFoundSection =
 document.getElementById("notFoundSection");
 
 
-/* =====================================================
-   CURRENT TEMPLATE
-===================================================== */
-
 let selectedTemplate =
 "boy";
 
-
-/* =====================================================
-   HIDE ALL
-===================================================== */
 
 function hideAll() {
 
@@ -959,10 +921,6 @@ function hideAll() {
 }
 
 
-/* =====================================================
-   LOGIN
-===================================================== */
-
 function showLogin() {
 
   hideAll();
@@ -972,10 +930,6 @@ function showLogin() {
 }
 
 
-/* =====================================================
-   SIGNUP
-===================================================== */
-
 function showSignup() {
 
   hideAll();
@@ -984,10 +938,6 @@ function showSignup() {
 
 }
 
-
-/* =====================================================
-   MESSAGE
-===================================================== */
 
 function showMessage(
   id,
@@ -1010,10 +960,6 @@ function showMessage(
 }
 
 
-/* =====================================================
-   LOGIN / SIGNUP SWITCH
-===================================================== */
-
 document
 .getElementById("showLogin")
 .addEventListener(
@@ -1022,9 +968,7 @@ showLogin
 );
 
 
-/* =====================================================
-   TEMPLATE SELECTOR
-===================================================== */
+/* TEMPLATE SELECTOR */
 
 document
 .querySelectorAll(".template-option")
@@ -1037,7 +981,6 @@ document
 
         selectedTemplate =
         option.dataset.template;
-
 
         document
         .querySelectorAll(
@@ -1053,7 +996,6 @@ document
           }
         );
 
-
         option.classList.add(
           "selected"
         );
@@ -1064,10 +1006,6 @@ document
   }
 );
 
-
-/* =====================================================
-   SET TEMPLATE
-===================================================== */
 
 function setSelectedTemplate(
   template
@@ -1080,7 +1018,6 @@ function setSelectedTemplate(
     "couple"
   ];
 
-
   if (
     !validTemplates.includes(
       template
@@ -1092,10 +1029,8 @@ function setSelectedTemplate(
 
   }
 
-
   selectedTemplate =
   template;
-
 
   document
   .querySelectorAll(
@@ -1116,9 +1051,7 @@ function setSelectedTemplate(
 }
 
 
-/* =====================================================
-   SIGNUP
-===================================================== */
+/* SIGNUP */
 
 document
 .getElementById("signupButton")
@@ -1132,12 +1065,10 @@ async () => {
   .value
   .trim();
 
-
   const password =
   document
   .getElementById("signupPassword")
   .value;
-
 
   if (!email || !password) {
 
@@ -1150,7 +1081,6 @@ async () => {
     return;
 
   }
-
 
   if (
     password.length < 6
@@ -1166,19 +1096,16 @@ async () => {
 
   }
 
-
   const signupButton =
   document.getElementById(
     "signupButton"
   );
-
 
   signupButton.disabled =
   true;
 
   signupButton.textContent =
   "Creating...";
-
 
   try {
 
@@ -1203,7 +1130,6 @@ async () => {
 
     });
 
-
     if (error) {
 
       showMessage(
@@ -1215,7 +1141,6 @@ async () => {
       return;
 
     }
-
 
     if (
       data.user &&
@@ -1231,7 +1156,6 @@ async () => {
       return;
 
     }
-
 
     if (data.session) {
 
@@ -1253,9 +1177,7 @@ async () => {
 );
 
 
-/* =====================================================
-   LOGIN
-===================================================== */
+/* LOGIN */
 
 document
 .getElementById("loginButton")
@@ -1269,12 +1191,10 @@ async () => {
   .value
   .trim();
 
-
   const password =
   document
   .getElementById("loginPassword")
   .value;
-
 
   if (!username || !password) {
 
@@ -1288,7 +1208,6 @@ async () => {
 
   }
 
-
   const internalEmail =
   username.toLowerCase().endsWith(
     ETAG_EMAIL_DOMAIN
@@ -1296,19 +1215,16 @@ async () => {
   ? username
   : username + ETAG_EMAIL_DOMAIN;
 
-
   const loginButton =
   document.getElementById(
     "loginButton"
   );
-
 
   loginButton.disabled =
   true;
 
   loginButton.textContent =
   "Logging in...";
-
 
   try {
 
@@ -1326,7 +1242,6 @@ async () => {
 
     });
 
-
     if (error) {
 
       showMessage(
@@ -1338,7 +1253,6 @@ async () => {
       return;
 
     }
-
 
     if (data.session) {
 
@@ -1360,9 +1274,7 @@ async () => {
 );
 
 
-/* =====================================================
-   AFTER LOGIN
-===================================================== */
+/* AFTER LOGIN */
 
 async function afterLogin() {
 
@@ -1372,7 +1284,6 @@ async function afterLogin() {
     }
   } =
   await supabase.auth.getUser();
-
 
   if (!user) {
 
@@ -1384,7 +1295,115 @@ async function afterLogin() {
 
 
   /*
-   * Pending E-Tag activation
+   * EDIT PROFILE REDIRECT
+   *
+   * If user came from Edit Profile,
+   * check that the logged-in user
+   * actually owns that E-Tag.
+   */
+
+  const editTagCode =
+  sessionStorage.getItem(
+    "editTagCode"
+  );
+
+
+  if (editTagCode) {
+
+    const {
+      data: editTag,
+      error: editTagError
+    } =
+    await supabase
+    .from("nfc_tags")
+    .select(
+      "id,tag_code,owner_id,active"
+    )
+    .eq(
+      "tag_code",
+      editTagCode
+    )
+    .maybeSingle();
+
+
+    if (
+      editTagError ||
+      !editTag
+    ) {
+
+      sessionStorage.removeItem(
+        "editTagCode"
+      );
+
+      showLogin();
+
+      showMessage(
+        "loginMessage",
+        "E-Tag not found.",
+        "error"
+      );
+
+      return;
+
+    }
+
+
+    if (
+      editTag.owner_id !== user.id
+    ) {
+
+      sessionStorage.removeItem(
+        "editTagCode"
+      );
+
+      showLogin();
+
+      showMessage(
+        "loginMessage",
+        "This account is not the owner of this E-Tag.",
+        "error"
+      );
+
+      return;
+
+    }
+
+
+    if (
+      editTag.active !== true
+    ) {
+
+      sessionStorage.removeItem(
+        "editTagCode"
+      );
+
+      showLogin();
+
+      showMessage(
+        "loginMessage",
+        "This E-Tag is not active.",
+        "error"
+      );
+
+      return;
+
+    }
+
+
+    sessionStorage.removeItem(
+      "editTagCode"
+    );
+
+
+    await loadDashboard();
+
+    return;
+
+  }
+
+
+  /*
+   * ACTIVATION REDIRECT
    */
 
   const pendingTag =
@@ -1408,7 +1427,6 @@ async function afterLogin() {
         "pendingTag"
       );
 
-
       await loadPublicTag(
         pendingTag
       );
@@ -1424,22 +1442,18 @@ async function afterLogin() {
       "hidden"
     );
 
-
     document
     .getElementById("publicLoading")
     .classList.add("hidden");
-
 
     document
     .getElementById("activationBox")
     .classList.remove("hidden");
 
-
     document
     .getElementById("activationTagId")
     .textContent =
     "E-Tag: " + pendingTag;
-
 
     showMessage(
       "activationMessage",
@@ -1452,43 +1466,12 @@ async function afterLogin() {
   }
 
 
-  /*
-   * Pending profile edit
-   *
-   * This is set when somebody clicks
-   * Edit Profile on a public E-Tag.
-   *
-   * Login is required before editing.
-   */
-
-  const pendingEditTag =
-  sessionStorage.getItem(
-    "pendingEditTag"
-  );
-
-
-  if (pendingEditTag) {
-
-    sessionStorage.removeItem(
-      "pendingEditTag"
-    );
-
-
-    await loadDashboard();
-
-    return;
-
-  }
-
-
   await loadDashboard();
 
 }
 
 
-/* =====================================================
-   ACTIVATE TAG
-===================================================== */
+/* ACTIVATE TAG */
 
 async function activateTag(
   tagCode,
@@ -1504,7 +1487,6 @@ async function activateTag(
 
   }
 
-
   if (!user) {
 
     return {
@@ -1513,7 +1495,6 @@ async function activateTag(
     };
 
   }
-
 
   const {
     data: tags,
@@ -1703,9 +1684,7 @@ async function activateTag(
 }
 
 
-/* =====================================================
-   ACTIVATE BUTTON
-===================================================== */
+/* ACTIVATE BUTTON */
 
 document
 .getElementById("activateButton")
@@ -1715,7 +1694,6 @@ async () => {
 
   const tag =
   window.currentTag;
-
 
   if (!tag) {
 
@@ -1728,7 +1706,6 @@ async () => {
     return;
 
   }
-
 
   const {
     data: {
@@ -1745,9 +1722,7 @@ async () => {
       tag.tag_code
     );
 
-
     showLogin();
-
 
     showMessage(
       "loginMessage",
@@ -1755,7 +1730,6 @@ async () => {
       tag.tag_code,
       "error"
     );
-
 
     return;
 
@@ -1786,7 +1760,6 @@ async () => {
     "pendingTag"
   );
 
-
   await loadPublicTag(
     tag.tag_code
   );
@@ -1795,9 +1768,7 @@ async () => {
 );
 
 
-/* =====================================================
-   DASHBOARD
-===================================================== */
+/* DASHBOARD */
 
 async function loadDashboard() {
 
@@ -1837,9 +1808,7 @@ async function loadDashboard() {
 }
 
 
-/* =====================================================
-   LOAD PROFILE
-===================================================== */
+/* LOAD PROFILE */
 
 async function loadProfile(
   userId
@@ -1924,9 +1893,7 @@ async function loadProfile(
 }
 
 
-/* =====================================================
-   SAVE PROFILE
-===================================================== */
+/* SAVE PROFILE */
 
 document
 .getElementById("saveProfileButton")
@@ -2058,9 +2025,7 @@ async () => {
 );
 
 
-/* =====================================================
-   PREVIEW
-===================================================== */
+/* PREVIEW */
 
 function updatePreview(
   data
@@ -2094,9 +2059,7 @@ function updatePreview(
 }
 
 
-/* =====================================================
-   LOAD USER TAGS
-===================================================== */
+/* LOAD TAGS */
 
 async function loadTags(
   userId
@@ -2212,9 +2175,7 @@ async function loadTags(
 }
 
 
-/* =====================================================
-   GET TAG CODE
-===================================================== */
+/* GET TAG CODE */
 
 function getTagCode() {
 
@@ -2337,9 +2298,7 @@ function getTagCode() {
 }
 
 
-/* =====================================================
-   LOAD PUBLIC TAG
-===================================================== */
+/* LOAD PUBLIC TAG */
 
 async function loadPublicTag(
   tagCode
@@ -2480,9 +2439,7 @@ async function loadPublicTag(
 }
 
 
-/* =====================================================
-   LOAD PUBLIC PROFILE
-===================================================== */
+/* LOAD PUBLIC PROFILE */
 
 async function loadPublicProfile(
   tag
@@ -2621,22 +2578,18 @@ async function loadPublicProfile(
       "a"
     );
 
-
     a.className =
     "info-button";
-
 
     a.href =
     "tel:" +
     profile.phone;
 
-
     a.textContent =
     "📞 Call";
 
-
     buttons.appendChild(
-    a
+      a
     );
 
   }
@@ -2659,27 +2612,21 @@ async function loadPublicProfile(
       "a"
     );
 
-
     a.className =
     "info-button";
-
 
     a.href =
     "https://wa.me/" +
     clean;
 
-
     a.target =
     "_blank";
-
 
     a.rel =
     "noopener noreferrer";
 
-
     a.textContent =
     "💬 WhatsApp";
-
 
     buttons.appendChild(
       a
@@ -2697,19 +2644,15 @@ async function loadPublicProfile(
       "a"
     );
 
-
     a.className =
     "info-button";
-
 
     a.href =
     "mailto:" +
     profile.email;
 
-
     a.textContent =
     "✉️ Email";
-
 
     buttons.appendChild(
       a
@@ -2719,26 +2662,13 @@ async function loadPublicProfile(
 
 
   /*
-   * EDIT BUTTON SECURITY
+   * EDIT BUTTON
    *
-   * Nobody can edit directly from
+   * Always show the button on
    * the public profile.
    *
-   * If not logged in:
-   *     save tag code
-   *     open login
-   *
-   * If logged in:
-   *     only owner can edit
+   * But clicking it requires login.
    */
-
-  const {
-    data: {
-      user
-    }
-  } =
-  await supabase.auth.getUser();
-
 
   const ownerEditButton =
   document.getElementById(
@@ -2751,69 +2681,13 @@ async function loadPublicProfile(
   );
 
 
-  ownerEditButton.onclick =
-  async () => {
-
-    /*
-     * NOT LOGGED IN
-     */
-
-    if (!user) {
-
-      sessionStorage.setItem(
-        "pendingEditTag",
-        tag.tag_code
-      );
-
-
-      showLogin();
-
-
-      showMessage(
-        "loginMessage",
-        "Login to edit this E-Tag.",
-        "error"
-      );
-
-
-      return;
-
-    }
-
-
-    /*
-     * LOGGED IN BUT NOT OWNER
-     */
-
-    if (
-      user.id !== tag.owner_id
-    ) {
-
-      showMessage(
-        "loginMessage",
-        "You are not the owner of this E-Tag.",
-        "error"
-      );
-
-      return;
-
-    }
-
-
-    /*
-     * OWNER
-     */
-
-    await loadDashboard();
-
-  };
+  window.currentTag =
+  tag;
 
 }
 
 
-/* =====================================================
-   APPLY PUBLIC TEMPLATE
-===================================================== */
+/* APPLY TEMPLATE */
 
 function applyPublicTemplate(
   template
@@ -2888,9 +2762,116 @@ function applyPublicTemplate(
 }
 
 
-/* =====================================================
-   NOT FOUND
-===================================================== */
+/*
+ * =====================================================
+ * OWNER EDIT BUTTON
+ * =====================================================
+ *
+ * IMPORTANT:
+ *
+ * Clicking this button NEVER directly opens dashboard.
+ *
+ * 1. Check login.
+ * 2. If not logged in -> Login.
+ * 3. Save E-Tag code.
+ * 4. After login -> check owner.
+ * 5. Only owner gets dashboard.
+ */
+
+document
+.getElementById("ownerEditButton")
+.addEventListener(
+"click",
+async () => {
+
+  const tag =
+  window.currentTag;
+
+
+  if (!tag) {
+
+    showLogin();
+
+    showMessage(
+      "loginMessage",
+      "E-Tag information is missing.",
+      "error"
+    );
+
+    return;
+
+  }
+
+
+  const {
+    data: {
+      user
+    }
+  } =
+  await supabase.auth.getUser();
+
+
+  /*
+   * NOT LOGGED IN
+   */
+
+  if (!user) {
+
+    sessionStorage.setItem(
+      "editTagCode",
+      tag.tag_code
+    );
+
+
+    showLogin();
+
+
+    showMessage(
+      "loginMessage",
+      "Login to edit this E-Tag.",
+      "error"
+    );
+
+
+    return;
+
+  }
+
+
+  /*
+   * LOGGED IN BUT NOT OWNER
+   */
+
+  if (
+    user.id !== tag.owner_id
+  ) {
+
+    showMessage(
+      "loginMessage",
+      "This account is not the owner of this E-Tag.",
+      "error"
+    );
+
+
+    showLogin();
+
+
+    return;
+
+  }
+
+
+  /*
+   * OWNER
+   */
+
+  await loadDashboard();
+
+}
+);
+
+
+/* NOT FOUND */
 
 function showNotFound(
 message
@@ -2915,9 +2896,7 @@ message
 }
 
 
-/* =====================================================
-   ESCAPE HTML
-===================================================== */
+/* ESCAPE HTML */
 
 function escapeHtml(
 value
@@ -2953,9 +2932,7 @@ value
 }
 
 
-/* =====================================================
-   LOGOUT
-===================================================== */
+/* LOGOUT */
 
 document
 .getElementById("logoutButton")
@@ -2972,7 +2949,7 @@ async () => {
 
 
   sessionStorage.removeItem(
-    "pendingEditTag"
+    "editTagCode"
   );
 
 
@@ -2982,9 +2959,7 @@ async () => {
 );
 
 
-/* =====================================================
-   AUTH STATE
-===================================================== */
+/* AUTH STATE */
 
 supabase
 .auth
@@ -3006,9 +2981,7 @@ async (
 );
 
 
-/* =====================================================
-   START APP
-===================================================== */
+/* START APP */
 
 async function startApp() {
 
