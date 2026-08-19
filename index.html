@@ -440,6 +440,13 @@ id="loginMessage"
 class="message"
 ></div>
 
+<div
+id="showSignup"
+class="link"
+>
+Create a new account
+</div>
+
 </section>
 
 
@@ -876,7 +883,6 @@ import {
 const SITE_URL =
 "https://emoon3d.github.io/E-Tag/";
 
-
 const ETAG_EMAIL_DOMAIN =
 "@etag.local";
 
@@ -948,6 +954,8 @@ function showMessage(
   const el =
   document.getElementById(id);
 
+  if (!el) return;
+
   el.textContent =
   text;
 
@@ -958,6 +966,14 @@ function showMessage(
   "block";
 
 }
+
+
+document
+.getElementById("showSignup")
+.addEventListener(
+"click",
+showSignup
+);
 
 
 document
@@ -1051,7 +1067,9 @@ function setSelectedTemplate(
 }
 
 
-/* SIGNUP */
+/* =====================================================
+   SIGNUP
+===================================================== */
 
 document
 .getElementById("signupButton")
@@ -1159,6 +1177,15 @@ async () => {
 
     if (data.session) {
 
+      /*
+       * IMPORTANT:
+       * Make sure profile exists immediately.
+       */
+
+      await ensureProfile(
+        data.user
+      );
+
       await afterLogin();
 
     }
@@ -1177,7 +1204,130 @@ async () => {
 );
 
 
-/* LOGIN */
+/* =====================================================
+   ENSURE PROFILE
+===================================================== */
+
+async function ensureProfile(user) {
+
+  if (!user || !user.id) {
+
+    return {
+      success: false,
+      message: "User information is missing."
+    };
+
+  }
+
+
+  /*
+   * First check whether profile exists.
+   */
+
+  const {
+    data: existingProfile,
+    error: checkError
+  } =
+  await supabase
+  .from("profiles")
+  .select("id")
+  .eq(
+    "id",
+    user.id
+  )
+  .maybeSingle();
+
+
+  if (checkError) {
+
+    console.error(
+      "PROFILE CHECK ERROR:",
+      checkError
+    );
+
+    return {
+      success: false,
+      message:
+        checkError.message
+    };
+
+  }
+
+
+  if (existingProfile) {
+
+    return {
+      success: true
+    };
+
+  }
+
+
+  /*
+   * Create profile BEFORE E-Tag activation.
+   */
+
+  const {
+    error: insertError
+  } =
+  await supabase
+  .from("profiles")
+  .insert({
+
+    id:
+    user.id,
+
+    email:
+    user.email || "",
+
+    template:
+    "boy"
+
+  });
+
+
+  if (insertError) {
+
+    /*
+     * Another request may have created it
+     * at the same time.
+     */
+
+    if (
+      insertError.code === "23505"
+    ) {
+
+      return {
+        success: true
+      };
+
+    }
+
+
+    console.error(
+      "PROFILE INSERT ERROR:",
+      insertError
+    );
+
+    return {
+      success: false,
+      message:
+        insertError.message
+    };
+
+  }
+
+
+  return {
+    success: true
+  };
+
+}
+
+
+/* =====================================================
+   LOGIN
+===================================================== */
 
 document
 .getElementById("loginButton")
@@ -1256,6 +1406,32 @@ async () => {
 
     if (data.session) {
 
+      /*
+       * IMPORTANT:
+       * Ensure profile exists before
+       * doing anything with E-Tags.
+       */
+
+      const profileResult =
+      await ensureProfile(
+        data.user
+      );
+
+
+      if (!profileResult.success) {
+
+        showMessage(
+          "loginMessage",
+          "Could not prepare your account: " +
+          profileResult.message,
+          "error"
+        );
+
+        return;
+
+      }
+
+
       await afterLogin();
 
     }
@@ -1274,7 +1450,9 @@ async () => {
 );
 
 
-/* AFTER LOGIN */
+/* =====================================================
+   AFTER LOGIN
+===================================================== */
 
 async function afterLogin() {
 
@@ -1284,6 +1462,7 @@ async function afterLogin() {
     }
   } =
   await supabase.auth.getUser();
+
 
   if (!user) {
 
@@ -1295,11 +1474,33 @@ async function afterLogin() {
 
 
   /*
-   * EDIT PROFILE REDIRECT
-   *
-   * If user came from Edit Profile,
-   * check that the logged-in user
-   * actually owns that E-Tag.
+   * Always make sure profile exists.
+   */
+
+  const profileResult =
+  await ensureProfile(
+    user
+  );
+
+
+  if (!profileResult.success) {
+
+    showLogin();
+
+    showMessage(
+      "loginMessage",
+      "Could not prepare your account: " +
+      profileResult.message,
+      "error"
+    );
+
+    return;
+
+  }
+
+
+  /*
+   * EDIT PROFILE
    */
 
   const editTagCode =
@@ -1403,7 +1604,7 @@ async function afterLogin() {
 
 
   /*
-   * ACTIVATION REDIRECT
+   * ACTIVATION
    */
 
   const pendingTag =
@@ -1471,7 +1672,9 @@ async function afterLogin() {
 }
 
 
-/* ACTIVATE TAG */
+/* =====================================================
+   ACTIVATE TAG
+===================================================== */
 
 async function activateTag(
   tagCode,
@@ -1496,6 +1699,38 @@ async function activateTag(
 
   }
 
+
+  /*
+   * =================================================
+   * VERY IMPORTANT
+   *
+   * Create profile FIRST.
+   * Then assign the E-Tag.
+   * =================================================
+   */
+
+  const profileResult =
+  await ensureProfile(
+    user
+  );
+
+
+  if (!profileResult.success) {
+
+    return {
+      success: false,
+      message:
+        "Could not create your account profile: " +
+        profileResult.message
+    };
+
+  }
+
+
+  /*
+   * Find E-Tag
+   */
+
   const {
     data: tags,
     error: findError
@@ -1513,11 +1748,16 @@ async function activateTag(
 
   if (findError) {
 
+    console.error(
+      "TAG FIND ERROR:",
+      findError
+    );
+
     return {
       success: false,
       message:
-      "Could not find E-Tag: " +
-      findError.message
+        "Could not find E-Tag: " +
+        findError.message
     };
 
   }
@@ -1531,9 +1771,9 @@ async function activateTag(
     return {
       success: false,
       message:
-      "E-Tag " +
-      tagCode +
-      " does not exist."
+        "E-Tag " +
+        tagCode +
+        " does not exist."
     };
 
   }
@@ -1543,6 +1783,10 @@ async function activateTag(
   tags[0];
 
 
+  /*
+   * Already belongs to user
+   */
+
   if (
     tag.owner_id === user.id &&
     tag.active === true
@@ -1551,11 +1795,15 @@ async function activateTag(
     return {
       success: true,
       message:
-      "E-Tag already belongs to you."
+        "E-Tag already belongs to you."
     };
 
   }
 
+
+  /*
+   * Belongs to somebody else
+   */
 
   if (
     tag.owner_id !== null &&
@@ -1565,11 +1813,15 @@ async function activateTag(
     return {
       success: false,
       message:
-      "This E-Tag has already been activated by another account."
+        "This E-Tag has already been activated by another account."
     };
 
   }
 
+
+  /*
+   * Must be inactive before activation
+   */
 
   if (
     tag.active !== false
@@ -1578,11 +1830,17 @@ async function activateTag(
     return {
       success: false,
       message:
-      "This E-Tag cannot be activated."
+        "This E-Tag cannot be activated."
     };
 
   }
 
+
+  /*
+   * =================================================
+   * ACTIVATE
+   * =================================================
+   */
 
   const {
     data: updated,
@@ -1618,11 +1876,16 @@ async function activateTag(
 
   if (updateError) {
 
+    console.error(
+      "TAG ACTIVATION ERROR:",
+      updateError
+    );
+
     return {
       success: false,
       message:
-      "Activation failed: " +
-      updateError.message
+        "Activation failed: " +
+        updateError.message
     };
 
   }
@@ -1636,41 +1899,8 @@ async function activateTag(
     return {
       success: false,
       message:
-      "Activation was not allowed."
+        "Activation was not allowed. The E-Tag may already be activated."
     };
-
-  }
-
-
-  const {
-    data: profile
-  } =
-  await supabase
-  .from("profiles")
-  .select("id")
-  .eq(
-    "id",
-    user.id
-  )
-  .maybeSingle();
-
-
-  if (!profile) {
-
-    await supabase
-    .from("profiles")
-    .insert({
-
-      id:
-      user.id,
-
-      email:
-      user.email || "",
-
-      template:
-      "boy"
-
-    });
 
   }
 
@@ -1678,13 +1908,15 @@ async function activateTag(
   return {
     success: true,
     message:
-    "E-Tag activated successfully."
+      "E-Tag activated successfully."
   };
 
 }
 
 
-/* ACTIVATE BUTTON */
+/* =====================================================
+   ACTIVATE BUTTON
+===================================================== */
 
 document
 .getElementById("activateButton")
@@ -1760,6 +1992,7 @@ async () => {
     "pendingTag"
   );
 
+
   await loadPublicTag(
     tag.tag_code
   );
@@ -1768,7 +2001,9 @@ async () => {
 );
 
 
-/* DASHBOARD */
+/* =====================================================
+   DASHBOARD
+===================================================== */
 
 async function loadDashboard() {
 
@@ -1787,6 +2022,15 @@ async function loadDashboard() {
     return;
 
   }
+
+
+  /*
+   * Make sure profile exists.
+   */
+
+  await ensureProfile(
+    user
+  );
 
 
   hideAll();
@@ -1808,7 +2052,9 @@ async function loadDashboard() {
 }
 
 
-/* LOAD PROFILE */
+/* =====================================================
+   LOAD PROFILE
+===================================================== */
 
 async function loadProfile(
   userId
@@ -1893,7 +2139,9 @@ async function loadProfile(
 }
 
 
-/* SAVE PROFILE */
+/* =====================================================
+   SAVE PROFILE
+===================================================== */
 
 document
 .getElementById("saveProfileButton")
@@ -1912,6 +2160,29 @@ async () => {
   if (!user) {
 
     showLogin();
+
+    return;
+
+  }
+
+
+  /*
+   * Make sure profile exists.
+   */
+
+  const profileResult =
+  await ensureProfile(
+    user
+  );
+
+
+  if (!profileResult.success) {
+
+    showMessage(
+      "profileMessage",
+      profileResult.message,
+      "error"
+    );
 
     return;
 
@@ -2025,7 +2296,9 @@ async () => {
 );
 
 
-/* PREVIEW */
+/* =====================================================
+   PREVIEW
+===================================================== */
 
 function updatePreview(
   data
@@ -2059,7 +2332,9 @@ function updatePreview(
 }
 
 
-/* LOAD TAGS */
+/* =====================================================
+   LOAD TAGS
+===================================================== */
 
 async function loadTags(
   userId
@@ -2175,7 +2450,9 @@ async function loadTags(
 }
 
 
-/* GET TAG CODE */
+/* =====================================================
+   GET TAG CODE
+===================================================== */
 
 function getTagCode() {
 
@@ -2298,7 +2575,9 @@ function getTagCode() {
 }
 
 
-/* LOAD PUBLIC TAG */
+/* =====================================================
+   LOAD PUBLIC TAG
+===================================================== */
 
 async function loadPublicTag(
   tagCode
@@ -2439,7 +2718,9 @@ async function loadPublicTag(
 }
 
 
-/* LOAD PUBLIC PROFILE */
+/* =====================================================
+   LOAD PUBLIC PROFILE
+===================================================== */
 
 async function loadPublicProfile(
   tag
@@ -2664,10 +2945,8 @@ async function loadPublicProfile(
   /*
    * EDIT BUTTON
    *
-   * Always show the button on
-   * the public profile.
-   *
-   * But clicking it requires login.
+   * Anyone can SEE the button.
+   * Only logged-in owner can edit.
    */
 
   const ownerEditButton =
@@ -2687,7 +2966,9 @@ async function loadPublicProfile(
 }
 
 
-/* APPLY TEMPLATE */
+/* =====================================================
+   APPLY TEMPLATE
+===================================================== */
 
 function applyPublicTemplate(
   template
@@ -2762,21 +3043,9 @@ function applyPublicTemplate(
 }
 
 
-/*
- * =====================================================
- * OWNER EDIT BUTTON
- * =====================================================
- *
- * IMPORTANT:
- *
- * Clicking this button NEVER directly opens dashboard.
- *
- * 1. Check login.
- * 2. If not logged in -> Login.
- * 3. Save E-Tag code.
- * 4. After login -> check owner.
- * 5. Only owner gets dashboard.
- */
+/* =====================================================
+   OWNER EDIT BUTTON
+===================================================== */
 
 document
 .getElementById("ownerEditButton")
@@ -2846,15 +3115,13 @@ async () => {
     user.id !== tag.owner_id
   ) {
 
+    showLogin();
+
     showMessage(
       "loginMessage",
       "This account is not the owner of this E-Tag.",
       "error"
     );
-
-
-    showLogin();
-
 
     return;
 
@@ -2871,7 +3138,9 @@ async () => {
 );
 
 
-/* NOT FOUND */
+/* =====================================================
+   NOT FOUND
+===================================================== */
 
 function showNotFound(
 message
@@ -2896,7 +3165,9 @@ message
 }
 
 
-/* ESCAPE HTML */
+/* =====================================================
+   ESCAPE HTML
+===================================================== */
 
 function escapeHtml(
 value
@@ -2932,7 +3203,9 @@ value
 }
 
 
-/* LOGOUT */
+/* =====================================================
+   LOGOUT
+===================================================== */
 
 document
 .getElementById("logoutButton")
@@ -2959,7 +3232,9 @@ async () => {
 );
 
 
-/* AUTH STATE */
+/* =====================================================
+   AUTH STATE
+===================================================== */
 
 supabase
 .auth
@@ -2981,7 +3256,9 @@ async (
 );
 
 
-/* START APP */
+/* =====================================================
+   START APP
+===================================================== */
 
 async function startApp() {
 
@@ -3009,6 +3286,17 @@ async function startApp() {
 
 
   if (session) {
+
+    /*
+     * Make sure profile exists
+     * whenever an existing user opens
+     * the dashboard.
+     */
+
+    await ensureProfile(
+      session.user
+    );
+
 
     await loadDashboard();
 
