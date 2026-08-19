@@ -288,9 +288,7 @@ button:disabled {
 }
 
 
-/* =====================================================
-   PUBLIC TEMPLATE BASE
-===================================================== */
+/* PUBLIC TEMPLATE */
 
 .public-template {
   min-height: 300px;
@@ -300,9 +298,7 @@ button:disabled {
 }
 
 
-/* =====================================================
-   BOY TEMPLATE
-===================================================== */
+/* BOY */
 
 .template-boy {
   background: linear-gradient(145deg, #111827, #374151);
@@ -318,9 +314,7 @@ button:disabled {
 }
 
 
-/* =====================================================
-   GIRL TEMPLATE
-===================================================== */
+/* GIRL */
 
 .template-girl {
   background: linear-gradient(145deg, #831843, #ec4899);
@@ -337,9 +331,7 @@ button:disabled {
 }
 
 
-/* =====================================================
-   BUSINESS TEMPLATE
-===================================================== */
+/* BUSINESS */
 
 .template-business {
   background: white;
@@ -357,9 +349,7 @@ button:disabled {
 }
 
 
-/* =====================================================
-   COUPLE TEMPLATE
-===================================================== */
+/* COUPLE */
 
 .template-couple {
   background: linear-gradient(145deg, #7f1d1d, #be123c);
@@ -376,9 +366,7 @@ button:disabled {
 }
 
 
-/* =====================================================
-   TEMPLATE BADGE
-===================================================== */
+/* BADGE */
 
 .template-badge {
   display: inline-block;
@@ -396,9 +384,7 @@ button:disabled {
 }
 
 
-/* =====================================================
-   PUBLIC CONTACT BUTTONS
-===================================================== */
+/* CONTACT BUTTONS */
 
 .template-boy .info-button,
 .template-girl .info-button,
@@ -431,9 +417,7 @@ Your Mini Digital Identity
 </div>
 
 
-<!-- =====================================================
-     LOGIN
-===================================================== -->
+<!-- LOGIN -->
 
 <section id="loginSection" class="card">
 
@@ -475,9 +459,7 @@ class="message"
 </section>
 
 
-<!-- =====================================================
-     SIGNUP
-===================================================== -->
+<!-- SIGNUP -->
 
 <section
 id="signupSection"
@@ -529,9 +511,7 @@ Already have an account? Login
 </section>
 
 
-<!-- =====================================================
-     EMAIL CONFIRMATION
-===================================================== -->
+<!-- EMAIL CONFIRMATION -->
 
 <section
 id="confirmationSection"
@@ -561,9 +541,7 @@ Please confirm your email before logging in.
 </section>
 
 
-<!-- =====================================================
-     DASHBOARD
-===================================================== -->
+<!-- DASHBOARD -->
 
 <section
 id="dashboardSection"
@@ -772,9 +750,7 @@ Logout
 </section>
 
 
-<!-- =====================================================
-     PUBLIC TAG
-===================================================== -->
+<!-- PUBLIC TAG -->
 
 <section
 id="publicTagSection"
@@ -788,9 +764,7 @@ Loading E-Tag...
 </div>
 
 
-<!-- =====================================================
-     ACTIVATION
-===================================================== -->
+<!-- ACTIVATION -->
 
 <div
 id="activationBox"
@@ -828,9 +802,7 @@ class="message"
 </div>
 
 
-<!-- =====================================================
-     PUBLIC PROFILE
-===================================================== -->
+<!-- PUBLIC PROFILE -->
 
 <div
 id="publicProfileBox"
@@ -875,14 +847,10 @@ Digital Identity
 
 <button
 id="ownerEditButton"
+class="hidden"
 >
 ✏️ Edit Profile
 </button>
-
-<div
-id="ownerEditMessage"
-class="message"
-></div>
 
 </div>
 
@@ -893,9 +861,7 @@ class="message"
 </section>
 
 
-<!-- =====================================================
-     NOT FOUND
-===================================================== -->
+<!-- NOT FOUND -->
 
 <section
 id="notFoundSection"
@@ -937,10 +903,6 @@ const SITE_URL =
 "https://emoon3d.github.io/E-Tag/";
 
 
-/* =====================================================
-   INTERNAL E-TAG EMAIL
-===================================================== */
-
 const ETAG_EMAIL_DOMAIN =
 "@etag.local";
 
@@ -974,14 +936,6 @@ document.getElementById("notFoundSection");
 
 let selectedTemplate =
 "boy";
-
-
-/* =====================================================
-   CURRENT PUBLIC TAG
-===================================================== */
-
-let currentPublicTag =
-null;
 
 
 /* =====================================================
@@ -1429,94 +1383,15 @@ async function afterLogin() {
   }
 
 
+  /*
+   * Pending E-Tag activation
+   */
+
   const pendingTag =
   sessionStorage.getItem(
     "pendingTag"
   );
 
-
-  const pendingEditTag =
-  sessionStorage.getItem(
-    "pendingEditTag"
-  );
-
-
-  /*
-   * LOGIN AFTER CLICKING EDIT PROFILE
-   */
-
-  if (pendingEditTag) {
-
-    sessionStorage.removeItem(
-      "pendingEditTag"
-    );
-
-
-    const {
-      data: ownerTag,
-      error: ownerTagError
-    } =
-    await supabase
-    .from("nfc_tags")
-    .select(
-      "id,tag_code,owner_id,active"
-    )
-    .eq(
-      "tag_code",
-      pendingEditTag
-    )
-    .maybeSingle();
-
-
-    if (
-      ownerTagError ||
-      !ownerTag
-    ) {
-
-      showLogin();
-
-      showMessage(
-        "loginMessage",
-        "E-Tag could not be found.",
-        "error"
-      );
-
-      return;
-
-    }
-
-
-    /*
-     * Only the real owner can edit.
-     */
-
-    if (
-      ownerTag.owner_id !== user.id
-    ) {
-
-      showLogin();
-
-      showMessage(
-        "loginMessage",
-        "You are not the owner of this E-Tag.",
-        "error"
-      );
-
-      return;
-
-    }
-
-
-    await loadDashboard();
-
-    return;
-
-  }
-
-
-  /*
-   * LOGIN AFTER ACTIVATION
-   */
 
   if (pendingTag) {
 
@@ -1571,6 +1446,35 @@ async function afterLogin() {
       result.message,
       "error"
     );
+
+    return;
+
+  }
+
+
+  /*
+   * Pending profile edit
+   *
+   * This is set when somebody clicks
+   * Edit Profile on a public E-Tag.
+   *
+   * Login is required before editing.
+   */
+
+  const pendingEditTag =
+  sessionStorage.getItem(
+    "pendingEditTag"
+  );
+
+
+  if (pendingEditTag) {
+
+    sessionStorage.removeItem(
+      "pendingEditTag"
+    );
+
+
+    await loadDashboard();
 
     return;
 
@@ -2526,9 +2430,6 @@ async function loadPublicTag(
   window.currentTag =
   tag;
 
-  currentPublicTag =
-  tag;
-
 
   if (
     tag.active === false &&
@@ -2735,7 +2636,7 @@ async function loadPublicProfile(
 
 
     buttons.appendChild(
-      a
+    a
     );
 
   }
@@ -2811,27 +2712,33 @@ async function loadPublicProfile(
 
 
     buttons.appendChild(
-    a
+      a
     );
 
   }
 
 
   /*
-   * EDIT BUTTON
+   * EDIT BUTTON SECURITY
    *
-   * Button is visible on the public profile.
+   * Nobody can edit directly from
+   * the public profile.
    *
-   * If user is logged in and is the owner:
-   * -> open dashboard.
+   * If not logged in:
+   *     save tag code
+   *     open login
    *
-   * If user is not logged in:
-   * -> save tag code.
-   * -> show login page.
-   *
-   * If logged in but not owner:
-   * -> show error.
+   * If logged in:
+   *     only owner can edit
    */
+
+  const {
+    data: {
+      user
+    }
+  } =
+  await supabase.auth.getUser();
+
 
   const ownerEditButton =
   document.getElementById(
@@ -2846,14 +2753,6 @@ async function loadPublicProfile(
 
   ownerEditButton.onclick =
   async () => {
-
-    const {
-      data: {
-        user
-      }
-    } =
-    await supabase.auth.getUser();
-
 
     /*
      * NOT LOGGED IN
@@ -2872,7 +2771,7 @@ async function loadPublicProfile(
 
       showMessage(
         "loginMessage",
-        "Login to edit your E-Tag profile.",
+        "Login to edit this E-Tag.",
         "error"
       );
 
@@ -2891,11 +2790,10 @@ async function loadPublicProfile(
     ) {
 
       showMessage(
-        "ownerEditMessage",
-        "Only the E-Tag owner can edit this profile.",
+        "loginMessage",
+        "You are not the owner of this E-Tag.",
         "error"
       );
-
 
       return;
 
@@ -2903,7 +2801,7 @@ async function loadPublicProfile(
 
 
     /*
-     * REAL OWNER
+     * OWNER
      */
 
     await loadDashboard();
