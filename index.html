@@ -1,4 +1,3 @@
-```html
 <!DOCTYPE html>
 <html lang="en">
 
@@ -108,12 +107,20 @@ button {
 }
 
 button:active {
-  transform: scale(0.98);
+  transform: scale(.98);
 }
 
 button:disabled {
-  opacity: 0.6;
+  opacity: .6;
   cursor: not-allowed;
+}
+
+.link {
+  text-align: center;
+  margin-top: 18px;
+  color: #2563eb;
+  cursor: pointer;
+  font-weight: 600;
 }
 
 .hidden {
@@ -165,15 +172,6 @@ button:disabled {
   margin-top: 5px;
 }
 
-.template-preview {
-  margin-top: 10px;
-  padding: 14px;
-  border-radius: 12px;
-  background: #f3f4f6;
-  text-align: center;
-  font-weight: 700;
-}
-
 .tag {
   border: 1px solid #e5e7eb;
   padding: 14px;
@@ -194,6 +192,16 @@ button:disabled {
 
 .logout {
   background: #dc2626;
+}
+
+.verify-box {
+  text-align: center;
+  padding: 10px 0;
+}
+
+.verify-icon {
+  font-size: 45px;
+  margin-bottom: 10px;
 }
 
 .activate-icon {
@@ -240,20 +248,169 @@ button:disabled {
   font-weight: 700;
 }
 
-.template-boy {
-  background: linear-gradient(135deg, #eef2ff, #ffffff);
+.template-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
 }
+
+.template-option {
+  border: 2px solid #e5e7eb;
+  border-radius: 14px;
+  padding: 15px 10px;
+  text-align: center;
+  cursor: pointer;
+  transition: .2s;
+}
+
+.template-option:hover {
+  border-color: #111827;
+}
+
+.template-option.selected {
+  border-color: #111827;
+  background: #f3f4f6;
+}
+
+.template-icon {
+  font-size: 32px;
+  margin-bottom: 7px;
+}
+
+.template-name {
+  font-weight: 700;
+}
+
+.template-description {
+  font-size: 12px;
+  color: #6b7280;
+  margin-top: 4px;
+}
+
+
+/* =====================================================
+   PUBLIC TEMPLATE BASE
+===================================================== */
+
+.public-template {
+  min-height: 300px;
+  border-radius: 18px;
+  overflow: hidden;
+  padding: 28px 20px;
+}
+
+
+/* =====================================================
+   BOY TEMPLATE
+===================================================== */
+
+.template-boy {
+  background: linear-gradient(145deg, #111827, #374151);
+  color: white;
+}
+
+.template-boy .public-bio {
+  color: #d1d5db;
+}
+
+.template-boy .avatar {
+  background: #2563eb;
+}
+
+
+/* =====================================================
+   GIRL TEMPLATE
+===================================================== */
 
 .template-girl {
-  background: linear-gradient(135deg, #fce7f3, #ffffff);
+  background: linear-gradient(145deg, #831843, #ec4899);
+  color: white;
 }
+
+.template-girl .public-bio {
+  color: #fce7f3;
+}
+
+.template-girl .avatar {
+  background: #f9a8d4;
+  color: #831843;
+}
+
+
+/* =====================================================
+   BUSINESS TEMPLATE
+===================================================== */
 
 .template-business {
-  background: linear-gradient(135deg, #e5e7eb, #ffffff);
+  background: white;
+  color: #111827;
+  border: 1px solid #e5e7eb;
 }
 
+.template-business .avatar {
+  border-radius: 18px;
+  background: #111827;
+}
+
+.template-business .public-name {
+  font-size: 24px;
+}
+
+
+/* =====================================================
+   COUPLE TEMPLATE
+===================================================== */
+
 .template-couple {
-  background: linear-gradient(135deg, #fee2e2, #ffffff);
+  background: linear-gradient(145deg, #7f1d1d, #be123c);
+  color: white;
+}
+
+.template-couple .public-bio {
+  color: #ffe4e6;
+}
+
+.template-couple .avatar {
+  background: #fecdd3;
+  color: #9f1239;
+}
+
+
+/* =====================================================
+   TEMPLATE BADGE
+===================================================== */
+
+.template-badge {
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  margin-bottom: 15px;
+  background: rgba(255,255,255,.15);
+}
+
+.template-business .template-badge {
+  background: #f3f4f6;
+  color: #374151;
+}
+
+
+/* =====================================================
+   PUBLIC CONTACT BUTTONS
+===================================================== */
+
+.template-boy .info-button,
+.template-girl .info-button,
+.template-couple .info-button {
+  background: rgba(255,255,255,.16);
+  color: white;
+  border: 1px solid rgba(255,255,255,.2);
+}
+
+.template-business .info-button {
+  background: #111827;
+  color: white;
 }
 
 </style>
@@ -319,6 +476,60 @@ class="message"
 
 
 <!-- =====================================================
+     SIGNUP
+===================================================== -->
+
+<section
+id="signupSection"
+class="card hidden"
+>
+
+<h2>
+Create your E-Tag account
+</h2>
+
+<label>
+Email
+</label>
+
+<input
+id="signupEmail"
+type="email"
+placeholder="you@example.com"
+autocomplete="email"
+>
+
+<label>
+Password
+</label>
+
+<input
+id="signupPassword"
+type="password"
+placeholder="Minimum 6 characters"
+autocomplete="new-password"
+>
+
+<button id="signupButton">
+Create Account
+</button>
+
+<div
+id="signupMessage"
+class="message"
+></div>
+
+<div
+id="showLogin"
+class="link"
+>
+Already have an account? Login
+</div>
+
+</section>
+
+
+<!-- =====================================================
      EMAIL CONFIRMATION
 ===================================================== -->
 
@@ -327,9 +538,9 @@ id="confirmationSection"
 class="card hidden"
 >
 
-<div style="text-align:center;">
+<div class="verify-box">
 
-<div style="font-size:45px;">
+<div class="verify-icon">
 📧
 </div>
 
@@ -386,6 +597,94 @@ My Digital Identity
 
 
 <label>
+Profile Template
+</label>
+
+<div class="template-grid">
+
+<div
+class="template-option"
+data-template="boy"
+>
+
+<div class="template-icon">
+👨
+</div>
+
+<div class="template-name">
+Boy
+</div>
+
+<div class="template-description">
+Modern dark style
+</div>
+
+</div>
+
+
+<div
+class="template-option"
+data-template="girl"
+>
+
+<div class="template-icon">
+👩
+</div>
+
+<div class="template-name">
+Girl
+</div>
+
+<div class="template-description">
+Pink elegant style
+</div>
+
+</div>
+
+
+<div
+class="template-option"
+data-template="business"
+>
+
+<div class="template-icon">
+💼
+</div>
+
+<div class="template-name">
+Business
+</div>
+
+<div class="template-description">
+Professional style
+</div>
+
+</div>
+
+
+<div
+class="template-option"
+data-template="couple"
+>
+
+<div class="template-icon">
+❤️
+</div>
+
+<div class="template-name">
+Couple
+</div>
+
+<div class="template-description">
+Romantic style
+</div>
+
+</div>
+
+</div>
+
+
+<label>
 Name
 </label>
 
@@ -395,7 +694,6 @@ type="text"
 placeholder="Your name"
 >
 
-
 <label>
 Bio
 </label>
@@ -404,7 +702,6 @@ Bio
 id="bio"
 placeholder="Tell people about yourself"
 ></textarea>
-
 
 <label>
 Phone
@@ -416,7 +713,6 @@ type="tel"
 placeholder="+94..."
 >
 
-
 <label>
 WhatsApp
 </label>
@@ -427,7 +723,6 @@ type="tel"
 placeholder="+94..."
 >
 
-
 <label>
 Public Email
 </label>
@@ -437,44 +732,6 @@ id="publicEmail"
 type="email"
 placeholder="contact@example.com"
 >
-
-
-<!-- =====================================================
-     TEMPLATE
-===================================================== -->
-
-<label>
-E-Tag Template
-</label>
-
-<select id="template">
-
-<option value="boy">
-👨 Boy
-</option>
-
-<option value="girl">
-👩 Girl
-</option>
-
-<option value="business">
-🏢 Business
-</option>
-
-<option value="couple">
-❤️ Couple
-</option>
-
-</select>
-
-
-<div
-id="templatePreview"
-class="template-preview template-boy"
->
-👨 Boy Template
-</div>
-
 
 <button id="saveProfileButton">
 Save Profile
@@ -488,10 +745,6 @@ class="message"
 </div>
 
 
-<!-- =====================================================
-     MY E-TAGS
-===================================================== -->
-
 <div class="card">
 
 <h2>
@@ -504,10 +757,6 @@ Loading...
 
 </div>
 
-
-<!-- =====================================================
-     LOGOUT
-===================================================== -->
 
 <div class="card">
 
@@ -532,10 +781,7 @@ id="publicTagSection"
 class="hidden"
 >
 
-<div
-id="publicTagCard"
-class="card"
->
+<div class="card">
 
 <div id="publicLoading">
 Loading E-Tag...
@@ -591,7 +837,17 @@ id="publicProfileBox"
 class="hidden"
 >
 
-<div class="public-profile">
+<div
+id="publicTemplate"
+class="public-profile public-template"
+>
+
+<div
+id="publicTemplateBadge"
+class="template-badge"
+>
+E-TAG
+</div>
 
 <div
 id="publicAvatar"
@@ -616,6 +872,13 @@ Digital Identity
 
 <div id="publicButtons">
 </div>
+
+<button
+id="ownerEditButton"
+class="hidden"
+>
+✏️ Edit Profile
+</button>
 
 </div>
 
@@ -671,7 +934,7 @@ const SITE_URL =
 
 
 /* =====================================================
-   INTERNAL E-TAG EMAIL DOMAIN
+   INTERNAL E-TAG EMAIL
 ===================================================== */
 
 const ETAG_EMAIL_DOMAIN =
@@ -683,39 +946,30 @@ const ETAG_EMAIL_DOMAIN =
 ===================================================== */
 
 const loginSection =
-document.getElementById(
-"loginSection"
-);
+document.getElementById("loginSection");
+
+const signupSection =
+document.getElementById("signupSection");
 
 const confirmationSection =
-document.getElementById(
-"confirmationSection"
-);
+document.getElementById("confirmationSection");
 
 const dashboardSection =
-document.getElementById(
-"dashboardSection"
-);
+document.getElementById("dashboardSection");
 
 const publicTagSection =
-document.getElementById(
-"publicTagSection"
-);
+document.getElementById("publicTagSection");
 
 const notFoundSection =
-document.getElementById(
-"notFoundSection"
-);
+document.getElementById("notFoundSection");
 
-const templateSelect =
-document.getElementById(
-"template"
-);
 
-const templatePreview =
-document.getElementById(
-"templatePreview"
-);
+/* =====================================================
+   CURRENT TEMPLATE
+===================================================== */
+
+let selectedTemplate =
+"boy";
 
 
 /* =====================================================
@@ -724,40 +978,43 @@ document.getElementById(
 
 function hideAll() {
 
-  loginSection.classList.add(
-    "hidden"
-  );
+  loginSection.classList.add("hidden");
 
-  confirmationSection.classList.add(
-    "hidden"
-  );
+  signupSection.classList.add("hidden");
 
-  dashboardSection.classList.add(
-    "hidden"
-  );
+  confirmationSection.classList.add("hidden");
 
-  publicTagSection.classList.add(
-    "hidden"
-  );
+  dashboardSection.classList.add("hidden");
 
-  notFoundSection.classList.add(
-    "hidden"
-  );
+  publicTagSection.classList.add("hidden");
+
+  notFoundSection.classList.add("hidden");
 
 }
 
 
 /* =====================================================
-   SHOW LOGIN
+   LOGIN
 ===================================================== */
 
 function showLogin() {
 
   hideAll();
 
-  loginSection.classList.remove(
-    "hidden"
-  );
+  loginSection.classList.remove("hidden");
+
+}
+
+
+/* =====================================================
+   SIGNUP
+===================================================== */
+
+function showSignup() {
+
+  hideAll();
+
+  signupSection.classList.remove("hidden");
 
 }
 
@@ -773,9 +1030,7 @@ function showMessage(
 ) {
 
   const el =
-  document.getElementById(
-    id
-  );
+  document.getElementById(id);
 
   el.textContent =
   text;
@@ -790,41 +1045,210 @@ function showMessage(
 
 
 /* =====================================================
-   LOGIN
+   LOGIN / SIGNUP SWITCH
 ===================================================== */
 
 document
-.getElementById(
-  "loginButton"
-)
+.getElementById("showLogin")
 .addEventListener(
-  "click",
-  async () => {
+"click",
+showLogin
+);
 
-    const username =
-    document
-    .getElementById(
-      "loginUsername"
+
+/*
+ * Signup link intentionally removed
+ * from login page as requested.
+ */
+
+
+/* =====================================================
+   TEMPLATE SELECTOR
+===================================================== */
+
+document
+.querySelectorAll(".template-option")
+.forEach(
+  option => {
+
+    option.addEventListener(
+      "click",
+      () => {
+
+        selectedTemplate =
+        option.dataset.template;
+
+
+        document
+        .querySelectorAll(
+          ".template-option"
+        )
+        .forEach(
+          item => {
+
+            item.classList.remove(
+              "selected"
+            );
+
+          }
+        );
+
+
+        option.classList.add(
+          "selected"
+        );
+
+      }
+    );
+
+  }
+);
+
+
+/* =====================================================
+   SET TEMPLATE
+===================================================== */
+
+function setSelectedTemplate(
+  template
+) {
+
+  const validTemplates = [
+    "boy",
+    "girl",
+    "business",
+    "couple"
+  ];
+
+
+  if (
+    !validTemplates.includes(
+      template
     )
-    .value
-    .trim();
+  ) {
 
-    const password =
-    document
-    .getElementById(
-      "loginPassword"
-    )
-    .value;
+    template =
+    "boy";
+
+  }
 
 
-    if (
-      !username ||
-      !password
-    ) {
+  selectedTemplate =
+  template;
+
+
+  document
+  .querySelectorAll(
+    ".template-option"
+  )
+  .forEach(
+    option => {
+
+      option.classList.toggle(
+        "selected",
+        option.dataset.template ===
+        template
+      );
+
+    }
+  );
+
+}
+
+
+/* =====================================================
+   SIGNUP
+===================================================== */
+
+document
+.getElementById("signupButton")
+.addEventListener(
+"click",
+async () => {
+
+  const email =
+  document
+  .getElementById("signupEmail")
+  .value
+  .trim();
+
+
+  const password =
+  document
+  .getElementById("signupPassword")
+  .value;
+
+
+  if (!email || !password) {
+
+    showMessage(
+      "signupMessage",
+      "Please enter your email and password.",
+      "error"
+    );
+
+    return;
+
+  }
+
+
+  if (
+    password.length < 6
+  ) {
+
+    showMessage(
+      "signupMessage",
+      "Password must contain at least 6 characters.",
+      "error"
+    );
+
+    return;
+
+  }
+
+
+  const signupButton =
+  document.getElementById(
+    "signupButton"
+  );
+
+
+  signupButton.disabled =
+  true;
+
+  signupButton.textContent =
+  "Creating...";
+
+
+  try {
+
+    const {
+      data,
+      error
+    } =
+    await supabase.auth.signUp({
+
+      email:
+      email,
+
+      password:
+      password,
+
+      options: {
+
+        emailRedirectTo:
+        SITE_URL
+
+      }
+
+    });
+
+
+    if (error) {
 
       showMessage(
-        "loginMessage",
-        "Please enter your username and password.",
+        "signupMessage",
+        error.message,
         "error"
       );
 
@@ -833,91 +1257,146 @@ document
     }
 
 
-    const internalEmail =
-    username
-    .toLowerCase()
-    .endsWith(
-      ETAG_EMAIL_DOMAIN
-    )
-    ? username
-    : username +
-      ETAG_EMAIL_DOMAIN;
+    if (
+      data.user &&
+      !data.session
+    ) {
 
+      hideAll();
 
-    const loginButton =
-    document.getElementById(
-      "loginButton"
-    );
-
-
-    loginButton.disabled =
-    true;
-
-    loginButton.textContent =
-    "Logging in...";
-
-
-    try {
-
-      const {
-        data,
-        error
-      } =
-      await supabase.auth.signInWithPassword({
-
-        email:
-        internalEmail,
-
-        password:
-        password
-
-      });
-
-
-      if (error) {
-
-        showMessage(
-          "loginMessage",
-          "Invalid login credentials",
-          "error"
-        );
-
-        return;
-
-      }
-
-
-      if (data.session) {
-
-        await afterLogin();
-
-      }
-
-    } catch (error) {
-
-      console.error(
-        "LOGIN ERROR:",
-        error
+      confirmationSection.classList.remove(
+        "hidden"
       );
 
-      showMessage(
-        "loginMessage",
-        error?.message ||
-        "Login failed.",
-        "error"
-      );
-
-    } finally {
-
-      loginButton.disabled =
-      false;
-
-      loginButton.textContent =
-      "Login";
+      return;
 
     }
 
+
+    if (data.session) {
+
+      await afterLogin();
+
+    }
+
+  } finally {
+
+    signupButton.disabled =
+    false;
+
+    signupButton.textContent =
+    "Create Account";
+
   }
+
+}
+);
+
+
+/* =====================================================
+   LOGIN
+===================================================== */
+
+document
+.getElementById("loginButton")
+.addEventListener(
+"click",
+async () => {
+
+  const username =
+  document
+  .getElementById("loginUsername")
+  .value
+  .trim();
+
+
+  const password =
+  document
+  .getElementById("loginPassword")
+  .value;
+
+
+  if (!username || !password) {
+
+    showMessage(
+      "loginMessage",
+      "Please enter your username and password.",
+      "error"
+    );
+
+    return;
+
+  }
+
+
+  const internalEmail =
+  username.toLowerCase().endsWith(
+    ETAG_EMAIL_DOMAIN
+  )
+  ? username
+  : username + ETAG_EMAIL_DOMAIN;
+
+
+  const loginButton =
+  document.getElementById(
+    "loginButton"
+  );
+
+
+  loginButton.disabled =
+  true;
+
+  loginButton.textContent =
+  "Logging in...";
+
+
+  try {
+
+    const {
+      data,
+      error
+    } =
+    await supabase.auth.signInWithPassword({
+
+      email:
+      internalEmail,
+
+      password:
+      password
+
+    });
+
+
+    if (error) {
+
+      showMessage(
+        "loginMessage",
+        error.message,
+        "error"
+      );
+
+      return;
+
+    }
+
+
+    if (data.session) {
+
+      await afterLogin();
+
+    }
+
+  } finally {
+
+    loginButton.disabled =
+    false;
+
+    loginButton.textContent =
+    "Login";
+
+  }
+
+}
 );
 
 
@@ -965,6 +1444,7 @@ async function afterLogin() {
         "pendingTag"
       );
 
+
       await loadPublicTag(
         pendingTag
       );
@@ -982,30 +1462,19 @@ async function afterLogin() {
 
 
     document
-    .getElementById(
-      "publicLoading"
-    )
-    .classList.add(
-      "hidden"
-    );
+    .getElementById("publicLoading")
+    .classList.add("hidden");
 
 
     document
-    .getElementById(
-      "activationBox"
-    )
-    .classList.remove(
-      "hidden"
-    );
+    .getElementById("activationBox")
+    .classList.remove("hidden");
 
 
     document
-    .getElementById(
-      "activationTagId"
-    )
+    .getElementById("activationTagId")
     .textContent =
-    "E-Tag: " +
-    pendingTag;
+    "E-Tag: " + pendingTag;
 
 
     showMessage(
@@ -1069,11 +1538,6 @@ async function activateTag(
 
 
   if (findError) {
-
-    console.error(
-      "FIND TAG ERROR:",
-      findError
-    );
 
     return {
       success: false,
@@ -1180,11 +1644,6 @@ async function activateTag(
 
   if (updateError) {
 
-    console.error(
-      "ACTIVATION UPDATE ERROR:",
-      updateError
-    );
-
     return {
       success: false,
       message:
@@ -1224,9 +1683,6 @@ async function activateTag(
 
   if (!profile) {
 
-    const {
-      error: profileError
-    } =
     await supabase
     .from("profiles")
     .insert({
@@ -1241,16 +1697,6 @@ async function activateTag(
       "boy"
 
     });
-
-
-    if (profileError) {
-
-      console.error(
-        "PROFILE CREATE ERROR:",
-        profileError
-      );
-
-    }
 
   }
 
@@ -1269,90 +1715,90 @@ async function activateTag(
 ===================================================== */
 
 document
-.getElementById(
-  "activateButton"
-)
+.getElementById("activateButton")
 .addEventListener(
-  "click",
-  async () => {
+"click",
+async () => {
 
-    const tag =
-    window.currentTag;
-
-
-    if (!tag) {
-
-      showMessage(
-        "activationMessage",
-        "E-Tag information is missing.",
-        "error"
-      );
-
-      return;
-
-    }
+  const tag =
+  window.currentTag;
 
 
-    const {
-      data: {
-        user
-      }
-    } =
-    await supabase.auth.getUser();
+  if (!tag) {
+
+    showMessage(
+      "activationMessage",
+      "E-Tag information is missing.",
+      "error"
+    );
+
+    return;
+
+  }
 
 
-    if (!user) {
-
-      sessionStorage.setItem(
-        "pendingTag",
-        tag.tag_code
-      );
-
-      showLogin();
-
-
-      showMessage(
-        "loginMessage",
-        "Login to activate E-Tag " +
-        tag.tag_code,
-        "error"
-      );
-
-      return;
-
-    }
-
-
-    const result =
-    await activateTag(
-      tag.tag_code,
+  const {
+    data: {
       user
-    );
-
-
-    if (!result.success) {
-
-      showMessage(
-        "activationMessage",
-        result.message,
-        "error"
-      );
-
-      return;
-
     }
+  } =
+  await supabase.auth.getUser();
 
 
-    sessionStorage.removeItem(
-      "pendingTag"
-    );
+  if (!user) {
 
-
-    await loadPublicTag(
+    sessionStorage.setItem(
+      "pendingTag",
       tag.tag_code
     );
 
+
+    showLogin();
+
+
+    showMessage(
+      "loginMessage",
+      "Login to activate E-Tag " +
+      tag.tag_code,
+      "error"
+    );
+
+
+    return;
+
   }
+
+
+  const result =
+  await activateTag(
+    tag.tag_code,
+    user
+  );
+
+
+  if (!result.success) {
+
+    showMessage(
+      "activationMessage",
+      result.message,
+      "error"
+    );
+
+    return;
+
+  }
+
+
+  sessionStorage.removeItem(
+    "pendingTag"
+  );
+
+
+  await loadPublicTag(
+    tag.tag_code
+  );
+
+}
 );
 
 
@@ -1434,10 +1880,9 @@ async function loadProfile(
 
   if (!data) {
 
-    templateSelect.value =
-    "boy";
-
-    updateTemplatePreview();
+    setSelectedTemplate(
+      "boy"
+    );
 
     return;
 
@@ -1445,62 +1890,38 @@ async function loadProfile(
 
 
   document
-  .getElementById(
-    "displayName"
-  )
+  .getElementById("displayName")
   .value =
   data.display_name || "";
 
 
   document
-  .getElementById(
-    "bio"
-  )
+  .getElementById("bio")
   .value =
   data.bio || "";
 
 
   document
-  .getElementById(
-    "phone"
-  )
+  .getElementById("phone")
   .value =
   data.phone || "";
 
 
   document
-  .getElementById(
-    "whatsapp"
-  )
+  .getElementById("whatsapp")
   .value =
   data.whatsapp || "";
 
 
   document
-  .getElementById(
-    "publicEmail"
-  )
+  .getElementById("publicEmail")
   .value =
   data.email || "";
 
 
-  const validTemplates = [
-    "boy",
-    "girl",
-    "business",
-    "couple"
-  ];
-
-
-  templateSelect.value =
-  validTemplates.includes(
-    data.template
-  )
-  ? data.template
-  : "boy";
-
-
-  updateTemplatePreview();
+  setSelectedTemplate(
+    data.template || "boy"
+  );
 
 
   updatePreview(
@@ -1511,244 +1932,136 @@ async function loadProfile(
 
 
 /* =====================================================
-   TEMPLATE PREVIEW
-===================================================== */
-
-function updateTemplatePreview() {
-
-  const template =
-  templateSelect.value;
-
-
-  templatePreview.className =
-  "template-preview template-" +
-  template;
-
-
-  const names = {
-
-    boy:
-    "👨 Boy Template",
-
-    girl:
-    "👩 Girl Template",
-
-    business:
-    "🏢 Business Template",
-
-    couple:
-    "❤️ Couple Template"
-
-  };
-
-
-  templatePreview.textContent =
-  names[template] ||
-  "👨 Boy Template";
-
-}
-
-
-templateSelect.addEventListener(
-  "change",
-  updateTemplatePreview
-);
-
-
-/* =====================================================
    SAVE PROFILE
 ===================================================== */
 
 document
-.getElementById(
-  "saveProfileButton"
-)
+.getElementById("saveProfileButton")
 .addEventListener(
-  "click",
-  async () => {
+"click",
+async () => {
+
+  const {
+    data: {
+      user
+    }
+  } =
+  await supabase.auth.getUser();
+
+
+  if (!user) {
+
+    showLogin();
+
+    return;
+
+  }
+
+
+  const profile = {
+
+    id:
+    user.id,
+
+    display_name:
+    document
+    .getElementById("displayName")
+    .value
+    .trim(),
+
+    bio:
+    document
+    .getElementById("bio")
+    .value
+    .trim(),
+
+    phone:
+    document
+    .getElementById("phone")
+    .value
+    .trim(),
+
+    whatsapp:
+    document
+    .getElementById("whatsapp")
+    .value
+    .trim(),
+
+    email:
+    document
+    .getElementById("publicEmail")
+    .value
+    .trim(),
+
+    template:
+    selectedTemplate
+
+  };
+
+
+  const saveButton =
+  document.getElementById(
+    "saveProfileButton"
+  );
+
+
+  saveButton.disabled =
+  true;
+
+  saveButton.textContent =
+  "Saving...";
+
+
+  try {
 
     const {
-      data: {
-        user
-      }
+      error
     } =
-    await supabase.auth.getUser();
-
-
-    if (!user) {
-
-      showLogin();
-
-      return;
-
-    }
-
-
-    const selectedTemplate =
-    templateSelect.value;
-
-
-    const allowedTemplates = [
-      "boy",
-      "girl",
-      "business",
-      "couple"
-    ];
-
-
-    if (
-      !allowedTemplates.includes(
-        selectedTemplate
-      )
-    ) {
-
-      showMessage(
-        "profileMessage",
-        "Invalid template selected.",
-        "error"
-      );
-
-      return;
-
-    }
-
-
-    const profile = {
-
-      id:
-      user.id,
-
-      display_name:
-      document
-      .getElementById(
-        "displayName"
-      )
-      .value
-      .trim(),
-
-      bio:
-      document
-      .getElementById(
-        "bio"
-      )
-      .value
-      .trim(),
-
-      phone:
-      document
-      .getElementById(
-        "phone"
-      )
-      .value
-      .trim(),
-
-      whatsapp:
-      document
-      .getElementById(
-        "whatsapp"
-      )
-      .value
-      .trim(),
-
-      email:
-      document
-      .getElementById(
-        "publicEmail"
-      )
-      .value
-      .trim(),
-
-      template:
-      selectedTemplate
-
-    };
-
-
-    const saveButton =
-    document.getElementById(
-      "saveProfileButton"
+    await supabase
+    .from("profiles")
+    .upsert(
+      profile,
+      {
+        onConflict: "id"
+      }
     );
 
 
-    saveButton.disabled =
-    true;
-
-    saveButton.textContent =
-    "Saving...";
-
-
-    try {
-
-      const {
-        error
-      } =
-      await supabase
-      .from("profiles")
-      .upsert(
-        profile,
-        {
-          onConflict: "id"
-        }
-      );
-
-
-      if (error) {
-
-        console.error(
-          "PROFILE SAVE ERROR:",
-          error
-        );
-
-        showMessage(
-          "profileMessage",
-          error.message,
-          "error"
-        );
-
-        return;
-
-      }
-
-
-      updatePreview(
-        profile
-      );
-
-
-      updateTemplatePreview();
-
+    if (error) {
 
       showMessage(
         "profileMessage",
-        "Profile saved successfully.",
-        "success"
-      );
-
-    } catch (error) {
-
-      console.error(
-        "PROFILE SAVE ERROR:",
-        error
-      );
-
-      showMessage(
-        "profileMessage",
-        error?.message ||
-        "Could not save profile.",
+        error.message,
         "error"
       );
 
-    } finally {
-
-      saveButton.disabled =
-      false;
-
-      saveButton.textContent =
-      "Save Profile";
+      return;
 
     }
 
+
+    updatePreview(
+      profile
+    );
+
+
+    showMessage(
+      "profileMessage",
+      "Profile and template saved successfully.",
+      "success"
+    );
+
+  } finally {
+
+    saveButton.disabled =
+    false;
+
+    saveButton.textContent =
+    "Save Profile";
+
   }
+
+}
 );
 
 
@@ -1766,26 +2079,20 @@ function updatePreview(
 
 
   document
-  .getElementById(
-    "previewName"
-  )
+  .getElementById("previewName")
   .textContent =
   name;
 
 
   document
-  .getElementById(
-    "previewBio"
-  )
+  .getElementById("previewBio")
   .textContent =
   data.bio ||
   "Your digital identity";
 
 
   document
-  .getElementById(
-    "avatar"
-  )
+  .getElementById("avatar")
   .textContent =
   name
   .charAt(0)
@@ -1833,7 +2140,6 @@ async function loadTags(
     "Unable to load E-Tags.";
 
     console.error(
-      "TAGS ERROR:",
       error
     );
 
@@ -1889,9 +2195,7 @@ async function loadTags(
         </div>
 
         <div class="status">
-          ${tag.active
-            ? "Active"
-            : "Inactive"}
+          ${tag.active ? "Active" : "Inactive"}
         </div>
 
         <div style="
@@ -2057,27 +2361,21 @@ async function loadPublicTag(
 
 
   document
-  .getElementById(
-    "publicLoading"
-  )
+  .getElementById("publicLoading")
   .classList.remove(
     "hidden"
   );
 
 
   document
-  .getElementById(
-    "activationBox"
-  )
+  .getElementById("activationBox")
   .classList.add(
     "hidden"
   );
 
 
   document
-  .getElementById(
-    "publicProfileBox"
-  )
+  .getElementById("publicProfileBox")
   .classList.add(
     "hidden"
   );
@@ -2099,21 +2397,13 @@ async function loadPublicTag(
 
 
   document
-  .getElementById(
-    "publicLoading"
-  )
+  .getElementById("publicLoading")
   .classList.add(
     "hidden"
   );
 
 
   if (error) {
-
-    console.error(
-      "TAG QUERY ERROR:",
-      error
-    );
-
 
     showNotFound(
       "Database error: " +
@@ -2131,7 +2421,7 @@ async function loadPublicTag(
   ) {
 
     showNotFound(
-      "No database row found for tag: " +
+      "No E-Tag found: " +
       tagCode
     );
 
@@ -2198,7 +2488,7 @@ async function loadPublicTag(
 
 
 /* =====================================================
-   PUBLIC PROFILE
+   LOAD PUBLIC PROFILE
 ===================================================== */
 
 async function loadPublicProfile(
@@ -2233,12 +2523,6 @@ async function loadPublicProfile(
 
 
   if (error) {
-
-    console.error(
-      "PUBLIC PROFILE ERROR:",
-      error
-    );
-
 
     showNotFound(
       "Profile error: " +
@@ -2280,34 +2564,11 @@ async function loadPublicProfile(
 
 
   const template =
-  [
-    "boy",
-    "girl",
-    "business",
-    "couple"
-  ].includes(
-    profile.template
-  )
-  ? profile.template
-  : "boy";
+  profile.template ||
+  "boy";
 
 
-  const publicCard =
-  document.getElementById(
-    "publicTagCard"
-  );
-
-
-  publicCard.classList.remove(
-    "template-boy",
-    "template-girl",
-    "template-business",
-    "template-couple"
-  );
-
-
-  publicCard.classList.add(
-    "template-" +
+  applyPublicTemplate(
     template
   );
 
@@ -2358,10 +2619,6 @@ async function loadPublicProfile(
   "";
 
 
-  /* ===================================================
-     PHONE
-  =================================================== */
-
   if (
     profile.phone
   ) {
@@ -2391,10 +2648,6 @@ async function loadPublicProfile(
 
   }
 
-
-  /* ===================================================
-     WHATSAPP
-  =================================================== */
 
   if (
     profile.whatsapp
@@ -2442,10 +2695,6 @@ async function loadPublicProfile(
   }
 
 
-  /* ===================================================
-     EMAIL
-  =================================================== */
-
   if (
     profile.email
   ) {
@@ -2475,7 +2724,138 @@ async function loadPublicProfile(
 
   }
 
+
+  /*
+   * Show edit button only
+   * when current logged-in user
+   * owns this E-Tag.
+   */
+
+  const {
+    data: {
+      user
+    }
+  } =
+  await supabase.auth.getUser();
+
+
+  const ownerEditButton =
+  document.getElementById(
+    "ownerEditButton"
+  );
+
+
+  if (
+    user &&
+    user.id === tag.owner_id
+  ) {
+
+    ownerEditButton.classList.remove(
+      "hidden"
+    );
+
+  } else {
+
+    ownerEditButton.classList.add(
+      "hidden"
+    );
+
+  }
+
 }
+
+
+/* =====================================================
+   APPLY PUBLIC TEMPLATE
+===================================================== */
+
+function applyPublicTemplate(
+  template
+) {
+
+  const validTemplates = [
+    "boy",
+    "girl",
+    "business",
+    "couple"
+  ];
+
+
+  if (
+    !validTemplates.includes(
+      template
+    )
+  ) {
+
+    template =
+    "boy";
+
+  }
+
+
+  const box =
+  document.getElementById(
+    "publicTemplate"
+  );
+
+
+  box.classList.remove(
+    "template-boy",
+    "template-girl",
+    "template-business",
+    "template-couple"
+  );
+
+
+  box.classList.add(
+    "template-" +
+    template
+  );
+
+
+  const badge =
+  document.getElementById(
+    "publicTemplateBadge"
+  );
+
+
+  const names = {
+
+    boy:
+    "BOY",
+
+    girl:
+    "GIRL",
+
+    business:
+    "BUSINESS",
+
+    couple:
+    "COUPLE"
+
+  };
+
+
+  badge.textContent =
+  names[template];
+
+}
+
+
+/* =====================================================
+   OWNER EDIT
+===================================================== */
+
+document
+.getElementById("ownerEditButton")
+.addEventListener(
+"click",
+async () => {
+
+  await loadDashboard();
+
+}
+);
 
 
 /* =====================================================
@@ -2548,24 +2928,22 @@ value
 ===================================================== */
 
 document
-.getElementById(
-  "logoutButton"
-)
+.getElementById("logoutButton")
 .addEventListener(
-  "click",
-  async () => {
+"click",
+async () => {
 
-    await supabase.auth.signOut();
-
-
-    sessionStorage.removeItem(
-      "pendingTag"
-    );
+  await supabase.auth.signOut();
 
 
-    showLogin();
+  sessionStorage.removeItem(
+    "pendingTag"
+  );
 
-  }
+
+  showLogin();
+
+}
 );
 
 
@@ -2587,8 +2965,6 @@ async (
 
     showLogin();
 
-    return;
-
   }
 
 }
@@ -2605,10 +2981,6 @@ async function startApp() {
   getTagCode();
 
 
-  /*
-   * PUBLIC E-TAG
-   */
-
   if (tagCode) {
 
     await loadPublicTag(
@@ -2619,10 +2991,6 @@ async function startApp() {
 
   }
 
-
-  /*
-   * NORMAL HOME
-   */
 
   const {
     data: {
@@ -2652,4 +3020,3 @@ startApp();
 </body>
 
 </html>
-```
