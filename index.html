@@ -875,10 +875,14 @@ Digital Identity
 
 <button
 id="ownerEditButton"
-class="hidden"
 >
 ✏️ Edit Profile
 </button>
+
+<div
+id="ownerEditMessage"
+class="message"
+></div>
 
 </div>
 
@@ -973,6 +977,14 @@ let selectedTemplate =
 
 
 /* =====================================================
+   CURRENT PUBLIC TAG
+===================================================== */
+
+let currentPublicTag =
+null;
+
+
+/* =====================================================
    HIDE ALL
 ===================================================== */
 
@@ -1054,12 +1066,6 @@ document
 "click",
 showLogin
 );
-
-
-/*
- * Signup link intentionally removed
- * from login page as requested.
- */
 
 
 /* =====================================================
@@ -1428,6 +1434,89 @@ async function afterLogin() {
     "pendingTag"
   );
 
+
+  const pendingEditTag =
+  sessionStorage.getItem(
+    "pendingEditTag"
+  );
+
+
+  /*
+   * LOGIN AFTER CLICKING EDIT PROFILE
+   */
+
+  if (pendingEditTag) {
+
+    sessionStorage.removeItem(
+      "pendingEditTag"
+    );
+
+
+    const {
+      data: ownerTag,
+      error: ownerTagError
+    } =
+    await supabase
+    .from("nfc_tags")
+    .select(
+      "id,tag_code,owner_id,active"
+    )
+    .eq(
+      "tag_code",
+      pendingEditTag
+    )
+    .maybeSingle();
+
+
+    if (
+      ownerTagError ||
+      !ownerTag
+    ) {
+
+      showLogin();
+
+      showMessage(
+        "loginMessage",
+        "E-Tag could not be found.",
+        "error"
+      );
+
+      return;
+
+    }
+
+
+    /*
+     * Only the real owner can edit.
+     */
+
+    if (
+      ownerTag.owner_id !== user.id
+    ) {
+
+      showLogin();
+
+      showMessage(
+        "loginMessage",
+        "You are not the owner of this E-Tag.",
+        "error"
+      );
+
+      return;
+
+    }
+
+
+    await loadDashboard();
+
+    return;
+
+  }
+
+
+  /*
+   * LOGIN AFTER ACTIVATION
+   */
 
   if (pendingTag) {
 
@@ -2437,6 +2526,9 @@ async function loadPublicTag(
   window.currentTag =
   tag;
 
+  currentPublicTag =
+  tag;
+
 
   if (
     tag.active === false &&
@@ -2719,25 +2811,27 @@ async function loadPublicProfile(
 
 
     buttons.appendChild(
-      a
+    a
     );
 
   }
 
 
   /*
-   * Show edit button only
-   * when current logged-in user
-   * owns this E-Tag.
+   * EDIT BUTTON
+   *
+   * Button is visible on the public profile.
+   *
+   * If user is logged in and is the owner:
+   * -> open dashboard.
+   *
+   * If user is not logged in:
+   * -> save tag code.
+   * -> show login page.
+   *
+   * If logged in but not owner:
+   * -> show error.
    */
-
-  const {
-    data: {
-      user
-    }
-  } =
-  await supabase.auth.getUser();
-
 
   const ownerEditButton =
   document.getElementById(
@@ -2745,22 +2839,76 @@ async function loadPublicProfile(
   );
 
 
-  if (
-    user &&
-    user.id === tag.owner_id
-  ) {
+  ownerEditButton.classList.remove(
+    "hidden"
+  );
 
-    ownerEditButton.classList.remove(
-      "hidden"
-    );
 
-  } else {
+  ownerEditButton.onclick =
+  async () => {
 
-    ownerEditButton.classList.add(
-      "hidden"
-    );
+    const {
+      data: {
+        user
+      }
+    } =
+    await supabase.auth.getUser();
 
-  }
+
+    /*
+     * NOT LOGGED IN
+     */
+
+    if (!user) {
+
+      sessionStorage.setItem(
+        "pendingEditTag",
+        tag.tag_code
+      );
+
+
+      showLogin();
+
+
+      showMessage(
+        "loginMessage",
+        "Login to edit your E-Tag profile.",
+        "error"
+      );
+
+
+      return;
+
+    }
+
+
+    /*
+     * LOGGED IN BUT NOT OWNER
+     */
+
+    if (
+      user.id !== tag.owner_id
+    ) {
+
+      showMessage(
+        "ownerEditMessage",
+        "Only the E-Tag owner can edit this profile.",
+        "error"
+      );
+
+
+      return;
+
+    }
+
+
+    /*
+     * REAL OWNER
+     */
+
+    await loadDashboard();
+
+  };
 
 }
 
@@ -2843,22 +2991,6 @@ function applyPublicTemplate(
 
 
 /* =====================================================
-   OWNER EDIT
-===================================================== */
-
-document
-.getElementById("ownerEditButton")
-.addEventListener(
-"click",
-async () => {
-
-  await loadDashboard();
-
-}
-);
-
-
-/* =====================================================
    NOT FOUND
 ===================================================== */
 
@@ -2938,6 +3070,11 @@ async () => {
 
   sessionStorage.removeItem(
     "pendingTag"
+  );
+
+
+  sessionStorage.removeItem(
+    "pendingEditTag"
   );
 
 
