@@ -298,71 +298,6 @@ id="loginMessage"
 class="message"
 ></div>
 
-<div
-id="showSignup"
-class="link"
->
-Create an E-Tag account
-</div>
-
-</section>
-
-
-<!-- =====================================================
-     SIGNUP
-===================================================== -->
-
-<section
-id="signupSection"
-class="card hidden"
->
-
-<h2>
-Create your E-Tag account
-</h2>
-
-<p style="color:#6b7280;font-size:14px;">
-Use your real email here for account confirmation.
-</p>
-
-<label>
-Email
-</label>
-
-<input
-id="signupEmail"
-type="email"
-placeholder="you@example.com"
-autocomplete="email"
->
-
-<label>
-Password
-</label>
-
-<input
-id="signupPassword"
-type="password"
-placeholder="Minimum 6 characters"
-autocomplete="new-password"
->
-
-<button id="signupButton">
-Create Account
-</button>
-
-<div
-id="signupMessage"
-class="message"
-></div>
-
-<div
-id="showLogin"
-class="link"
->
-Already have an account? Login
-</div>
-
 </section>
 
 
@@ -686,9 +621,6 @@ const ETAG_EMAIL_DOMAIN =
 const loginSection =
 document.getElementById("loginSection");
 
-const signupSection =
-document.getElementById("signupSection");
-
 const confirmationSection =
 document.getElementById("confirmationSection");
 
@@ -710,8 +642,6 @@ function hideAll() {
 
   loginSection.classList.add("hidden");
 
-  signupSection.classList.add("hidden");
-
   confirmationSection.classList.add("hidden");
 
   dashboardSection.classList.add("hidden");
@@ -732,19 +662,6 @@ function showLogin() {
   hideAll();
 
   loginSection.classList.remove("hidden");
-
-}
-
-
-/* =====================================================
-   SIGNUP SCREEN
-===================================================== */
-
-function showSignup() {
-
-  hideAll();
-
-  signupSection.classList.remove("hidden");
 
 }
 
@@ -772,160 +689,6 @@ function showMessage(
   "block";
 
 }
-
-
-/* =====================================================
-   SWITCH LOGIN / SIGNUP
-===================================================== */
-
-document
-.getElementById("showSignup")
-.addEventListener(
-"click",
-showSignup
-);
-
-
-document
-.getElementById("showLogin")
-.addEventListener(
-"click",
-showLogin
-);
-
-
-/* =====================================================
-   SIGNUP
-===================================================== */
-
-document
-.getElementById("signupButton")
-.addEventListener(
-"click",
-async () => {
-
-  const email =
-  document
-  .getElementById("signupEmail")
-  .value
-  .trim();
-
-  const password =
-  document
-  .getElementById("signupPassword")
-  .value;
-
-
-  if (!email || !password) {
-
-    showMessage(
-      "signupMessage",
-      "Please enter your email and password.",
-      "error"
-    );
-
-    return;
-
-  }
-
-
-  if (password.length < 6) {
-
-    showMessage(
-      "signupMessage",
-      "Password must contain at least 6 characters.",
-      "error"
-    );
-
-    return;
-
-  }
-
-
-  const signupButton =
-  document.getElementById(
-    "signupButton"
-  );
-
-
-  signupButton.disabled =
-  true;
-
-  signupButton.textContent =
-  "Creating...";
-
-
-  try {
-
-    const {
-      data,
-      error
-    } =
-    await supabase.auth.signUp({
-
-      email:
-      email,
-
-      password:
-      password,
-
-      options: {
-
-        emailRedirectTo:
-        SITE_URL
-
-      }
-
-    });
-
-
-    if (error) {
-
-      showMessage(
-        "signupMessage",
-        error.message,
-        "error"
-      );
-
-      return;
-
-    }
-
-
-    if (
-      data.user &&
-      !data.session
-    ) {
-
-      hideAll();
-
-      confirmationSection.classList.remove(
-        "hidden"
-      );
-
-      return;
-
-    }
-
-
-    if (data.session) {
-
-      await afterLogin();
-
-    }
-
-  } finally {
-
-    signupButton.disabled =
-    false;
-
-    signupButton.textContent =
-    "Create Account";
-
-  }
-
-}
-);
 
 
 /* =====================================================
