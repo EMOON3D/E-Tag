@@ -5,8 +5,10 @@
 
 <meta charset="UTF-8">
 
-<meta name="viewport"
-      content="width=device-width, initial-scale=1.0">
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0"
+>
 
 <title>E-Tag | Admin</title>
 
@@ -68,6 +70,11 @@ input {
   border: 1px solid #d1d5db;
   border-radius: 10px;
   font-size: 15px;
+  outline: none;
+}
+
+input:focus {
+  border-color: #111827;
 }
 
 button {
@@ -169,9 +176,7 @@ Admin • Create New E-Tag
 </div>
 
 
-<!-- ==============================
-     GENERATOR
-============================== -->
+<!-- CREATE TAG -->
 
 <div class="card">
 
@@ -186,8 +191,9 @@ Tag Code
 <input
 id="tagCode"
 type="text"
-placeholder="Example: ABX729"
+placeholder="Example: TAG123"
 maxlength="30"
+autocomplete="off"
 >
 
 <button id="generateButton">
@@ -202,9 +208,7 @@ class="message"
 </div>
 
 
-<!-- ==============================
-     RESULT
-============================== -->
+<!-- RESULT -->
 
 <div
 id="resultCard"
@@ -235,34 +239,6 @@ class="result-value"
 <div class="result-row">
 
 <div class="result-label">
-Username
-</div>
-
-<div
-id="resultUsername"
-class="result-value"
-></div>
-
-</div>
-
-
-<div class="result-row">
-
-<div class="result-label">
-Password
-</div>
-
-<div
-id="resultPassword"
-class="result-value"
-></div>
-
-</div>
-
-
-<div class="result-row">
-
-<div class="result-label">
 NFC URL
 </div>
 
@@ -282,18 +258,11 @@ Copy NFC URL
 </button>
 
 
-<button
-id="copyCredentialsButton"
-class="copy"
->
-Copy Username + Password
-</button>
-
-
 <div class="warning">
 
-⚠️ Save the generated username and password.
-The password will not be shown again after leaving this page.
+The customer will create their own account using
+their own email and password when they open this
+E-Tag link.
 
 </div>
 
@@ -307,17 +276,13 @@ The password will not be shown again after leaving this page.
 
 <script type="module">
 
-/* =========================================
-   SUPABASE
-========================================= */
-
 import {
   supabase
 } from "./supabase.js";
 
 
 /* =========================================
-   SITE
+   WEBSITE URL
 ========================================= */
 
 const SITE_URL =
@@ -330,42 +295,37 @@ const SITE_URL =
 
 const tagCodeInput =
 document.getElementById(
-"tagCode"
+  "tagCode"
 );
 
 const generateButton =
 document.getElementById(
-"generateButton"
+  "generateButton"
 );
 
 const message =
 document.getElementById(
-"message"
+  "message"
 );
 
 const resultCard =
 document.getElementById(
-"resultCard"
+  "resultCard"
 );
 
 const resultTagCode =
 document.getElementById(
-"resultTagCode"
-);
-
-const resultUsername =
-document.getElementById(
-"resultUsername"
-);
-
-const resultPassword =
-document.getElementById(
-"resultPassword"
+  "resultTagCode"
 );
 
 const resultUrl =
 document.getElementById(
-"resultUrl"
+  "resultUrl"
+);
+
+const copyUrlButton =
+document.getElementById(
+  "copyUrlButton"
 );
 
 
@@ -384,81 +344,14 @@ function showMessage(
   message.className =
   "message " + type;
 
-}
-
-
-/* =========================================
-   RANDOM STRING
-========================================= */
-
-function randomString(
-  length
-) {
-
-  const chars =
-  "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789";
-
-  let result = "";
-
-  const array =
-  new Uint32Array(
-    length
-  );
-
-  crypto.getRandomValues(
-    array
-  );
-
-  for (
-    let i = 0;
-    i < length;
-    i++
-  ) {
-
-    result +=
-    chars[
-      array[i] %
-      chars.length
-    ];
-
-  }
-
-  return result;
+  message.style.display =
+  "block";
 
 }
 
 
 /* =========================================
-   GENERATE USERNAME
-========================================= */
-
-function generateUsername() {
-
-  return (
-    "etag_" +
-    randomString(8)
-  );
-
-}
-
-
-/* =========================================
-   GENERATE PASSWORD
-========================================= */
-
-function generatePassword() {
-
-  return (
-    randomString(5) +
-    "!" +
-    randomString(5)
-  );
-
-}
-
-
-/* =========================================
-   GENERATE E-TAG
+   CREATE TAG
 ========================================= */
 
 generateButton.addEventListener(
@@ -505,18 +398,7 @@ generateButton.addEventListener(
 
 
     /* =====================================
-       GENERATE CREDENTIALS
-    ===================================== */
-
-    const username =
-    generateUsername();
-
-    const password =
-    generatePassword();
-
-
-    /* =====================================
-       BUTTON STATE
+       BUTTON
     ===================================== */
 
     generateButton.disabled =
@@ -530,90 +412,93 @@ generateButton.addEventListener(
 
 
       /* ===================================
-         CALL EDGE FUNCTION
-
-         IMPORTANT:
-
-         We DO NOT insert directly into
-         nfc_tags here.
-
-         Edge Function creates:
-
-         1. Supabase Auth user
-         2. nfc_tags row
+         CHECK EXISTING TAG
       =================================== */
 
       const {
-        data,
-        error
+        data: existingTag,
+        error: checkError
       } =
-      await supabase.functions.invoke(
-        "create-etag-user",
-        {
-          body: {
-
-            tag_code:
-            tagCode,
-
-            username:
-            username,
-
-            password:
-            password
-
-          }
-        }
-      );
+      await supabase
+      .from("nfc_tags")
+      .select(
+        "id,tag_code,owner_id,active"
+      )
+      .eq(
+        "tag_code",
+        tagCode
+      )
+      .maybeSingle();
 
 
-      /* ===================================
-         EDGE FUNCTION ERROR
-      =================================== */
-
-      if (error) {
-
-        console.error(
-          "EDGE FUNCTION ERROR:",
-          error
-        );
+      if (checkError) {
 
         throw new Error(
-          error.message ||
-          "Failed to call create-etag-user."
+          checkError.message
+        );
+
+      }
+
+
+      if (existingTag) {
+
+        throw new Error(
+          "E-Tag " +
+          tagCode +
+          " already exists."
         );
 
       }
 
 
       /* ===================================
-         APPLICATION ERROR
+         CREATE EMPTY E-TAG
+         
+         IMPORTANT:
+         
+         owner_id = NULL
+         active   = FALSE
+         
+         NO USER IS CREATED HERE.
       =================================== */
 
-      if (
-        !data ||
-        data.success !== true
-      ) {
+      const {
+        data: createdTag,
+        error: insertError
+      } =
+      await supabase
+      .from("nfc_tags")
+      .insert({
+
+        tag_code:
+        tagCode,
+
+        owner_id:
+        null,
+
+        active:
+        false
+
+      })
+      .select(
+        "id,tag_code,owner_id,active,created_at"
+      )
+      .single();
+
+
+      if (insertError) {
 
         throw new Error(
-          data?.error ||
-          "Failed to create E-Tag."
+          insertError.message
         );
 
       }
-
-
-      /* ===================================
-         CREATED TAG
-      =================================== */
-
-      const createdTag =
-      data.tag;
 
 
       if (!createdTag) {
 
         throw new Error(
-          "E-Tag was created but tag data was not returned."
+          "E-Tag was not created."
         );
 
       }
@@ -632,24 +517,14 @@ generateButton.addEventListener(
 
 
       /* ===================================
-         DISPLAY RESULT
+         SHOW RESULT
       =================================== */
 
       resultTagCode.textContent =
       createdTag.tag_code;
 
-
-      resultUsername.textContent =
-      username;
-
-
-      resultPassword.textContent =
-      password;
-
-
       resultUrl.textContent =
       nfcUrl;
-
 
       resultCard.classList.remove(
         "hidden"
@@ -657,21 +532,11 @@ generateButton.addEventListener(
 
 
       /* ===================================
-         SAVE TEMPORARILY IN MEMORY
+         SAVE URL
       =================================== */
 
-      window.currentCredentials = {
-
-        username:
-        username,
-
-        password:
-        password,
-
-        url:
-        nfcUrl
-
-      };
+      window.currentNfcUrl =
+      nfcUrl;
 
 
       /* ===================================
@@ -684,22 +549,13 @@ generateButton.addEventListener(
       );
 
 
-      /* ===================================
-         CLEAR INPUT
-      =================================== */
-
-      tagCodeInput.value = "";
+      tagCodeInput.value =
+      "";
 
 
       console.log(
         "Created E-Tag:",
         createdTag
-      );
-
-
-      console.log(
-        "Created Auth User:",
-        data.user
       );
 
 
@@ -736,23 +592,19 @@ generateButton.addEventListener(
 
 
 /* =========================================
-   COPY URL
+   COPY NFC URL
 ========================================= */
 
-document
-.getElementById(
-  "copyUrlButton"
-)
-.addEventListener(
+copyUrlButton.addEventListener(
   "click",
   async () => {
 
     if (
-      !window.currentCredentials
+      !window.currentNfcUrl
     ) {
 
       showMessage(
-        "No E-Tag URL available.",
+        "No NFC URL available.",
         "error"
       );
 
@@ -764,7 +616,7 @@ document
     try {
 
       await navigator.clipboard.writeText(
-        window.currentCredentials.url
+        window.currentNfcUrl
       );
 
 
@@ -783,70 +635,6 @@ document
 
       showMessage(
         "Could not copy URL.",
-        "error"
-      );
-
-    }
-
-  }
-);
-
-
-/* =========================================
-   COPY CREDENTIALS
-========================================= */
-
-document
-.getElementById(
-  "copyCredentialsButton"
-)
-.addEventListener(
-  "click",
-  async () => {
-
-    if (
-      !window.currentCredentials
-    ) {
-
-      showMessage(
-        "No credentials available.",
-        "error"
-      );
-
-      return;
-
-    }
-
-
-    const text =
-    "Username: " +
-    window.currentCredentials.username +
-    "\nPassword: " +
-    window.currentCredentials.password;
-
-
-    try {
-
-      await navigator.clipboard.writeText(
-        text
-      );
-
-
-      showMessage(
-        "Username and password copied.",
-        "success"
-      );
-
-
-    } catch (error) {
-
-      console.error(
-        error
-      );
-
-
-      showMessage(
-        "Could not copy credentials.",
         "error"
       );
 
