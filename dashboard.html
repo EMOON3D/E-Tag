@@ -1,0 +1,1611 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>E-Tag Dashboard</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family:
+                Inter,
+                system-ui,
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                sans-serif;
+            background: #f5f7fb;
+            color: #111827;
+        }
+
+        .app {
+            width: min(100% - 24px, 1100px);
+            margin: 0 auto;
+            padding: 24px 0 50px;
+        }
+
+        .header {
+            margin-bottom: 20px;
+        }
+
+        .header h1 {
+            margin: 0 0 6px;
+            font-size: 30px;
+        }
+
+        .header p {
+            margin: 0;
+            color: #6b7280;
+        }
+
+        .layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .card {
+            background: #ffffff;
+            border: 1px solid #e5e7eb;
+            border-radius: 20px;
+            padding: 22px;
+            box-shadow:
+                0 10px 35px rgba(0, 0, 0, 0.05);
+        }
+
+        .card h2 {
+            margin: 0 0 18px;
+            font-size: 21px;
+        }
+
+        .field {
+            margin-bottom: 16px;
+        }
+
+        .field label {
+            display: block;
+            margin-bottom: 7px;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .input,
+        .textarea,
+        .select {
+            width: 100%;
+            border: 1px solid #d1d5db;
+            border-radius: 11px;
+            padding: 12px 13px;
+            font-size: 15px;
+            outline: none;
+            font-family: inherit;
+            background: #ffffff;
+        }
+
+        .textarea {
+            min-height: 110px;
+            resize: vertical;
+        }
+
+        .input:focus,
+        .textarea:focus,
+        .select:focus {
+            border-color: #111827;
+            box-shadow:
+                0 0 0 3px rgba(
+                    17,
+                    24,
+                    39,
+                    0.08
+                );
+        }
+
+        .button-row {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .button {
+            border: 0;
+            border-radius: 11px;
+            padding: 13px 16px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .button:disabled {
+            opacity: 0.55;
+            cursor: not-allowed;
+        }
+
+        .primary {
+            background: #111827;
+            color: #ffffff;
+        }
+
+        .secondary {
+            background: #eef2f7;
+            color: #111827;
+        }
+
+        .danger {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .message {
+            display: none;
+            margin-bottom: 16px;
+            padding: 12px 14px;
+            border-radius: 11px;
+            font-size: 14px;
+            line-height: 1.5;
+            word-break: break-word;
+        }
+
+        .message.show {
+            display: block;
+        }
+
+        .message.success {
+            background: #ecfdf5;
+            color: #065f46;
+            border: 1px solid #a7f3d0;
+        }
+
+        .message.error {
+            background: #fef2f2;
+            color: #991b1b;
+            border: 1px solid #fecaca;
+        }
+
+        .tag-info {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .tag-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 7px 10px;
+            border-radius: 999px;
+            background: #eef2f7;
+            color: #374151;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .avatar-section {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .avatar {
+            width: 86px;
+            height: 86px;
+            border-radius: 50%;
+            overflow: hidden;
+            background: #e5e7eb;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #6b7280;
+            font-size: 28px;
+            font-weight: 800;
+            flex-shrink: 0;
+        }
+
+        .avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .preview-shell {
+            background: #f5f7fb;
+            border-radius: 18px;
+            padding: 14px;
+            min-height: 500px;
+        }
+
+        .preview-card {
+            max-width: 430px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: 22px;
+            padding: 28px 22px;
+            text-align: center;
+            box-shadow:
+                0 10px 35px rgba(
+                    0,
+                    0,
+                    0,
+                    0.06
+                );
+        }
+
+        .preview-avatar {
+            width: 96px;
+            height: 96px;
+            margin: 0 auto 16px;
+            border-radius: 50%;
+            overflow: hidden;
+            background: #e5e7eb;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #6b7280;
+            font-size: 30px;
+            font-weight: 800;
+        }
+
+        .preview-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .preview-name {
+            margin: 0;
+            font-size: 27px;
+            line-height: 1.2;
+        }
+
+        .preview-bio {
+            margin: 10px 0 0;
+            color: #6b7280;
+            line-height: 1.6;
+            white-space: pre-wrap;
+        }
+
+        .preview-actions {
+            display: grid;
+            gap: 10px;
+            margin-top: 24px;
+        }
+
+        .preview-button {
+            display: block;
+            text-decoration: none;
+            padding: 12px 14px;
+            border-radius: 11px;
+            background: #111827;
+            color: #ffffff;
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .preview-button.hidden {
+            display: none;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 50px 20px;
+            color: #6b7280;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .top-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 18px;
+        }
+
+        .top-actions h2 {
+            margin: 0;
+        }
+
+        @media (max-width: 800px) {
+
+            .layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+
+            .app {
+                width: min(100% - 16px, 1100px);
+                padding-top: 16px;
+            }
+
+            .card {
+                padding: 18px;
+            }
+
+            .button-row {
+                flex-direction: column;
+            }
+
+            .avatar-section {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .header h1 {
+                font-size: 26px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="app">
+
+    <div
+        id="loadingCard"
+        class="card loading"
+    >
+        Loading your E-Tag dashboard...
+    </div>
+
+
+    <div
+        id="dashboard"
+        class="hidden"
+    >
+
+        <header class="header">
+            <h1>
+                E-Tag Dashboard
+            </h1>
+
+            <p>
+                Manage your public E-Tag profile.
+            </p>
+        </header>
+
+
+        <div class="tag-info">
+
+            <span
+                id="tagBadge"
+                class="tag-badge"
+            >
+                E-Tag
+            </span>
+
+            <span
+                id="statusBadge"
+                class="tag-badge"
+            >
+                Active
+            </span>
+
+        </div>
+
+
+        <div
+            id="message"
+            class="message"
+        ></div>
+
+
+        <div class="layout">
+
+
+            <section class="card">
+
+                <h2>
+                    Your Public Profile
+                </h2>
+
+
+                <div class="avatar-section">
+
+                    <div
+                        id="avatarPreview"
+                        class="avatar"
+                    >
+                    </div>
+
+                    <div>
+
+                        <label
+                            for="avatarUrl"
+                            style="
+                                display:block;
+                                font-size:13px;
+                                font-weight:700;
+                                margin-bottom:7px;
+                            "
+                        >
+                            Avatar URL
+                        </label>
+
+                        <input
+                            id="avatarUrl"
+                            class="input"
+                            type="url"
+                            placeholder="https://..."
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <div class="field">
+
+                    <label for="displayName">
+                        Name
+                    </label>
+
+                    <input
+                        id="displayName"
+                        class="input"
+                        type="text"
+                        maxlength="100"
+                        placeholder="Your name"
+                    >
+
+                </div>
+
+
+                <div class="field">
+
+                    <label for="bio">
+                        Bio
+                    </label>
+
+                    <textarea
+                        id="bio"
+                        class="textarea"
+                        maxlength="500"
+                        placeholder="Tell people about yourself..."
+                    ></textarea>
+
+                </div>
+
+
+                <div class="field">
+
+                    <label for="phone">
+                        Phone
+                    </label>
+
+                    <input
+                        id="phone"
+                        class="input"
+                        type="tel"
+                        maxlength="30"
+                        placeholder="+94..."
+                    >
+
+                </div>
+
+
+                <div class="field">
+
+                    <label for="whatsapp">
+                        WhatsApp
+                    </label>
+
+                    <input
+                        id="whatsapp"
+                        class="input"
+                        type="tel"
+                        maxlength="30"
+                        placeholder="+94..."
+                    >
+
+                </div>
+
+
+                <div class="field">
+
+                    <label for="publicEmail">
+                        Public Email
+                    </label>
+
+                    <input
+                        id="publicEmail"
+                        class="input"
+                        type="email"
+                        maxlength="150"
+                        placeholder="you@example.com"
+                    >
+
+                </div>
+
+
+                <div class="field">
+
+                    <label for="profileType">
+                        Profile Type
+                    </label>
+
+                    <select
+                        id="profileType"
+                        class="select"
+                    >
+
+                        <option value="personal">
+                            Personal
+                        </option>
+
+                        <option value="business">
+                            Business
+                        </option>
+
+                        <option value="couple">
+                            Couple
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="field">
+
+                    <label for="template">
+                        Template
+                    </label>
+
+                    <select
+                        id="template"
+                        class="select"
+                    >
+
+                        <option value="boy">
+                            Boy
+                        </option>
+
+                        <option value="girl">
+                            Girl
+                        </option>
+
+                        <option value="business">
+                            Business
+                        </option>
+
+                        <option value="couple">
+                            Couple
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="button-row">
+
+                    <button
+                        id="saveButton"
+                        type="button"
+                        class="button primary"
+                    >
+                        Save Profile
+                    </button>
+
+                    <button
+                        id="logoutButton"
+                        type="button"
+                        class="button secondary"
+                    >
+                        Logout
+                    </button>
+
+                </div>
+
+            </section>
+
+
+            <section class="card">
+
+                <div class="top-actions">
+
+                    <h2>
+                        Public Preview
+                    </h2>
+
+                    <button
+                        id="openPublicButton"
+                        type="button"
+                        class="button secondary"
+                    >
+                        Open Public
+                    </button>
+
+                </div>
+
+
+                <div class="preview-shell">
+
+                    <div class="preview-card">
+
+                        <div
+                            id="previewAvatar"
+                            class="preview-avatar"
+                        ></div>
+
+                        <h1
+                            id="previewName"
+                            class="preview-name"
+                        >
+                            E-Tag User
+                        </h1>
+
+                        <p
+                            id="previewBio"
+                            class="preview-bio"
+                        >
+                        </p>
+
+
+                        <div class="preview-actions">
+
+                            <a
+                                id="previewPhone"
+                                class="preview-button hidden"
+                            >
+                                Call
+                            </a>
+
+                            <a
+                                id="previewWhatsapp"
+                                class="preview-button hidden"
+                                target="_blank"
+                                rel="noopener"
+                            >
+                                WhatsApp
+                            </a>
+
+                            <a
+                                id="previewEmail"
+                                class="preview-button hidden"
+                            >
+                                Email
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script type="module">
+
+    import {
+        createClient
+    } from
+        "https://esm.sh/@supabase/supabase-js@2";
+
+
+    const SUPABASE_URL =
+        "https://zuptxhcjzhqynrquyray.supabase.co";
+
+
+    const SUPABASE_PUBLISHABLE_KEY =
+        "sb_publishable_1sa0MtE83MZXETR5JLakJA_fRVrjDJI";
+
+
+    const supabase =
+        createClient(
+            SUPABASE_URL,
+            SUPABASE_PUBLISHABLE_KEY,
+            {
+                auth: {
+                    persistSession: true,
+                    autoRefreshToken: true,
+                    detectSessionInUrl: true
+                }
+            }
+        );
+
+
+    const loadingCard =
+        document.getElementById(
+            "loadingCard"
+        );
+
+    const dashboard =
+        document.getElementById(
+            "dashboard"
+        );
+
+    const message =
+        document.getElementById(
+            "message"
+        );
+
+    const tagBadge =
+        document.getElementById(
+            "tagBadge"
+        );
+
+    const statusBadge =
+        document.getElementById(
+            "statusBadge"
+        );
+
+    const avatarUrl =
+        document.getElementById(
+            "avatarUrl"
+        );
+
+    const avatarPreview =
+        document.getElementById(
+            "avatarPreview"
+        );
+
+    const displayName =
+        document.getElementById(
+            "displayName"
+        );
+
+    const bio =
+        document.getElementById(
+            "bio"
+        );
+
+    const phone =
+        document.getElementById(
+            "phone"
+        );
+
+    const whatsapp =
+        document.getElementById(
+            "whatsapp"
+        );
+
+    const publicEmail =
+        document.getElementById(
+            "publicEmail"
+        );
+
+    const profileType =
+        document.getElementById(
+            "profileType"
+        );
+
+    const template =
+        document.getElementById(
+            "template"
+        );
+
+    const saveButton =
+        document.getElementById(
+            "saveButton"
+        );
+
+    const logoutButton =
+        document.getElementById(
+            "logoutButton"
+        );
+
+    const openPublicButton =
+        document.getElementById(
+            "openPublicButton"
+        );
+
+    const previewAvatar =
+        document.getElementById(
+            "previewAvatar"
+        );
+
+    const previewName =
+        document.getElementById(
+            "previewName"
+        );
+
+    const previewBio =
+        document.getElementById(
+            "previewBio"
+        );
+
+    const previewPhone =
+        document.getElementById(
+            "previewPhone"
+        );
+
+    const previewWhatsapp =
+        document.getElementById(
+            "previewWhatsapp"
+        );
+
+    const previewEmail =
+        document.getElementById(
+            "previewEmail"
+        );
+
+
+    let currentUser = null;
+
+    let currentTag = null;
+
+    let profileExists = false;
+
+
+    function showMessage(
+        text,
+        type
+    ) {
+
+        message.textContent =
+            text;
+
+        message.className =
+            `message show ${type}`;
+    }
+
+
+    function clearMessage() {
+
+        message.textContent =
+            "";
+
+        message.className =
+            "message";
+    }
+
+
+    function getInitials(
+        name
+    ) {
+
+        const words =
+            String(name || "")
+                .trim()
+                .split(/\s+/)
+                .filter(
+                    Boolean
+                );
+
+
+        if (
+            words.length === 0
+        ) {
+
+            return "?";
+        }
+
+
+        if (
+            words.length === 1
+        ) {
+
+            return words[0]
+                .substring(
+                    0,
+                    2
+                )
+                .toUpperCase();
+        }
+
+
+        return (
+            words[0][0] +
+            words[
+                words.length - 1
+            ][0]
+        ).toUpperCase();
+    }
+
+
+    function escapeAttribute(
+        value
+    ) {
+
+        return String(value)
+            .replaceAll(
+                "&",
+                "&amp;"
+            )
+            .replaceAll(
+                '"',
+                "&quot;"
+            )
+            .replaceAll(
+                "<",
+                "&lt;"
+            )
+            .replaceAll(
+                ">",
+                "&gt;"
+            );
+    }
+
+
+    function normalizeWhatsapp(
+        value
+    ) {
+
+        return String(value || "")
+            .replace(
+                /\D/g,
+                ""
+            );
+    }
+
+
+    function getTagCodeFromUrl() {
+
+        const url =
+            new URL(
+                window.location.href
+            );
+
+
+        const tagParam =
+            url.searchParams.get(
+                "tag"
+            );
+
+
+        if (
+            tagParam
+        ) {
+
+            return decodeURIComponent(
+                tagParam
+            )
+                .trim()
+                .toUpperCase();
+        }
+
+
+        const pathMatch =
+            url.pathname.match(
+                /\/id\/([^\/?#]+)\/?$/i
+            );
+
+
+        if (
+            pathMatch &&
+            pathMatch[1]
+        ) {
+
+            return decodeURIComponent(
+                pathMatch[1]
+            )
+                .trim()
+                .toUpperCase();
+        }
+
+
+        return null;
+    }
+
+
+    function updateAvatar(
+        element,
+        name,
+        imageUrl
+    ) {
+
+        if (
+            imageUrl
+        ) {
+
+            element.innerHTML =
+                `
+                    <img
+                        src="${escapeAttribute(
+                            imageUrl
+                        )}"
+                        alt="${escapeAttribute(
+                            name ||
+                            "Profile"
+                        )}"
+                    >
+                `;
+
+        } else {
+
+            element.textContent =
+                getInitials(
+                    name
+                );
+        }
+    }
+
+
+    function updatePreview() {
+
+        const name =
+            displayName.value.trim() ||
+            "E-Tag User";
+
+        const bioValue =
+            bio.value.trim();
+
+        const phoneValue =
+            phone.value.trim();
+
+        const whatsappValue =
+            whatsapp.value.trim();
+
+        const emailValue =
+            publicEmail.value.trim();
+
+        const avatarValue =
+            avatarUrl.value.trim();
+
+
+        previewName.textContent =
+            name;
+
+        previewBio.textContent =
+            bioValue;
+
+
+        updateAvatar(
+            previewAvatar,
+            name,
+            avatarValue
+        );
+
+
+        if (
+            phoneValue
+        ) {
+
+            previewPhone.href =
+                `tel:${encodeURIComponent(
+                    phoneValue
+                )}`;
+
+            previewPhone.classList.remove(
+                "hidden"
+            );
+
+        } else {
+
+            previewPhone.classList.add(
+                "hidden"
+            );
+        }
+
+
+        if (
+            whatsappValue
+        ) {
+
+            const number =
+                normalizeWhatsapp(
+                    whatsappValue
+                );
+
+
+            previewWhatsapp.href =
+                `https://wa.me/${number}`;
+
+            previewWhatsapp.classList.remove(
+                "hidden"
+            );
+
+        } else {
+
+            previewWhatsapp.classList.add(
+                "hidden"
+            );
+        }
+
+
+        if (
+            emailValue
+        ) {
+
+            previewEmail.href =
+                `mailto:${encodeURIComponent(
+                    emailValue
+                )}`;
+
+            previewEmail.classList.remove(
+                "hidden"
+            );
+
+        } else {
+
+            previewEmail.classList.add(
+                "hidden"
+            );
+        }
+    }
+
+
+    function fillForm(
+        profile
+    ) {
+
+        displayName.value =
+            profile.display_name ||
+            "";
+
+        bio.value =
+            profile.bio ||
+            "";
+
+        phone.value =
+            profile.phone ||
+            "";
+
+        whatsapp.value =
+            profile.whatsapp ||
+            "";
+
+        publicEmail.value =
+            profile.email ||
+            "";
+
+        profileType.value =
+            profile.profile_type ||
+            "personal";
+
+        template.value =
+            (
+                profile.template ||
+                "boy"
+            ).toLowerCase();
+
+        avatarUrl.value =
+            profile.avatar_url ||
+            "";
+
+
+        updatePreview();
+    }
+
+
+    async function loadDashboard() {
+
+        clearMessage();
+
+
+        const {
+            data: sessionData,
+            error: sessionError
+        } =
+            await supabase.auth.getSession();
+
+
+        if (
+            sessionError
+        ) {
+
+            loadingCard.textContent =
+                "Unable to load your session.";
+
+            return;
+        }
+
+
+        const user =
+            sessionData?.session?.user;
+
+
+        if (
+            !user
+        ) {
+
+            window.location.replace(
+                "/E-Tag/"
+            );
+
+            return;
+        }
+
+
+        currentUser =
+            user;
+
+
+        const {
+            data: tag,
+            error: tagError
+        } =
+            await supabase
+                .from("nfc_tags")
+                .select(
+                    "id,tag_code,owner_id,active"
+                )
+                .eq(
+                    "owner_id",
+                    user.id
+                )
+                .eq(
+                    "active",
+                    true
+                )
+                .limit(1)
+                .maybeSingle();
+
+
+        if (
+            tagError
+        ) {
+
+            loadingCard.textContent =
+                `Unable to load your E-Tag: ${tagError.message}`;
+
+            return;
+        }
+
+
+        if (
+            !tag
+        ) {
+
+            loadingCard.textContent =
+                "No active E-Tag is connected to this account.";
+
+            return;
+        }
+
+
+        currentTag =
+            tag;
+
+
+        tagBadge.textContent =
+            tag.tag_code;
+
+        statusBadge.textContent =
+            tag.active
+                ? "Active"
+                : "Inactive";
+
+
+        const {
+            data: profile,
+            error: profileError
+        } =
+            await supabase
+                .from("profiles")
+                .select(
+                    "id,display_name,bio,phone,whatsapp,email,profile_type,avatar_url,created_at,updated_at,template"
+                )
+                .eq(
+                    "id",
+                    user.id
+                )
+                .maybeSingle();
+
+
+        if (
+            profileError
+        ) {
+
+            loadingCard.textContent =
+                `Unable to load profile: ${profileError.message}`;
+
+            return;
+        }
+
+
+        if (
+            profile
+        ) {
+
+            profileExists =
+                true;
+
+            fillForm(
+                profile
+            );
+
+        } else {
+
+            profileExists =
+                false;
+
+            fillForm(
+                {
+                    display_name: "",
+                    bio: "",
+                    phone: "",
+                    whatsapp: "",
+                    email: "",
+                    profile_type: "personal",
+                    avatar_url: "",
+                    template: "boy"
+                }
+            );
+        }
+
+
+        const publicUrl =
+            `${window.location.origin}/E-Tag/id/${encodeURIComponent(
+                tag.tag_code
+            )}`;
+
+
+        openPublicButton.dataset.url =
+            publicUrl;
+
+
+        loadingCard.classList.add(
+            "hidden"
+        );
+
+        dashboard.classList.remove(
+            "hidden"
+        );
+    }
+
+
+    async function saveProfile() {
+
+        if (
+            !currentUser
+        ) {
+
+            return;
+        }
+
+
+        clearMessage();
+
+
+        saveButton.disabled =
+            true;
+
+        saveButton.textContent =
+            "Saving...";
+
+
+        const now =
+            new Date().toISOString();
+
+
+        const profileData = {
+
+            id:
+                currentUser.id,
+
+            display_name:
+                displayName.value.trim(),
+
+            bio:
+                bio.value.trim(),
+
+            phone:
+                phone.value.trim(),
+
+            whatsapp:
+                whatsapp.value.trim(),
+
+            email:
+                publicEmail.value.trim(),
+
+            profile_type:
+                profileType.value,
+
+            avatar_url:
+                avatarUrl.value.trim() ||
+                null,
+
+            template:
+                template.value,
+
+            updated_at:
+                now
+        };
+
+
+        try {
+
+            let result;
+
+
+            if (
+                profileExists
+            ) {
+
+                result =
+                    await supabase
+                        .from("profiles")
+                        .update(
+                            profileData
+                        )
+                        .eq(
+                            "id",
+                            currentUser.id
+                        )
+                        .select()
+                        .single();
+
+            } else {
+
+                result =
+                    await supabase
+                        .from("profiles")
+                        .insert(
+                            {
+                                ...profileData,
+                                created_at:
+                                    now
+                            }
+                        )
+                        .select()
+                        .single();
+            }
+
+
+            if (
+                result.error
+            ) {
+
+                throw result.error;
+            }
+
+
+            profileExists =
+                true;
+
+
+            showMessage(
+                "Public profile saved successfully.",
+                "success"
+            );
+
+
+            fillForm(
+                result.data
+            );
+
+        } catch (
+            error
+        ) {
+
+            console.error(
+                "Save profile error:",
+                error
+            );
+
+
+            showMessage(
+                `Failed to save profile: ${error.message}${
+                    error.code
+                        ? ` (code: ${error.code})`
+                        : ""
+                }`,
+                "error"
+            );
+
+        } finally {
+
+            saveButton.disabled =
+                false;
+
+            saveButton.textContent =
+                "Save Profile";
+        }
+    }
+
+
+    async function logout() {
+
+        await supabase.auth.signOut();
+
+        window.location.replace(
+            "/E-Tag/"
+        );
+    }
+
+
+    function openPublicProfile() {
+
+        const url =
+            openPublicButton.dataset.url;
+
+
+        if (
+            !url
+        ) {
+
+            return;
+        }
+
+
+        window.open(
+            url,
+            "_blank",
+            "noopener,noreferrer"
+        );
+    }
+
+
+    [
+        displayName,
+        bio,
+        phone,
+        whatsapp,
+        publicEmail,
+        avatarUrl,
+        profileType,
+        template
+    ].forEach(
+        (element) => {
+
+            element.addEventListener(
+                "input",
+                updatePreview
+            );
+
+            element.addEventListener(
+                "change",
+                updatePreview
+            );
+        }
+    );
+
+
+    saveButton.addEventListener(
+        "click",
+        saveProfile
+    );
+
+
+    logoutButton.addEventListener(
+        "click",
+        logout
+    );
+
+
+    openPublicButton.addEventListener(
+        "click",
+        openPublicProfile
+    );
+
+
+    supabase.auth.onAuthStateChange(
+        (
+            event,
+            session
+        ) => {
+
+            if (
+                event === "SIGNED_OUT" ||
+                !session
+            ) {
+
+                window.location.replace(
+                    "/E-Tag/"
+                );
+            }
+        }
+    );
+
+
+    loadDashboard();
+
+</script>
+
+</body>
+</html>
