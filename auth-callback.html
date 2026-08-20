@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Confirming E-Tag Account...</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            font-family:
+                Inter,
+                system-ui,
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                sans-serif;
+            background: #f5f7fb;
+            color: #111827;
+        }
+
+        .card {
+            width: min(100%, 480px);
+            padding: 28px;
+            text-align: center;
+            background: #ffffff;
+            border: 1px solid #e5e7eb;
+            border-radius: 20px;
+            box-shadow:
+                0 12px 40px rgba(
+                    0,
+                    0,
+                    0,
+                    0.06
+                );
+        }
+
+        h1 {
+            margin: 0 0 10px;
+            font-size: 26px;
+        }
+
+        p {
+            margin: 0;
+            color: #6b7280;
+            line-height: 1.6;
+        }
+
+        .error {
+            color: #991b1b;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="card">
+
+    <h1 id="title">
+        Confirming your account...
+    </h1>
+
+    <p id="message">
+        Please wait.
+    </p>
+
+</div>
+
+
+<script type="module">
+
+    import {
+        createClient
+    } from "https://esm.sh/@supabase/supabase-js@2";
+
+
+    const SUPABASE_URL =
+        "https://zuptxhcjzhqynrquyray.supabase.co";
+
+
+    const SUPABASE_PUBLISHABLE_KEY =
+        "sb_publishable_1sa0MtE83MZXETR5JLakJA_fRVrjDJI";
+
+
+    const supabase =
+        createClient(
+            SUPABASE_URL,
+            SUPABASE_PUBLISHABLE_KEY,
+            {
+                auth: {
+                    detectSessionInUrl: true,
+                    persistSession: true,
+                    autoRefreshToken: true
+                }
+            }
+        );
+
+
+    const title =
+        document.getElementById(
+            "title"
+        );
+
+
+    const message =
+        document.getElementById(
+            "message"
+        );
+
+
+    function getTagCode() {
+
+        const url =
+            new URL(
+                window.location.href
+            );
+
+
+        const tag =
+            url.searchParams.get(
+                "tag"
+            );
+
+
+        if (
+            !tag
+        ) {
+
+            return null;
+        }
+
+
+        return decodeURIComponent(
+            tag
+        )
+            .trim()
+            .toUpperCase();
+    }
+
+
+    function getCanonicalUrl(
+        tagCode
+    ) {
+
+        return (
+            `${window.location.origin}` +
+            `/E-Tag/id/${encodeURIComponent(
+                tagCode
+            )}`
+        );
+    }
+
+
+    async function finish() {
+
+        const tagCode =
+            getTagCode();
+
+
+        if (
+            !tagCode
+        ) {
+
+            title.textContent =
+                "Invalid confirmation link.";
+
+            message.textContent =
+                "The E-Tag ID could not be found.";
+
+            message.classList.add(
+                "error"
+            );
+
+            return;
+        }
+
+
+        const {
+            data: sessionData,
+            error
+        } =
+            await supabase.auth.getSession();
+
+
+        if (
+            error
+        ) {
+
+            title.textContent =
+                "Confirmation failed.";
+
+            message.textContent =
+                error.message;
+
+            message.classList.add(
+                "error"
+            );
+
+            return;
+        }
+
+
+        if (
+            !sessionData.session
+        ) {
+
+            title.textContent =
+                "Confirmation failed.";
+
+            message.textContent =
+                "No authenticated session was created.";
+
+            message.classList.add(
+                "error"
+            );
+
+            return;
+        }
+
+
+        message.textContent =
+            "Account confirmed. Returning to your E-Tag...";
+
+
+        const target =
+            getCanonicalUrl(
+                tagCode
+            );
+
+
+        setTimeout(
+            () => {
+
+                window.location.replace(
+                    target
+                );
+
+            },
+            300
+        );
+    }
+
+
+    finish();
+
+</script>
+
+</body>
+</html>
