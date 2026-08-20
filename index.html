@@ -40,7 +40,8 @@
             border: 1px solid #e5e7eb;
             border-radius: 22px;
             padding: 24px;
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.06);
+            box-shadow:
+                0 12px 40px rgba(0, 0, 0, 0.06);
         }
 
         .center {
@@ -218,7 +219,8 @@
 
         .input:focus {
             border-color: #111827;
-            box-shadow: 0 0 0 3px rgba(17, 24, 39, 0.08);
+            box-shadow:
+                0 0 0 3px rgba(17, 24, 39, 0.08);
         }
 
         .owner-label {
@@ -233,6 +235,7 @@
         }
 
         @media (max-width: 480px) {
+
             .app {
                 width: min(100% - 16px, 520px);
                 padding-top: 16px;
@@ -259,6 +262,7 @@
     >
         Loading E-Tag...
     </div>
+
 
     <div
         id="mainView"
@@ -492,6 +496,14 @@
                         Email
                     </a>
 
+                    <a
+                        id="editProfileButton"
+                        class="profile-button"
+                        href="/E-Tag/dashboard.html"
+                    >
+                        Edit Public Profile
+                    </a>
+
                     <button
                         id="logoutButton"
                         class="button secondary"
@@ -595,117 +607,188 @@
 
 
     const loadingView =
-        document.getElementById("loadingView");
+        document.getElementById(
+            "loadingView"
+        );
 
     const mainView =
-        document.getElementById("mainView");
+        document.getElementById(
+            "mainView"
+        );
 
     const activationCard =
-        document.getElementById("activationCard");
+        document.getElementById(
+            "activationCard"
+        );
 
     const activationTagCode =
-        document.getElementById("activationTagCode");
+        document.getElementById(
+            "activationTagCode"
+        );
 
     const loginButton =
-        document.getElementById("loginButton");
+        document.getElementById(
+            "loginButton"
+        );
 
     const signupButton =
-        document.getElementById("signupButton");
+        document.getElementById(
+            "signupButton"
+        );
 
     const authCard =
-        document.getElementById("authCard");
+        document.getElementById(
+            "authCard"
+        );
 
     const authTitle =
-        document.getElementById("authTitle");
+        document.getElementById(
+            "authTitle"
+        );
 
     const authSubtitle =
-        document.getElementById("authSubtitle");
+        document.getElementById(
+            "authSubtitle"
+        );
 
     const emailInput =
-        document.getElementById("email");
+        document.getElementById(
+            "email"
+        );
 
     const passwordInput =
-        document.getElementById("password");
+        document.getElementById(
+            "password"
+        );
 
     const confirmPasswordInput =
-        document.getElementById("confirmPassword");
+        document.getElementById(
+            "confirmPassword"
+        );
 
     const confirmPasswordGroup =
-        document.getElementById("confirmPasswordGroup");
+        document.getElementById(
+            "confirmPasswordGroup"
+        );
 
     const authSubmitButton =
-        document.getElementById("authSubmitButton");
+        document.getElementById(
+            "authSubmitButton"
+        );
 
     const authBackButton =
-        document.getElementById("authBackButton");
+        document.getElementById(
+            "authBackButton"
+        );
 
     const authMessage =
-        document.getElementById("authMessage");
+        document.getElementById(
+            "authMessage"
+        );
 
     const alreadyActivatedCard =
-        document.getElementById("alreadyActivatedCard");
+        document.getElementById(
+            "alreadyActivatedCard"
+        );
 
     const alreadyActivatedTagCode =
-        document.getElementById("alreadyActivatedTagCode");
+        document.getElementById(
+            "alreadyActivatedTagCode"
+        );
 
     const alreadyActivatedMessage =
-        document.getElementById("alreadyActivatedMessage");
+        document.getElementById(
+            "alreadyActivatedMessage"
+        );
 
     const ownerProfileCard =
-        document.getElementById("ownerProfileCard");
+        document.getElementById(
+            "ownerProfileCard"
+        );
 
     const ownerAvatar =
-        document.getElementById("ownerAvatar");
+        document.getElementById(
+            "ownerAvatar"
+        );
 
     const ownerName =
-        document.getElementById("ownerName");
+        document.getElementById(
+            "ownerName"
+        );
 
     const ownerBio =
-        document.getElementById("ownerBio");
+        document.getElementById(
+            "ownerBio"
+        );
 
     const ownerPhone =
-        document.getElementById("ownerPhone");
+        document.getElementById(
+            "ownerPhone"
+        );
 
     const ownerWhatsapp =
-        document.getElementById("ownerWhatsapp");
+        document.getElementById(
+            "ownerWhatsapp"
+        );
 
     const ownerEmail =
-        document.getElementById("ownerEmail");
+        document.getElementById(
+            "ownerEmail"
+        );
 
     const logoutButton =
-        document.getElementById("logoutButton");
+        document.getElementById(
+            "logoutButton"
+        );
 
     const publicProfileCard =
-        document.getElementById("publicProfileCard");
+        document.getElementById(
+            "publicProfileCard"
+        );
 
     const publicAvatar =
-        document.getElementById("publicAvatar");
+        document.getElementById(
+            "publicAvatar"
+        );
 
     const publicName =
-        document.getElementById("publicName");
+        document.getElementById(
+            "publicName"
+        );
 
     const publicBio =
-        document.getElementById("publicBio");
+        document.getElementById(
+            "publicBio"
+        );
 
     const publicPhone =
-        document.getElementById("publicPhone");
+        document.getElementById(
+            "publicPhone"
+        );
 
     const publicWhatsapp =
-        document.getElementById("publicWhatsapp");
+        document.getElementById(
+            "publicWhatsapp"
+        );
 
     const publicEmail =
-        document.getElementById("publicEmail");
+        document.getElementById(
+            "publicEmail"
+        );
 
 
     let currentTag = null;
 
-    let authMode = "login";
+    let authMode =
+        "login";
 
 
     function getTagCodeFromUrl() {
 
         const url =
-            new URL(window.location.href);
+            new URL(
+                window.location.href
+            );
 
 
         const directMatch =
@@ -728,7 +811,9 @@
 
 
         const tagParam =
-            url.searchParams.get("tag");
+            url.searchParams.get(
+                "tag"
+            );
 
 
         if (
@@ -749,11 +834,25 @@
 
     function hideAllCards() {
 
-        activationCard.classList.add("hidden");
-        authCard.classList.add("hidden");
-        alreadyActivatedCard.classList.add("hidden");
-        ownerProfileCard.classList.add("hidden");
-        publicProfileCard.classList.add("hidden");
+        activationCard.classList.add(
+            "hidden"
+        );
+
+        authCard.classList.add(
+            "hidden"
+        );
+
+        alreadyActivatedCard.classList.add(
+            "hidden"
+        );
+
+        ownerProfileCard.classList.add(
+            "hidden"
+        );
+
+        publicProfileCard.classList.add(
+            "hidden"
+        );
     }
 
 
@@ -796,7 +895,9 @@
             error
         } =
             await supabase
-                .from("nfc_tags")
+                .from(
+                    "nfc_tags"
+                )
                 .select(
                     "id,tag_code,owner_id,active"
                 )
@@ -810,11 +911,6 @@
         if (
             error
         ) {
-
-            console.error(
-                "Tag lookup error:",
-                error
-            );
 
             loadingView.textContent =
                 `Unable to load this E-Tag: ${error.message}`;
@@ -841,6 +937,7 @@
         activationTagCode.textContent =
             tag.tag_code;
 
+
         alreadyActivatedTagCode.textContent =
             tag.tag_code;
 
@@ -851,8 +948,14 @@
 
     async function renderTagState() {
 
-        loadingView.classList.add("hidden");
-        mainView.classList.remove("hidden");
+        loadingView.classList.add(
+            "hidden"
+        );
+
+        mainView.classList.remove(
+            "hidden"
+        );
+
 
         hideAllCards();
 
@@ -873,7 +976,9 @@
             !currentTag.owner_id
         ) {
 
-            activationCard.classList.remove("hidden");
+            activationCard.classList.remove(
+                "hidden"
+            );
 
             return;
         }
@@ -881,7 +986,8 @@
 
         if (
             user &&
-            user.id === currentTag.owner_id
+            user.id ===
+            currentTag.owner_id
         ) {
 
             await loadOwnerProfile(
@@ -907,7 +1013,9 @@
             error
         } =
             await supabase
-                .from("profiles")
+                .from(
+                    "profiles"
+                )
                 .select(
                     "id,display_name,bio,phone,whatsapp,email,profile_type,avatar_url,created_at,updated_at,template"
                 )
@@ -921,11 +1029,6 @@
         if (
             error
         ) {
-
-            console.error(
-                "Profile lookup error:",
-                error
-            );
 
             return null;
         }
@@ -948,53 +1051,6 @@
         if (
             !profile
         ) {
-
-            const created =
-                await ensureProfile(
-                    ownerId
-                );
-
-
-            if (
-                created
-            ) {
-
-                const newProfile =
-                    await getProfile(
-                        ownerId
-                    );
-
-
-                if (
-                    newProfile
-                ) {
-
-                    renderProfile(
-                        newProfile,
-                        {
-                            avatar:
-                                ownerAvatar,
-                            name:
-                                ownerName,
-                            bio:
-                                ownerBio,
-                            phone:
-                                ownerPhone,
-                            whatsapp:
-                                ownerWhatsapp,
-                            email:
-                                ownerEmail
-                        }
-                    );
-
-                    ownerProfileCard.classList.remove(
-                        "hidden"
-                    );
-
-                    return;
-                }
-            }
-
 
             ownerProfileCard.classList.remove(
                 "hidden"
@@ -1129,7 +1185,9 @@
         } else {
 
             elements.avatar.textContent =
-                getInitials(name);
+                getInitials(
+                    name
+                );
         }
 
 
@@ -1158,7 +1216,7 @@
             profile.whatsapp
         ) {
 
-            const whatsappNumber =
+            const number =
                 profile.whatsapp.replace(
                     /\D/g,
                     ""
@@ -1166,7 +1224,7 @@
 
 
             elements.whatsapp.href =
-                `https://wa.me/${whatsappNumber}`;
+                `https://wa.me/${number}`;
 
             elements.whatsapp.classList.remove(
                 "hidden"
@@ -1207,10 +1265,12 @@
     ) {
 
         const words =
-            name
+            String(name || "")
                 .trim()
                 .split(/\s+/)
-                .filter(Boolean);
+                .filter(
+                    Boolean
+                );
 
 
         if (
@@ -1226,14 +1286,19 @@
         ) {
 
             return words[0]
-                .substring(0, 2)
+                .substring(
+                    0,
+                    2
+                )
                 .toUpperCase();
         }
 
 
         return (
             words[0][0] +
-            words[words.length - 1][0]
+            words[
+                words.length - 1
+            ][0]
         ).toUpperCase();
     }
 
@@ -1243,10 +1308,22 @@
     ) {
 
         return String(value)
-            .replaceAll("&", "&amp;")
-            .replaceAll('"', "&quot;")
-            .replaceAll("<", "&lt;")
-            .replaceAll(">", "&gt;");
+            .replaceAll(
+                "&",
+                "&amp;"
+            )
+            .replaceAll(
+                '"',
+                "&quot;"
+            )
+            .replaceAll(
+                "<",
+                "&lt;"
+            )
+            .replaceAll(
+                ">",
+                "&gt;"
+            );
     }
 
 
@@ -1258,16 +1335,31 @@
             mode;
 
 
-        activationCard.classList.add("hidden");
-        alreadyActivatedCard.classList.add("hidden");
-        ownerProfileCard.classList.add("hidden");
-        publicProfileCard.classList.add("hidden");
+        activationCard.classList.add(
+            "hidden"
+        );
 
-        authCard.classList.remove("hidden");
+        alreadyActivatedCard.classList.add(
+            "hidden"
+        );
+
+        ownerProfileCard.classList.add(
+            "hidden"
+        );
+
+        publicProfileCard.classList.add(
+            "hidden"
+        );
+
+
+        authCard.classList.remove(
+            "hidden"
+        );
 
 
         if (
-            mode === "signup"
+            mode ===
+            "signup"
         ) {
 
             authTitle.textContent =
@@ -1354,7 +1446,8 @@
         try {
 
             if (
-                authMode === "signup"
+                authMode ===
+                "signup"
             ) {
 
                 const confirmPassword =
@@ -1362,7 +1455,8 @@
 
 
                 if (
-                    password !== confirmPassword
+                    password !==
+                    confirmPassword
                 ) {
 
                     showMessage(
@@ -1473,12 +1567,6 @@
             error
         ) {
 
-            console.error(
-                "Authentication error:",
-                error
-            );
-
-
             showMessage(
                 authMessage,
                 error.message ||
@@ -1492,7 +1580,8 @@
                 false;
 
             authSubmitButton.textContent =
-                authMode === "signup"
+                authMode ===
+                "signup"
                     ? "Create Account"
                     : "Login";
         }
@@ -1508,7 +1597,9 @@
             error
         } =
             await supabase
-                .from("nfc_tags")
+                .from(
+                    "nfc_tags"
+                )
                 .select(
                     "id,tag_code,owner_id,active"
                 )
@@ -1554,7 +1645,8 @@
         if (
             latestTag.active &&
             latestTag.owner_id &&
-            latestTag.owner_id !== userId
+            latestTag.owner_id !==
+                userId
         ) {
 
             hideAllCards();
@@ -1569,74 +1661,23 @@
 
         if (
             latestTag.active &&
-            latestTag.owner_id === userId
+            latestTag.owner_id ===
+                userId
         ) {
 
-            const profile =
-                await getProfile(userId);
+            hideAllCards();
 
-
-            if (
-                profile
-            ) {
-
-                hideAllCards();
-
-                renderProfile(
-                    profile,
-                    {
-                        avatar:
-                            ownerAvatar,
-                        name:
-                            ownerName,
-                        bio:
-                            ownerBio,
-                        phone:
-                            ownerPhone,
-                        whatsapp:
-                            ownerWhatsapp,
-                        email:
-                            ownerEmail
-                    }
-                );
-
-                ownerProfileCard.classList.remove(
-                    "hidden"
-                );
-
-                return;
-            }
-
-
-            const created =
-                await ensureProfile(
-                    userId
-                );
-
-
-            if (
-                created
-            ) {
-
-                await loadOwnerProfile(
-                    userId
-                );
-
-                return;
-            }
-
-
-            showMessage(
-                authMessage,
-                "Your E-Tag is active, but your public profile could not be created.",
-                "error"
+            await loadOwnerProfile(
+                userId
             );
 
             return;
         }
 
 
-        await claimTag(userId);
+        await claimTag(
+            userId
+        );
     }
 
 
@@ -1649,7 +1690,9 @@
             error
         } =
             await supabase
-                .from("nfc_tags")
+                .from(
+                    "nfc_tags"
+                )
                 .select(
                     "id,tag_code,owner_id,active"
                 )
@@ -1684,7 +1727,8 @@
         if (
             latestTag.active &&
             latestTag.owner_id &&
-            latestTag.owner_id !== userId
+            latestTag.owner_id !==
+                userId
         ) {
 
             hideAllCards();
@@ -1699,7 +1743,8 @@
 
         if (
             latestTag.active &&
-            latestTag.owner_id === userId
+            latestTag.owner_id ===
+                userId
         ) {
 
             await continueAfterLogin(
@@ -1716,7 +1761,9 @@
                 updateError
         } =
             await supabase
-                .from("nfc_tags")
+                .from(
+                    "nfc_tags"
+                )
                 .update(
                     {
                         owner_id:
@@ -1749,7 +1796,7 @@
 
             showMessage(
                 authMessage,
-                `Activation failed: ${updateError.message}${updateError.code ? ` (code: ${updateError.code})` : ""}`,
+                `Activation failed: ${updateError.message}`,
                 "error"
             );
 
@@ -1783,12 +1830,6 @@
             !profileCreated
         ) {
 
-            showMessage(
-                authMessage,
-                "E-Tag activated, but the public profile could not be created.",
-                "error"
-            );
-
             return;
         }
 
@@ -1811,9 +1852,16 @@
                 lookupError
         } =
             await supabase
-                .from("profiles")
-                .select("id")
-                .eq("id", userId)
+                .from(
+                    "profiles"
+                )
+                .select(
+                    "id"
+                )
+                .eq(
+                    "id",
+                    userId
+                )
                 .maybeSingle();
 
 
@@ -1821,14 +1869,9 @@
             lookupError
         ) {
 
-            console.error(
-                "Profile lookup error:",
-                lookupError
-            );
-
             showMessage(
                 authMessage,
-                `Profile lookup failed: ${lookupError.message}${lookupError.code ? ` (code: ${lookupError.code})` : ""}`,
+                `Profile lookup failed: ${lookupError.message}`,
                 "error"
             );
 
@@ -1844,12 +1887,18 @@
         }
 
 
+        const now =
+            new Date().toISOString();
+
+
         const {
             error:
                 insertError
         } =
             await supabase
-                .from("profiles")
+                .from(
+                    "profiles"
+                )
                 .insert(
                     {
                         id:
@@ -1869,9 +1918,9 @@
                         avatar_url:
                             null,
                         created_at:
-                            new Date().toISOString(),
+                            now,
                         updated_at:
-                            new Date().toISOString(),
+                            now,
                         template:
                             "boy"
                     }
@@ -1882,15 +1931,9 @@
             insertError
         ) {
 
-            console.error(
-                "Profile creation error:",
-                insertError
-            );
-
-
             showMessage(
                 authMessage,
-                `Profile creation failed: ${insertError.message}${insertError.code ? ` (code: ${insertError.code})` : ""}`,
+                `Profile creation failed: ${insertError.message}`,
                 "error"
             );
 
@@ -1914,7 +1957,9 @@
         "click",
         () => {
 
-            showAuth("login");
+            showAuth(
+                "login"
+            );
         }
     );
 
@@ -1923,7 +1968,9 @@
         "click",
         () => {
 
-            showAuth("signup");
+            showAuth(
+                "signup"
+            );
         }
     );
 
@@ -1938,7 +1985,9 @@
         "click",
         async () => {
 
-            authCard.classList.add("hidden");
+            authCard.classList.add(
+                "hidden"
+            );
 
             await renderTagState();
         }
@@ -1958,10 +2007,8 @@
         ) => {
 
             if (
-                (
-                    event === "SIGNED_IN" ||
-                    event === "INITIAL_SESSION"
-                ) &&
+                event ===
+                    "SIGNED_IN" &&
                 session?.user &&
                 currentTag
             ) {
@@ -1973,7 +2020,8 @@
 
 
             if (
-                event === "SIGNED_OUT"
+                event ===
+                "SIGNED_OUT"
             ) {
 
                 await renderTagState();
@@ -1982,14 +2030,14 @@
     );
 
 
-    const initialUrl =
+    const url =
         new URL(
             window.location.href
         );
 
 
     const callbackTag =
-        initialUrl.searchParams.get(
+        url.searchParams.get(
             "tag"
         );
 
