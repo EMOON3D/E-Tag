@@ -23,7 +23,6 @@
                 BlinkMacSystemFont,
                 "Segoe UI",
                 sans-serif;
-
             background: #f5f7fb;
             color: #111827;
         }
@@ -87,7 +86,9 @@
             border-radius: 10px;
             font-size: 16px;
             outline: none;
-            transition: border-color 0.2s, box-shadow 0.2s;
+            transition:
+                border-color 0.2s,
+                box-shadow 0.2s;
         }
 
         input:focus {
@@ -126,11 +127,6 @@
         .secondary-btn {
             background: #eef2f7;
             color: #111827;
-        }
-
-        .danger-btn {
-            background: #fee2e2;
-            color: #991b1b;
         }
 
         .message {
@@ -314,11 +310,6 @@
         <p>Create and manage physical E-Tags.</p>
     </header>
 
-
-    <!-- =====================================================
-         CREATE E-TAG
-         ===================================================== -->
-
     <section class="card">
 
         <h2>Generate E-Tag</h2>
@@ -358,9 +349,6 @@
             role="alert"
         ></div>
 
-
-        <!-- Generated Result -->
-
         <div
             id="result"
             class="result"
@@ -379,7 +367,6 @@
 
             </div>
 
-
             <div class="result-row">
 
                 <span class="result-label">
@@ -392,7 +379,6 @@
                 ></div>
 
             </div>
-
 
             <div class="result-row">
 
@@ -432,11 +418,6 @@
 
     </section>
 
-
-    <!-- =====================================================
-         EXISTING E-TAGS
-         ===================================================== -->
-
     <section class="card">
 
         <div class="top-actions">
@@ -454,7 +435,6 @@
             </button>
 
         </div>
-
 
         <div class="table-wrapper">
 
@@ -493,29 +473,22 @@
 
 </div>
 
-
 <script type="module">
 
     // =====================================================
-    // CONFIGURATION
-    // =====================================================
-    //
-    // IMPORTANT:
-    //
-    // Replace ONLY these values.
-    //
-    // NEVER put the Supabase service-role key here.
-    //
-    // The anon/publishable key is safe for browser use.
-    //
+    // SUPABASE CONFIGURATION
     // =====================================================
 
     const SUPABASE_URL =
-        "YOUR_SUPABASE_PROJECT_URL";
+        "https://zuptxhcjzhqynrquyray.supabase.co";
 
     const SUPABASE_ANON_KEY =
-        "YOUR_SUPABASE_ANON_OR_PUBLISHABLE_KEY";
+        "sb_publishable_1sa0MtE83MZXETR5JLakJA_fRVrjDJI";
 
+
+    // =====================================================
+    // EDGE FUNCTION URL
+    // =====================================================
 
     const CREATE_ETAG_FUNCTION_URL =
         `${SUPABASE_URL}/functions/v1/create-etag`;
@@ -582,7 +555,8 @@
 
         message.textContent = text;
 
-        message.className = `message ${type}`;
+        message.className =
+            `message ${type}`;
     }
 
 
@@ -640,7 +614,9 @@
         clearMessage();
 
         const tagCode =
-            normalizeTagCode(tagCodeInput.value);
+            normalizeTagCode(
+                tagCodeInput.value
+            );
 
         const validationError =
             validateTagCode(tagCode);
@@ -655,24 +631,24 @@
             return;
         }
 
-
         if (!isConfigurationValid()) {
 
             showMessage(
-                "Supabase configuration is missing. Add your Project URL and Publishable/Anon key in admin.html.",
+                "Supabase configuration is missing. Check the Supabase configuration in admin.html.",
                 "error"
             );
 
             return;
         }
 
-
         generateBtn.disabled = true;
 
-        generateBtn.textContent = "Creating...";
+        generateBtn.textContent =
+            "Creating...";
 
-        generateBtn.classList.add("loading");
-
+        generateBtn.classList.add(
+            "loading"
+        );
 
         try {
 
@@ -687,10 +663,7 @@
                                 "application/json",
 
                             "apikey":
-                                SUPABASE_ANON_KEY,
-
-                            "Authorization":
-                                `Bearer ${SUPABASE_ANON_KEY}`
+                                SUPABASE_ANON_KEY
                         },
 
                         body: JSON.stringify({
@@ -715,7 +688,10 @@
             }
 
 
-            if (!response.ok || !data.success) {
+            if (
+                !response.ok ||
+                !data.success
+            ) {
 
                 showMessage(
                     data.message ||
@@ -727,12 +703,9 @@
             }
 
 
-            // =============================================
-            // Show result
-            // =============================================
-
             resultTagCode.textContent =
-                data.tag?.tag_code || tagCode;
+                data.tag?.tag_code ||
+                tagCode;
 
             resultStatus.textContent =
                 data.tag?.active
@@ -740,11 +713,12 @@
                     : "Unactivated";
 
             resultUrl.value =
-                data.url || "";
+                data.url ||
+                "";
 
-
-            result.classList.add("show");
-
+            result.classList.add(
+                "show"
+            );
 
             showMessage(
                 data.message ||
@@ -752,12 +726,8 @@
                 "success"
             );
 
-
-            // Clear input
             tagCodeInput.value = "";
 
-
-            // Refresh list
             await loadTags();
 
         } catch (error) {
@@ -780,7 +750,9 @@
             generateBtn.textContent =
                 "Generate E-Tag";
 
-            generateBtn.classList.remove("loading");
+            generateBtn.classList.remove(
+                "loading"
+            );
         }
     }
 
@@ -795,9 +767,11 @@
 
             tagsTableBody.innerHTML = `
                 <tr>
-                    <td colspan="5" class="empty">
-                        Add your Supabase Project URL and
-                        Publishable/Anon key to load E-Tags.
+                    <td
+                        colspan="5"
+                        class="empty"
+                    >
+                        Supabase configuration is missing.
                     </td>
                 </tr>
             `;
@@ -805,11 +779,10 @@
             return;
         }
 
-
         refreshBtn.disabled = true;
 
-        refreshBtn.textContent = "Loading...";
-
+        refreshBtn.textContent =
+            "Loading...";
 
         try {
 
@@ -817,7 +790,6 @@
                 `${SUPABASE_URL}/rest/v1/nfc_tags` +
                 `?select=id,tag_code,owner_id,active,created_at` +
                 `&order=created_at.desc`;
-
 
             const response =
                 await fetch(
@@ -827,10 +799,7 @@
 
                         headers: {
                             "apikey":
-                                SUPABASE_ANON_KEY,
-
-                            "Authorization":
-                                `Bearer ${SUPABASE_ANON_KEY}`
+                                SUPABASE_ANON_KEY
                         }
                     }
                 );
@@ -841,10 +810,12 @@
                 let errorData = null;
 
                 try {
+
                     errorData =
                         await response.json();
+
                 } catch {
-                    // Ignore JSON parsing failure.
+                    errorData = null;
                 }
 
                 throw new Error(
@@ -857,7 +828,6 @@
             const tags =
                 await response.json();
 
-
             renderTags(tags);
 
         } catch (error) {
@@ -867,12 +837,16 @@
                 error
             );
 
-
             tagsTableBody.innerHTML = `
                 <tr>
-                    <td colspan="5" class="empty">
+                    <td
+                        colspan="5"
+                        class="empty"
+                    >
                         Failed to load E-Tags.<br>
-                        ${escapeHtml(error.message)}
+                        ${escapeHtml(
+                            error.message
+                        )}
                     </td>
                 </tr>
             `;
@@ -881,7 +855,8 @@
 
             refreshBtn.disabled = false;
 
-            refreshBtn.textContent = "Refresh";
+            refreshBtn.textContent =
+                "Refresh";
         }
     }
 
@@ -892,11 +867,17 @@
 
     function renderTags(tags) {
 
-        if (!Array.isArray(tags) || tags.length === 0) {
+        if (
+            !Array.isArray(tags) ||
+            tags.length === 0
+        ) {
 
             tagsTableBody.innerHTML = `
                 <tr>
-                    <td colspan="5" class="empty">
+                    <td
+                        colspan="5"
+                        class="empty"
+                    >
                         No E-Tags found.
                     </td>
                 </tr>
@@ -907,91 +888,104 @@
 
 
         tagsTableBody.innerHTML =
-            tags.map((tag) => {
+            tags
+                .map((tag) => {
 
-                const publicUrl =
-                    `${window.location.origin}/E-Tag/id/${encodeURIComponent(tag.tag_code)}`;
-
-
-                const statusClass =
-                    tag.active
-                        ? "active"
-                        : "inactive";
+                    const publicUrl =
+                        `${window.location.origin}/E-Tag/id/${encodeURIComponent(tag.tag_code)}`;
 
 
-                const statusText =
-                    tag.active
-                        ? "Active"
-                        : "Unactivated";
+                    const statusClass =
+                        tag.active
+                            ? "active"
+                            : "inactive";
 
 
-                const ownerText =
-                    tag.owner_id
-                        ? tag.owner_id
-                        : "Unassigned";
+                    const statusText =
+                        tag.active
+                            ? "Active"
+                            : "Unactivated";
 
 
-                const createdDate =
-                    tag.created_at
-                        ? new Date(
-                            tag.created_at
-                        ).toLocaleString()
-                        : "-";
+                    const ownerText =
+                        tag.owner_id
+                            ? tag.owner_id
+                            : "Unassigned";
 
 
-                return `
-                    <tr>
+                    const createdDate =
+                        tag.created_at
+                            ? new Date(
+                                tag.created_at
+                            ).toLocaleString()
+                            : "-";
 
-                        <td>
-                            <strong>
-                                ${escapeHtml(tag.tag_code)}
-                            </strong>
-                        </td>
 
-                        <td>
-                            <span
-                                class="status ${statusClass}"
-                            >
-                                ${statusText}
-                            </span>
-                        </td>
+                    return `
+                        <tr>
 
-                        <td>
-                            ${escapeHtml(ownerText)}
-                        </td>
+                            <td>
+                                <strong>
+                                    ${escapeHtml(
+                                        tag.tag_code
+                                    )}
+                                </strong>
+                            </td>
 
-                        <td>
-                            ${escapeHtml(createdDate)}
-                        </td>
+                            <td>
 
-                        <td>
-
-                            <div class="table-actions">
-
-                                <button
-                                    type="button"
-                                    class="secondary-btn small-btn"
-                                    data-copy-url="${escapeHtml(publicUrl)}"
+                                <span
+                                    class="status ${statusClass}"
                                 >
-                                    Copy
-                                </button>
+                                    ${statusText}
+                                </span>
 
-                                <button
-                                    type="button"
-                                    class="secondary-btn small-btn"
-                                    data-open-url="${escapeHtml(publicUrl)}"
-                                >
-                                    Open
-                                </button>
+                            </td>
 
-                            </div>
+                            <td>
+                                ${escapeHtml(
+                                    ownerText
+                                )}
+                            </td>
 
-                        </td>
+                            <td>
+                                ${escapeHtml(
+                                    createdDate
+                                )}
+                            </td>
 
-                    </tr>
-                `;
+                            <td>
 
-            }).join("");
+                                <div class="table-actions">
+
+                                    <button
+                                        type="button"
+                                        class="secondary-btn small-btn"
+                                        data-copy-url="${escapeHtml(
+                                            publicUrl
+                                        )}"
+                                    >
+                                        Copy
+                                    </button>
+
+                                    <button
+                                        type="button"
+                                        class="secondary-btn small-btn"
+                                        data-open-url="${escapeHtml(
+                                            publicUrl
+                                        )}"
+                                    >
+                                        Open
+                                    </button>
+
+                                </div>
+
+                            </td>
+
+                        </tr>
+                    `;
+                })
+                .join("");
     }
 
 
@@ -1002,11 +996,26 @@
     function escapeHtml(value) {
 
         return String(value)
-            .replaceAll("&", "&amp;")
-            .replaceAll("<", "&lt;")
-            .replaceAll(">", "&gt;")
-            .replaceAll('"', "&quot;")
-            .replaceAll("'", "&#039;");
+            .replaceAll(
+                "&",
+                "&amp;"
+            )
+            .replaceAll(
+                "<",
+                "&lt;"
+            )
+            .replaceAll(
+                ">",
+                "&gt;"
+            )
+            .replaceAll(
+                '"',
+                "&quot;"
+            )
+            .replaceAll(
+                "'",
+                "&#039;"
+            );
     }
 
 
@@ -1016,9 +1025,64 @@
 
     async function copyText(text) {
 
+        if (!text) {
+            return;
+        }
+
         try {
 
-            await navigator.clipboard.writeText(text);
+            await navigator.clipboard.writeText(
+                text
+            );
+
+            showMessage(
+                "URL copied to clipboard.",
+                "success"
+            );
+
+            return;
+
+        } catch (error) {
+
+            console.warn(
+                "Clipboard API failed. Using fallback.",
+                error
+            );
+        }
+
+
+        try {
+
+            const textarea =
+                document.createElement(
+                    "textarea"
+                );
+
+            textarea.value =
+                text;
+
+            textarea.style.position =
+                "fixed";
+
+            textarea.style.left =
+                "-9999px";
+
+            textarea.style.top =
+                "0";
+
+            document.body.appendChild(
+                textarea
+            );
+
+            textarea.focus();
+
+            textarea.select();
+
+            document.execCommand(
+                "copy"
+            );
+
+            textarea.remove();
 
             showMessage(
                 "URL copied to clipboard.",
@@ -1028,41 +1092,20 @@
         } catch (error) {
 
             console.error(
-                "Clipboard error:",
+                "Copy failed:",
                 error
             );
 
-
-            // Fallback
-
-            const textarea =
-                document.createElement("textarea");
-
-            textarea.value = text;
-
-            textarea.style.position = "fixed";
-
-            textarea.style.opacity = "0";
-
-            document.body.appendChild(textarea);
-
-            textarea.select();
-
-            document.execCommand("copy");
-
-            textarea.remove();
-
-
             showMessage(
-                "URL copied to clipboard.",
-                "success"
+                "Could not copy the URL.",
+                "error"
             );
         }
     }
 
 
     // =====================================================
-    // RESULT COPY
+    // COPY GENERATED URL
     // =====================================================
 
     copyBtn.addEventListener(
@@ -1082,7 +1125,7 @@
 
 
     // =====================================================
-    // RESULT OPEN
+    // OPEN GENERATED URL
     // =====================================================
 
     openBtn.addEventListener(
@@ -1154,7 +1197,9 @@
             const target =
                 event.target;
 
-            if (!(target instanceof HTMLElement)) {
+            if (
+                !(target instanceof HTMLElement)
+            ) {
                 return;
             }
 
@@ -1166,7 +1211,9 @@
 
             if (copyUrl) {
 
-                await copyText(copyUrl);
+                await copyText(
+                    copyUrl
+                );
 
                 return;
             }
