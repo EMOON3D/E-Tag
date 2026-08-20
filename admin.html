@@ -90,10 +90,6 @@
       background: #6b7280;
     }
 
-    .danger {
-      background: #dc2626;
-    }
-
     .message {
       display: none;
       margin-top: 14px;
@@ -190,17 +186,10 @@
       margin-bottom: 15px;
     }
 
-    .lock-icon {
-      font-size: 50px;
+    .loading {
       text-align: center;
-      margin-bottom: 10px;
-    }
-
-    .small-note {
-      font-size: 13px;
       color: #6b7280;
-      line-height: 1.5;
-      text-align: center;
+      padding: 15px;
     }
   </style>
 </head>
@@ -209,110 +198,114 @@
 
 <div class="container">
 
-  <div class="logo">E-Tag</div>
+  <div class="logo">
+    E-Tag
+  </div>
 
   <div class="tagline">
     Admin Tag Generator
   </div>
 
 
-  <!-- NO ACCESS (missing / wrong key in URL) -->
+  <!-- =====================================================
+       CREATE TAG
+  ====================================================== -->
 
-  <section id="noAccessSection" class="card hidden">
+  <section class="card">
 
-    <div class="lock-icon">🔒</div>
-
-    <h2 style="text-align:center">
-      Admin Access Required
+    <h2>
+      Create New E-Tag
     </h2>
 
-    <p class="small-note">
-      This page can only be opened using the private admin link.
-      If you were given that link, make sure you opened it exactly
-      as shared, including everything after "?key=".
+    <p style="color:#6b7280;font-size:14px;">
+      Enter a unique Tag ID. The public E-Tag URL will be
+      generated automatically.
     </p>
 
-  </section>
+    <label>
+      Unique Tag ID
+    </label>
+
+    <input
+      id="tagCode"
+      type="text"
+      placeholder="Example: ETAG-000001"
+      maxlength="30"
+      autocomplete="off"
+    >
+
+    <button id="createButton">
+      Generate E-Tag
+    </button>
+
+    <div
+      id="createMessage"
+      class="message"
+    ></div>
 
 
-  <!-- ADMIN PANEL -->
+    <!-- GENERATED URL -->
 
-  <section id="adminSection" class="hidden">
+    <div
+      id="generatedBox"
+      class="url-box hidden"
+    >
 
-    <!-- CREATE TAG -->
+      <strong>
+        E-Tag URL
+      </strong>
 
-    <div class="card">
+      <div
+        id="generatedUrl"
+        class="url"
+      ></div>
 
-      <h2>Create New E-Tag</h2>
+      <div class="row">
 
-      <p style="color:#6b7280;font-size:14px;">
-        Enter a unique Tag ID. The public E-Tag URL will be generated automatically.
-      </p>
+        <button
+          id="copyButton"
+          class="secondary"
+        >
+          Copy URL
+        </button>
 
-      <label>Unique Tag ID</label>
-
-      <input
-        id="tagCode"
-        type="text"
-        placeholder="Example: ETAG-000001"
-        maxlength="30"
-        autocomplete="off"
-      >
-
-      <button id="createButton">
-        Generate E-Tag
-      </button>
-
-      <div id="createMessage" class="message"></div>
-
-      <div id="generatedBox" class="url-box hidden">
-
-        <strong>E-Tag URL</strong>
-
-        <div id="generatedUrl" class="url"></div>
-
-        <div class="row">
-
-          <button
-            id="copyButton"
-            class="secondary"
-          >
-            Copy URL
-          </button>
-
-          <button
-            id="openButton"
-          >
-            Open
-          </button>
-
-        </div>
+        <button
+          id="openButton"
+        >
+          Open
+        </button>
 
       </div>
 
     </div>
 
+  </section>
 
-    <!-- TAGS -->
 
-    <div class="card">
+  <!-- =====================================================
+       ALL TAGS
+  ====================================================== -->
 
-      <h2>My E-Tags</h2>
+  <section class="card">
 
-      <div
-        id="tagCount"
-        class="count"
-      >
+    <h2>
+      My E-Tags
+    </h2>
+
+    <div
+      id="tagCount"
+      class="count"
+    >
+      Loading...
+    </div>
+
+    <div
+      id="tagsContainer"
+      class="tag-list"
+    >
+      <div class="loading">
         Loading...
       </div>
-
-      <div
-        id="tagsContainer"
-        class="tag-list"
-      >
-        Loading...
-      </div>
-
     </div>
 
   </section>
@@ -322,7 +315,9 @@
 
 <script type="module">
 
-import { supabase } from "./supabase.js";
+import {
+  supabase
+} from "./supabase.js";
 
 
 /* =====================================================
@@ -340,77 +335,53 @@ const SITE_URL =
    ELEMENTS
 ===================================================== */
 
-const noAccessSection =
-  document.getElementById("noAccessSection");
-
-const adminSection =
-  document.getElementById("adminSection");
-
 const tagCodeInput =
-  document.getElementById("tagCode");
+  document.getElementById(
+    "tagCode"
+  );
 
 const createButton =
-  document.getElementById("createButton");
+  document.getElementById(
+    "createButton"
+  );
 
 const createMessage =
-  document.getElementById("createMessage");
+  document.getElementById(
+    "createMessage"
+  );
 
 const generatedBox =
-  document.getElementById("generatedBox");
+  document.getElementById(
+    "generatedBox"
+  );
 
 const generatedUrl =
-  document.getElementById("generatedUrl");
+  document.getElementById(
+    "generatedUrl"
+  );
 
 const copyButton =
-  document.getElementById("copyButton");
+  document.getElementById(
+    "copyButton"
+  );
 
 const openButton =
-  document.getElementById("openButton");
+  document.getElementById(
+    "openButton"
+  );
 
 const tagsContainer =
-  document.getElementById("tagsContainer");
+  document.getElementById(
+    "tagsContainer"
+  );
 
 const tagCount =
-  document.getElementById("tagCount");
+  document.getElementById(
+    "tagCount"
+  );
 
 
 let lastGeneratedUrl = "";
-let adminKey = "";
-
-
-/* =====================================================
-   ADMIN KEY CHECK
-   No login. Access is gated purely by having the
-   exact ?key= value in the URL. Whoever holds the
-   link has admin access — do not share it publicly.
-===================================================== */
-
-function getKeyFromUrl() {
-
-  const params =
-    new URLSearchParams(window.location.search);
-
-  return (params.get("key") || "").trim();
-
-}
-
-
-function showNoAccess() {
-
-  noAccessSection.classList.remove("hidden");
-
-  adminSection.classList.add("hidden");
-
-}
-
-
-function showAdminPanel() {
-
-  noAccessSection.classList.add("hidden");
-
-  adminSection.classList.remove("hidden");
-
-}
 
 
 /* =====================================================
@@ -423,7 +394,8 @@ function showMessage(
   type
 ) {
 
-  element.textContent = text;
+  element.textContent =
+    text;
 
   element.className =
     "message " + type;
@@ -431,9 +403,12 @@ function showMessage(
 }
 
 
-function hideMessage(element) {
+function hideMessage(
+  element
+) {
 
-  element.textContent = "";
+  element.textContent =
+    "";
 
   element.className =
     "message";
@@ -442,12 +417,16 @@ function hideMessage(element) {
 
 
 /* =====================================================
-   NORMALIZE TAG
+   NORMALIZE TAG CODE
 ===================================================== */
 
-function normalizeTagCode(value) {
+function normalizeTagCode(
+  value
+) {
 
-  return String(value || "")
+  return String(
+    value || ""
+  )
     .trim()
     .toUpperCase();
 
@@ -455,10 +434,12 @@ function normalizeTagCode(value) {
 
 
 /* =====================================================
-   VALIDATE TAG
+   VALIDATE TAG CODE
 ===================================================== */
 
-function validateTagCode(tagCode) {
+function validateTagCode(
+  tagCode
+) {
 
   if (!tagCode) {
 
@@ -466,15 +447,25 @@ function validateTagCode(tagCode) {
 
   }
 
-  if (!/^[A-Z0-9_-]+$/.test(tagCode)) {
+  if (
+    !/^[A-Z0-9_-]+$/.test(
+      tagCode
+    )
+  ) {
 
-    return "Use only A-Z, 0-9, _ or -.";
+    return (
+      "Use only A-Z, 0-9, _ or -."
+    );
 
   }
 
-  if (tagCode.length > 30) {
+  if (
+    tagCode.length > 30
+  ) {
 
-    return "Tag ID cannot be longer than 30 characters.";
+    return (
+      "Tag ID cannot be longer than 30 characters."
+    );
 
   }
 
@@ -485,17 +476,20 @@ function validateTagCode(tagCode) {
 
 /* =====================================================
    CREATE TAG
-   Sends the admin key as a custom header instead of a
-   Supabase auth token, since there is no login here.
 ===================================================== */
 
 createButton.addEventListener(
   "click",
   async () => {
 
-    hideMessage(createMessage);
+    hideMessage(
+      createMessage
+    );
 
-    generatedBox.classList.add("hidden");
+    generatedBox.classList.add(
+      "hidden"
+    );
+
 
     const tagCode =
       normalizeTagCode(
@@ -504,7 +498,9 @@ createButton.addEventListener(
 
 
     const validation =
-      validateTagCode(tagCode);
+      validateTagCode(
+        tagCode
+      );
 
 
     if (validation) {
@@ -520,13 +516,20 @@ createButton.addEventListener(
     }
 
 
-    createButton.disabled = true;
+    createButton.disabled =
+      true;
 
     createButton.textContent =
       "Creating E-Tag...";
 
 
     try {
+
+      /*
+       * No login.
+       * No password.
+       * No secret key.
+       */
 
       const {
         data,
@@ -537,9 +540,6 @@ createButton.addEventListener(
         {
           body: {
             tag_code: tagCode
-          },
-          headers: {
-            "x-admin-secret": adminKey
           }
         }
       );
@@ -586,7 +586,9 @@ createButton.addEventListener(
         (
           SITE_URL +
           "id/" +
-          encodeURIComponent(tagCode)
+          encodeURIComponent(
+            tagCode
+          )
         );
 
 
@@ -610,7 +612,8 @@ createButton.addEventListener(
       );
 
 
-      tagCodeInput.value = "";
+      tagCodeInput.value =
+        "";
 
 
       await loadTags();
@@ -619,6 +622,7 @@ createButton.addEventListener(
     } catch (error) {
 
       console.error(
+        "CREATE ETAG ERROR:",
         error
       );
 
@@ -631,7 +635,8 @@ createButton.addEventListener(
 
     } finally {
 
-      createButton.disabled = false;
+      createButton.disabled =
+        false;
 
       createButton.textContent =
         "Generate E-Tag";
@@ -650,7 +655,10 @@ tagCodeInput.addEventListener(
   "keydown",
   event => {
 
-    if (event.key === "Enter") {
+    if (
+      event.key ===
+      "Enter"
+    ) {
 
       event.preventDefault();
 
@@ -663,70 +671,40 @@ tagCodeInput.addEventListener(
 
 
 /* =====================================================
-   COPY URL
+   COPY GENERATED URL
 ===================================================== */
 
 copyButton.addEventListener(
   "click",
   async () => {
 
-    if (!lastGeneratedUrl) {
+    if (
+      !lastGeneratedUrl
+    ) {
 
       return;
 
     }
 
-    try {
 
-      await navigator.clipboard.writeText(
-        lastGeneratedUrl
-      );
+    await copyText(
+      lastGeneratedUrl
+    );
 
-      copyButton.textContent =
-        "Copied!";
 
-      setTimeout(
-        () => {
+    copyButton.textContent =
+      "Copied!";
 
-          copyButton.textContent =
-            "Copy URL";
 
-        },
-        1500
-      );
+    setTimeout(
+      () => {
 
-    } catch {
+        copyButton.textContent =
+          "Copy URL";
 
-      const textarea =
-        document.createElement("textarea");
-
-      textarea.value =
-        lastGeneratedUrl;
-
-      document.body.appendChild(
-        textarea
-      );
-
-      textarea.select();
-
-      document.execCommand("copy");
-
-      textarea.remove();
-
-      copyButton.textContent =
-        "Copied!";
-
-      setTimeout(
-        () => {
-
-          copyButton.textContent =
-            "Copy URL";
-
-        },
-        1500
-      );
-
-    }
+      },
+      1500
+    );
 
   }
 );
@@ -740,11 +718,14 @@ openButton.addEventListener(
   "click",
   () => {
 
-    if (!lastGeneratedUrl) {
+    if (
+      !lastGeneratedUrl
+    ) {
 
       return;
 
     }
+
 
     window.open(
       lastGeneratedUrl,
@@ -757,15 +738,58 @@ openButton.addEventListener(
 
 
 /* =====================================================
+   COPY TEXT
+===================================================== */
+
+async function copyText(
+  text
+) {
+
+  try {
+
+    await navigator.clipboard.writeText(
+      text
+    );
+
+  } catch {
+
+    const textarea =
+      document.createElement(
+        "textarea"
+      );
+
+    textarea.value =
+      text;
+
+    document.body.appendChild(
+      textarea
+    );
+
+    textarea.select();
+
+    document.execCommand(
+      "copy"
+    );
+
+    textarea.remove();
+
+  }
+
+}
+
+
+/* =====================================================
    LOAD TAGS
-   No login required to read — nfc_tags has a public
-   read RLS policy, so this works with just the anon key.
 ===================================================== */
 
 async function loadTags() {
 
-  tagsContainer.textContent =
-    "Loading...";
+  tagsContainer.innerHTML =
+    `
+      <div class="loading">
+        Loading...
+      </div>
+    `;
 
   tagCount.textContent =
     "Loading...";
@@ -795,8 +819,13 @@ async function loadTags() {
       error
     );
 
-    tagsContainer.textContent =
-      "Unable to load E-Tags.";
+
+    tagsContainer.innerHTML =
+      `
+        <div class="loading">
+          Unable to load E-Tags.
+        </div>
+      `;
 
     tagCount.textContent =
       "";
@@ -806,10 +835,17 @@ async function loadTags() {
   }
 
 
-  if (!data || data.length === 0) {
+  if (
+    !data ||
+    data.length === 0
+  ) {
 
-    tagsContainer.textContent =
-      "No E-Tags created yet.";
+    tagsContainer.innerHTML =
+      `
+        <div class="loading">
+          No E-Tags created yet.
+        </div>
+      `;
 
     tagCount.textContent =
       "0 E-Tags";
@@ -820,17 +856,24 @@ async function loadTags() {
 
 
   tagCount.textContent =
-    `${data.length} E-Tag${data.length === 1 ? "" : "s"}`;
+    `${data.length} E-Tag${
+      data.length === 1
+        ? ""
+        : "s"
+    }`;
 
 
-  tagsContainer.innerHTML = "";
+  tagsContainer.innerHTML =
+    "";
 
 
   data.forEach(
     tag => {
 
       const div =
-        document.createElement("div");
+        document.createElement(
+          "div"
+        );
 
       div.className =
         "tag";
@@ -862,15 +905,23 @@ async function loadTags() {
           : "inactive";
 
 
-      div.innerHTML = `
+      div.innerHTML =
+        `
 
         <div class="tag-code">
           ${code}
         </div>
 
-        <div class="tag-status ${statusClass}">
-          ${tag.active ? "Active" : "Inactive"}
-          · ${ownerStatus}
+        <div
+          class="tag-status ${statusClass}"
+        >
+          ${
+            tag.active
+              ? "Active"
+              : "Inactive"
+          }
+          ·
+          ${ownerStatus}
         </div>
 
         <div class="tag-url">
@@ -879,12 +930,44 @@ async function loadTags() {
 
         <button
           class="copy-existing"
-          data-url="${escapeHtml(url)}"
         >
           Copy URL
         </button>
 
-      `;
+        `;
+
+
+      const copyExisting =
+        div.querySelector(
+          ".copy-existing"
+        );
+
+
+      copyExisting.addEventListener(
+        "click",
+        async () => {
+
+          await copyText(
+            url
+          );
+
+
+          copyExisting.textContent =
+            "Copied!";
+
+
+          setTimeout(
+            () => {
+
+              copyExisting.textContent =
+                "Copy URL";
+
+            },
+            1500
+          );
+
+        }
+      );
 
 
       tagsContainer.appendChild(
@@ -894,70 +977,6 @@ async function loadTags() {
     }
   );
 
-
-  document
-    .querySelectorAll(".copy-existing")
-    .forEach(
-      button => {
-
-        button.addEventListener(
-          "click",
-          async () => {
-
-            const url =
-              button.dataset.url;
-
-            try {
-
-              await navigator.clipboard.writeText(
-                url
-              );
-
-            } catch {
-
-              const textarea =
-                document.createElement(
-                  "textarea"
-                );
-
-              textarea.value =
-                url;
-
-              document.body.appendChild(
-                textarea
-              );
-
-              textarea.select();
-
-              document.execCommand(
-                "copy"
-              );
-
-              textarea.remove();
-
-            }
-
-
-            button.textContent =
-              "Copied!";
-
-
-            setTimeout(
-              () => {
-
-                button.textContent =
-                  "Copy URL";
-
-              },
-              1500
-            );
-
-          }
-        );
-
-      }
-    );
-
 }
 
 
@@ -965,30 +984,29 @@ async function loadTags() {
    ESCAPE HTML
 ===================================================== */
 
-function escapeHtml(value) {
+function escapeHtml(
+  value
+) {
 
-  return String(value)
-
+  return String(
+    value
+  )
     .replaceAll(
       "&",
       "&amp;"
     )
-
     .replaceAll(
       "<",
       "&lt;"
     )
-
     .replaceAll(
       ">",
       "&gt;"
     )
-
     .replaceAll(
       '"',
       "&quot;"
     )
-
     .replaceAll(
       "'",
       "&#039;"
@@ -1001,33 +1019,9 @@ function escapeHtml(value) {
    START
 ===================================================== */
 
-function start() {
+async function start() {
 
-  adminKey =
-    getKeyFromUrl();
-
-
-  if (!adminKey) {
-
-    showNoAccess();
-
-    return;
-
-  }
-
-
-  /*
-   * We don't know the correct secret client-side
-   * (it lives only in the Edge Function's env var),
-   * so we optimistically show the panel and let the
-   * first create-etag call fail with an error if the
-   * key is wrong. Reading tags works regardless since
-   * that's public read access.
-   */
-
-  showAdminPanel();
-
-  loadTags();
+  await loadTags();
 
 }
 
