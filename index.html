@@ -25,7 +25,6 @@
                 BlinkMacSystemFont,
                 "Segoe UI",
                 sans-serif;
-
             background: #f5f7fb;
             color: #111827;
         }
@@ -109,6 +108,7 @@
             border-radius: 12px;
             line-height: 1.5;
             font-size: 14px;
+            word-break: break-word;
         }
 
         .message.show {
@@ -220,8 +220,7 @@
         .input:focus {
             border-color: #111827;
             box-shadow:
-                0 0 0 3px
-                rgba(17, 24, 39, 0.08);
+                0 0 0 3px rgba(17, 24, 39, 0.08);
         }
 
         .owner-label {
@@ -310,11 +309,6 @@
                 </button>
 
             </div>
-
-            <div
-                id="activationMessage"
-                class="message"
-            ></div>
 
         </div>
 
@@ -584,6 +578,7 @@
     const SUPABASE_URL =
         "https://zuptxhcjzhqynrquyray.supabase.co";
 
+
     const SUPABASE_PUBLISHABLE_KEY =
         "sb_publishable_1sa0MtE83MZXETR5JLakJA_fRVrjDJI";
 
@@ -780,18 +775,14 @@
 
     function getTagCodeFromUrl() {
 
-        const currentUrl =
+        const url =
             new URL(
                 window.location.href
             );
 
 
-        const pathname =
-            currentUrl.pathname;
-
-
         const directMatch =
-            pathname.match(
+            url.pathname.match(
                 /\/id\/([^\/?#]+)\/?$/i
             );
 
@@ -810,7 +801,7 @@
 
 
         const tagParam =
-            currentUrl.searchParams.get(
+            url.searchParams.get(
                 "tag"
             );
 
@@ -828,7 +819,7 @@
 
 
         const idParam =
-            currentUrl.searchParams.get(
+            url.searchParams.get(
                 "id"
             );
 
@@ -839,62 +830,6 @@
 
             return decodeURIComponent(
                 idParam
-            )
-                .trim()
-                .toUpperCase();
-        }
-
-
-        const hash =
-            currentUrl.hash;
-
-
-        const hashMatch =
-            hash.match(
-                /\/id\/([^\/?#]+)\/?$/i
-            );
-
-
-        if (
-            hashMatch &&
-            hashMatch[1]
-        ) {
-
-            return decodeURIComponent(
-                hashMatch[1]
-            )
-                .trim()
-                .toUpperCase();
-        }
-
-
-        const pathSegments =
-            pathname
-                .split("/")
-                .filter(
-                    Boolean
-                );
-
-
-        const idIndex =
-            pathSegments.findIndex(
-                (segment) =>
-                    segment.toLowerCase() ===
-                    "id"
-            );
-
-
-        if (
-            idIndex !== -1 &&
-            pathSegments[
-                idIndex + 1
-            ]
-        ) {
-
-            return decodeURIComponent(
-                pathSegments[
-                    idIndex + 1
-                ]
             )
                 .trim()
                 .toUpperCase();
@@ -987,8 +922,9 @@
                 error
             );
 
+
             loadingView.textContent =
-                "Unable to load this E-Tag.";
+                `Unable to load this E-Tag: ${error.message}`;
 
             return;
         }
@@ -1036,11 +972,27 @@
 
 
         const {
-            data: {
-                user
-            }
+            data: sessionData,
+            error:
+                sessionError
         } =
-            await supabase.auth.getUser();
+            await supabase.auth.getSession();
+
+
+        if (
+            sessionError
+        ) {
+
+            console.error(
+                "Session error:",
+                sessionError
+            );
+        }
+
+
+        const user =
+            sessionData?.session?.user ||
+            null;
 
 
         if (
@@ -1294,11 +1246,10 @@
         ) {
 
             const whatsappNumber =
-                profile.whatsapp
-                    .replace(
-                        /\D/g,
-                        ""
-                    );
+                profile.whatsapp.replace(
+                    /\D/g,
+                    ""
+                );
 
 
             elements.whatsapp.href =
@@ -1490,6 +1441,7 @@
         const email =
             emailInput.value.trim();
 
+
         const password =
             passwordInput.value;
 
@@ -1603,7 +1555,7 @@
 
                 showMessage(
                     authMessage,
-                    "Account created. Check your email to confirm your account. After confirmation, you will return to this E-Tag.",
+                    "Account created. Check your email to confirm your account, then return to this E-Tag.",
                     "success"
                 );
 
@@ -1658,7 +1610,7 @@
             showMessage(
                 authMessage,
                 error.message ||
-                "Authentication failed.",
+                    "Authentication failed.",
                 "error"
             );
 
@@ -1705,7 +1657,7 @@
 
             showMessage(
                 authMessage,
-                "Unable to verify this E-Tag.",
+                `Unable to verify this E-Tag: ${error.message}`,
                 "error"
             );
 
@@ -1735,7 +1687,7 @@
             latestTag.active &&
             latestTag.owner_id &&
             latestTag.owner_id !==
-            userId
+                userId
         ) {
 
             hideAllCards();
@@ -1751,7 +1703,7 @@
         if (
             latestTag.active &&
             latestTag.owner_id ===
-            userId
+                userId
         ) {
 
             hideAllCards();
@@ -1776,7 +1728,8 @@
 
         const {
             data: latestTag,
-            error
+            error:
+                latestTagError
         } =
             await supabase
                 .from(
@@ -1793,13 +1746,26 @@
 
 
         if (
-            error ||
+            latestTagError
+        ) {
+
+            showMessage(
+                authMessage,
+                `Unable to verify this E-Tag: ${latestTagError.message}`,
+                "error"
+            );
+
+            return;
+        }
+
+
+        if (
             !latestTag
         ) {
 
             showMessage(
                 authMessage,
-                "Unable to verify this E-Tag.",
+                "E-Tag not found.",
                 "error"
             );
 
@@ -1815,7 +1781,7 @@
             latestTag.active &&
             latestTag.owner_id &&
             latestTag.owner_id !==
-            userId
+                userId
         ) {
 
             hideAllCards();
@@ -1831,7 +1797,7 @@
         if (
             latestTag.active &&
             latestTag.owner_id ===
-            userId
+                userId
         ) {
 
             hideAllCards();
@@ -1883,9 +1849,15 @@
             updateError
         ) {
 
+            console.error(
+                "Activation update error:",
+                updateError
+            );
+
+
             showMessage(
                 authMessage,
-                "This E-Tag could not be activated.",
+                `Activation failed: ${updateError.message}${updateError.code ? ` (code: ${updateError.code})` : ""}`,
                 "error"
             );
 
@@ -1914,6 +1886,7 @@
 
         hideAllCards();
 
+
         await loadOwnerProfile(
             userId
         );
@@ -1925,7 +1898,9 @@
     ) {
 
         const {
-            data: profile
+            data: profile,
+            error:
+                profileLookupError
         } =
             await supabase
                 .from(
@@ -1942,24 +1917,53 @@
 
 
         if (
-            profile
+            profileLookupError
         ) {
+
+            console.error(
+                "Profile lookup error:",
+                profileLookupError
+            );
+
             return;
         }
 
 
-        await supabase
-            .from(
-                "profiles"
-            )
-            .insert(
-                {
-                    id:
-                        userId,
-                    template:
-                        "Boy"
-                }
+        if (
+            profile
+        ) {
+
+            return;
+        }
+
+
+        const {
+            error:
+                profileInsertError
+        } =
+            await supabase
+                .from(
+                    "profiles"
+                )
+                .insert(
+                    {
+                        id:
+                            userId,
+                        template:
+                            "Boy"
+                    }
+                );
+
+
+        if (
+            profileInsertError
+        ) {
+
+            console.error(
+                "Profile creation error:",
+                profileInsertError
             );
+        }
     }
 
 
@@ -2027,54 +2031,50 @@
             if (
                 (
                     event ===
-                    "SIGNED_IN" ||
+                        "SIGNED_IN" ||
                     event ===
-                    "INITIAL_SESSION"
+                        "INITIAL_SESSION"
                 ) &&
-                session?.user
+                session?.user &&
+                currentTag
             ) {
 
+                const {
+                    data: latestTag
+                } =
+                    await supabase
+                        .from(
+                            "nfc_tags"
+                        )
+                        .select(
+                            "id,tag_code,owner_id,active"
+                        )
+                        .eq(
+                            "tag_code",
+                            currentTag.tag_code
+                        )
+                        .maybeSingle();
+
+
                 if (
-                    currentTag
+                    latestTag
                 ) {
 
-                    const {
-                        data: latestTag
-                    } =
-                        await supabase
-                            .from(
-                                "nfc_tags"
-                            )
-                            .select(
-                                "id,tag_code,owner_id,active"
-                            )
-                            .eq(
-                                "tag_code",
-                                currentTag.tag_code
-                            )
-                            .maybeSingle();
+                    currentTag =
+                        latestTag;
 
 
                     if (
-                        latestTag
+                        latestTag.active &&
+                        latestTag.owner_id ===
+                            session.user.id
                     ) {
 
-                        currentTag =
-                            latestTag;
+                        hideAllCards();
 
-
-                        if (
-                            latestTag.active &&
-                            latestTag.owner_id ===
+                        await loadOwnerProfile(
                             session.user.id
-                        ) {
-
-                            hideAllCards();
-
-                            await loadOwnerProfile(
-                                session.user.id
-                            );
-                        }
+                        );
                     }
                 }
             }
