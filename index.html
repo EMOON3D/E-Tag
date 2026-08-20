@@ -96,11 +96,6 @@
             color: #111827;
         }
 
-        .danger {
-            background: #fee2e2;
-            color: #991b1b;
-        }
-
         .button:disabled {
             opacity: 0.55;
             cursor: not-allowed;
@@ -228,19 +223,8 @@
         .input:focus {
             border-color: #111827;
             box-shadow:
-                0 0 0 3px rgba(17, 24, 39, 0.08);
-        }
-
-        .small-text {
-            margin-top: 12px;
-            font-size: 13px;
-            color: #6b7280;
-            line-height: 1.5;
-            text-align: center;
-        }
-
-        .owner-panel {
-            margin-top: 20px;
+                0 0 0 3px
+                rgba(17, 24, 39, 0.08);
         }
 
         .owner-label {
@@ -251,6 +235,7 @@
             color: #166534;
             font-size: 12px;
             font-weight: 800;
+            margin-bottom: 12px;
         }
 
         @media (max-width: 480px) {
@@ -392,7 +377,6 @@
 
                 </div>
 
-
                 <div
                     id="confirmPasswordGroup"
                     class="input-group hidden"
@@ -410,7 +394,6 @@
                     >
 
                 </div>
-
 
                 <button
                     id="authSubmitButton"
@@ -496,7 +479,6 @@
                     class="profile-bio"
                 ></p>
 
-
                 <div class="profile-actions">
 
                     <a
@@ -559,7 +541,6 @@
                     class="profile-bio"
                 ></p>
 
-
                 <div class="profile-actions">
 
                     <a
@@ -603,12 +584,9 @@
     } from "https://esm.sh/@supabase/supabase-js@2";
 
 
-    // =====================================================
-    // SUPABASE CONFIGURATION
-    // =====================================================
-
     const SUPABASE_URL =
         "https://zuptxhcjzhqynrquyray.supabase.co";
+
 
     const SUPABASE_PUBLISHABLE_KEY =
         "sb_publishable_1sa0MtE83MZXETR5JLakJA_fRVrjDJI";
@@ -620,10 +598,6 @@
             SUPABASE_PUBLISHABLE_KEY
         );
 
-
-    // =====================================================
-    // ELEMENTS
-    // =====================================================
 
     const loadingView =
         document.getElementById(
@@ -720,6 +694,11 @@
             "alreadyActivatedTagCode"
         );
 
+    const alreadyActivatedMessage =
+        document.getElementById(
+            "alreadyActivatedMessage"
+        );
+
     const ownerProfileCard =
         document.getElementById(
             "ownerProfileCard"
@@ -796,57 +775,114 @@
         );
 
 
-    // =====================================================
-    // STATE
-    // =====================================================
-
     let currentTag = null;
 
-    let authMode =
-        "login";
+    let authMode = "login";
 
-
-    // =====================================================
-    // GET TAG CODE FROM URL
-    // =====================================================
 
     function getTagCodeFromUrl() {
 
-        const path =
-            window.location.pathname;
-
-        const marker =
-            "/id/";
-
-        const markerIndex =
-            path.indexOf(marker);
-
-        if (
-            markerIndex === -1
-        ) {
-            return null;
-        }
-
-        const value =
-            path.substring(
-                markerIndex + marker.length
+        const url =
+            new URL(
+                window.location.href
             );
 
-        if (!value) {
-            return null;
+
+        const pathname =
+            url.pathname;
+
+
+        const pathMatch =
+            pathname.match(
+                /\/id\/([^/?#]+)\/?$/i
+            );
+
+
+        if (
+            pathMatch &&
+            pathMatch[1]
+        ) {
+
+            return decodeURIComponent(
+                pathMatch[1]
+            )
+                .trim()
+                .toUpperCase();
         }
 
-        return decodeURIComponent(
-            value
-        )
-            .trim()
-            .toUpperCase();
+
+        const queryTag =
+            url.searchParams.get(
+                "tag"
+            );
+
+
+        if (
+            queryTag
+        ) {
+
+            return queryTag
+                .trim()
+                .toUpperCase();
+        }
+
+
+        const queryPath =
+            url.searchParams.get(
+                "path"
+            );
+
+
+        if (
+            queryPath
+        ) {
+
+            const queryPathMatch =
+                queryPath.match(
+                    /\/id\/([^/?#]+)\/?$/i
+                );
+
+
+            if (
+                queryPathMatch &&
+                queryPathMatch[1]
+            ) {
+
+                return decodeURIComponent(
+                    queryPathMatch[1]
+                )
+                    .trim()
+                    .toUpperCase();
+            }
+        }
+
+
+        const hash =
+            window.location.hash;
+
+
+        const hashMatch =
+            hash.match(
+                /\/id\/([^/?#]+)\/?$/i
+            );
+
+
+        if (
+            hashMatch &&
+            hashMatch[1]
+        ) {
+
+            return decodeURIComponent(
+                hashMatch[1]
+            )
+                .trim()
+                .toUpperCase();
+        }
+
+
+        return null;
     }
 
-
-    // =====================================================
-    // HIDE ALL MAIN CARDS
-    // =====================================================
 
     function hideAllCards() {
 
@@ -872,10 +908,6 @@
     }
 
 
-    // =====================================================
-    // MESSAGE
-    // =====================================================
-
     function showMessage(
         element,
         text,
@@ -889,10 +921,6 @@
             `message show ${type}`;
     }
 
-
-    // =====================================================
-    // LOAD TAG
-    // =====================================================
 
     async function loadTag() {
 
@@ -916,7 +944,7 @@
             await supabase
                 .from("nfc_tags")
                 .select(
-                    "id, tag_code, owner_id, active"
+                    "id,tag_code,owner_id,active"
                 )
                 .eq(
                     "tag_code",
@@ -964,10 +992,6 @@
     }
 
 
-    // =====================================================
-    // RENDER CURRENT TAG STATE
-    // =====================================================
-
     async function renderTagState() {
 
         loadingView.classList.add(
@@ -990,11 +1014,6 @@
             await supabase.auth.getUser();
 
 
-        // =================================================
-        // CASE 1
-        // TAG IS NOT ACTIVATED
-        // =================================================
-
         if (
             !currentTag.active ||
             !currentTag.owner_id
@@ -1008,23 +1027,10 @@
         }
 
 
-        // =================================================
-        // CASE 2
-        // TAG IS ACTIVATED
-        // =================================================
-        //
-        // IMPORTANT:
-        //
-        // Once active, NO signup/activation UI is shown.
-        // This prevents another account from trying to
-        // claim the same E-Tag.
-        // =================================================
-
-
         if (
             user &&
             user.id ===
-                currentTag.owner_id
+            currentTag.owner_id
         ) {
 
             await loadOwnerProfile(
@@ -1035,20 +1041,11 @@
         }
 
 
-        // =================================================
-        // CASE 3
-        // DIFFERENT USER / LOGGED OUT
-        // =================================================
-
         await loadPublicProfile(
             currentTag.owner_id
         );
     }
 
-
-    // =====================================================
-    // LOAD PROFILE
-    // =====================================================
 
     async function getProfile(
         ownerId
@@ -1061,7 +1058,7 @@
             await supabase
                 .from("profiles")
                 .select(
-                    "id, display_name, bio, phone, whatsapp, email, template, profile_type, avatar_url"
+                    "id,display_name,bio,phone,whatsapp,email,template,profile_type,avatar_url"
                 )
                 .eq(
                     "id",
@@ -1084,10 +1081,6 @@
         return profile;
     }
 
-
-    // =====================================================
-    // OWNER PROFILE
-    // =====================================================
 
     async function loadOwnerProfile(
         ownerId
@@ -1143,10 +1136,6 @@
     }
 
 
-    // =====================================================
-    // PUBLIC PROFILE
-    // =====================================================
-
     async function loadPublicProfile(
         ownerId
     ) {
@@ -1164,9 +1153,7 @@
             );
 
             showMessage(
-                document.getElementById(
-                    "alreadyActivatedMessage"
-                ),
+                alreadyActivatedMessage,
                 "This E-Tag is already activated, but the public profile has not been created yet.",
                 "info"
             );
@@ -1200,10 +1187,6 @@
     }
 
 
-    // =====================================================
-    // RENDER PROFILE
-    // =====================================================
-
     function renderProfile(
         profile,
         elements
@@ -1222,10 +1205,6 @@
             profile.bio ||
             "";
 
-
-        // =================================================
-        // AVATAR
-        // =================================================
 
         if (
             profile.avatar_url
@@ -1252,10 +1231,6 @@
         }
 
 
-        // =================================================
-        // PHONE
-        // =================================================
-
         if (
             profile.phone
         ) {
@@ -1277,23 +1252,20 @@
         }
 
 
-        // =================================================
-        // WHATSAPP
-        // =================================================
-
         if (
             profile.whatsapp
         ) {
 
             const whatsappNumber =
-                profile.whatsapp
-                    .replace(
-                        /\D/g,
-                        ""
-                    );
+                profile.whatsapp.replace(
+                    /\D/g,
+                    ""
+                );
+
 
             elements.whatsapp.href =
                 `https://wa.me/${whatsappNumber}`;
+
 
             elements.whatsapp.classList.remove(
                 "hidden"
@@ -1306,10 +1278,6 @@
             );
         }
 
-
-        // =================================================
-        // EMAIL
-        // =================================================
 
         if (
             profile.email
@@ -1333,10 +1301,6 @@
     }
 
 
-    // =====================================================
-    // INITIALS
-    // =====================================================
-
     function getInitials(
         name
     ) {
@@ -1349,14 +1313,17 @@
 
 
         if (
-            words.length === 0
+            words.length ===
+            0
         ) {
+
             return "?";
         }
 
 
         if (
-            words.length === 1
+            words.length ===
+            1
         ) {
 
             return words[0]
@@ -1370,14 +1337,12 @@
 
         return (
             words[0][0] +
-            words[words.length - 1][0]
+            words[
+                words.length - 1
+            ][0]
         ).toUpperCase();
     }
 
-
-    // =====================================================
-    // ESCAPE ATTRIBUTE
-    // =====================================================
 
     function escapeAttribute(
         value
@@ -1403,16 +1368,13 @@
     }
 
 
-    // =====================================================
-    // SHOW AUTH
-    // =====================================================
-
     function showAuth(
         mode
     ) {
 
         authMode =
             mode;
+
 
         activationCard.classList.add(
             "hidden"
@@ -1437,7 +1399,8 @@
 
 
         if (
-            mode === "signup"
+            mode ===
+            "signup"
         ) {
 
             authTitle.textContent =
@@ -1486,15 +1449,10 @@
     }
 
 
-    // =====================================================
-    // AUTH SUBMIT
-    // =====================================================
-
     async function submitAuth() {
 
         const email =
-            emailInput.value
-                .trim();
+            emailInput.value.trim();
 
 
         const password =
@@ -1529,10 +1487,6 @@
             true;
 
 
-        authSubmitButton.textContent =
-            "Please wait...";
-
-
         try {
 
             if (
@@ -1541,8 +1495,7 @@
             ) {
 
                 const confirmPassword =
-                    confirmPasswordInput
-                        .value;
+                    confirmPasswordInput.value;
 
 
                 if (
@@ -1564,11 +1517,12 @@
                     data,
                     error
                 } =
-                    await supabase.auth
-                        .signUp({
+                    await supabase.auth.signUp(
+                        {
                             email,
                             password
-                        });
+                        }
+                    );
 
 
                 if (error) {
@@ -1602,18 +1556,18 @@
                     "success"
                 );
 
-
             } else {
 
                 const {
                     data,
                     error
                 } =
-                    await supabase.auth
-                        .signInWithPassword({
+                    await supabase.auth.signInWithPassword(
+                        {
                             email,
                             password
-                        });
+                        }
+                    );
 
 
                 if (error) {
@@ -1645,6 +1599,7 @@
                 error
             );
 
+
             showMessage(
                 authMessage,
                 error.message ||
@@ -1666,20 +1621,9 @@
     }
 
 
-    // =====================================================
-    // CONTINUE AFTER LOGIN
-    // =====================================================
-
     async function continueAfterLogin(
         userId
     ) {
-
-        // -------------------------------------------------
-        // Re-read tag from database.
-        //
-        // This is important so a second user cannot rely
-        // on stale browser information.
-        // -------------------------------------------------
 
         const {
             data: latestTag,
@@ -1688,7 +1632,7 @@
             await supabase
                 .from("nfc_tags")
                 .select(
-                    "id, tag_code, owner_id, active"
+                    "id,tag_code,owner_id,active"
                 )
                 .eq(
                     "tag_code",
@@ -1725,15 +1669,11 @@
             latestTag;
 
 
-        // -------------------------------------------------
-        // Already activated by another user
-        // -------------------------------------------------
-
         if (
             latestTag.active &&
             latestTag.owner_id &&
             latestTag.owner_id !==
-                userId
+            userId
         ) {
 
             hideAllCards();
@@ -1746,14 +1686,10 @@
         }
 
 
-        // -------------------------------------------------
-        // Already belongs to current user
-        // -------------------------------------------------
-
         if (
             latestTag.active &&
             latestTag.owner_id ===
-                userId
+            userId
         ) {
 
             hideAllCards();
@@ -1766,27 +1702,15 @@
         }
 
 
-        // -------------------------------------------------
-        // Still unclaimed
-        // -------------------------------------------------
-
         await claimTag(
             userId
         );
     }
 
 
-    // =====================================================
-    // CLAIM TAG
-    // =====================================================
-
     async function claimTag(
         userId
     ) {
-
-        // -------------------------------------------------
-        // Check current tag state first
-        // -------------------------------------------------
 
         const {
             data: latestTag,
@@ -1796,7 +1720,7 @@
             await supabase
                 .from("nfc_tags")
                 .select(
-                    "id, tag_code, owner_id, active"
+                    "id,tag_code,owner_id,active"
                 )
                 .eq(
                     "tag_code",
@@ -1835,15 +1759,11 @@
             latestTag;
 
 
-        // -------------------------------------------------
-        // Someone else already claimed it
-        // -------------------------------------------------
-
         if (
             latestTag.active &&
             latestTag.owner_id &&
             latestTag.owner_id !==
-                userId
+            userId
         ) {
 
             hideAllCards();
@@ -1856,14 +1776,10 @@
         }
 
 
-        // -------------------------------------------------
-        // Already owned by current user
-        // -------------------------------------------------
-
         if (
             latestTag.active &&
             latestTag.owner_id ===
-                userId
+            userId
         ) {
 
             hideAllCards();
@@ -1876,22 +1792,20 @@
         }
 
 
-        // -------------------------------------------------
-        // Claim the unowned inactive tag
-        // -------------------------------------------------
-
         const {
             data,
             error
         } =
             await supabase
                 .from("nfc_tags")
-                .update({
-                    owner_id:
-                        userId,
-                    active:
-                        true
-                })
+                .update(
+                    {
+                        owner_id:
+                            userId,
+                        active:
+                            true
+                    }
+                )
                 .eq(
                     "id",
                     latestTag.id
@@ -1905,7 +1819,7 @@
                     false
                 )
                 .select(
-                    "id, tag_code, owner_id, active"
+                    "id,tag_code,owner_id,active"
                 )
                 .maybeSingle();
 
@@ -1917,6 +1831,7 @@
                 error
             );
 
+
             showMessage(
                 authMessage,
                 "This E-Tag could not be activated.",
@@ -1927,15 +1842,7 @@
         }
 
 
-        // -------------------------------------------------
-        // No row means another user won the race.
-        // -------------------------------------------------
-
-        if (
-            !data
-        ) {
-
-            hideAllCards();
+        if (!data) {
 
             const {
                 data:
@@ -1944,7 +1851,7 @@
                 await supabase
                     .from("nfc_tags")
                     .select(
-                        "id, tag_code, owner_id, active"
+                        "id,tag_code,owner_id,active"
                     )
                     .eq(
                         "tag_code",
@@ -1961,17 +1868,16 @@
                 currentTag =
                     latestClaimedTag;
 
+
                 await loadPublicProfile(
                     latestClaimedTag.owner_id
                 );
 
             } else {
 
-                alreadyActivatedCard
-                    .classList
-                    .remove(
-                        "hidden"
-                    );
+                alreadyActivatedCard.classList.remove(
+                    "hidden"
+                );
             }
 
             return;
@@ -1982,25 +1888,19 @@
             data;
 
 
-        // -------------------------------------------------
-        // Activated successfully
-        // -------------------------------------------------
-
         hideAllCards();
+
 
         await ensureProfile(
             userId
         );
+
 
         await loadOwnerProfile(
             userId
         );
     }
 
-
-    // =====================================================
-    // ENSURE PROFILE
-    // =====================================================
 
     async function ensureProfile(
         userId
@@ -2039,6 +1939,7 @@
         if (
             existingProfile
         ) {
+
             return;
         }
 
@@ -2049,18 +1950,20 @@
         } =
             await supabase
                 .from("profiles")
-                .insert({
-                    id:
-                        userId,
-                    template:
-                        "Boy"
-                });
+                .insert(
+                    {
+                        id:
+                            userId,
+                        template:
+                            "Boy"
+                    }
+                );
 
 
         if (
             insertError &&
             insertError.code !==
-                "23505"
+            "23505"
         ) {
 
             console.error(
@@ -2071,10 +1974,6 @@
     }
 
 
-    // =====================================================
-    // LOGOUT
-    // =====================================================
-
     async function logout() {
 
         await supabase.auth.signOut();
@@ -2082,10 +1981,6 @@
         window.location.reload();
     }
 
-
-    // =====================================================
-    // BUTTON EVENTS
-    // =====================================================
 
     loginButton.addEventListener(
         "click",
@@ -2117,32 +2012,14 @@
 
     authBackButton.addEventListener(
         "click",
-        () => {
+        async () => {
 
             authCard.classList.add(
                 "hidden"
             );
 
 
-            // -------------------------------------------------
-            // Only show activation when tag is genuinely
-            // unactivated.
-            // -------------------------------------------------
-
-            if (
-                currentTag &&
-                !currentTag.active &&
-                !currentTag.owner_id
-            ) {
-
-                activationCard.classList.remove(
-                    "hidden"
-                );
-
-            } else {
-
-                renderTagState();
-            }
+            await renderTagState();
         }
     );
 
@@ -2153,10 +2030,6 @@
     );
 
 
-    // =====================================================
-    // AUTH STATE LISTENER
-    // =====================================================
-
     supabase.auth.onAuthStateChange(
         async (
             event,
@@ -2165,7 +2038,7 @@
 
             if (
                 event ===
-                    "SIGNED_IN" &&
+                "SIGNED_IN" &&
                 session?.user
             ) {
 
@@ -2173,7 +2046,7 @@
                     currentTag &&
                     currentTag.active &&
                     currentTag.owner_id ===
-                        session.user.id
+                    session.user.id
                 ) {
 
                     hideAllCards();
@@ -2187,7 +2060,7 @@
 
             if (
                 event ===
-                    "SIGNED_OUT"
+                "SIGNED_OUT"
             ) {
 
                 if (
@@ -2200,10 +2073,6 @@
         }
     );
 
-
-    // =====================================================
-    // INITIAL LOAD
-    // =====================================================
 
     loadTag();
 
