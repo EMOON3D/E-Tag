@@ -11,6 +11,7 @@
     <title>E-Tag</title>
 
     <script>
+
         (function () {
 
             const path =
@@ -19,39 +20,99 @@
             const base =
                 "/E-Tag/";
 
+
+            /*
+             * Allow normal static files to load.
+             */
+
+            const allowedFiles = [
+                "index.html",
+                "admin.html",
+                "dashboard.html",
+                "auth-callback.html"
+            ];
+
+
+            const filename =
+                path
+                    .split("/")
+                    .filter(Boolean)
+                    .pop();
+
+
             if (
-                path.startsWith(
-                    base + "id/"
+                filename &&
+                allowedFiles.includes(
+                    filename.toLowerCase()
                 )
             ) {
-
-                const tag =
-                    path.substring(
-                        (base + "id/").length
-                    );
-
-                const target =
-                    `${base}?tag=${encodeURIComponent(
-                        tag
-                    )}`;
-
-                window.location.replace(
-                    target
-                );
 
                 return;
             }
 
+
+            /*
+             * Handle public E-Tag routes.
+             *
+             * Example:
+             *
+             * /E-Tag/id/DFG
+             *
+             * becomes:
+             *
+             * /E-Tag/?tag=DFG
+             */
+
+            const idPrefix =
+                `${base}id/`;
+
+
+            if (
+                path.startsWith(
+                    idPrefix
+                )
+            ) {
+
+                const tagCode =
+                    path.substring(
+                        idPrefix.length
+                    )
+                    .split("/")
+                    .filter(Boolean)[0];
+
+
+                if (
+                    tagCode
+                ) {
+
+                    window.location.replace(
+                        `${base}?tag=${encodeURIComponent(
+                            tagCode
+                        )}`
+                    );
+
+                    return;
+                }
+            }
+
+
+            /*
+             * Unknown route.
+             */
 
             window.location.replace(
                 base
             );
 
         })();
+
     </script>
+
 </head>
 
 <body>
+
     Loading E-Tag...
+
 </body>
 </html>
