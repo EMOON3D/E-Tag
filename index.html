@@ -25,6 +25,7 @@
                 BlinkMacSystemFont,
                 "Segoe UI",
                 sans-serif;
+
             background: #f5f7fb;
             color: #111827;
         }
@@ -94,6 +95,11 @@
         .secondary {
             background: #eef2f7;
             color: #111827;
+        }
+
+        .danger {
+            background: #fee2e2;
+            color: #991b1b;
         }
 
         .button:disabled {
@@ -188,6 +194,8 @@
 
         .profile-button {
             display: block;
+            width: 100%;
+            border: 0;
             text-decoration: none;
             text-align: center;
             padding: 13px 14px;
@@ -195,6 +203,9 @@
             background: #111827;
             color: #ffffff;
             font-weight: 700;
+            font-family: inherit;
+            font-size: 15px;
+            cursor: pointer;
         }
 
         .input-group {
@@ -215,12 +226,18 @@
             padding: 13px 14px;
             font-size: 15px;
             outline: none;
+            font-family: inherit;
         }
 
         .input:focus {
             border-color: #111827;
             box-shadow:
-                0 0 0 3px rgba(17, 24, 39, 0.08);
+                0 0 0 3px rgba(
+                    17,
+                    24,
+                    39,
+                    0.08
+                );
         }
 
         .owner-label {
@@ -235,7 +252,6 @@
         }
 
         @media (max-width: 480px) {
-
             .app {
                 width: min(100% - 16px, 520px);
                 padding-top: 16px;
@@ -269,6 +285,8 @@
         class="hidden"
     >
 
+        <!-- UNACTIVATED TAG -->
+
         <div
             id="activationCard"
             class="card hidden"
@@ -290,6 +308,7 @@
                 ></div>
 
             </div>
+
 
             <div class="section">
 
@@ -314,6 +333,8 @@
         </div>
 
 
+        <!-- LOGIN / SIGNUP -->
+
         <div
             id="authCard"
             class="card hidden"
@@ -337,6 +358,7 @@
 
             </div>
 
+
             <div class="section">
 
                 <div class="input-group">
@@ -354,6 +376,7 @@
 
                 </div>
 
+
                 <div class="input-group">
 
                     <label for="password">
@@ -368,6 +391,7 @@
                     >
 
                 </div>
+
 
                 <div
                     id="confirmPasswordGroup"
@@ -387,6 +411,7 @@
 
                 </div>
 
+
                 <button
                     id="authSubmitButton"
                     class="button primary"
@@ -395,6 +420,7 @@
                     Login
                 </button>
 
+
                 <button
                     id="authBackButton"
                     class="button secondary"
@@ -402,6 +428,7 @@
                 >
                     Back
                 </button>
+
 
                 <div
                     id="authMessage"
@@ -412,6 +439,95 @@
 
         </div>
 
+
+        <!-- EDIT PROFILE LOGIN -->
+
+        <div
+            id="editLoginCard"
+            class="card hidden"
+        >
+
+            <div class="center">
+
+                <h1 class="title">
+                    Edit Your Profile
+                </h1>
+
+                <p class="subtitle">
+                    Login to confirm that this E-Tag belongs to you.
+                </p>
+
+                <div
+                    id="editLoginTagCode"
+                    class="tag-code"
+                ></div>
+
+            </div>
+
+
+            <div class="section">
+
+                <div class="input-group">
+
+                    <label for="editEmail">
+                        Email
+                    </label>
+
+                    <input
+                        id="editEmail"
+                        class="input"
+                        type="email"
+                        autocomplete="email"
+                    >
+
+                </div>
+
+
+                <div class="input-group">
+
+                    <label for="editPassword">
+                        Password
+                    </label>
+
+                    <input
+                        id="editPassword"
+                        class="input"
+                        type="password"
+                        autocomplete="current-password"
+                    >
+
+                </div>
+
+
+                <button
+                    id="editLoginButton"
+                    class="button primary"
+                    type="button"
+                >
+                    Login to Edit
+                </button>
+
+
+                <button
+                    id="editBackButton"
+                    class="button secondary"
+                    type="button"
+                >
+                    Back to Profile
+                </button>
+
+
+                <div
+                    id="editLoginMessage"
+                    class="message"
+                ></div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ALREADY ACTIVATED -->
 
         <div
             id="alreadyActivatedCard"
@@ -435,6 +551,7 @@
 
             </div>
 
+
             <div
                 id="alreadyActivatedMessage"
                 class="message info show"
@@ -444,6 +561,8 @@
 
         </div>
 
+
+        <!-- OWNER PROFILE -->
 
         <div
             id="ownerProfileCard"
@@ -457,19 +576,23 @@
                     class="avatar"
                 ></div>
 
+
                 <span class="owner-label">
                     Your E-Tag
                 </span>
+
 
                 <h1
                     id="ownerName"
                     class="profile-name"
                 ></h1>
 
+
                 <p
                     id="ownerBio"
                     class="profile-bio"
                 ></p>
+
 
                 <div class="profile-actions">
 
@@ -480,6 +603,7 @@
                         Call
                     </a>
 
+
                     <a
                         id="ownerWhatsapp"
                         class="profile-button hidden"
@@ -489,6 +613,7 @@
                         WhatsApp
                     </a>
 
+
                     <a
                         id="ownerEmail"
                         class="profile-button hidden"
@@ -496,13 +621,15 @@
                         Email
                     </a>
 
+
                     <a
-                        id="editProfileButton"
+                        id="editProfileButtonOwner"
                         class="profile-button"
                         href="/E-Tag/dashboard.html"
                     >
                         Edit Public Profile
                     </a>
+
 
                     <button
                         id="logoutButton"
@@ -519,6 +646,8 @@
         </div>
 
 
+        <!-- PUBLIC PROFILE -->
+
         <div
             id="publicProfileCard"
             class="card hidden"
@@ -531,15 +660,18 @@
                     class="avatar"
                 ></div>
 
+
                 <h1
                     id="publicName"
                     class="profile-name"
                 ></h1>
 
+
                 <p
                     id="publicBio"
                     class="profile-bio"
                 ></p>
+
 
                 <div class="profile-actions">
 
@@ -550,6 +682,7 @@
                         Call
                     </a>
 
+
                     <a
                         id="publicWhatsapp"
                         class="profile-button hidden"
@@ -559,12 +692,22 @@
                         WhatsApp
                     </a>
 
+
                     <a
                         id="publicEmail"
                         class="profile-button hidden"
                     >
                         Email
                     </a>
+
+
+                    <button
+                        id="editProfileButtonPublic"
+                        class="profile-button"
+                        type="button"
+                    >
+                        Edit My Profile
+                    </button>
 
                 </div>
 
@@ -686,6 +829,41 @@
             "authMessage"
         );
 
+    const editLoginCard =
+        document.getElementById(
+            "editLoginCard"
+        );
+
+    const editLoginTagCode =
+        document.getElementById(
+            "editLoginTagCode"
+        );
+
+    const editEmail =
+        document.getElementById(
+            "editEmail"
+        );
+
+    const editPassword =
+        document.getElementById(
+            "editPassword"
+        );
+
+    const editLoginButton =
+        document.getElementById(
+            "editLoginButton"
+        );
+
+    const editBackButton =
+        document.getElementById(
+            "editBackButton"
+        );
+
+    const editLoginMessage =
+        document.getElementById(
+            "editLoginMessage"
+        );
+
     const alreadyActivatedCard =
         document.getElementById(
             "alreadyActivatedCard"
@@ -736,6 +914,11 @@
             "ownerEmail"
         );
 
+    const editProfileButtonOwner =
+        document.getElementById(
+            "editProfileButtonOwner"
+        );
+
     const logoutButton =
         document.getElementById(
             "logoutButton"
@@ -776,8 +959,14 @@
             "publicEmail"
         );
 
+    const editProfileButtonPublic =
+        document.getElementById(
+            "editProfileButtonPublic"
+        );
 
-    let currentTag = null;
+
+    let currentTag =
+        null;
 
     let authMode =
         "login";
@@ -842,6 +1031,10 @@
             "hidden"
         );
 
+        editLoginCard.classList.add(
+            "hidden"
+        );
+
         alreadyActivatedCard.classList.add(
             "hidden"
         );
@@ -867,6 +1060,121 @@
 
         element.className =
             `message show ${type}`;
+    }
+
+
+    function clearMessage(
+        element
+    ) {
+
+        element.textContent =
+            "";
+
+        element.className =
+            "message";
+    }
+
+
+    function getInitials(
+        name
+    ) {
+
+        const words =
+            String(
+                name || ""
+            )
+                .trim()
+                .split(
+                    /\s+/
+                )
+                .filter(
+                    Boolean
+                );
+
+
+        if (
+            words.length === 0
+        ) {
+
+            return "?";
+        }
+
+
+        if (
+            words.length === 1
+        ) {
+
+            return words[0]
+                .substring(
+                    0,
+                    2
+                )
+                .toUpperCase();
+        }
+
+
+        return (
+            words[0][0] +
+            words[
+                words.length - 1
+            ][0]
+        ).toUpperCase();
+    }
+
+
+    function escapeAttribute(
+        value
+    ) {
+
+        return String(value)
+            .replaceAll(
+                "&",
+                "&amp;"
+            )
+            .replaceAll(
+                '"',
+                "&quot;"
+            )
+            .replaceAll(
+                "<",
+                "&lt;"
+            )
+            .replaceAll(
+                ">",
+                "&gt;"
+            );
+    }
+
+
+    function renderAvatar(
+        element,
+        name,
+        avatarUrl
+    ) {
+
+        if (
+            avatarUrl
+        ) {
+
+            element.innerHTML =
+                `
+                    <img
+                        src="${escapeAttribute(
+                            avatarUrl
+                        )}"
+                        alt="${escapeAttribute(
+                            name
+                        )}"
+                    >
+                `;
+
+        } else {
+
+            element.textContent =
+                getInitials(
+                    name
+                );
+        }
     }
 
 
@@ -939,6 +1247,10 @@
 
 
         alreadyActivatedTagCode.textContent =
+            tag.tag_code;
+
+
+        editLoginTagCode.textContent =
             tag.tag_code;
 
 
@@ -1029,6 +1341,11 @@
         if (
             error
         ) {
+
+            console.error(
+                "Profile lookup error:",
+                error
+            );
 
             return null;
         }
@@ -1166,29 +1483,11 @@
             "";
 
 
-        if (
+        renderAvatar(
+            elements.avatar,
+            name,
             profile.avatar_url
-        ) {
-
-            elements.avatar.innerHTML =
-                `
-                    <img
-                        src="${escapeAttribute(
-                            profile.avatar_url
-                        )}"
-                        alt="${escapeAttribute(
-                            name
-                        )}"
-                    >
-                `;
-
-        } else {
-
-            elements.avatar.textContent =
-                getInitials(
-                    name
-                );
-        }
+        );
 
 
         if (
@@ -1216,7 +1515,7 @@
             profile.whatsapp
         ) {
 
-            const number =
+            const whatsappNumber =
                 profile.whatsapp.replace(
                     /\D/g,
                     ""
@@ -1224,7 +1523,7 @@
 
 
             elements.whatsapp.href =
-                `https://wa.me/${number}`;
+                `https://wa.me/${whatsappNumber}`;
 
             elements.whatsapp.classList.remove(
                 "hidden"
@@ -1260,73 +1559,6 @@
     }
 
 
-    function getInitials(
-        name
-    ) {
-
-        const words =
-            String(name || "")
-                .trim()
-                .split(/\s+/)
-                .filter(
-                    Boolean
-                );
-
-
-        if (
-            words.length === 0
-        ) {
-
-            return "?";
-        }
-
-
-        if (
-            words.length === 1
-        ) {
-
-            return words[0]
-                .substring(
-                    0,
-                    2
-                )
-                .toUpperCase();
-        }
-
-
-        return (
-            words[0][0] +
-            words[
-                words.length - 1
-            ][0]
-        ).toUpperCase();
-    }
-
-
-    function escapeAttribute(
-        value
-    ) {
-
-        return String(value)
-            .replaceAll(
-                "&",
-                "&amp;"
-            )
-            .replaceAll(
-                '"',
-                "&quot;"
-            )
-            .replaceAll(
-                "<",
-                "&lt;"
-            )
-            .replaceAll(
-                ">",
-                "&gt;"
-            );
-    }
-
-
     function showAuth(
         mode
     ) {
@@ -1336,6 +1568,10 @@
 
 
         activationCard.classList.add(
+            "hidden"
+        );
+
+        editLoginCard.classList.add(
             "hidden"
         );
 
@@ -1392,13 +1628,43 @@
         }
 
 
-        authMessage.className =
-            "message";
+        clearMessage(
+            authMessage
+        );
 
-        authMessage.textContent =
-            "";
 
         emailInput.focus();
+    }
+
+
+    function showEditLogin() {
+
+        hideAllCards();
+
+
+        editLoginCard.classList.remove(
+            "hidden"
+        );
+
+
+        editLoginTagCode.textContent =
+            currentTag?.tag_code ||
+            "";
+
+
+        clearMessage(
+            editLoginMessage
+        );
+
+
+        editEmail.value =
+            "";
+
+        editPassword.value =
+            "";
+
+
+        editEmail.focus();
     }
 
 
@@ -1570,7 +1836,7 @@
             showMessage(
                 authMessage,
                 error.message ||
-                "Authentication failed.",
+                    "Authentication failed.",
                 "error"
             );
 
@@ -1667,9 +1933,8 @@
 
             hideAllCards();
 
-            await loadOwnerProfile(
-                userId
-            );
+            window.location.href =
+                "/E-Tag/dashboard.html";
 
             return;
         }
@@ -1678,6 +1943,208 @@
         await claimTag(
             userId
         );
+    }
+
+
+    async function submitEditLogin() {
+
+        const email =
+            editEmail.value.trim();
+
+        const password =
+            editPassword.value;
+
+
+        if (
+            !email
+        ) {
+
+            showMessage(
+                editLoginMessage,
+                "Please enter your email.",
+                "error"
+            );
+
+            return;
+        }
+
+
+        if (
+            !password
+        ) {
+
+            showMessage(
+                editLoginMessage,
+                "Please enter your password.",
+                "error"
+            );
+
+            return;
+        }
+
+
+        editLoginButton.disabled =
+            true;
+
+        editLoginButton.textContent =
+            "Checking...";
+
+
+        try {
+
+            const {
+                data,
+                error
+            } =
+                await supabase.auth.signInWithPassword(
+                    {
+                        email,
+                        password
+                    }
+                );
+
+
+            if (
+                error
+            ) {
+
+                showMessage(
+                    editLoginMessage,
+                    error.message,
+                    "error"
+                );
+
+                return;
+            }
+
+
+            const user =
+                data?.user;
+
+
+            if (
+                !user
+            ) {
+
+                showMessage(
+                    editLoginMessage,
+                    "Unable to identify the logged-in account.",
+                    "error"
+                );
+
+                return;
+            }
+
+
+            const {
+                data: latestTag,
+                error:
+                    tagError
+            } =
+                await supabase
+                    .from(
+                        "nfc_tags"
+                    )
+                    .select(
+                        "id,tag_code,owner_id,active"
+                    )
+                    .eq(
+                        "tag_code",
+                        currentTag.tag_code
+                    )
+                    .maybeSingle();
+
+
+            if (
+                tagError
+            ) {
+
+                showMessage(
+                    editLoginMessage,
+                    `Unable to verify E-Tag ownership: ${tagError.message}`,
+                    "error"
+                );
+
+                return;
+            }
+
+
+            if (
+                !latestTag
+            ) {
+
+                showMessage(
+                    editLoginMessage,
+                    "E-Tag not found.",
+                    "error"
+                );
+
+                return;
+            }
+
+
+            if (
+                !latestTag.active ||
+                !latestTag.owner_id
+            ) {
+
+                showMessage(
+                    editLoginMessage,
+                    "This E-Tag has not been activated yet.",
+                    "error"
+                );
+
+                return;
+            }
+
+
+            if (
+                latestTag.owner_id !==
+                user.id
+            ) {
+
+                showMessage(
+                    editLoginMessage,
+                    "This account does not own this E-Tag.",
+                    "error"
+                );
+
+
+                await supabase.auth.signOut();
+
+
+                return;
+            }
+
+
+            window.location.href =
+                "/E-Tag/dashboard.html";
+
+        } catch (
+            error
+        ) {
+
+            console.error(
+                "Edit login error:",
+                error
+            );
+
+
+            showMessage(
+                editLoginMessage,
+                error.message ||
+                    "Unable to login.",
+                "error"
+            );
+
+        } finally {
+
+            editLoginButton.disabled =
+                false;
+
+            editLoginButton.textContent =
+                "Login to Edit";
+        }
     }
 
 
@@ -1747,9 +2214,8 @@
                 userId
         ) {
 
-            await continueAfterLogin(
-                userId
-            );
+            window.location.href =
+                "/E-Tag/dashboard.html";
 
             return;
         }
@@ -1834,11 +2300,8 @@
         }
 
 
-        hideAllCards();
-
-        await loadOwnerProfile(
-            userId
-        );
+        window.location.href =
+            "/E-Tag/dashboard.html";
     }
 
 
@@ -1994,6 +2457,41 @@
     );
 
 
+    editProfileButtonPublic.addEventListener(
+        "click",
+        showEditLogin
+    );
+
+
+    editBackButton.addEventListener(
+        "click",
+        async () => {
+
+            editLoginCard.classList.add(
+                "hidden"
+            );
+
+            await renderTagState();
+        }
+    );
+
+
+    editLoginButton.addEventListener(
+        "click",
+        submitEditLogin
+    );
+
+
+    editProfileButtonOwner.addEventListener(
+        "click",
+        () => {
+
+            window.location.href =
+                "/E-Tag/dashboard.html";
+        }
+    );
+
+
     logoutButton.addEventListener(
         "click",
         logout
@@ -2007,24 +2505,62 @@
         ) => {
 
             if (
-                event ===
-                    "SIGNED_IN" &&
+                event === "SIGNED_IN" &&
                 session?.user &&
                 currentTag
             ) {
 
-                await continueAfterLogin(
-                    session.user.id
-                );
+                const {
+                    data: latestTag
+                } =
+                    await supabase
+                        .from(
+                            "nfc_tags"
+                        )
+                        .select(
+                            "id,tag_code,owner_id,active"
+                        )
+                        .eq(
+                            "tag_code",
+                            currentTag.tag_code
+                        )
+                        .maybeSingle();
+
+
+                if (
+                    latestTag
+                ) {
+
+                    currentTag =
+                        latestTag;
+
+
+                    if (
+                        latestTag.active &&
+                        latestTag.owner_id ===
+                            session.user.id
+                    ) {
+
+                        hideAllCards();
+
+                        await loadOwnerProfile(
+                            session.user.id
+                        );
+                    }
+                }
             }
 
 
             if (
-                event ===
-                "SIGNED_OUT"
+                event === "SIGNED_OUT"
             ) {
 
-                await renderTagState();
+                if (
+                    currentTag
+                ) {
+
+                    await renderTagState();
+                }
             }
         }
     );
