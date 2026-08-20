@@ -591,7 +591,14 @@
     const supabase =
         createClient(
             SUPABASE_URL,
-            SUPABASE_PUBLISHABLE_KEY
+            SUPABASE_PUBLISHABLE_KEY,
+            {
+                auth: {
+                    detectSessionInUrl: true,
+                    persistSession: true,
+                    autoRefreshToken: true
+                }
+            }
         );
 
 
@@ -1545,6 +1552,12 @@
                 }
 
 
+                const redirectUrl =
+                    `${window.location.origin}/E-Tag/?tag=${encodeURIComponent(
+                        currentTag.tag_code
+                    )}`;
+
+
                 const {
                     data,
                     error
@@ -1552,7 +1565,11 @@
                     await supabase.auth.signUp(
                         {
                             email,
-                            password
+                            password,
+                            options: {
+                                emailRedirectTo:
+                                    redirectUrl
+                            }
                         }
                     );
 
@@ -1586,7 +1603,7 @@
 
                 showMessage(
                     authMessage,
-                    "Account created. Check your email to confirm your account, then return to this E-Tag.",
+                    "Account created. Check your email to confirm your account. After confirmation, you will return to this E-Tag.",
                     "success"
                 );
 
@@ -1998,6 +2015,84 @@
     logoutButton.addEventListener(
         "click",
         logout
+    );
+
+
+    supabase.auth.onAuthStateChange(
+        async (
+            event,
+            session
+        ) => {
+
+            if (
+                (
+                    event ===
+                    "SIGNED_IN" ||
+                    event ===
+                    "INITIAL_SESSION"
+                ) &&
+                session?.user
+            ) {
+
+                if (
+                    currentTag
+                ) {
+
+                    const {
+                        data: latestTag
+                    } =
+                        await supabase
+                            .from(
+                                "nfc_tags"
+                            )
+                            .select(
+                                "id,tag_code,owner_id,active"
+                            )
+                            .eq(
+                                "tag_code",
+                                currentTag.tag_code
+                            )
+                            .maybeSingle();
+
+
+                    if (
+                        latestTag
+                    ) {
+
+                        currentTag =
+                            latestTag;
+
+
+                        if (
+                            latestTag.active &&
+                            latestTag.owner_id ===
+                            session.user.id
+                        ) {
+
+                            hideAllCards();
+
+                            await loadOwnerProfile(
+                                session.user.id
+                            );
+                        }
+                    }
+                }
+            }
+
+
+            if (
+                event ===
+                "SIGNED_OUT"
+            ) {
+
+                if (
+                    currentTag
+                ) {
+
+                    await renderTagState();
+                }
+            }
+        }
     );
 
 
