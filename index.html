@@ -40,8 +40,7 @@
             border: 1px solid #e5e7eb;
             border-radius: 22px;
             padding: 24px;
-            box-shadow:
-                0 12px 40px rgba(0, 0, 0, 0.06);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.06);
         }
 
         .center {
@@ -219,8 +218,7 @@
 
         .input:focus {
             border-color: #111827;
-            box-shadow:
-                0 0 0 3px rgba(17, 24, 39, 0.08);
+            box-shadow: 0 0 0 3px rgba(17, 24, 39, 0.08);
         }
 
         .owner-label {
@@ -311,6 +309,7 @@
 
         </div>
 
+
         <div
             id="authCard"
             class="card hidden"
@@ -329,7 +328,7 @@
                     id="authSubtitle"
                     class="subtitle"
                 >
-                    Login to activate your E-Tag.
+                    Login to activate this E-Tag.
                 </p>
 
             </div>
@@ -409,6 +408,7 @@
 
         </div>
 
+
         <div
             id="alreadyActivatedCard"
             class="card hidden"
@@ -418,7 +418,7 @@
 
                 <h1 class="title">
                     E-Tag Already Activated
-                </1>
+                </h1>
 
                 <p class="subtitle">
                     This E-Tag has already been connected to an account.
@@ -439,6 +439,7 @@
             </div>
 
         </div>
+
 
         <div
             id="ownerProfileCard"
@@ -505,6 +506,7 @@
 
         </div>
 
+
         <div
             id="publicProfileCard"
             class="card hidden"
@@ -562,6 +564,7 @@
 
 </div>
 
+
 <script type="module">
 
     import {
@@ -571,6 +574,7 @@
 
     const SUPABASE_URL =
         "https://zuptxhcjzhqynrquyray.supabase.co";
+
 
     const SUPABASE_PUBLISHABLE_KEY =
         "sb_publishable_1sa0MtE83MZXETR5JLakJA_fRVrjDJI";
@@ -701,17 +705,11 @@
     function getTagCodeFromUrl() {
 
         const url =
-            new URL(
-                window.location.href
-            );
-
-
-        const pathname =
-            url.pathname;
+            new URL(window.location.href);
 
 
         const directMatch =
-            pathname.match(
+            url.pathname.match(
                 /\/id\/([^\/?#]+)\/?$/i
             );
 
@@ -745,99 +743,17 @@
         }
 
 
-        const idParam =
-            url.searchParams.get("id");
-
-
-        if (
-            idParam
-        ) {
-
-            return decodeURIComponent(
-                idParam
-            )
-                .trim()
-                .toUpperCase();
-        }
-
-
         return null;
-    }
-
-
-    function canonicalTagUrl(
-        tagCode
-    ) {
-
-        return (
-            `${window.location.origin}` +
-            `/E-Tag/id/${encodeURIComponent(tagCode)}`
-        );
-    }
-
-
-    function cleanAuthCallbackUrl() {
-
-        const url =
-            new URL(
-                window.location.href
-            );
-
-
-        const tagCode =
-            url.searchParams.get("tag");
-
-
-        if (
-            !tagCode
-        ) {
-
-            return null;
-        }
-
-
-        const cleanTag =
-            decodeURIComponent(
-                tagCode
-            )
-                .trim()
-                .toUpperCase();
-
-
-        window.history.replaceState(
-            {},
-            document.title,
-            canonicalTagUrl(
-                cleanTag
-            )
-        );
-
-
-        return cleanTag;
     }
 
 
     function hideAllCards() {
 
-        activationCard.classList.add(
-            "hidden"
-        );
-
-        authCard.classList.add(
-            "hidden"
-        );
-
-        alreadyActivatedCard.classList.add(
-            "hidden"
-        );
-
-        ownerProfileCard.classList.add(
-            "hidden"
-        );
-
-        publicProfileCard.classList.add(
-            "hidden"
-        );
+        activationCard.classList.add("hidden");
+        authCard.classList.add("hidden");
+        alreadyActivatedCard.classList.add("hidden");
+        ownerProfileCard.classList.add("hidden");
+        publicProfileCard.classList.add("hidden");
     }
 
 
@@ -935,14 +851,8 @@
 
     async function renderTagState() {
 
-        loadingView.classList.add(
-            "hidden"
-        );
-
-        mainView.classList.remove(
-            "hidden"
-        );
-
+        loadingView.classList.add("hidden");
+        mainView.classList.remove("hidden");
 
         hideAllCards();
 
@@ -963,9 +873,7 @@
             !currentTag.owner_id
         ) {
 
-            activationCard.classList.remove(
-                "hidden"
-            );
+            activationCard.classList.remove("hidden");
 
             return;
         }
@@ -973,8 +881,7 @@
 
         if (
             user &&
-            user.id ===
-            currentTag.owner_id
+            user.id === currentTag.owner_id
         ) {
 
             await loadOwnerProfile(
@@ -1002,7 +909,7 @@
             await supabase
                 .from("profiles")
                 .select(
-                    "id,display_name,bio,phone,whatsapp,email,template,profile_type,avatar_url"
+                    "id,display_name,bio,phone,whatsapp,email,profile_type,avatar_url,created_at,updated_at,template"
                 )
                 .eq(
                     "id",
@@ -1222,9 +1129,7 @@
         } else {
 
             elements.avatar.textContent =
-                getInitials(
-                    name
-                );
+                getInitials(name);
         }
 
 
@@ -1262,7 +1167,6 @@
 
             elements.whatsapp.href =
                 `https://wa.me/${whatsappNumber}`;
-
 
             elements.whatsapp.classList.remove(
                 "hidden"
@@ -1306,9 +1210,7 @@
             name
                 .trim()
                 .split(/\s+/)
-                .filter(
-                    Boolean
-                );
+                .filter(Boolean);
 
 
         if (
@@ -1324,19 +1226,14 @@
         ) {
 
             return words[0]
-                .substring(
-                    0,
-                    2
-                )
+                .substring(0, 2)
                 .toUpperCase();
         }
 
 
         return (
             words[0][0] +
-            words[
-                words.length - 1
-            ][0]
+            words[words.length - 1][0]
         ).toUpperCase();
     }
 
@@ -1346,22 +1243,10 @@
     ) {
 
         return String(value)
-            .replaceAll(
-                "&",
-                "&amp;"
-            )
-            .replaceAll(
-                '"',
-                "&quot;"
-            )
-            .replaceAll(
-                "<",
-                "&lt;"
-            )
-            .replaceAll(
-                ">",
-                "&gt;"
-            );
+            .replaceAll("&", "&amp;")
+            .replaceAll('"', "&quot;")
+            .replaceAll("<", "&lt;")
+            .replaceAll(">", "&gt;");
     }
 
 
@@ -1373,26 +1258,12 @@
             mode;
 
 
-        activationCard.classList.add(
-            "hidden"
-        );
+        activationCard.classList.add("hidden");
+        alreadyActivatedCard.classList.add("hidden");
+        ownerProfileCard.classList.add("hidden");
+        publicProfileCard.classList.add("hidden");
 
-        alreadyActivatedCard.classList.add(
-            "hidden"
-        );
-
-        ownerProfileCard.classList.add(
-            "hidden"
-        );
-
-        publicProfileCard.classList.add(
-            "hidden"
-        );
-
-
-        authCard.classList.remove(
-            "hidden"
-        );
+        authCard.classList.remove("hidden");
 
 
         if (
@@ -1491,8 +1362,7 @@
 
 
                 if (
-                    password !==
-                    confirmPassword
+                    password !== confirmPassword
                 ) {
 
                     showMessage(
@@ -1560,42 +1430,43 @@
                     "success"
                 );
 
-            } else {
-
-                const {
-                    data,
-                    error
-                } =
-                    await supabase.auth.signInWithPassword(
-                        {
-                            email,
-                            password
-                        }
-                    );
+                return;
+            }
 
 
-                if (
-                    error
-                ) {
-
-                    showMessage(
-                        authMessage,
-                        error.message,
-                        "error"
-                    );
-
-                    return;
-                }
+            const {
+                data,
+                error
+            } =
+                await supabase.auth.signInWithPassword(
+                    {
+                        email,
+                        password
+                    }
+                );
 
 
-                if (
-                    data.user
-                ) {
+            if (
+                error
+            ) {
 
-                    await continueAfterLogin(
-                        data.user.id
-                    );
-                }
+                showMessage(
+                    authMessage,
+                    error.message,
+                    "error"
+                );
+
+                return;
+            }
+
+
+            if (
+                data.user
+            ) {
+
+                await continueAfterLogin(
+                    data.user.id
+                );
             }
 
         } catch (
@@ -1619,7 +1490,6 @@
 
             authSubmitButton.disabled =
                 false;
-
 
             authSubmitButton.textContent =
                 authMode === "signup"
@@ -1684,8 +1554,7 @@
         if (
             latestTag.active &&
             latestTag.owner_id &&
-            latestTag.owner_id !==
-                userId
+            latestTag.owner_id !== userId
         ) {
 
             hideAllCards();
@@ -1700,23 +1569,74 @@
 
         if (
             latestTag.active &&
-            latestTag.owner_id ===
-                userId
+            latestTag.owner_id === userId
         ) {
 
-            hideAllCards();
+            const profile =
+                await getProfile(userId);
 
-            await loadOwnerProfile(
-                userId
+
+            if (
+                profile
+            ) {
+
+                hideAllCards();
+
+                renderProfile(
+                    profile,
+                    {
+                        avatar:
+                            ownerAvatar,
+                        name:
+                            ownerName,
+                        bio:
+                            ownerBio,
+                        phone:
+                            ownerPhone,
+                        whatsapp:
+                            ownerWhatsapp,
+                        email:
+                            ownerEmail
+                    }
+                );
+
+                ownerProfileCard.classList.remove(
+                    "hidden"
+                );
+
+                return;
+            }
+
+
+            const created =
+                await ensureProfile(
+                    userId
+                );
+
+
+            if (
+                created
+            ) {
+
+                await loadOwnerProfile(
+                    userId
+                );
+
+                return;
+            }
+
+
+            showMessage(
+                authMessage,
+                "Your E-Tag is active, but your public profile could not be created.",
+                "error"
             );
 
             return;
         }
 
 
-        await claimTag(
-            userId
-        );
+        await claimTag(userId);
     }
 
 
@@ -1764,8 +1684,7 @@
         if (
             latestTag.active &&
             latestTag.owner_id &&
-            latestTag.owner_id !==
-                userId
+            latestTag.owner_id !== userId
         ) {
 
             hideAllCards();
@@ -1780,13 +1699,10 @@
 
         if (
             latestTag.active &&
-            latestTag.owner_id ===
-                userId
+            latestTag.owner_id === userId
         ) {
 
-            hideAllCards();
-
-            await loadOwnerProfile(
+            await continueAfterLogin(
                 userId
             );
 
@@ -1845,7 +1761,9 @@
             !data
         ) {
 
-            await loadTag();
+            await loadTag(
+                currentTag.tag_code
+            );
 
             return;
         }
@@ -1894,13 +1812,8 @@
         } =
             await supabase
                 .from("profiles")
-                .select(
-                    "id"
-                )
-                .eq(
-                    "id",
-                    userId
-                )
+                .select("id")
+                .eq("id", userId)
                 .maybeSingle();
 
 
@@ -1911,6 +1824,12 @@
             console.error(
                 "Profile lookup error:",
                 lookupError
+            );
+
+            showMessage(
+                authMessage,
+                `Profile lookup failed: ${lookupError.message}${lookupError.code ? ` (code: ${lookupError.code})` : ""}`,
+                "error"
             );
 
             return false;
@@ -1945,16 +1864,16 @@
                             "",
                         email:
                             "",
-                        template:
-                            "Boy",
                         profile_type:
-                            "Boy",
+                            "personal",
                         avatar_url:
                             null,
                         created_at:
                             new Date().toISOString(),
                         updated_at:
-                            new Date().toISOString()
+                            new Date().toISOString(),
+                        template:
+                            "boy"
                     }
                 );
 
@@ -1967,6 +1886,7 @@
                 "Profile creation error:",
                 insertError
             );
+
 
             showMessage(
                 authMessage,
@@ -1994,9 +1914,7 @@
         "click",
         () => {
 
-            showAuth(
-                "login"
-            );
+            showAuth("login");
         }
     );
 
@@ -2005,9 +1923,7 @@
         "click",
         () => {
 
-            showAuth(
-                "signup"
-            );
+            showAuth("signup");
         }
     );
 
@@ -2022,9 +1938,7 @@
         "click",
         async () => {
 
-            authCard.classList.add(
-                "hidden"
-            );
+            authCard.classList.add("hidden");
 
             await renderTagState();
         }
@@ -2052,42 +1966,9 @@
                 currentTag
             ) {
 
-                const {
-                    data: latestTag
-                } =
-                    await supabase
-                        .from("nfc_tags")
-                        .select(
-                            "id,tag_code,owner_id,active"
-                        )
-                        .eq(
-                            "tag_code",
-                            currentTag.tag_code
-                        )
-                        .maybeSingle();
-
-
-                if (
-                    latestTag
-                ) {
-
-                    currentTag =
-                        latestTag;
-
-
-                    if (
-                        latestTag.active &&
-                        latestTag.owner_id ===
-                            session.user.id
-                    ) {
-
-                        hideAllCards();
-
-                        await loadOwnerProfile(
-                            session.user.id
-                        );
-                    }
-                }
+                await continueAfterLogin(
+                    session.user.id
+                );
             }
 
 
@@ -2095,19 +1976,22 @@
                 event === "SIGNED_OUT"
             ) {
 
-                if (
-                    currentTag
-                ) {
-
-                    await renderTagState();
-                }
+                await renderTagState();
             }
         }
     );
 
 
+    const initialUrl =
+        new URL(
+            window.location.href
+        );
+
+
     const callbackTag =
-        cleanAuthCallbackUrl();
+        initialUrl.searchParams.get(
+            "tag"
+        );
 
 
     if (
@@ -2115,7 +1999,11 @@
     ) {
 
         await loadTag(
-            callbackTag
+            decodeURIComponent(
+                callbackTag
+            )
+                .trim()
+                .toUpperCase()
         );
 
     } else {
