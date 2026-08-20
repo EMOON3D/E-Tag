@@ -25,6 +25,7 @@
                 BlinkMacSystemFont,
                 "Segoe UI",
                 sans-serif;
+
             background: #f5f7fb;
             color: #111827;
         }
@@ -900,9 +901,7 @@
             error
         } =
             await supabase
-                .from(
-                    "nfc_tags"
-                )
+                .from("nfc_tags")
                 .select(
                     "id,tag_code,owner_id,active"
                 )
@@ -972,22 +971,9 @@
 
 
         const {
-            data: sessionData,
-            error:
-                sessionError
+            data: sessionData
         } =
             await supabase.auth.getSession();
-
-
-        if (
-            sessionError
-        ) {
-
-            console.error(
-                "Session error:",
-                sessionError
-            );
-        }
 
 
         const user =
@@ -1037,9 +1023,7 @@
             error
         } =
             await supabase
-                .from(
-                    "profiles"
-                )
+                .from("profiles")
                 .select(
                     "id,display_name,bio,phone,whatsapp,email,template,profile_type,avatar_url"
                 )
@@ -1081,6 +1065,53 @@
             !profile
         ) {
 
+            const created =
+                await ensureProfile(
+                    ownerId
+                );
+
+
+            if (
+                created
+            ) {
+
+                const newProfile =
+                    await getProfile(
+                        ownerId
+                    );
+
+
+                if (
+                    newProfile
+                ) {
+
+                    renderProfile(
+                        newProfile,
+                        {
+                            avatar:
+                                ownerAvatar,
+                            name:
+                                ownerName,
+                            bio:
+                                ownerBio,
+                            phone:
+                                ownerPhone,
+                            whatsapp:
+                                ownerWhatsapp,
+                            email:
+                                ownerEmail
+                        }
+                    );
+
+                    ownerProfileCard.classList.remove(
+                        "hidden"
+                    );
+
+                    return;
+                }
+            }
+
+
             ownerProfileCard.classList.remove(
                 "hidden"
             );
@@ -1089,7 +1120,7 @@
                 "Your E-Tag";
 
             ownerBio.textContent =
-                "Your profile has not been created yet.";
+                "Your public identity profile has not been created yet.";
 
             ownerAvatar.textContent =
                 "?";
@@ -1441,7 +1472,6 @@
         const email =
             emailInput.value.trim();
 
-
         const password =
             passwordInput.value;
 
@@ -1610,7 +1640,7 @@
             showMessage(
                 authMessage,
                 error.message ||
-                    "Authentication failed.",
+                "Authentication failed.",
                 "error"
             );
 
@@ -1638,9 +1668,7 @@
             error
         } =
             await supabase
-                .from(
-                    "nfc_tags"
-                )
+                .from("nfc_tags")
                 .select(
                     "id,tag_code,owner_id,active"
                 )
@@ -1728,13 +1756,10 @@
 
         const {
             data: latestTag,
-            error:
-                latestTagError
+            error
         } =
             await supabase
-                .from(
-                    "nfc_tags"
-                )
+                .from("nfc_tags")
                 .select(
                     "id,tag_code,owner_id,active"
                 )
@@ -1746,12 +1771,12 @@
 
 
         if (
-            latestTagError
+            error
         ) {
 
             showMessage(
                 authMessage,
-                `Unable to verify this E-Tag: ${latestTagError.message}`,
+                `Unable to verify this E-Tag: ${error.message}`,
                 "error"
             );
 
@@ -1816,9 +1841,7 @@
                 updateError
         } =
             await supabase
-                .from(
-                    "nfc_tags"
-                )
+                .from("nfc_tags")
                 .update(
                     {
                         owner_id:
@@ -1879,13 +1902,27 @@
             data;
 
 
-        await ensureProfile(
-            userId
-        );
+        const profileCreated =
+            await ensureProfile(
+                userId
+            );
+
+
+        if (
+            !profileCreated
+        ) {
+
+            showMessage(
+                authMessage,
+                "E-Tag activated, but the public profile could not be created.",
+                "error"
+            );
+
+            return;
+        }
 
 
         hideAllCards();
-
 
         await loadOwnerProfile(
             userId
@@ -1898,14 +1935,12 @@
     ) {
 
         const {
-            data: profile,
+            data: existingProfile,
             error:
-                profileLookupError
+                lookupError
         } =
             await supabase
-                .from(
-                    "profiles"
-                )
+                .from("profiles")
                 .select(
                     "id"
                 )
@@ -1917,53 +1952,81 @@
 
 
         if (
-            profileLookupError
+            lookupError
         ) {
 
             console.error(
                 "Profile lookup error:",
-                profileLookupError
+                lookupError
             );
 
-            return;
+            return false;
         }
 
 
         if (
-            profile
+            existingProfile
         ) {
 
-            return;
+            return true;
         }
 
 
         const {
             error:
-                profileInsertError
+                insertError
         } =
             await supabase
-                .from(
-                    "profiles"
-                )
+                .from("profiles")
                 .insert(
                     {
                         id:
                             userId,
+                        display_name:
+                            "",
+                        bio:
+                            "",
+                        phone:
+                            "",
+                        whatsapp:
+                            "",
+                        email:
+                            "",
                         template:
-                            "Boy"
+                            "Boy",
+                        profile_type:
+                            "Boy",
+                        avatar_url:
+                            null,
+                        created_at:
+                            new Date().toISOString(),
+                        updated_at:
+                            new Date().toISOString()
                     }
                 );
 
 
         if (
-            profileInsertError
+            insertError
         ) {
 
             console.error(
                 "Profile creation error:",
-                profileInsertError
+                insertError
             );
+
+
+            showMessage(
+                authMessage,
+                `Profile creation failed: ${insertError.message}${insertError.code ? ` (code: ${insertError.code})` : ""}`,
+                "error"
+            );
+
+            return false;
         }
+
+
+        return true;
     }
 
 
@@ -2043,9 +2106,7 @@
                     data: latestTag
                 } =
                     await supabase
-                        .from(
-                            "nfc_tags"
-                        )
+                        .from("nfc_tags")
                         .select(
                             "id,tag_code,owner_id,active"
                         )
