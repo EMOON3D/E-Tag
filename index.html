@@ -25,7 +25,6 @@
                 BlinkMacSystemFont,
                 "Segoe UI",
                 sans-serif;
-
             background: #f5f7fb;
             color: #111827;
         }
@@ -97,14 +96,20 @@
             color: #111827;
         }
 
-        .danger {
-            background: #fee2e2;
-            color: #991b1b;
-        }
-
         .button:disabled {
             opacity: 0.55;
             cursor: not-allowed;
+        }
+
+        .link-button {
+            width: 100%;
+            border: 0;
+            background: transparent;
+            color: #2563eb;
+            padding: 10px 5px 0;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
         }
 
         .message {
@@ -252,6 +257,7 @@
         }
 
         @media (max-width: 480px) {
+
             .app {
                 width: min(100% - 16px, 520px);
                 padding-top: 16px;
@@ -284,8 +290,6 @@
         id="mainView"
         class="hidden"
     >
-
-        <!-- UNACTIVATED TAG -->
 
         <div
             id="activationCard"
@@ -332,8 +336,6 @@
 
         </div>
 
-
-        <!-- LOGIN / SIGNUP -->
 
         <div
             id="authCard"
@@ -422,6 +424,15 @@
 
 
                 <button
+                    id="forgotPasswordButton"
+                    class="link-button"
+                    type="button"
+                >
+                    Forgot Password?
+                </button>
+
+
+                <button
                     id="authBackButton"
                     class="button secondary"
                     type="button"
@@ -439,8 +450,6 @@
 
         </div>
 
-
-        <!-- EDIT PROFILE LOGIN -->
 
         <div
             id="editLoginCard"
@@ -509,6 +518,15 @@
 
 
                 <button
+                    id="editForgotPasswordButton"
+                    class="link-button"
+                    type="button"
+                >
+                    Forgot Password?
+                </button>
+
+
+                <button
                     id="editBackButton"
                     class="button secondary"
                     type="button"
@@ -527,7 +545,69 @@
         </div>
 
 
-        <!-- ALREADY ACTIVATED -->
+        <div
+            id="forgotPasswordCard"
+            class="card hidden"
+        >
+
+            <div class="center">
+
+                <h1 class="title">
+                    Reset Password
+                </h1>
+
+                <p class="subtitle">
+                    Enter your account email and we will send you a password reset link.
+                </p>
+
+            </div>
+
+
+            <div class="section">
+
+                <div class="input-group">
+
+                    <label for="resetEmail">
+                        Email
+                    </label>
+
+                    <input
+                        id="resetEmail"
+                        class="input"
+                        type="email"
+                        autocomplete="email"
+                    >
+
+                </div>
+
+
+                <button
+                    id="sendResetButton"
+                    class="button primary"
+                    type="button"
+                >
+                    Send Reset Email
+                </button>
+
+
+                <button
+                    id="resetBackButton"
+                    class="button secondary"
+                    type="button"
+                >
+                    Back
+                </button>
+
+
+                <div
+                    id="resetMessage"
+                    class="message"
+                ></div>
+
+            </div>
+
+        </div>
+
 
         <div
             id="alreadyActivatedCard"
@@ -561,8 +641,6 @@
 
         </div>
 
-
-        <!-- OWNER PROFILE -->
 
         <div
             id="ownerProfileCard"
@@ -645,8 +723,6 @@
 
         </div>
 
-
-        <!-- PUBLIC PROFILE -->
 
         <div
             id="publicProfileCard"
@@ -819,6 +895,11 @@
             "authSubmitButton"
         );
 
+    const forgotPasswordButton =
+        document.getElementById(
+            "forgotPasswordButton"
+        );
+
     const authBackButton =
         document.getElementById(
             "authBackButton"
@@ -854,6 +935,11 @@
             "editLoginButton"
         );
 
+    const editForgotPasswordButton =
+        document.getElementById(
+            "editForgotPasswordButton"
+        );
+
     const editBackButton =
         document.getElementById(
             "editBackButton"
@@ -862,6 +948,31 @@
     const editLoginMessage =
         document.getElementById(
             "editLoginMessage"
+        );
+
+    const forgotPasswordCard =
+        document.getElementById(
+            "forgotPasswordCard"
+        );
+
+    const resetEmail =
+        document.getElementById(
+            "resetEmail"
+        );
+
+    const sendResetButton =
+        document.getElementById(
+            "sendResetButton"
+        );
+
+    const resetBackButton =
+        document.getElementById(
+            "resetBackButton"
+        );
+
+    const resetMessage =
+        document.getElementById(
+            "resetMessage"
         );
 
     const alreadyActivatedCard =
@@ -914,11 +1025,6 @@
             "ownerEmail"
         );
 
-    const editProfileButtonOwner =
-        document.getElementById(
-            "editProfileButtonOwner"
-        );
-
     const logoutButton =
         document.getElementById(
             "logoutButton"
@@ -962,6 +1068,11 @@
     const editProfileButtonPublic =
         document.getElementById(
             "editProfileButtonPublic"
+        );
+
+    const editProfileButtonOwner =
+        document.getElementById(
+            "editProfileButtonOwner"
         );
 
 
@@ -1032,6 +1143,10 @@
         );
 
         editLoginCard.classList.add(
+            "hidden"
+        );
+
+        forgotPasswordCard.classList.add(
             "hidden"
         );
 
@@ -1299,7 +1414,7 @@
         if (
             user &&
             user.id ===
-            currentTag.owner_id
+                currentTag.owner_id
         ) {
 
             await loadOwnerProfile(
@@ -1515,7 +1630,7 @@
             profile.whatsapp
         ) {
 
-            const whatsappNumber =
+            const number =
                 profile.whatsapp.replace(
                     /\D/g,
                     ""
@@ -1523,7 +1638,7 @@
 
 
             elements.whatsapp.href =
-                `https://wa.me/${whatsappNumber}`;
+                `https://wa.me/${number}`;
 
             elements.whatsapp.classList.remove(
                 "hidden"
@@ -1575,6 +1690,10 @@
             "hidden"
         );
 
+        forgotPasswordCard.classList.add(
+            "hidden"
+        );
+
         alreadyActivatedCard.classList.add(
             "hidden"
         );
@@ -1607,6 +1726,10 @@
             authSubmitButton.textContent =
                 "Create Account";
 
+            forgotPasswordButton.classList.add(
+                "hidden"
+            );
+
             confirmPasswordGroup.classList.remove(
                 "hidden"
             );
@@ -1621,6 +1744,10 @@
 
             authSubmitButton.textContent =
                 "Login";
+
+            forgotPasswordButton.classList.remove(
+                "hidden"
+            );
 
             confirmPasswordGroup.classList.add(
                 "hidden"
@@ -1665,6 +1792,31 @@
 
 
         editEmail.focus();
+    }
+
+
+    function showForgotPassword(
+        email = ""
+    ) {
+
+        hideAllCards();
+
+
+        forgotPasswordCard.classList.remove(
+            "hidden"
+        );
+
+
+        clearMessage(
+            resetMessage
+        );
+
+
+        resetEmail.value =
+            email;
+
+
+        resetEmail.focus();
     }
 
 
@@ -1854,98 +2006,6 @@
     }
 
 
-    async function continueAfterLogin(
-        userId
-    ) {
-
-        const {
-            data: latestTag,
-            error
-        } =
-            await supabase
-                .from(
-                    "nfc_tags"
-                )
-                .select(
-                    "id,tag_code,owner_id,active"
-                )
-                .eq(
-                    "tag_code",
-                    currentTag.tag_code
-                )
-                .maybeSingle();
-
-
-        if (
-            error
-        ) {
-
-            showMessage(
-                authMessage,
-                `Unable to verify this E-Tag: ${error.message}`,
-                "error"
-            );
-
-            return;
-        }
-
-
-        if (
-            !latestTag
-        ) {
-
-            showMessage(
-                authMessage,
-                "E-Tag not found.",
-                "error"
-            );
-
-            return;
-        }
-
-
-        currentTag =
-            latestTag;
-
-
-        if (
-            latestTag.active &&
-            latestTag.owner_id &&
-            latestTag.owner_id !==
-                userId
-        ) {
-
-            hideAllCards();
-
-            await loadPublicProfile(
-                latestTag.owner_id
-            );
-
-            return;
-        }
-
-
-        if (
-            latestTag.active &&
-            latestTag.owner_id ===
-                userId
-        ) {
-
-            hideAllCards();
-
-            window.location.href =
-                "/E-Tag/dashboard.html";
-
-            return;
-        }
-
-
-        await claimTag(
-            userId
-        );
-    }
-
-
     async function submitEditLogin() {
 
         const email =
@@ -2124,12 +2184,6 @@
             error
         ) {
 
-            console.error(
-                "Edit login error:",
-                error
-            );
-
-
             showMessage(
                 editLoginMessage,
                 error.message ||
@@ -2145,6 +2199,183 @@
             editLoginButton.textContent =
                 "Login to Edit";
         }
+    }
+
+
+    async function sendPasswordReset() {
+
+        const email =
+            resetEmail.value.trim();
+
+
+        if (
+            !email
+        ) {
+
+            showMessage(
+                resetMessage,
+                "Please enter your email.",
+                "error"
+            );
+
+            return;
+        }
+
+
+        sendResetButton.disabled =
+            true;
+
+        sendResetButton.textContent =
+            "Sending...";
+
+
+        try {
+
+            const redirectUrl =
+                `${window.location.origin}/E-Tag/password-reset.html`;
+
+
+            const {
+                error
+            } =
+                await supabase.auth.resetPasswordForEmail(
+                    email,
+                    {
+                        redirectTo:
+                            redirectUrl
+                    }
+                );
+
+
+            if (
+                error
+            ) {
+
+                showMessage(
+                    resetMessage,
+                    error.message,
+                    "error"
+                );
+
+                return;
+            }
+
+
+            showMessage(
+                resetMessage,
+                "Password reset email sent. Check your inbox and spam folder.",
+                "success"
+            );
+
+        } catch (
+            error
+        ) {
+
+            showMessage(
+                resetMessage,
+                error.message ||
+                    "Unable to send password reset email.",
+                "error"
+            );
+
+        } finally {
+
+            sendResetButton.disabled =
+                false;
+
+            sendResetButton.textContent =
+                "Send Reset Email";
+        }
+    }
+
+
+    async function continueAfterLogin(
+        userId
+    ) {
+
+        const {
+            data: latestTag,
+            error
+        } =
+            await supabase
+                .from(
+                    "nfc_tags"
+                )
+                .select(
+                    "id,tag_code,owner_id,active"
+                )
+                .eq(
+                    "tag_code",
+                    currentTag.tag_code
+                )
+                .maybeSingle();
+
+
+        if (
+            error
+        ) {
+
+            showMessage(
+                authMessage,
+                `Unable to verify this E-Tag: ${error.message}`,
+                "error"
+            );
+
+            return;
+        }
+
+
+        if (
+            !latestTag
+        ) {
+
+            showMessage(
+                authMessage,
+                "E-Tag not found.",
+                "error"
+            );
+
+            return;
+        }
+
+
+        currentTag =
+            latestTag;
+
+
+        if (
+            latestTag.active &&
+            latestTag.owner_id &&
+            latestTag.owner_id !==
+                userId
+        ) {
+
+            hideAllCards();
+
+            await loadPublicProfile(
+                latestTag.owner_id
+            );
+
+            return;
+        }
+
+
+        if (
+            latestTag.active &&
+            latestTag.owner_id ===
+                userId
+        ) {
+
+            window.location.href =
+                "/E-Tag/dashboard.html";
+
+            return;
+        }
+
+
+        await claimTag(
+            userId
+        );
     }
 
 
@@ -2444,6 +2675,34 @@
     );
 
 
+    forgotPasswordButton.addEventListener(
+        "click",
+        () => {
+
+            showForgotPassword(
+                emailInput.value.trim()
+            );
+        }
+    );
+
+
+    editForgotPasswordButton.addEventListener(
+        "click",
+        () => {
+
+            showForgotPassword(
+                editEmail.value.trim()
+            );
+        }
+    );
+
+
+    sendResetButton.addEventListener(
+        "click",
+        sendPasswordReset
+    );
+
+
     authBackButton.addEventListener(
         "click",
         async () => {
@@ -2454,12 +2713,6 @@
 
             await renderTagState();
         }
-    );
-
-
-    editProfileButtonPublic.addEventListener(
-        "click",
-        showEditLogin
     );
 
 
@@ -2476,9 +2729,22 @@
     );
 
 
-    editLoginButton.addEventListener(
+    resetBackButton.addEventListener(
         "click",
-        submitEditLogin
+        async () => {
+
+            forgotPasswordCard.classList.add(
+                "hidden"
+            );
+
+            await renderTagState();
+        }
+    );
+
+
+    editProfileButtonPublic.addEventListener(
+        "click",
+        showEditLogin
     );
 
 
@@ -2489,6 +2755,12 @@
             window.location.href =
                 "/E-Tag/dashboard.html";
         }
+    );
+
+
+    editLoginButton.addEventListener(
+        "click",
+        submitEditLogin
     );
 
 
@@ -2541,11 +2813,8 @@
                             session.user.id
                     ) {
 
-                        hideAllCards();
-
-                        await loadOwnerProfile(
-                            session.user.id
-                        );
+                        window.location.href =
+                            "/E-Tag/dashboard.html";
                     }
                 }
             }
@@ -2566,14 +2835,14 @@
     );
 
 
-    const url =
+    const initialUrl =
         new URL(
             window.location.href
         );
 
 
     const callbackTag =
-        url.searchParams.get(
+        initialUrl.searchParams.get(
             "tag"
         );
 
