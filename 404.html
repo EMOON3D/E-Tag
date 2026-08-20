@@ -1,65 +1,57 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
+    <meta charset="UTF-8">
 
-<meta charset="UTF-8">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
-<meta
-  name="viewport"
-  content="width=device-width, initial-scale=1.0"
->
+    <title>E-Tag</title>
 
-<title>E-Tag</title>
+    <script>
+        (function () {
 
-<script>
+            const path =
+                window.location.pathname;
 
-(function () {
+            const base =
+                "/E-Tag/";
 
-  const path =
-    window.location.pathname;
+            if (
+                path.startsWith(
+                    base + "id/"
+                )
+            ) {
 
-  const search =
-    window.location.search;
+                const tag =
+                    path.substring(
+                        (base + "id/").length
+                    );
 
-  const hash =
-    window.location.hash;
+                const target =
+                    `${base}?tag=${encodeURIComponent(
+                        tag
+                    )}`;
 
+                window.location.replace(
+                    target
+                );
 
-  /*
-    Example:
-
-    /E-Tag/id/ABX729
-
-    becomes:
-
-    /E-Tag/?route=/E-Tag/id/ABX729
-  */
-
-  const target =
-    "/E-Tag/?route=" +
-    encodeURIComponent(
-      path +
-      search +
-      hash
-    );
+                return;
+            }
 
 
-  window.location.replace(
-    target
-  );
+            window.location.replace(
+                base
+            );
 
-})();
-
-</script>
-
+        })();
+    </script>
 </head>
 
-
 <body>
-
-Loading E-Tag...
-
+    Loading E-Tag...
 </body>
-
 </html>
