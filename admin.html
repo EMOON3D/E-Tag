@@ -1,1417 +1,1201 @@
-```html
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
+    <meta charset="UTF-8">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
-<meta charset="UTF-8">
+    <title>E-Tag Admin</title>
 
-<meta
-  name="viewport"
-  content="width=device-width, initial-scale=1.0"
->
+    <style>
+        * {
+            box-sizing: border-box;
+        }
 
-<title>E-Tag Admin</title>
+        body {
+            margin: 0;
+            font-family:
+                Inter,
+                system-ui,
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                sans-serif;
 
-<style>
+            background: #f5f7fb;
+            color: #111827;
+        }
 
-* {
-  box-sizing: border-box;
-}
+        .container {
+            width: min(100% - 32px, 900px);
+            margin: 0 auto;
+            padding: 40px 0;
+        }
 
-body {
-  margin: 0;
-  font-family: Arial, Helvetica, sans-serif;
-  background: #f4f6f8;
-  color: #111827;
-}
+        .header {
+            margin-bottom: 28px;
+        }
 
-.container {
-  width: 100%;
-  max-width: 560px;
-  margin: auto;
-  padding: 25px 18px 50px;
-}
+        .header h1 {
+            margin: 0 0 8px;
+            font-size: 32px;
+            line-height: 1.2;
+        }
 
-.logo {
-  text-align: center;
-  font-size: 34px;
-  font-weight: 800;
-  margin-top: 20px;
-}
+        .header p {
+            margin: 0;
+            color: #6b7280;
+        }
 
-.tagline {
-  text-align: center;
-  color: #6b7280;
-  margin: 6px 0 25px;
-}
+        .card {
+            background: #ffffff;
+            border: 1px solid #e5e7eb;
+            border-radius: 18px;
+            padding: 24px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.04);
+        }
 
-.card {
-  background: white;
-  border-radius: 18px;
-  padding: 22px;
-  margin-bottom: 18px;
-  box-shadow: 0 5px 25px rgba(0,0,0,.06);
-}
+        .card h2 {
+            margin: 0 0 18px;
+            font-size: 20px;
+        }
 
-h2 {
-  margin: 0 0 18px;
-}
+        .form-group {
+            margin-bottom: 16px;
+        }
 
-label {
-  display: block;
-  margin: 15px 0 6px;
-  font-weight: 700;
-}
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 14px;
+            font-weight: 600;
+        }
 
-input {
-  width: 100%;
-  padding: 13px;
-  border: 1px solid #d1d5db;
-  border-radius: 10px;
-  font-size: 15px;
-  outline: none;
-}
+        .input-row {
+            display: flex;
+            gap: 10px;
+        }
 
-input:focus {
-  border-color: #111827;
-}
+        input {
+            width: 100%;
+            min-width: 0;
+            padding: 13px 14px;
+            border: 1px solid #d1d5db;
+            border-radius: 10px;
+            font-size: 16px;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
 
-button {
-  width: 100%;
-  border: 0;
-  border-radius: 10px;
-  padding: 14px;
-  margin-top: 16px;
-  background: #111827;
-  color: white;
-  font-size: 16px;
-  font-weight: 700;
-  cursor: pointer;
-}
+        input:focus {
+            border-color: #111827;
+            box-shadow: 0 0 0 3px rgba(17, 24, 39, 0.08);
+        }
 
-button:disabled {
-  opacity: .6;
-  cursor: not-allowed;
-}
+        button {
+            border: 0;
+            border-radius: 10px;
+            padding: 12px 16px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition:
+                transform 0.15s,
+                opacity 0.15s,
+                background 0.15s;
+        }
 
-.secondary {
-  background: #6b7280;
-}
+        button:hover {
+            transform: translateY(-1px);
+        }
 
-.danger {
-  background: #dc2626;
-}
+        button:disabled {
+            cursor: not-allowed;
+            opacity: 0.55;
+            transform: none;
+        }
 
-.message {
-  display: none;
-  margin-top: 14px;
-  padding: 12px;
-  border-radius: 10px;
-  font-size: 14px;
-  word-break: break-word;
-}
+        .primary-btn {
+            background: #111827;
+            color: #ffffff;
+        }
 
-.message.success {
-  display: block;
-  background: #ecfdf5;
-  color: #166534;
-}
+        .secondary-btn {
+            background: #eef2f7;
+            color: #111827;
+        }
 
-.message.error {
-  display: block;
-  background: #fef2f2;
-  color: #991b1b;
-}
+        .danger-btn {
+            background: #fee2e2;
+            color: #991b1b;
+        }
 
-.hidden {
-  display: none !important;
-}
+        .message {
+            display: none;
+            margin-top: 16px;
+            padding: 12px 14px;
+            border-radius: 10px;
+            font-size: 14px;
+            line-height: 1.5;
+        }
 
-.tag-list {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
+        .message.success {
+            display: block;
+            background: #ecfdf5;
+            color: #065f46;
+            border: 1px solid #a7f3d0;
+        }
 
-.tag {
-  border: 1px solid #e5e7eb;
-  border-radius: 12px;
-  padding: 15px;
-}
+        .message.error {
+            display: block;
+            background: #fef2f2;
+            color: #991b1b;
+            border: 1px solid #fecaca;
+        }
 
-.tag-code {
-  font-size: 18px;
-  font-weight: 800;
-  margin-bottom: 6px;
-}
+        .result {
+            display: none;
+            margin-top: 20px;
+            padding: 18px;
+            border: 1px solid #dbeafe;
+            background: #eff6ff;
+            border-radius: 14px;
+        }
 
-.tag-url {
-  color: #2563eb;
-  font-size: 13px;
-  word-break: break-all;
-  margin: 8px 0;
-}
+        .result.show {
+            display: block;
+        }
 
-.tag-status {
-  font-size: 13px;
-  font-weight: 700;
-}
+        .result-row {
+            margin-bottom: 14px;
+        }
 
-.active {
-  color: #16a34a;
-}
+        .result-row:last-child {
+            margin-bottom: 0;
+        }
 
-.inactive {
-  color: #dc2626;
-}
+        .result-label {
+            display: block;
+            font-size: 12px;
+            color: #6b7280;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
 
-.assigned {
-  color: #2563eb;
-}
+        .result-value {
+            font-weight: 600;
+            word-break: break-word;
+        }
 
-.unassigned {
-  color: #6b7280;
-}
+        .url-box {
+            display: flex;
+            gap: 8px;
+        }
 
-.url-box {
-  margin-top: 15px;
-  padding: 15px;
-  border-radius: 12px;
-  background: #f3f4f6;
-}
+        .url-box input {
+            background: #ffffff;
+        }
 
-.url-box strong {
-  display: block;
-  margin-bottom: 7px;
-}
+        .table-wrapper {
+            overflow-x: auto;
+        }
 
-.url {
-  font-size: 13px;
-  color: #2563eb;
-  word-break: break-all;
-  line-height: 1.5;
-}
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 650px;
+        }
 
-.row {
-  display: flex;
-  gap: 8px;
-}
+        th,
+        td {
+            padding: 13px 12px;
+            text-align: left;
+            border-bottom: 1px solid #e5e7eb;
+            font-size: 14px;
+        }
 
-.row button {
-  flex: 1;
-}
+        th {
+            font-size: 12px;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            background: #f9fafb;
+        }
 
-.count {
-  color: #6b7280;
-  font-size: 14px;
-  margin-bottom: 15px;
-}
+        .status {
+            display: inline-flex;
+            align-items: center;
+            padding: 5px 9px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 700;
+        }
 
-.loading {
-  text-align: center;
-  color: #6b7280;
-  padding: 20px;
-}
+        .status.active {
+            background: #dcfce7;
+            color: #166534;
+        }
 
-.empty {
-  text-align: center;
-  color: #6b7280;
-  padding: 20px 10px;
-}
+        .status.inactive {
+            background: #fef3c7;
+            color: #92400e;
+        }
 
-.refresh {
-  margin-top: 0;
-  margin-bottom: 15px;
-}
+        .table-actions {
+            display: flex;
+            gap: 7px;
+            flex-wrap: wrap;
+        }
 
-</style>
+        .small-btn {
+            padding: 8px 10px;
+            font-size: 12px;
+        }
 
+        .empty {
+            text-align: center;
+            padding: 30px 15px;
+            color: #6b7280;
+        }
+
+        .loading {
+            opacity: 0.65;
+            pointer-events: none;
+        }
+
+        .top-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 18px;
+        }
+
+        @media (max-width: 640px) {
+            .container {
+                width: min(100% - 20px, 900px);
+                padding: 24px 0;
+            }
+
+            .card {
+                padding: 18px;
+            }
+
+            .header h1 {
+                font-size: 27px;
+            }
+
+            .input-row {
+                flex-direction: column;
+            }
+
+            .url-box {
+                flex-direction: column;
+            }
+
+            .top-actions {
+                align-items: stretch;
+                flex-direction: column;
+            }
+        }
+    </style>
 </head>
-
 
 <body>
 
-
 <div class="container">
 
+    <header class="header">
+        <h1>E-Tag Admin</h1>
+        <p>Create and manage physical E-Tags.</p>
+    </header>
 
-<div class="logo">
-E-Tag
+
+    <!-- =====================================================
+         CREATE E-TAG
+         ===================================================== -->
+
+    <section class="card">
+
+        <h2>Generate E-Tag</h2>
+
+        <div class="form-group">
+
+            <label for="tagCode">
+                Tag ID
+            </label>
+
+            <div class="input-row">
+
+                <input
+                    id="tagCode"
+                    type="text"
+                    placeholder="ETAG-000002"
+                    maxlength="30"
+                    autocomplete="off"
+                    spellcheck="false"
+                >
+
+                <button
+                    id="generateBtn"
+                    class="primary-btn"
+                    type="button"
+                >
+                    Generate E-Tag
+                </button>
+
+            </div>
+
+        </div>
+
+        <div
+            id="message"
+            class="message"
+            role="alert"
+        ></div>
+
+
+        <!-- Generated Result -->
+
+        <div
+            id="result"
+            class="result"
+        >
+
+            <div class="result-row">
+
+                <span class="result-label">
+                    Tag ID
+                </span>
+
+                <div
+                    id="resultTagCode"
+                    class="result-value"
+                ></div>
+
+            </div>
+
+
+            <div class="result-row">
+
+                <span class="result-label">
+                    Status
+                </span>
+
+                <div
+                    id="resultStatus"
+                    class="result-value"
+                ></div>
+
+            </div>
+
+
+            <div class="result-row">
+
+                <span class="result-label">
+                    Public URL
+                </span>
+
+                <div class="url-box">
+
+                    <input
+                        id="resultUrl"
+                        type="text"
+                        readonly
+                    >
+
+                    <button
+                        id="copyBtn"
+                        type="button"
+                        class="secondary-btn"
+                    >
+                        Copy
+                    </button>
+
+                    <button
+                        id="openBtn"
+                        type="button"
+                        class="secondary-btn"
+                    >
+                        Open
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         EXISTING E-TAGS
+         ===================================================== -->
+
+    <section class="card">
+
+        <div class="top-actions">
+
+            <h2 style="margin: 0;">
+                Existing E-Tags
+            </h2>
+
+            <button
+                id="refreshBtn"
+                type="button"
+                class="secondary-btn"
+            >
+                Refresh
+            </button>
+
+        </div>
+
+
+        <div class="table-wrapper">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+                        <th>Tag ID</th>
+                        <th>Status</th>
+                        <th>Owner</th>
+                        <th>Created</th>
+                        <th>Actions</th>
+                    </tr>
+
+                </thead>
+
+                <tbody id="tagsTableBody">
+
+                    <tr>
+                        <td
+                            colspan="5"
+                            class="empty"
+                        >
+                            Loading E-Tags...
+                        </td>
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
 </div>
-
-
-<div class="tagline">
-Admin Tag Generator
-</div>
-
-
-
-<!-- =====================================================
-     CREATE TAG
-===================================================== -->
-
-<section class="card">
-
-
-<h2>
-Create New E-Tag
-</h2>
-
-
-<p
-style="
-color:#6b7280;
-font-size:14px;
-line-height:1.5;
-"
->
-Enter a unique Tag ID.
-The public E-Tag URL will be generated automatically.
-</p>
-
-
-<label>
-Unique Tag ID
-</label>
-
-
-<input
-id="tagCode"
-type="text"
-placeholder="Example: ETAG-000001"
-maxlength="30"
-autocomplete="off"
->
-
-
-<button
-id="createButton"
->
-Generate E-Tag
-</button>
-
-
-<div
-id="createMessage"
-class="message"
->
-</div>
-
-
-
-<!-- GENERATED URL -->
-
-<div
-id="generatedBox"
-class="url-box hidden"
->
-
-
-<strong>
-E-Tag URL
-</strong>
-
-
-<div
-id="generatedUrl"
-class="url"
->
-</div>
-
-
-<div class="row">
-
-
-<button
-id="copyButton"
-class="secondary"
->
-Copy URL
-</button>
-
-
-<button
-id="openButton"
->
-Open
-</button>
-
-
-</div>
-
-
-</div>
-
-
-</section>
-
-
-
-<!-- =====================================================
-     ALL TAGS
-===================================================== -->
-
-<section class="card">
-
-
-<h2>
-All E-Tags
-</h2>
-
-
-<div
-id="tagCount"
-class="count"
->
-Loading...
-</div>
-
-
-<button
-id="refreshButton"
-class="secondary refresh"
->
-Refresh
-</button>
-
-
-<div
-id="tagsContainer"
-class="tag-list"
->
-Loading...
-</div>
-
-
-</section>
-
-
-</div>
-
 
 
 <script type="module">
 
+    // =====================================================
+    // CONFIGURATION
+    // =====================================================
+    //
+    // IMPORTANT:
+    //
+    // Replace ONLY these values.
+    //
+    // NEVER put the Supabase service-role key here.
+    //
+    // The anon/publishable key is safe for browser use.
+    //
+    // =====================================================
 
-/* =====================================================
-   SUPABASE
-===================================================== */
+    const SUPABASE_URL =
+        "YOUR_SUPABASE_PROJECT_URL";
 
-import {
-  createClient
-} from
-"https://esm.sh/@supabase/supabase-js@2";
+    const SUPABASE_ANON_KEY =
+        "YOUR_SUPABASE_ANON_OR_PUBLISHABLE_KEY";
 
 
+    const CREATE_ETAG_FUNCTION_URL =
+        `${SUPABASE_URL}/functions/v1/create-etag`;
 
-/*
-   IMPORTANT
 
-   Use the SAME Supabase URL and ANON KEY
-   that you use inside supabase.js.
+    // =====================================================
+    // DOM ELEMENTS
+    // =====================================================
 
-   If your existing supabase.js already contains
-   these values, you can also import from "./supabase.js".
-*/
+    const tagCodeInput =
+        document.getElementById("tagCode");
 
+    const generateBtn =
+        document.getElementById("generateBtn");
 
-import {
-  supabase
-} from "./supabase.js";
+    const refreshBtn =
+        document.getElementById("refreshBtn");
 
+    const message =
+        document.getElementById("message");
 
+    const result =
+        document.getElementById("result");
 
-/* =====================================================
-   CONFIG
-===================================================== */
+    const resultTagCode =
+        document.getElementById("resultTagCode");
 
-const CREATE_FUNCTION =
-"create-etag";
+    const resultStatus =
+        document.getElementById("resultStatus");
 
+    const resultUrl =
+        document.getElementById("resultUrl");
 
-const SITE_URL =
-"https://emoon3d.github.io/E-Tag/";
+    const copyBtn =
+        document.getElementById("copyBtn");
 
+    const openBtn =
+        document.getElementById("openBtn");
 
+    const tagsTableBody =
+        document.getElementById("tagsTableBody");
 
-/* =====================================================
-   ELEMENTS
-===================================================== */
 
-const tagCodeInput =
-document.getElementById(
-  "tagCode"
-);
+    // =====================================================
+    // CONFIGURATION CHECK
+    // =====================================================
 
+    function isConfigurationValid() {
 
-const createButton =
-document.getElementById(
-  "createButton"
-);
-
-
-const createMessage =
-document.getElementById(
-  "createMessage"
-);
-
-
-const generatedBox =
-document.getElementById(
-  "generatedBox"
-);
-
-
-const generatedUrl =
-document.getElementById(
-  "generatedUrl"
-);
-
-
-const copyButton =
-document.getElementById(
-  "copyButton"
-);
-
-
-const openButton =
-document.getElementById(
-  "openButton"
-);
-
-
-const tagsContainer =
-document.getElementById(
-  "tagsContainer"
-);
-
-
-const tagCount =
-document.getElementById(
-  "tagCount"
-);
-
-
-const refreshButton =
-document.getElementById(
-  "refreshButton"
-);
-
-
-
-let lastGeneratedUrl = "";
-
-
-
-/* =====================================================
-   MESSAGE
-===================================================== */
-
-function showMessage(
-  element,
-  text,
-  type
-) {
-
-  element.textContent =
-    text;
-
-  element.className =
-    "message " + type;
-
-}
-
-
-
-function hideMessage(
-  element
-) {
-
-  element.textContent =
-    "";
-
-  element.className =
-    "message";
-
-}
-
-
-
-/* =====================================================
-   NORMALIZE TAG
-===================================================== */
-
-function normalizeTagCode(
-  value
-) {
-
-  return String(
-    value || ""
-  )
-    .trim()
-    .toUpperCase();
-
-}
-
-
-
-/* =====================================================
-   VALIDATE TAG
-===================================================== */
-
-function validateTagCode(
-  tagCode
-) {
-
-
-  if (!tagCode) {
-
-    return "Tag ID is required.";
-
-  }
-
-
-  if (
-    !/^[A-Z0-9_-]+$/.test(
-      tagCode
-    )
-  ) {
-
-    return
-      "Use only A-Z, 0-9, - or _.";
-
-  }
-
-
-  if (
-    tagCode.length > 30
-  ) {
-
-    return
-      "Tag ID cannot be longer than 30 characters.";
-
-  }
-
-
-  return null;
-
-}
-
-
-
-/* =====================================================
-   CREATE TAG
-===================================================== */
-
-createButton.addEventListener(
-  "click",
-  async () => {
-
-
-    hideMessage(
-      createMessage
-    );
-
-
-    generatedBox
-      .classList
-      .add("hidden");
-
-
-    const tagCode =
-      normalizeTagCode(
-        tagCodeInput.value
-      );
-
-
-    const validation =
-      validateTagCode(
-        tagCode
-      );
-
-
-    if (validation) {
-
-      showMessage(
-        createMessage,
-        validation,
-        "error"
-      );
-
-      return;
-
+        return (
+            SUPABASE_URL &&
+            SUPABASE_ANON_KEY &&
+            !SUPABASE_URL.includes("YOUR_") &&
+            !SUPABASE_ANON_KEY.includes("YOUR_")
+        );
     }
 
 
-    createButton.disabled =
-      true;
+    // =====================================================
+    // MESSAGE HELPERS
+    // =====================================================
 
+    function showMessage(text, type) {
 
-    createButton.textContent =
-      "Creating E-Tag...";
+        message.textContent = text;
 
-
-    try {
-
-
-      /*
-         IMPORTANT:
-
-         No admin key.
-         No password.
-         No login.
-
-         The Edge Function itself creates
-         the tag using the Supabase service role.
-      */
-
-
-      const {
-        data,
-        error
-      } =
-        await supabase
-          .functions
-          .invoke(
-            CREATE_FUNCTION,
-            {
-              body: {
-                tag_code:
-                  tagCode
-              }
-            }
-          );
-
-
-
-      /* ===============================================
-         EDGE FUNCTION ERROR
-      =============================================== */
-
-      if (error) {
-
-        console.error(
-          "CREATE ETAG ERROR:",
-          error
-        );
-
-
-        let message =
-          error.message ||
-          "Could not create E-Tag.";
-
-
-        /*
-           Supabase sometimes returns
-           "Failed to send a request to the Edge Function"
-           when the function is not deployed correctly,
-           has a runtime error, or is not reachable.
-        */
-
-
-        showMessage(
-          createMessage,
-          message,
-          "error"
-        );
-
-
-        return;
-
-      }
-
-
-
-      /* ===============================================
-         FUNCTION RESPONSE ERROR
-      =============================================== */
-
-      if (
-        !data ||
-        data.success !== true
-      ) {
-
-
-        showMessage(
-          createMessage,
-          data?.error ||
-            "Could not create E-Tag.",
-          "error"
-        );
-
-
-        return;
-
-      }
-
-
-
-      /* ===============================================
-         SUCCESS
-      =============================================== */
-
-      const url =
-        data.url ||
-        (
-          SITE_URL +
-          "id/" +
-          encodeURIComponent(
-            tagCode
-          )
-        );
-
-
-      lastGeneratedUrl =
-        url;
-
-
-      generatedUrl.textContent =
-        url;
-
-
-      generatedBox
-        .classList
-        .remove(
-          "hidden"
-        );
-
-
-      showMessage(
-        createMessage,
-        "E-Tag created successfully.",
-        "success"
-      );
-
-
-      tagCodeInput.value =
-        "";
-
-
-      await loadTags();
-
-
-    } catch (error) {
-
-
-      console.error(
-        "CREATE ETAG ERROR:",
-        error
-      );
-
-
-      showMessage(
-        createMessage,
-        error?.message ||
-          "Could not create E-Tag.",
-        "error"
-      );
-
-
-    } finally {
-
-
-      createButton.disabled =
-        false;
-
-
-      createButton.textContent =
-        "Generate E-Tag";
-
-    }
-
-  }
-);
-
-
-
-/* =====================================================
-   ENTER KEY
-===================================================== */
-
-tagCodeInput.addEventListener(
-  "keydown",
-  event => {
-
-
-    if (
-      event.key ===
-      "Enter"
-    ) {
-
-
-      event.preventDefault();
-
-
-      createButton.click();
-
-    }
-
-  }
-);
-
-
-
-/* =====================================================
-   COPY GENERATED URL
-===================================================== */
-
-copyButton.addEventListener(
-  "click",
-  async () => {
-
-
-    if (
-      !lastGeneratedUrl
-    ) {
-
-      return;
-
+        message.className = `message ${type}`;
     }
 
 
-    await copyText(
-      lastGeneratedUrl
-    );
+    function clearMessage() {
 
+        message.textContent = "";
 
-    copyButton.textContent =
-      "Copied!";
-
-
-    setTimeout(
-      () => {
-
-        copyButton.textContent =
-          "Copy URL";
-
-      },
-      1500
-    );
-
-  }
-);
-
-
-
-/* =====================================================
-   OPEN GENERATED URL
-===================================================== */
-
-openButton.addEventListener(
-  "click",
-  () => {
-
-
-    if (
-      !lastGeneratedUrl
-    ) {
-
-      return;
-
+        message.className = "message";
     }
 
 
-    window.open(
-      lastGeneratedUrl,
-      "_blank"
-    );
+    // =====================================================
+    // NORMALIZE TAG CODE
+    // =====================================================
 
-  }
-);
+    function normalizeTagCode(value) {
 
-
-
-/* =====================================================
-   REFRESH
-===================================================== */
-
-refreshButton.addEventListener(
-  "click",
-  async () => {
-
-
-    refreshButton.disabled =
-      true;
-
-
-    refreshButton.textContent =
-      "Loading...";
-
-
-    await loadTags();
-
-
-    refreshButton.disabled =
-      false;
-
-
-    refreshButton.textContent =
-      "Refresh";
-
-  }
-);
-
-
-
-/* =====================================================
-   LOAD TAGS
-===================================================== */
-
-async function loadTags() {
-
-
-  tagsContainer.innerHTML =
-    `
-      <div class="loading">
-        Loading E-Tags...
-      </div>
-    `;
-
-
-  tagCount.textContent =
-    "Loading...";
-
-
-  try {
-
-
-    const {
-      data,
-      error
-    } =
-      await supabase
-        .from("nfc_tags")
-        .select(
-          "id,tag_code,owner_id,active,created_at"
-        )
-        .order(
-          "created_at",
-          {
-            ascending:
-              false
-          }
-        );
-
-
-    if (error) {
-
-
-      console.error(
-        "LOAD TAGS ERROR:",
-        error
-      );
-
-
-      tagsContainer.innerHTML =
-        `
-          <div class="empty">
-            Unable to load E-Tags.
-          </div>
-        `;
-
-
-      tagCount.textContent =
-        "";
-
-
-      return;
-
+        return value
+            .trim()
+            .toUpperCase();
     }
 
 
+    // =====================================================
+    // CLIENT-SIDE VALIDATION
+    // =====================================================
 
-    /* ===============================================
-       NO TAGS
-    =============================================== */
+    function validateTagCode(tagCode) {
 
-    if (
-      !data ||
-      data.length === 0
-    ) {
-
-
-      tagsContainer.innerHTML =
-        `
-          <div class="empty">
-            No E-Tags created yet.
-          </div>
-        `;
-
-
-      tagCount.textContent =
-        "0 E-Tags";
-
-
-      return;
-
-    }
-
-
-
-    /* ===============================================
-       COUNT
-    =============================================== */
-
-    tagCount.textContent =
-      `${data.length} E-Tag${
-        data.length === 1
-          ? ""
-          : "s"
-      }`;
-
-
-
-    tagsContainer.innerHTML =
-      "";
-
-
-
-    /* ===============================================
-       CREATE TAG CARDS
-    =============================================== */
-
-    data.forEach(
-      tag => {
-
-
-        const div =
-          document.createElement(
-            "div"
-          );
-
-
-        div.className =
-          "tag";
-
-
-
-        const code =
-          escapeHtml(
-            tag.tag_code
-          );
-
-
-
-        const url =
-          SITE_URL +
-          "id/" +
-          encodeURIComponent(
-            tag.tag_code
-          );
-
-
-
-        const statusClass =
-          tag.active
-            ? "active"
-            : "inactive";
-
-
-        const ownerClass =
-          tag.owner_id
-            ? "assigned"
-            : "unassigned";
-
-
-        const statusText =
-          tag.active
-            ? "Active"
-            : "Inactive";
-
-
-        const ownerText =
-          tag.owner_id
-            ? "Assigned"
-            : "Unassigned";
-
-
-
-        div.innerHTML = `
-
-          <div class="tag-code">
-            ${code}
-          </div>
-
-          <div
-            class="tag-status ${statusClass}"
-          >
-            ${statusText}
-          </div>
-
-          <div
-            class="tag-status ${ownerClass}"
-            style="margin-top:4px;"
-          >
-            ${ownerText}
-          </div>
-
-          <div class="tag-url">
-            ${escapeHtml(url)}
-          </div>
-
-          <div class="row">
-
-            <button
-              class="copy-existing secondary"
-              data-url="${escapeHtml(url)}"
-            >
-              Copy URL
-            </button>
-
-            <button
-              class="open-existing"
-              data-url="${escapeHtml(url)}"
-            >
-              Open
-            </button>
-
-          </div>
-
-        `;
-
-
-        tagsContainer.appendChild(
-          div
-        );
-
-      }
-    );
-
-
-
-    /* ===============================================
-       COPY BUTTONS
-    =============================================== */
-
-    document
-      .querySelectorAll(
-        ".copy-existing"
-      )
-      .forEach(
-        button => {
-
-
-          button.addEventListener(
-            "click",
-            async () => {
-
-
-              const url =
-                button.dataset.url;
-
-
-              await copyText(
-                url
-              );
-
-
-              button.textContent =
-                "Copied!";
-
-
-              setTimeout(
-                () => {
-
-                  button.textContent =
-                    "Copy URL";
-
-                },
-                1500
-              );
-
-            }
-          );
-
+        if (!tagCode) {
+            return "Please enter an E-Tag ID.";
         }
-      );
+
+        if (tagCode.length > 30) {
+            return "Tag ID cannot be longer than 30 characters.";
+        }
+
+        if (!/^[A-Z0-9_-]+$/.test(tagCode)) {
+
+            return (
+                "Only A-Z, 0-9, underscore (_) and hyphen (-) are allowed."
+            );
+        }
+
+        return null;
+    }
 
 
+    // =====================================================
+    // CREATE E-TAG
+    // =====================================================
 
-    /* ===============================================
-       OPEN BUTTONS
-    =============================================== */
+    async function createETag() {
 
-    document
-      .querySelectorAll(
-        ".open-existing"
-      )
-      .forEach(
-        button => {
+        clearMessage();
+
+        const tagCode =
+            normalizeTagCode(tagCodeInput.value);
+
+        const validationError =
+            validateTagCode(tagCode);
+
+        if (validationError) {
+
+            showMessage(
+                validationError,
+                "error"
+            );
+
+            return;
+        }
 
 
-          button.addEventListener(
-            "click",
-            () => {
+        if (!isConfigurationValid()) {
+
+            showMessage(
+                "Supabase configuration is missing. Add your Project URL and Publishable/Anon key in admin.html.",
+                "error"
+            );
+
+            return;
+        }
 
 
-              const url =
-                button.dataset.url;
+        generateBtn.disabled = true;
+
+        generateBtn.textContent = "Creating...";
+
+        generateBtn.classList.add("loading");
 
 
-              window.open(
+        try {
+
+            const response =
+                await fetch(
+                    CREATE_ETAG_FUNCTION_URL,
+                    {
+                        method: "POST",
+
+                        headers: {
+                            "Content-Type":
+                                "application/json",
+
+                            "apikey":
+                                SUPABASE_ANON_KEY,
+
+                            "Authorization":
+                                `Bearer ${SUPABASE_ANON_KEY}`
+                        },
+
+                        body: JSON.stringify({
+                            tag_code: tagCode
+                        })
+                    }
+                );
+
+
+            let data;
+
+            try {
+
+                data =
+                    await response.json();
+
+            } catch {
+
+                throw new Error(
+                    `Server returned HTTP ${response.status}.`
+                );
+            }
+
+
+            if (!response.ok || !data.success) {
+
+                showMessage(
+                    data.message ||
+                    `Failed to create E-Tag. HTTP ${response.status}`,
+                    "error"
+                );
+
+                return;
+            }
+
+
+            // =============================================
+            // Show result
+            // =============================================
+
+            resultTagCode.textContent =
+                data.tag?.tag_code || tagCode;
+
+            resultStatus.textContent =
+                data.tag?.active
+                    ? "Active"
+                    : "Unactivated";
+
+            resultUrl.value =
+                data.url || "";
+
+
+            result.classList.add("show");
+
+
+            showMessage(
+                data.message ||
+                "E-Tag created successfully.",
+                "success"
+            );
+
+
+            // Clear input
+            tagCodeInput.value = "";
+
+
+            // Refresh list
+            await loadTags();
+
+        } catch (error) {
+
+            console.error(
+                "createETag error:",
+                error
+            );
+
+            showMessage(
+                error.message ||
+                "Something went wrong while creating the E-Tag.",
+                "error"
+            );
+
+        } finally {
+
+            generateBtn.disabled = false;
+
+            generateBtn.textContent =
+                "Generate E-Tag";
+
+            generateBtn.classList.remove("loading");
+        }
+    }
+
+
+    // =====================================================
+    // LOAD EXISTING TAGS
+    // =====================================================
+
+    async function loadTags() {
+
+        if (!isConfigurationValid()) {
+
+            tagsTableBody.innerHTML = `
+                <tr>
+                    <td colspan="5" class="empty">
+                        Add your Supabase Project URL and
+                        Publishable/Anon key to load E-Tags.
+                    </td>
+                </tr>
+            `;
+
+            return;
+        }
+
+
+        refreshBtn.disabled = true;
+
+        refreshBtn.textContent = "Loading...";
+
+
+        try {
+
+            const endpoint =
+                `${SUPABASE_URL}/rest/v1/nfc_tags` +
+                `?select=id,tag_code,owner_id,active,created_at` +
+                `&order=created_at.desc`;
+
+
+            const response =
+                await fetch(
+                    endpoint,
+                    {
+                        method: "GET",
+
+                        headers: {
+                            "apikey":
+                                SUPABASE_ANON_KEY,
+
+                            "Authorization":
+                                `Bearer ${SUPABASE_ANON_KEY}`
+                        }
+                    }
+                );
+
+
+            if (!response.ok) {
+
+                let errorData = null;
+
+                try {
+                    errorData =
+                        await response.json();
+                } catch {
+                    // Ignore JSON parsing failure.
+                }
+
+                throw new Error(
+                    errorData?.message ||
+                    `Failed to load E-Tags. HTTP ${response.status}`
+                );
+            }
+
+
+            const tags =
+                await response.json();
+
+
+            renderTags(tags);
+
+        } catch (error) {
+
+            console.error(
+                "loadTags error:",
+                error
+            );
+
+
+            tagsTableBody.innerHTML = `
+                <tr>
+                    <td colspan="5" class="empty">
+                        Failed to load E-Tags.<br>
+                        ${escapeHtml(error.message)}
+                    </td>
+                </tr>
+            `;
+
+        } finally {
+
+            refreshBtn.disabled = false;
+
+            refreshBtn.textContent = "Refresh";
+        }
+    }
+
+
+    // =====================================================
+    // RENDER TAG TABLE
+    // =====================================================
+
+    function renderTags(tags) {
+
+        if (!Array.isArray(tags) || tags.length === 0) {
+
+            tagsTableBody.innerHTML = `
+                <tr>
+                    <td colspan="5" class="empty">
+                        No E-Tags found.
+                    </td>
+                </tr>
+            `;
+
+            return;
+        }
+
+
+        tagsTableBody.innerHTML =
+            tags.map((tag) => {
+
+                const publicUrl =
+                    `${window.location.origin}/E-Tag/id/${encodeURIComponent(tag.tag_code)}`;
+
+
+                const statusClass =
+                    tag.active
+                        ? "active"
+                        : "inactive";
+
+
+                const statusText =
+                    tag.active
+                        ? "Active"
+                        : "Unactivated";
+
+
+                const ownerText =
+                    tag.owner_id
+                        ? tag.owner_id
+                        : "Unassigned";
+
+
+                const createdDate =
+                    tag.created_at
+                        ? new Date(
+                            tag.created_at
+                        ).toLocaleString()
+                        : "-";
+
+
+                return `
+                    <tr>
+
+                        <td>
+                            <strong>
+                                ${escapeHtml(tag.tag_code)}
+                            </strong>
+                        </td>
+
+                        <td>
+                            <span
+                                class="status ${statusClass}"
+                            >
+                                ${statusText}
+                            </span>
+                        </td>
+
+                        <td>
+                            ${escapeHtml(ownerText)}
+                        </td>
+
+                        <td>
+                            ${escapeHtml(createdDate)}
+                        </td>
+
+                        <td>
+
+                            <div class="table-actions">
+
+                                <button
+                                    type="button"
+                                    class="secondary-btn small-btn"
+                                    data-copy-url="${escapeHtml(publicUrl)}"
+                                >
+                                    Copy
+                                </button>
+
+                                <button
+                                    type="button"
+                                    class="secondary-btn small-btn"
+                                    data-open-url="${escapeHtml(publicUrl)}"
+                                >
+                                    Open
+                                </button>
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+                `;
+
+            }).join("");
+    }
+
+
+    // =====================================================
+    // ESCAPE HTML
+    // =====================================================
+
+    function escapeHtml(value) {
+
+        return String(value)
+            .replaceAll("&", "&amp;")
+            .replaceAll("<", "&lt;")
+            .replaceAll(">", "&gt;")
+            .replaceAll('"', "&quot;")
+            .replaceAll("'", "&#039;");
+    }
+
+
+    // =====================================================
+    // COPY TEXT
+    // =====================================================
+
+    async function copyText(text) {
+
+        try {
+
+            await navigator.clipboard.writeText(text);
+
+            showMessage(
+                "URL copied to clipboard.",
+                "success"
+            );
+
+        } catch (error) {
+
+            console.error(
+                "Clipboard error:",
+                error
+            );
+
+
+            // Fallback
+
+            const textarea =
+                document.createElement("textarea");
+
+            textarea.value = text;
+
+            textarea.style.position = "fixed";
+
+            textarea.style.opacity = "0";
+
+            document.body.appendChild(textarea);
+
+            textarea.select();
+
+            document.execCommand("copy");
+
+            textarea.remove();
+
+
+            showMessage(
+                "URL copied to clipboard.",
+                "success"
+            );
+        }
+    }
+
+
+    // =====================================================
+    // RESULT COPY
+    // =====================================================
+
+    copyBtn.addEventListener(
+        "click",
+        async () => {
+
+            const url =
+                resultUrl.value.trim();
+
+            if (!url) {
+                return;
+            }
+
+            await copyText(url);
+        }
+    );
+
+
+    // =====================================================
+    // RESULT OPEN
+    // =====================================================
+
+    openBtn.addEventListener(
+        "click",
+        () => {
+
+            const url =
+                resultUrl.value.trim();
+
+            if (!url) {
+                return;
+            }
+
+            window.open(
                 url,
-                "_blank"
-              );
-
-            }
-          );
-
+                "_blank",
+                "noopener,noreferrer"
+            );
         }
-      );
-
-
-  } catch (error) {
-
-
-    console.error(
-      "LOAD TAGS ERROR:",
-      error
     );
 
 
-    tagsContainer.innerHTML =
-      `
-        <div class="empty">
-          Unable to load E-Tags.
-        </div>
-      `;
+    // =====================================================
+    // GENERATE BUTTON
+    // =====================================================
 
-
-    tagCount.textContent =
-      "";
-
-  }
-
-}
-
-
-
-/* =====================================================
-   COPY TEXT
-===================================================== */
-
-async function copyText(
-  text
-) {
-
-
-  try {
-
-
-    await navigator
-      .clipboard
-      .writeText(
-        text
-      );
-
-
-  } catch {
-
-
-    const textarea =
-      document.createElement(
-        "textarea"
-      );
-
-
-    textarea.value =
-      text;
-
-
-    textarea.style.position =
-      "fixed";
-
-
-    textarea.style.opacity =
-      "0";
-
-
-    document.body.appendChild(
-      textarea
+    generateBtn.addEventListener(
+        "click",
+        createETag
     );
 
 
-    textarea.select();
+    // =====================================================
+    // ENTER KEY
+    // =====================================================
 
+    tagCodeInput.addEventListener(
+        "keydown",
+        (event) => {
 
-    document.execCommand(
-      "copy"
+            if (event.key === "Enter") {
+
+                event.preventDefault();
+
+                createETag();
+            }
+        }
     );
 
 
-    textarea.remove();
+    // =====================================================
+    // REFRESH BUTTON
+    // =====================================================
 
-  }
-
-}
-
-
-
-/* =====================================================
-   ESCAPE HTML
-===================================================== */
-
-function escapeHtml(
-  value
-) {
-
-
-  return String(
-    value
-  )
-
-
-    .replaceAll(
-      "&",
-      "&amp;"
-    )
-
-
-    .replaceAll(
-      "<",
-      "&lt;"
-    )
-
-
-    .replaceAll(
-      ">",
-      "&gt;"
-    )
-
-
-    .replaceAll(
-      '"',
-      "&quot;"
-    )
-
-
-    .replaceAll(
-      "'",
-      "&#039;"
+    refreshBtn.addEventListener(
+        "click",
+        loadTags
     );
 
-}
+
+    // =====================================================
+    // TABLE ACTIONS
+    // =====================================================
+
+    tagsTableBody.addEventListener(
+        "click",
+        async (event) => {
+
+            const target =
+                event.target;
+
+            if (!(target instanceof HTMLElement)) {
+                return;
+            }
 
 
+            const copyUrl =
+                target.getAttribute(
+                    "data-copy-url"
+                );
 
-/* =====================================================
-   START
-===================================================== */
+            if (copyUrl) {
 
-async function start() {
+                await copyText(copyUrl);
 
-  await loadTags();
-
-}
+                return;
+            }
 
 
-start();
+            const openUrl =
+                target.getAttribute(
+                    "data-open-url"
+                );
 
+            if (openUrl) {
+
+                window.open(
+                    openUrl,
+                    "_blank",
+                    "noopener,noreferrer"
+                );
+            }
+        }
+    );
+
+
+    // =====================================================
+    // INITIAL LOAD
+    // =====================================================
+
+    loadTags();
 
 </script>
 
 </body>
-
 </html>
-```
