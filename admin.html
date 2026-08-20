@@ -1,4 +1,3 @@
-```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -190,6 +189,19 @@
       font-size: 14px;
       margin-bottom: 15px;
     }
+
+    .lock-icon {
+      font-size: 50px;
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    .small-note {
+      font-size: 13px;
+      color: #6b7280;
+      line-height: 1.5;
+      text-align: center;
+    }
   </style>
 </head>
 
@@ -204,35 +216,21 @@
   </div>
 
 
-  <!-- ADMIN LOGIN -->
+  <!-- NO ACCESS (missing / wrong key in URL) -->
 
-  <section id="loginSection" class="card">
+  <section id="noAccessSection" class="card hidden">
 
-    <h2>Admin Login</h2>
+    <div class="lock-icon">🔒</div>
 
-    <label>Email</label>
+    <h2 style="text-align:center">
+      Admin Access Required
+    </h2>
 
-    <input
-      id="email"
-      type="email"
-      placeholder="Admin email"
-      autocomplete="email"
-    >
-
-    <label>Password</label>
-
-    <input
-      id="password"
-      type="password"
-      placeholder="Password"
-      autocomplete="current-password"
-    >
-
-    <button id="loginButton">
-      Login
-    </button>
-
-    <div id="loginMessage" class="message"></div>
+    <p class="small-note">
+      This page can only be opened using the private admin link.
+      If you were given that link, make sure you opened it exactly
+      as shared, including everything after "?key=".
+    </p>
 
   </section>
 
@@ -317,20 +315,6 @@
 
     </div>
 
-
-    <!-- LOGOUT -->
-
-    <div class="card">
-
-      <button
-        id="logoutButton"
-        class="danger"
-      >
-        Logout
-      </button>
-
-    </div>
-
   </section>
 
 </div>
@@ -356,23 +340,11 @@ const SITE_URL =
    ELEMENTS
 ===================================================== */
 
-const loginSection =
-  document.getElementById("loginSection");
+const noAccessSection =
+  document.getElementById("noAccessSection");
 
 const adminSection =
   document.getElementById("adminSection");
-
-const emailInput =
-  document.getElementById("email");
-
-const passwordInput =
-  document.getElementById("password");
-
-const loginButton =
-  document.getElementById("loginButton");
-
-const loginMessage =
-  document.getElementById("loginMessage");
 
 const tagCodeInput =
   document.getElementById("tagCode");
@@ -401,11 +373,44 @@ const tagsContainer =
 const tagCount =
   document.getElementById("tagCount");
 
-const logoutButton =
-  document.getElementById("logoutButton");
-
 
 let lastGeneratedUrl = "";
+let adminKey = "";
+
+
+/* =====================================================
+   ADMIN KEY CHECK
+   No login. Access is gated purely by having the
+   exact ?key= value in the URL. Whoever holds the
+   link has admin access — do not share it publicly.
+===================================================== */
+
+function getKeyFromUrl() {
+
+  const params =
+    new URLSearchParams(window.location.search);
+
+  return (params.get("key") || "").trim();
+
+}
+
+
+function showNoAccess() {
+
+  noAccessSection.classList.remove("hidden");
+
+  adminSection.classList.add("hidden");
+
+}
+
+
+function showAdminPanel() {
+
+  noAccessSection.classList.add("hidden");
+
+  adminSection.classList.remove("hidden");
+
+}
 
 
 /* =====================================================
@@ -425,10 +430,6 @@ function showMessage(
 
 }
 
-
-/* =====================================================
-   HIDE MESSAGE
-===================================================== */
 
 function hideMessage(element) {
 
@@ -483,106 +484,9 @@ function validateTagCode(tagCode) {
 
 
 /* =====================================================
-   LOGIN
-===================================================== */
-
-loginButton.addEventListener(
-  "click",
-  async () => {
-
-    const email =
-      emailInput.value
-        .trim()
-        .toLowerCase();
-
-    const password =
-      passwordInput.value;
-
-    hideMessage(loginMessage);
-
-    if (!email || !password) {
-
-      showMessage(
-        loginMessage,
-        "Enter email and password.",
-        "error"
-      );
-
-      return;
-
-    }
-
-    loginButton.disabled = true;
-
-    loginButton.textContent =
-      "Logging in...";
-
-    try {
-
-      const {
-        data,
-        error
-      } =
-      await supabase.auth.signInWithPassword({
-
-        email,
-        password
-
-      });
-
-
-      if (error) {
-
-        showMessage(
-          loginMessage,
-          error.message,
-          "error"
-        );
-
-        return;
-
-      }
-
-
-      if (!data.session) {
-
-        showMessage(
-          loginMessage,
-          "Login session was not created.",
-          "error"
-        );
-
-        return;
-
-      }
-
-
-      await showAdmin();
-
-    } catch (error) {
-
-      showMessage(
-        loginMessage,
-        error?.message ||
-          "Login failed.",
-        "error"
-      );
-
-    } finally {
-
-      loginButton.disabled = false;
-
-      loginButton.textContent =
-        "Login";
-
-    }
-
-  }
-);
-
-
-/* =====================================================
    CREATE TAG
+   Sends the admin key as a custom header instead of a
+   Supabase auth token, since there is no login here.
 ===================================================== */
 
 createButton.addEventListener(
@@ -624,16 +528,6 @@ createButton.addEventListener(
 
     try {
 
-      /*
-       * IMPORTANT:
-       *
-       * The SERVICE ROLE KEY is NEVER
-       * placed in this HTML file.
-       *
-       * The Edge Function handles
-       * the database insert.
-       */
-
       const {
         data,
         error
@@ -643,6 +537,9 @@ createButton.addEventListener(
         {
           body: {
             tag_code: tagCode
+          },
+          headers: {
+            "x-admin-secret": adminKey
           }
         }
       );
@@ -683,11 +580,6 @@ createButton.addEventListener(
 
       }
 
-
-      /*
-       * Prefer URL returned by
-       * Edge Function.
-       */
 
       const url =
         data.url ||
@@ -805,11 +697,6 @@ copyButton.addEventListener(
 
     } catch {
 
-      /*
-       * Fallback for browsers where
-       * Clipboard API is unavailable.
-       */
-
       const textarea =
         document.createElement("textarea");
 
@@ -871,6 +758,8 @@ openButton.addEventListener(
 
 /* =====================================================
    LOAD TAGS
+   No login required to read — nfc_tags has a public
+   read RLS policy, so this works with just the anon key.
 ===================================================== */
 
 async function loadTags() {
@@ -881,36 +770,6 @@ async function loadTags() {
   tagCount.textContent =
     "Loading...";
 
-
-  /*
-   * Admin page should normally
-   * only be accessible after login.
-   */
-
-  const {
-    data: {
-      user
-    }
-  } =
-  await supabase.auth.getUser();
-
-
-  if (!user) {
-
-    showLogin();
-
-    return;
-
-  }
-
-
-  /*
-   * Load all tags.
-   *
-   * This requires an RLS policy
-   * allowing the logged-in admin
-   * to SELECT the tags.
-   */
 
   const {
     data,
@@ -1103,100 +962,6 @@ async function loadTags() {
 
 
 /* =====================================================
-   SHOW ADMIN
-===================================================== */
-
-async function showAdmin() {
-
-  loginSection.classList.add(
-    "hidden"
-  );
-
-  adminSection.classList.remove(
-    "hidden"
-  );
-
-
-  await loadTags();
-
-}
-
-
-/* =====================================================
-   SHOW LOGIN
-===================================================== */
-
-function showLogin() {
-
-  adminSection.classList.add(
-    "hidden"
-  );
-
-  loginSection.classList.remove(
-    "hidden"
-  );
-
-}
-
-
-/* =====================================================
-   LOGOUT
-===================================================== */
-
-logoutButton.addEventListener(
-  "click",
-  async () => {
-
-    await supabase.auth.signOut();
-
-    showLogin();
-
-    emailInput.value = "";
-
-    passwordInput.value = "";
-
-  }
-);
-
-
-/* =====================================================
-   AUTH STATE
-===================================================== */
-
-supabase.auth.onAuthStateChange(
-  async (
-    event,
-    session
-  ) => {
-
-    if (
-      event === "SIGNED_OUT"
-    ) {
-
-      showLogin();
-
-      return;
-
-    }
-
-
-    if (
-      session &&
-      (
-        event === "SIGNED_IN" ||
-        event === "INITIAL_SESSION"
-      )
-    ) {
-
-      await showAdmin();
-
-    }
-
-  }
-);
-
-
-/* =====================================================
    ESCAPE HTML
 ===================================================== */
 
@@ -1236,25 +1001,33 @@ function escapeHtml(value) {
    START
 ===================================================== */
 
-async function start() {
+function start() {
 
-  const {
-    data: {
-      session
-    }
-  } =
-  await supabase.auth.getSession();
+  adminKey =
+    getKeyFromUrl();
 
 
-  if (session) {
+  if (!adminKey) {
 
-    await showAdmin();
+    showNoAccess();
 
-  } else {
-
-    showLogin();
+    return;
 
   }
+
+
+  /*
+   * We don't know the correct secret client-side
+   * (it lives only in the Edge Function's env var),
+   * so we optimistically show the panel and let the
+   * first create-etag call fail with an error if the
+   * key is wrong. Reading tags works regardless since
+   * that's public read access.
+   */
+
+  showAdminPanel();
+
+  loadTags();
 
 }
 
@@ -1265,4 +1038,3 @@ start();
 
 </body>
 </html>
-```
