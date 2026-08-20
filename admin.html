@@ -24,7 +24,6 @@
                 BlinkMacSystemFont,
                 "Segoe UI",
                 sans-serif;
-
             background: #f5f7fb;
             color: #111827;
         }
@@ -42,7 +41,6 @@
         .header h1 {
             margin: 0 0 8px;
             font-size: 32px;
-            line-height: 1.2;
         }
 
         .header p {
@@ -94,8 +92,12 @@
         input:focus {
             border-color: #111827;
             box-shadow:
-                0 0 0 3px
-                rgba(17, 24, 39, 0.08);
+                0 0 0 3px rgba(
+                    17,
+                    24,
+                    39,
+                    0.08
+                );
         }
 
         button {
@@ -108,8 +110,8 @@
         }
 
         button:disabled {
-            cursor: not-allowed;
             opacity: 0.55;
+            cursor: not-allowed;
         }
 
         .primary-btn {
@@ -172,7 +174,6 @@
             color: #6b7280;
             margin-bottom: 5px;
             text-transform: uppercase;
-            letter-spacing: 0.04em;
         }
 
         .result-value {
@@ -183,10 +184,6 @@
         .url-box {
             display: flex;
             gap: 8px;
-        }
-
-        .url-box input {
-            background: #ffffff;
         }
 
         .table-wrapper {
@@ -211,13 +208,11 @@
             font-size: 12px;
             color: #6b7280;
             text-transform: uppercase;
-            letter-spacing: 0.04em;
             background: #f9fafb;
         }
 
         .status {
             display: inline-flex;
-            align-items: center;
             padding: 5px 9px;
             border-radius: 999px;
             font-size: 12px;
@@ -255,7 +250,6 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            gap: 12px;
             margin-bottom: 18px;
         }
 
@@ -270,20 +264,11 @@
                 padding: 18px;
             }
 
-            .header h1 {
-                font-size: 27px;
-            }
-
             .input-row {
                 flex-direction: column;
             }
 
             .url-box {
-                flex-direction: column;
-            }
-
-            .top-actions {
-                align-items: stretch;
                 flex-direction: column;
             }
         }
@@ -336,7 +321,6 @@
         <div
             id="message"
             class="message"
-            role="alert"
         ></div>
 
 
@@ -561,16 +545,6 @@
     }
 
 
-    function clearMessage() {
-
-        message.textContent =
-            "";
-
-        message.className =
-            "message";
-    }
-
-
     function normalizeTagCode(
         value
     ) {
@@ -586,40 +560,31 @@
     ) {
 
         if (!tagCode) {
-
             return "Please enter an E-Tag ID.";
         }
-
 
         if (
             tagCode.length >
             30
         ) {
-
             return
                 "Tag ID cannot be longer than 30 characters.";
         }
-
 
         if (
             !/^[A-Z0-9_-]+$/.test(
                 tagCode
             )
         ) {
-
             return
                 "Only A-Z, 0-9, underscore (_) and hyphen (-) are allowed.";
         }
-
 
         return null;
     }
 
 
     async function createETag() {
-
-        clearMessage();
-
 
         const tagCode =
             normalizeTagCode(
@@ -655,58 +620,54 @@
 
         try {
 
-            const {
-                data,
-                error
-            } =
-                await supabase.functions.invoke(
-                    "create-etag",
+            const response =
+                await fetch(
+                    `${SUPABASE_URL}/functions/v1/create-etag`,
                     {
-                        body: {
-                            tag_code:
-                                tagCode
-                        }
+                        method: "POST",
+                        headers: {
+                            "apikey":
+                                SUPABASE_PUBLISHABLE_KEY,
+                            "Content-Type":
+                                "application/json"
+                        },
+                        body:
+                            JSON.stringify({
+                                tag_code:
+                                    tagCode
+                            })
                     }
                 );
 
 
-            if (error) {
-
-                console.error(
-                    "create-etag error:",
-                    error
-                );
-
-                throw error;
-            }
+            const data =
+                await response.json();
 
 
             if (
-                !data ||
+                !response.ok ||
                 !data.success
             ) {
 
                 throw new Error(
                     data?.message ||
-                    "Failed to create E-Tag."
+                    `HTTP ${response.status}`
                 );
             }
 
 
             resultTagCode.textContent =
-                data.tag?.tag_code ||
-                tagCode;
+                data.tag.tag_code;
 
 
             resultStatus.textContent =
-                data.tag?.active
+                data.tag.active
                     ? "Active"
                     : "Unactivated";
 
 
             resultUrl.value =
-                data.url ||
-                "";
+                data.url;
 
 
             result.classList.add(
@@ -715,7 +676,6 @@
 
 
             showMessage(
-                data.message ||
                 "E-Tag created successfully.",
                 "success"
             );
@@ -730,14 +690,13 @@
         } catch (error) {
 
             console.error(
-                "Generate E-Tag failed:",
                 error
             );
 
 
             showMessage(
                 error?.message ||
-                "Unable to connect to the create-etag function.",
+                "Failed to create E-Tag.",
                 "error"
             );
 
@@ -753,13 +712,6 @@
 
 
     async function loadTags() {
-
-        refreshBtn.disabled =
-            true;
-
-        refreshBtn.textContent =
-            "Loading...";
-
 
         try {
 
@@ -782,7 +734,6 @@
 
 
             if (error) {
-
                 throw error;
             }
 
@@ -794,7 +745,6 @@
         } catch (error) {
 
             console.error(
-                "loadTags error:",
                 error
             );
 
@@ -809,14 +759,6 @@
                     </td>
                 </tr>
             `;
-
-        } finally {
-
-            refreshBtn.disabled =
-                false;
-
-            refreshBtn.textContent =
-                "Refresh";
         }
     }
 
@@ -826,8 +768,7 @@
     ) {
 
         if (
-            !tags ||
-            tags.length === 0
+            !tags.length
         ) {
 
             tagsTableBody.innerHTML = `
@@ -855,32 +796,6 @@
                         )}`;
 
 
-                    const statusClass =
-                        tag.active
-                            ? "active"
-                            : "inactive";
-
-
-                    const statusText =
-                        tag.active
-                            ? "Active"
-                            : "Unactivated";
-
-
-                    const ownerText =
-                        tag.owner_id
-                            ? tag.owner_id
-                            : "Unassigned";
-
-
-                    const createdDate =
-                        tag.created_at
-                            ? new Date(
-                                tag.created_at
-                            ).toLocaleString()
-                            : "-";
-
-
                     return `
                         <tr>
 
@@ -895,23 +810,39 @@
                             <td>
 
                                 <span
-                                    class="status ${statusClass}"
+                                    class="status ${
+                                        tag.active
+                                            ? "active"
+                                            : "inactive"
+                                    }"
                                 >
-                                    ${statusText}
+                                    ${
+                                        tag.active
+                                            ? "Active"
+                                            : "Unactivated"
+                                    }
                                 </span>
 
                             </td>
 
                             <td>
-                                ${escapeHtml(
-                                    ownerText
-                                )}
+                                ${
+                                    tag.owner_id
+                                        ? escapeHtml(
+                                            tag.owner_id
+                                        )
+                                        : "Unassigned"
+                                }
                             </td>
 
                             <td>
-                                ${escapeHtml(
-                                    createdDate
-                                )}
+                                ${
+                                    tag.created_at
+                                        ? new Date(
+                                            tag.created_at
+                                        ).toLocaleString()
+                                        : "-"
+                                }
                             </td>
 
                             <td>
@@ -923,7 +854,7 @@
                                     <button
                                         type="button"
                                         class="secondary-btn small-btn"
-                                        data-copy-url="${escapeAttribute(
+                                        data-copy-url="${escapeHtml(
                                             publicUrl
                                         )}"
                                     >
@@ -933,7 +864,7 @@
                                     <button
                                         type="button"
                                         class="secondary-btn small-btn"
-                                        data-open-url="${escapeAttribute(
+                                        data-open-url="${escapeHtml(
                                             publicUrl
                                         )}"
                                     >
@@ -979,24 +910,9 @@
     }
 
 
-    function escapeAttribute(
-        value
-    ) {
-
-        return escapeHtml(
-            value
-        );
-    }
-
-
     async function copyText(
         text
     ) {
-
-        if (!text) {
-            return;
-        }
-
 
         try {
 
@@ -1016,33 +932,20 @@
                     "textarea"
                 );
 
-
             textarea.value =
                 text;
-
-
-            textarea.style.position =
-                "fixed";
-
-            textarea.style.left =
-                "-9999px";
-
 
             document.body.appendChild(
                 textarea
             );
 
-
             textarea.select();
-
 
             document.execCommand(
                 "copy"
             );
 
-
             textarea.remove();
-
 
             showMessage(
                 "URL copied to clipboard.",
@@ -1057,7 +960,7 @@
         async () => {
 
             await copyText(
-                resultUrl.value.trim()
+                resultUrl.value
             );
         }
     );
@@ -1067,17 +970,14 @@
         "click",
         () => {
 
-            const url =
-                resultUrl.value.trim();
-
-
-            if (!url) {
+            if (
+                !resultUrl.value
+            ) {
                 return;
             }
 
-
             window.open(
-                url,
+                resultUrl.value,
                 "_blank",
                 "noopener,noreferrer"
             );
@@ -1091,13 +991,18 @@
     );
 
 
+    refreshBtn.addEventListener(
+        "click",
+        loadTags
+    );
+
+
     tagCodeInput.addEventListener(
         "keydown",
         (event) => {
 
             if (
-                event.key ===
-                "Enter"
+                event.key === "Enter"
             ) {
 
                 event.preventDefault();
@@ -1105,12 +1010,6 @@
                 createETag();
             }
         }
-    );
-
-
-    refreshBtn.addEventListener(
-        "click",
-        loadTags
     );
 
 
@@ -1123,10 +1022,8 @@
 
 
             if (
-                !(target instanceof
-                    HTMLElement)
+                !(target instanceof HTMLElement)
             ) {
-
                 return;
             }
 
