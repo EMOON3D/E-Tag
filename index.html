@@ -1,11 +1,16 @@
 <!DOCTYPE html>
+
 <html lang="en">
 
 <head>
 
 <meta charset="UTF-8">
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0"
+
+>
 
 <title>E-Tag</title>
 
@@ -48,7 +53,7 @@ body {
   border-radius: 18px;
   padding: 22px;
   margin-bottom: 18px;
-  box-shadow: 0 5px 25px rgba(0,0,0,.06);
+  box-shadow: 0 5px 25px rgba(0,0,0,0.06);
 }
 
 h2 {
@@ -68,7 +73,8 @@ label {
 }
 
 input,
-textarea {
+textarea,
+select {
   width: 100%;
   padding: 13px;
   border: 1px solid #d1d5db;
@@ -84,7 +90,8 @@ textarea {
 }
 
 input:focus,
-textarea:focus {
+textarea:focus,
+select:focus {
   border-color: #111827;
 }
 
@@ -99,6 +106,10 @@ button {
   font-size: 16px;
   font-weight: 700;
   cursor: pointer;
+}
+
+button:active {
+  transform: scale(.98);
 }
 
 button:disabled {
@@ -251,6 +262,7 @@ button:disabled {
   padding: 15px 10px;
   text-align: center;
   cursor: pointer;
+  transition: .2s;
 }
 
 .template-option:hover {
@@ -390,102 +402,141 @@ E-Tag
 Your Mini Digital Identity
 </div>
 
-
 <!-- LOGIN -->
 
-<section id="loginSection" class="card hidden">
+<section id="loginSection" class="card">
 
-<h2>Login</h2>
+<h2>
+Login
+</h2>
 
-<label>Email</label>
+<label>
+Email
+</label>
 
 <input
-  id="loginEmail"
-  type="email"
-  placeholder="you@example.com"
-  autocomplete="email"
+id="loginEmail"
+type="email"
+placeholder="[you@example.com](mailto:you@example.com)"
+autocomplete="email"
+
 >
 
-<label>Password</label>
+<label>
+Password
+</label>
 
 <input
-  id="loginPassword"
-  type="password"
-  placeholder="Your password"
-  autocomplete="current-password"
+id="loginPassword"
+type="password"
+placeholder="Your password"
+autocomplete="current-password"
+
 >
 
 <button id="loginButton">
 Login
 </button>
 
-<div id="loginMessage" class="message"></div>
+<div
+id="loginMessage"
+class="message"
+></div>
 
-<div id="forgotPasswordLink" class="link">
-Forgot password?
+<div
+id="forgotPasswordLink"
+class="link"
+>
+Forgot Password?
 </div>
 
-<div id="showSignup" class="link">
-Create E-Tag account
+<div
+id="showSignup"
+class="link"
+>
+Create E-Tag Account
 </div>
 
 </section>
 
+<!-- SIGNUP -->
 
-<!-- SIGNUP / ACTIVATION -->
+<section
+id="signupSection"
+class="card hidden"
+>
 
-<section id="signupSection" class="card hidden">
-
-<div class="activate-icon">
-🏷️
-</div>
-
-<h2 style="text-align:center;">
+<h2>
 Activate your E-Tag
 </h2>
 
-<div id="signupTagId" class="tag-id">
+<div
+id="signupTagDisplay"
+class="tag-id"
+>
 E-Tag
 </div>
 
-<p style="text-align:center;">
-Create your account to activate this E-Tag.
-</p>
-
-<label>Email</label>
+<label>
+Email
+</label>
 
 <input
-  id="signupEmail"
-  type="email"
-  placeholder="you@example.com"
-  autocomplete="email"
+id="signupEmail"
+type="email"
+placeholder="[you@example.com](mailto:you@example.com)"
+autocomplete="email"
+
 >
 
-<label>Password</label>
+<label>
+Password
+</label>
 
 <input
-  id="signupPassword"
-  type="password"
-  placeholder="Minimum 6 characters"
-  autocomplete="new-password"
+id="signupPassword"
+type="password"
+placeholder="Minimum 6 characters"
+autocomplete="new-password"
+
+>
+
+<label>
+Confirm Password
+</label>
+
+<input
+id="signupPasswordConfirm"
+type="password"
+placeholder="Enter password again"
+autocomplete="new-password"
+
 >
 
 <button id="signupButton">
-Create Account & Activate
+Create Account
 </button>
 
-<div id="signupMessage" class="message"></div>
+<div
+id="signupMessage"
+class="message"
+></div>
 
-<div id="showLogin" class="link">
+<div
+id="showLogin"
+class="link"
+>
 Already have an account? Login
 </div>
 
 </section>
 
+<!-- CONFIRMATION -->
 
-<!-- EMAIL CONFIRMATION -->
-
-<section id="confirmationSection" class="card hidden">
+<section
+id="confirmationSection"
+class="card hidden"
+>
 
 <div class="verify-box">
 
@@ -506,96 +557,128 @@ We've sent a confirmation link to:
 </p>
 
 <p>
-Click the confirmation link in your email.
+Please click the confirmation link in your email.
 </p>
 
-<p>
-After confirmation, your E-Tag will be activated automatically.
-</p>
+<button id="confirmationLoginButton">
+I Confirmed My Email
+</button>
+
+<div
+id="confirmationMessage"
+class="message"
+></div>
 
 </div>
 
 </section>
 
-
 <!-- FORGOT PASSWORD -->
 
-<section id="forgotSection" class="card hidden">
+<section
+id="forgotPasswordSection"
+class="card hidden"
+>
 
 <h2>
 Reset Password
 </h2>
 
 <p>
-Enter your account email and we will send you a password reset link.
+Enter the email address connected to your E-Tag account.
 </p>
 
-<label>Email</label>
+<label>
+Email
+</label>
 
 <input
-  id="resetEmail"
-  type="email"
-  placeholder="you@example.com"
-  autocomplete="email"
+id="resetEmail"
+type="email"
+placeholder="[you@example.com](mailto:you@example.com)"
+autocomplete="email"
+
 >
 
-<button id="resetButton">
-Send Reset Email
+<button id="sendResetButton">
+Send Reset Link
 </button>
 
-<div id="resetMessage" class="message"></div>
+<div
+id="resetMessage"
+class="message"
+></div>
 
-<div id="backToLogin" class="link">
+<div
+id="backToLogin"
+class="link"
+>
 Back to Login
 </div>
 
 </section>
 
+<!-- UPDATE PASSWORD -->
 
-<!-- NEW PASSWORD -->
-
-<section id="newPasswordSection" class="card hidden">
+<section
+id="updatePasswordSection"
+class="card hidden"
+>
 
 <h2>
 Create New Password
 </h2>
 
-<label>New Password</label>
+<label>
+New Password
+</label>
 
 <input
-  id="newPassword"
-  type="password"
-  placeholder="Minimum 6 characters"
-  autocomplete="new-password"
+id="newPassword"
+type="password"
+placeholder="Minimum 6 characters"
+autocomplete="new-password"
+
 >
 
-<label>Confirm Password</label>
+<label>
+Confirm New Password
+</label>
 
 <input
-  id="confirmPassword"
-  type="password"
-  placeholder="Repeat your password"
-  autocomplete="new-password"
+id="newPasswordConfirm"
+type="password"
+placeholder="Enter password again"
+autocomplete="new-password"
+
 >
 
 <button id="updatePasswordButton">
 Update Password
 </button>
 
-<div id="updatePasswordMessage" class="message"></div>
+<div
+id="updatePasswordMessage"
+class="message"
+></div>
 
 </section>
 
-
 <!-- DASHBOARD -->
 
-<section id="dashboardSection" class="hidden">
+<section
+id="dashboardSection"
+class="hidden"
+>
 
 <div class="card">
 
 <div class="profile">
 
-<div id="avatar" class="avatar">
+<div
+id="avatar"
+class="avatar"
+>
 E
 </div>
 
@@ -619,7 +702,10 @@ Profile Template
 
 <div class="template-grid">
 
-<div class="template-option" data-template="boy">
+<div
+class="template-option"
+data-template="boy"
+>
 
 <div class="template-icon">
 👨
@@ -635,7 +721,10 @@ Modern dark style
 
 </div>
 
-<div class="template-option" data-template="girl">
+<div
+class="template-option"
+data-template="girl"
+>
 
 <div class="template-icon">
 👩
@@ -651,7 +740,10 @@ Pink elegant style
 
 </div>
 
-<div class="template-option" data-template="business">
+<div
+class="template-option"
+data-template="business"
+>
 
 <div class="template-icon">
 💼
@@ -667,7 +759,10 @@ Professional style
 
 </div>
 
-<div class="template-option" data-template="couple">
+<div
+class="template-option"
+data-template="couple"
+>
 
 <div class="template-icon">
 ❤️
@@ -690,9 +785,10 @@ Name
 </label>
 
 <input
-  id="displayName"
-  type="text"
-  placeholder="Your name"
+id="displayName"
+type="text"
+placeholder="Your name"
+
 >
 
 <label>
@@ -700,8 +796,8 @@ Bio
 </label>
 
 <textarea
-  id="bio"
-  placeholder="Tell people about yourself"
+id="bio"
+placeholder="Tell people about yourself"
 ></textarea>
 
 <label>
@@ -709,9 +805,10 @@ Phone
 </label>
 
 <input
-  id="phone"
-  type="tel"
-  placeholder="+94..."
+id="phone"
+type="tel"
+placeholder="+94..."
+
 >
 
 <label>
@@ -719,9 +816,10 @@ WhatsApp
 </label>
 
 <input
-  id="whatsapp"
-  type="tel"
-  placeholder="+94..."
+id="whatsapp"
+type="tel"
+placeholder="+94..."
+
 >
 
 <label>
@@ -729,19 +827,22 @@ Public Email
 </label>
 
 <input
-  id="publicEmail"
-  type="email"
-  placeholder="contact@example.com"
+id="publicEmail"
+type="email"
+placeholder="[contact@example.com](mailto:contact@example.com)"
+
 >
 
 <button id="saveProfileButton">
 Save Profile
 </button>
 
-<div id="profileMessage" class="message"></div>
+<div
+id="profileMessage"
+class="message"
+></div>
 
 </div>
-
 
 <div class="card">
 
@@ -755,21 +856,26 @@ Loading...
 
 </div>
 
-
 <div class="card">
 
-<button id="logoutButton" class="logout">
-Logout
-</button>
+<button
+id="logoutButton"
+class="logout"
+
+>
+
+Logout </button>
 
 </div>
 
 </section>
 
-
 <!-- PUBLIC TAG -->
 
-<section id="publicTagSection" class="hidden">
+<section
+id="publicTagSection"
+class="hidden"
+>
 
 <div class="card">
 
@@ -777,10 +883,12 @@ Logout
 Loading E-Tag...
 </div>
 
-
 <!-- ACTIVATION -->
 
-<div id="activationBox" class="hidden">
+<div
+id="activationBox"
+class="hidden"
+>
 
 <div class="activate-icon">
 🏷️
@@ -790,51 +898,78 @@ Loading E-Tag...
 Activate your E-Tag
 </h2>
 
-<div id="activationTagId" class="tag-id">
+<div
+id="activationTagId"
+class="tag-id"
+>
 E-Tag
 </div>
 
 <p style="text-align:center;">
-This E-Tag is ready to be connected to your account.
+Create your account to activate this E-Tag.
 </p>
 
 <button id="activateButton">
 Activate E-Tag
 </button>
 
-<div id="activationMessage" class="message"></div>
+<div
+id="activationMessage"
+class="message"
+></div>
 
 </div>
-
 
 <!-- PUBLIC PROFILE -->
 
-<div id="publicProfileBox" class="hidden">
+<div
+id="publicProfileBox"
+class="hidden"
+>
 
-<div id="publicTemplate" class="public-profile public-template">
+<div
+id="publicTemplate"
+class="public-profile public-template"
+>
 
-<div id="publicTemplateBadge" class="template-badge">
+<div
+id="publicTemplateBadge"
+class="template-badge"
+>
 E-TAG
 </div>
 
-<div id="publicAvatar" class="avatar">
+<div
+id="publicAvatar"
+class="avatar"
+>
 E
 </div>
 
-<div id="publicName" class="public-name">
+<div
+id="publicName"
+class="public-name"
+>
 Your Name
 </div>
 
-<div id="publicBio" class="public-bio">
+<div
+id="publicBio"
+class="public-bio"
+>
 Digital Identity
 </div>
 
 <div id="publicButtons">
 </div>
 
-<button id="ownerEditButton" class="hidden edit-button">
-✏️ Edit Profile
-</button>
+<button
+id="ownerEditButton"
+class="hidden edit-button"
+
+>
+
+✏️ Edit Profile </button>
 
 </div>
 
@@ -844,10 +979,12 @@ Digital Identity
 
 </section>
 
-
 <!-- NOT FOUND -->
 
-<section id="notFoundSection" class="card hidden">
+<section
+id="notFoundSection"
+class="card hidden"
+>
 
 <h2 style="text-align:center;">
 E-Tag not found
@@ -857,12 +994,15 @@ E-Tag not found
 This E-Tag does not exist.
 </p>
 
-<div id="notFoundMessage" class="message" style="display:block;"></div>
+<div
+id="notFoundMessage"
+class="message"
+style="display:block;"
+></div>
 
 </section>
 
 </div>
-
 
 <script type="module">
 
@@ -871,21 +1011,9 @@ import {
 } from "./supabase.js";
 
 
-/*
-=====================================================
-CONFIG
-=====================================================
-*/
-
 const SITE_URL =
 "https://emoon3d.github.io/E-Tag/";
 
-
-/*
-=====================================================
-ELEMENTS
-=====================================================
-*/
 
 const loginSection =
 document.getElementById("loginSection");
@@ -896,11 +1024,11 @@ document.getElementById("signupSection");
 const confirmationSection =
 document.getElementById("confirmationSection");
 
-const forgotSection =
-document.getElementById("forgotSection");
+const forgotPasswordSection =
+document.getElementById("forgotPasswordSection");
 
-const newPasswordSection =
-document.getElementById("newPasswordSection");
+const updatePasswordSection =
+document.getElementById("updatePasswordSection");
 
 const dashboardSection =
 document.getElementById("dashboardSection");
@@ -914,14 +1042,6 @@ document.getElementById("notFoundSection");
 
 let selectedTemplate = "boy";
 
-let currentTag = null;
-
-
-/*
-=====================================================
-SHOW / HIDE
-=====================================================
-*/
 
 function hideAll() {
 
@@ -931,9 +1051,9 @@ function hideAll() {
 
   confirmationSection.classList.add("hidden");
 
-  forgotSection.classList.add("hidden");
+  forgotPasswordSection.classList.add("hidden");
 
-  newPasswordSection.classList.add("hidden");
+  updatePasswordSection.classList.add("hidden");
 
   dashboardSection.classList.add("hidden");
 
@@ -959,12 +1079,20 @@ function showSignup(tagCode = null) {
 
   signupSection.classList.remove("hidden");
 
+  const display =
+    document.getElementById(
+      "signupTagDisplay"
+    );
+
   if (tagCode) {
 
-    document
-    .getElementById("signupTagId")
-    .textContent =
-    "E-Tag: " + tagCode;
+    display.textContent =
+      "E-Tag: " + tagCode;
+
+  } else {
+
+    display.textContent =
+      "E-Tag Account";
 
   }
 
@@ -975,7 +1103,9 @@ function showForgotPassword() {
 
   hideAll();
 
-  forgotSection.classList.remove("hidden");
+  forgotPasswordSection.classList.remove(
+    "hidden"
+  );
 
 }
 
@@ -986,59 +1116,68 @@ function showMessage(
   type = ""
 ) {
 
-  const element =
-  document.getElementById(id);
+  const el =
+    document.getElementById(id);
 
-  element.textContent =
-  text;
+  el.textContent =
+    text;
 
-  element.className =
-  "message " + type;
+  el.className =
+    "message " + type;
 
-  element.style.display =
-  "block";
+  el.style.display =
+    "block";
 
 }
 
 
-/*
-=====================================================
-TEMPLATE SELECTOR
-=====================================================
-*/
+function clearMessage(id) {
+
+  const el =
+    document.getElementById(id);
+
+  el.textContent =
+    "";
+
+  el.className =
+    "message";
+
+  el.style.display =
+    "none";
+
+}
+
+
+/* =====================================================
+   TEMPLATE SELECTOR
+===================================================== */
 
 document
 .querySelectorAll(".template-option")
-.forEach(option => {
+.forEach(
+  option => {
 
-  option.addEventListener(
-    "click",
-    () => {
+    option.addEventListener(
+      "click",
+      () => {
 
-      selectedTemplate =
-      option.dataset.template;
+        selectedTemplate =
+          option.dataset.template;
 
-      document
-      .querySelectorAll(".template-option")
-      .forEach(item => {
-
-        item.classList.remove(
-          "selected"
+        setSelectedTemplate(
+          selectedTemplate
         );
 
-      });
+      }
+    );
 
-      option.classList.add(
-        "selected"
-      );
-
-    }
-  );
-
-});
+  }
+);
 
 
-function setSelectedTemplate(template) {
+function setSelectedTemplate(
+  template
+) {
 
   const validTemplates = [
     "boy",
@@ -1048,7 +1187,9 @@ function setSelectedTemplate(template) {
   ];
 
   if (
-    !validTemplates.includes(template)
+    !validTemplates.includes(
+      template
+    )
   ) {
 
     template = "boy";
@@ -1056,56 +1197,337 @@ function setSelectedTemplate(template) {
   }
 
   selectedTemplate =
-  template;
+    template;
 
   document
-  .querySelectorAll(".template-option")
-  .forEach(option => {
+  .querySelectorAll(
+    ".template-option"
+  )
+  .forEach(
+    option => {
 
-    option.classList.toggle(
-      "selected",
-      option.dataset.template ===
-      template
-    );
+      option.classList.toggle(
+        "selected",
+        option.dataset.template ===
+        template
+      );
 
-  });
+    }
+  );
 
 }
 
 
-/*
-=====================================================
-NAVIGATION
-=====================================================
-*/
+/* =====================================================
+   SIGNUP
+===================================================== */
 
 document
-.getElementById("showSignup")
+.getElementById("signupButton")
 .addEventListener(
   "click",
-  () => {
+  async () => {
 
-    const tagCode =
-    currentTag?.tag_code ||
-    getTagCode();
+    const email =
+      document
+      .getElementById("signupEmail")
+      .value
+      .trim()
+      .toLowerCase();
 
-    showSignup(tagCode);
+    const password =
+      document
+      .getElementById("signupPassword")
+      .value;
+
+    const confirmPassword =
+      document
+      .getElementById(
+        "signupPasswordConfirm"
+      )
+      .value;
+
+
+    if (!email || !password) {
+
+      showMessage(
+        "signupMessage",
+        "Please enter your email and password.",
+        "error"
+      );
+
+      return;
+
+    }
+
+
+    if (
+      password.length < 6
+    ) {
+
+      showMessage(
+        "signupMessage",
+        "Password must contain at least 6 characters.",
+        "error"
+      );
+
+      return;
+
+    }
+
+
+    if (
+      password !== confirmPassword
+    ) {
+
+      showMessage(
+        "signupMessage",
+        "Passwords do not match.",
+        "error"
+      );
+
+      return;
+
+    }
+
+
+    const signupButton =
+      document.getElementById(
+        "signupButton"
+      );
+
+    signupButton.disabled =
+      true;
+
+    signupButton.textContent =
+      "Creating Account...";
+
+
+    try {
+
+      const {
+        data,
+        error
+      } =
+      await supabase.auth.signUp({
+
+        email:
+          email,
+
+        password:
+          password,
+
+        options: {
+
+          emailRedirectTo:
+            SITE_URL
+
+        }
+
+      });
+
+
+      if (error) {
+
+        showMessage(
+          "signupMessage",
+          error.message,
+          "error"
+        );
+
+        return;
+
+      }
+
+
+      if (!data.user) {
+
+        showMessage(
+          "signupMessage",
+          "Account could not be created.",
+          "error"
+        );
+
+        return;
+
+      }
+
+
+      const pendingTag =
+        sessionStorage.getItem(
+          "pendingTag"
+        );
+
+
+      if (
+        data.session
+      ) {
+
+        if (pendingTag) {
+
+          const result =
+            await activateTag(
+              pendingTag,
+              data.user
+            );
+
+
+          if (!result.success) {
+
+            showMessage(
+              "signupMessage",
+              result.message,
+              "error"
+            );
+
+            return;
+
+          }
+
+          sessionStorage.removeItem(
+            "pendingTag"
+          );
+
+        }
+
+
+        await loadDashboard();
+
+        return;
+
+      }
+
+
+      document
+      .getElementById(
+        "confirmationEmail"
+      )
+      .textContent =
+        email;
+
+
+      hideAll();
+
+      confirmationSection.classList.remove(
+        "hidden"
+      );
+
+
+    } finally {
+
+      signupButton.disabled =
+        false;
+
+      signupButton.textContent =
+        "Create Account";
+
+    }
 
   }
 );
 
 
+/* =====================================================
+   LOGIN
+===================================================== */
+
 document
-.getElementById("showLogin")
+.getElementById("loginButton")
 .addEventListener(
   "click",
-  () => {
+  async () => {
 
-    showLogin();
+    const email =
+      document
+      .getElementById("loginEmail")
+      .value
+      .trim()
+      .toLowerCase();
+
+    const password =
+      document
+      .getElementById("loginPassword")
+      .value;
+
+
+    if (!email || !password) {
+
+      showMessage(
+        "loginMessage",
+        "Please enter your email and password.",
+        "error"
+      );
+
+      return;
+
+    }
+
+
+    const loginButton =
+      document.getElementById(
+        "loginButton"
+      );
+
+    loginButton.disabled =
+      true;
+
+    loginButton.textContent =
+      "Logging in...";
+
+
+    try {
+
+      const {
+        data,
+        error
+      } =
+      await supabase.auth.signInWithPassword({
+
+        email:
+          email,
+
+        password:
+          password
+
+      });
+
+
+      if (error) {
+
+        showMessage(
+          "loginMessage",
+          error.message,
+          "error"
+        );
+
+        return;
+
+      }
+
+
+      if (data.session) {
+
+        await afterLogin();
+
+      }
+
+    } finally {
+
+      loginButton.disabled =
+        false;
+
+      loginButton.textContent =
+        "Login";
+
+    }
 
   }
 );
 
+
+/* =====================================================
+   FORGOT PASSWORD
+===================================================== */
 
 document
 .getElementById("forgotPasswordLink")
@@ -1119,147 +1541,134 @@ document
 );
 
 
+/* =====================================================
+   SEND PASSWORD RESET EMAIL
+===================================================== */
+
+document
+.getElementById("sendResetButton")
+.addEventListener(
+  "click",
+  async () => {
+
+    const email =
+      document
+      .getElementById("resetEmail")
+      .value
+      .trim()
+      .toLowerCase();
+
+
+    if (!email) {
+
+      showMessage(
+        "resetMessage",
+        "Enter your email address.",
+        "error"
+      );
+
+      return;
+
+    }
+
+
+    const button =
+      document.getElementById(
+        "sendResetButton"
+      );
+
+    button.disabled =
+      true;
+
+    button.textContent =
+      "Sending...";
+
+
+    try {
+
+      const {
+        error
+      } =
+      await supabase.auth.resetPasswordForEmail(
+        email,
+        {
+          redirectTo:
+            SITE_URL
+        }
+      );
+
+
+      if (error) {
+
+        showMessage(
+          "resetMessage",
+          error.message,
+          "error"
+        );
+
+        return;
+
+      }
+
+
+      showMessage(
+        "resetMessage",
+        "Password reset link sent. Check your email.",
+        "success"
+      );
+
+
+    } finally {
+
+      button.disabled =
+        false;
+
+      button.textContent =
+        "Send Reset Link";
+
+    }
+
+  }
+);
+
+
+/* =====================================================
+   BACK TO LOGIN
+===================================================== */
+
 document
 .getElementById("backToLogin")
 .addEventListener(
   "click",
-  () => {
-
-    showLogin();
-
-  }
+  showLogin
 );
 
 
-/*
-=====================================================
-SIGNUP
-=====================================================
-*/
+/* =====================================================
+   CONFIRMATION BUTTON
+===================================================== */
 
 document
-.getElementById("signupButton")
+.getElementById(
+  "confirmationLoginButton"
+)
 .addEventListener(
-"click",
-async () => {
-
-  const email =
-  document
-  .getElementById("signupEmail")
-  .value
-  .trim()
-  .toLowerCase();
-
-  const password =
-  document
-  .getElementById("signupPassword")
-  .value;
-
-  const tagCode =
-  currentTag?.tag_code ||
-  getTagCode() ||
-  sessionStorage.getItem("pendingTag");
-
-
-  if (!email || !password) {
-
-    showMessage(
-      "signupMessage",
-      "Please enter your email and password.",
-      "error"
-    );
-
-    return;
-
-  }
-
-
-  if (password.length < 6) {
-
-    showMessage(
-      "signupMessage",
-      "Password must contain at least 6 characters.",
-      "error"
-    );
-
-    return;
-
-  }
-
-
-  if (!tagCode) {
-
-    showMessage(
-      "signupMessage",
-      "E-Tag information is missing.",
-      "error"
-    );
-
-    return;
-
-  }
-
-
-  /*
-   * SAVE TAG BEFORE EMAIL CONFIRMATION.
-   *
-   * The tag code is kept locally so after
-   * confirmation we know which E-Tag to activate.
-   */
-
-  sessionStorage.setItem(
-    "pendingTag",
-    tagCode
-  );
-
-
-  const signupButton =
-  document.getElementById(
-    "signupButton"
-  );
-
-  signupButton.disabled =
-  true;
-
-  signupButton.textContent =
-  "Creating Account...";
-
-
-  try {
-
-    const redirectURL =
-    SITE_URL +
-    "?confirmed=1&tag=" +
-    encodeURIComponent(tagCode);
-
+  "click",
+  async () => {
 
     const {
-      data,
-      error
-    } =
-    await supabase.auth.signUp({
-
-      email:
-      email,
-
-      password:
-      password,
-
-      options: {
-
-        emailRedirectTo:
-        redirectURL
-
+      data: {
+        session
       }
+    } =
+      await supabase.auth.getSession();
 
-    });
 
-
-    if (error) {
+    if (!session) {
 
       showMessage(
-        "signupMessage",
-        error.message,
+        "confirmationMessage",
+        "Please click the confirmation link in your email first.",
         "error"
       );
 
@@ -1268,828 +1677,174 @@ async () => {
     }
 
 
-    document
-    .getElementById(
-      "confirmationEmail"
-    )
-    .textContent =
-    email;
-
-
-    hideAll();
-
-    confirmationSection.classList.remove(
-      "hidden"
-    );
-
-
-  } finally {
-
-    signupButton.disabled =
-    false;
-
-    signupButton.textContent =
-    "Create Account & Activate";
+    await afterLogin();
 
   }
-
-}
 );
 
 
-/*
-=====================================================
-LOGIN
-=====================================================
-*/
+/* =====================================================
+   UPDATE PASSWORD
+===================================================== */
 
 document
-.getElementById("loginButton")
+.getElementById(
+  "updatePasswordButton"
+)
 .addEventListener(
-"click",
-async () => {
-
-  const email =
-  document
-  .getElementById("loginEmail")
-  .value
-  .trim()
-  .toLowerCase();
-
-  const password =
-  document
-  .getElementById("loginPassword")
-  .value;
-
-
-  if (!email || !password) {
-
-    showMessage(
-      "loginMessage",
-      "Please enter your email and password.",
-      "error"
-    );
-
-    return;
-
-  }
-
-
-  const loginButton =
-  document.getElementById(
-    "loginButton"
-  );
-
-  loginButton.disabled =
-  true;
-
-  loginButton.textContent =
-  "Logging in...";
-
-
-  try {
-
-    const {
-      data,
-      error
-    } =
-    await supabase.auth.signInWithPassword({
-
-      email:
-      email,
-
-      password:
-      password
-
-    });
-
-
-    if (error) {
-
-      showMessage(
-        "loginMessage",
-        error.message,
-        "error"
-      );
-
-      return;
-
-    }
-
-
-    if (data.session) {
-
-      await afterLogin();
-
-    }
-
-  } finally {
-
-    loginButton.disabled =
-    false;
-
-    loginButton.textContent =
-    "Login";
-
-  }
-
-}
-);
-
-
-/*
-=====================================================
-FORGOT PASSWORD
-=====================================================
-*/
-
-document
-.getElementById("resetButton")
-.addEventListener(
-"click",
-async () => {
-
-  const email =
-  document
-  .getElementById("resetEmail")
-  .value
-  .trim()
-  .toLowerCase();
-
-
-  if (!email) {
-
-    showMessage(
-      "resetMessage",
-      "Please enter your email.",
-      "error"
-    );
-
-    return;
-
-  }
-
-
-  const button =
-  document.getElementById(
-    "resetButton"
-  );
-
-  button.disabled =
-  true;
-
-  button.textContent =
-  "Sending...";
-
-
-  try {
-
-    const redirectURL =
-    SITE_URL +
-    "?reset=1";
-
-
-    const {
-      error
-    } =
-    await supabase.auth.resetPasswordForEmail(
-      email,
-      {
-        redirectTo:
-        redirectURL
-      }
-    );
-
-
-    if (error) {
-
-      showMessage(
-        "resetMessage",
-        error.message,
-        "error"
-      );
-
-      return;
-
-    }
-
-
-    showMessage(
-      "resetMessage",
-      "Password reset email sent. Check your email.",
-      "success"
-    );
-
-
-  } finally {
-
-    button.disabled =
-    false;
-
-    button.textContent =
-    "Send Reset Email";
-
-  }
-
-}
-);
-
-
-/*
-=====================================================
-UPDATE PASSWORD
-=====================================================
-*/
-
-document
-.getElementById("updatePasswordButton")
-.addEventListener(
-"click",
-async () => {
-
-  const password =
-  document
-  .getElementById("newPassword")
-  .value;
-
-  const confirm =
-  document
-  .getElementById("confirmPassword")
-  .value;
-
-
-  if (!password || !confirm) {
-
-    showMessage(
-      "updatePasswordMessage",
-      "Please enter your new password.",
-      "error"
-    );
-
-    return;
-
-  }
-
-
-  if (password.length < 6) {
-
-    showMessage(
-      "updatePasswordMessage",
-      "Password must contain at least 6 characters.",
-      "error"
-    );
-
-    return;
-
-  }
-
-
-  if (password !== confirm) {
-
-    showMessage(
-      "updatePasswordMessage",
-      "Passwords do not match.",
-      "error"
-    );
-
-    return;
-
-  }
-
-
-  const button =
-  document.getElementById(
-    "updatePasswordButton"
-  );
-
-  button.disabled =
-  true;
-
-  button.textContent =
-  "Updating...";
-
-
-  try {
-
-    const {
-      error
-    } =
-    await supabase.auth.updateUser({
-
-      password:
-      password
-
-    });
-
-
-    if (error) {
-
-      showMessage(
-        "updatePasswordMessage",
-        error.message,
-        "error"
-      );
-
-      return;
-
-    }
-
-
-    showMessage(
-      "updatePasswordMessage",
-      "Password updated successfully.",
-      "success"
-    );
-
-
-    setTimeout(
-      async () => {
-
-        await afterLogin();
-
-      },
-      1200
-    );
-
-
-  } finally {
-
-    button.disabled =
-    false;
-
-    button.textContent =
-    "Update Password";
-
-  }
-
-}
-);
-
-
-/*
-=====================================================
-CREATE PROFILE IF MISSING
-=====================================================
-*/
-
-async function ensureProfile(user) {
-
-  if (!user) {
-
-    return {
-      success: false,
-      message: "User not found."
-    };
-
-  }
-
-
-  const {
-    data: existingProfile,
-    error: profileCheckError
-  } =
-  await supabase
-  .from("profiles")
-  .select("id")
-  .eq(
-    "id",
-    user.id
-  )
-  .maybeSingle();
-
-
-  if (profileCheckError) {
-
-    return {
-      success: false,
-      message:
-      "Could not check profile: " +
-      profileCheckError.message
-    };
-
-  }
-
-
-  if (existingProfile) {
-
-    return {
-      success: true
-    };
-
-  }
-
-
-  /*
-   * IMPORTANT:
-   *
-   * Create the profiles row BEFORE
-   * assigning owner_id in nfc_tags.
-   */
-
-  const {
-    error: insertError
-  } =
-  await supabase
-  .from("profiles")
-  .insert({
-
-    id:
-    user.id,
-
-    email:
-    user.email || "",
-
-    template:
-    "boy"
-
-  });
-
-
-  if (insertError) {
-
-    /*
-     * Another browser/tab may have created it.
-     * Check once more.
-     */
-
-    const {
-      data: retryProfile
-    } =
-    await supabase
-    .from("profiles")
-    .select("id")
-    .eq(
-      "id",
-      user.id
-    )
-    .maybeSingle();
-
-
-    if (!retryProfile) {
-
-      return {
-        success: false,
-        message:
-        "Could not create profile: " +
-        insertError.message
-      };
-
-    }
-
-  }
-
-
-  return {
-    success: true
-  };
-
-}
-
-
-/*
-=====================================================
-ACTIVATE TAG
-=====================================================
-*/
-
-async function activateTag(
-  tagCode,
-  user
-) {
-
-  if (!tagCode) {
-
-    return {
-      success: false,
-      message: "E-Tag code is missing."
-    };
-
-  }
-
-
-  if (!user) {
-
-    return {
-      success: false,
-      message: "You must login first."
-    };
-
-  }
-
-
-  /*
-   * FIRST create profile.
-   *
-   * This prevents the foreign key error.
-   */
-
-  const profileResult =
-  await ensureProfile(user);
-
-
-  if (!profileResult.success) {
-
-    return profileResult;
-
-  }
-
-
-  /*
-   * FIND TAG
-   */
-
-  const {
-    data: tags,
-    error: findError
-  } =
-  await supabase
-  .from("nfc_tags")
-  .select(
-    "id,tag_code,owner_id,active"
-  )
-  .eq(
-    "tag_code",
-    tagCode
-  );
-
-
-  if (findError) {
-
-    return {
-      success: false,
-      message:
-      "Could not find E-Tag: " +
-      findError.message
-    };
-
-  }
-
-
-  if (!tags || tags.length === 0) {
-
-    return {
-      success: false,
-      message:
-      "E-Tag " +
-      tagCode +
-      " does not exist."
-    };
-
-  }
-
-
-  const tag =
-  tags[0];
-
-
-  /*
-   * ALREADY OWNED BY THIS USER
-   */
-
-  if (
-    tag.owner_id === user.id &&
-    tag.active === true
-  ) {
-
-    return {
-      success: true,
-      message:
-      "E-Tag already belongs to you."
-    };
-
-  }
-
-
-  /*
-   * OWNED BY SOMEONE ELSE
-   */
-
-  if (
-    tag.owner_id !== null &&
-    tag.owner_id !== user.id
-  ) {
-
-    return {
-      success: false,
-      message:
-      "This E-Tag has already been activated by another account."
-    };
-
-  }
-
-
-  /*
-   * TAG MUST BE UNUSED
-   */
-
-  if (tag.active !== false) {
-
-    return {
-      success: false,
-      message:
-      "This E-Tag cannot be activated."
-    };
-
-  }
-
-
-  /*
-   * NOW LINK TAG TO USER
-   */
-
-  const {
-    data: updated,
-    error: updateError
-  } =
-  await supabase
-  .from("nfc_tags")
-  .update({
-
-    owner_id:
-    user.id,
-
-    active:
-    true
-
-  })
-  .eq(
-    "id",
-    tag.id
-  )
-  .is(
-    "owner_id",
-    null
-  )
-  .eq(
-    "active",
-    false
-  )
-  .select(
-    "id,tag_code,owner_id,active"
-  );
-
-
-  if (updateError) {
-
-    return {
-      success: false,
-      message:
-      "Activation failed: " +
-      updateError.message
-    };
-
-  }
-
-
-  if (
-    !updated ||
-    updated.length === 0
-  ) {
-
-    /*
-     * Check whether another request
-     * activated it.
-     */
-
-    const {
-      data: checkTag
-    } =
-    await supabase
-    .from("nfc_tags")
-    .select(
-      "id,tag_code,owner_id,active"
-    )
-    .eq(
-      "tag_code",
-      tagCode
-    )
-    .maybeSingle();
+  "click",
+  async () => {
+
+    const password =
+      document
+      .getElementById("newPassword")
+      .value;
+
+    const confirm =
+      document
+      .getElementById(
+        "newPasswordConfirm"
+      )
+      .value;
 
 
     if (
-      checkTag &&
-      checkTag.owner_id === user.id &&
-      checkTag.active === true
+      password.length < 6
     ) {
 
-      return {
-        success: true,
-        message:
-        "E-Tag activated successfully."
-      };
+      showMessage(
+        "updatePasswordMessage",
+        "Password must contain at least 6 characters.",
+        "error"
+      );
+
+      return;
 
     }
 
 
-    return {
-      success: false,
-      message:
-      "Activation was not allowed."
-    };
+    if (
+      password !== confirm
+    ) {
 
-  }
+      showMessage(
+        "updatePasswordMessage",
+        "Passwords do not match.",
+        "error"
+      );
 
+      return;
 
-  return {
-    success: true,
-    message:
-    "E-Tag activated successfully."
-  };
-
-}
-
-
-/*
-=====================================================
-ACTIVATE BUTTON
-=====================================================
-*/
-
-document
-.getElementById("activateButton")
-.addEventListener(
-"click",
-async () => {
-
-  const tag =
-  currentTag;
-
-
-  if (!tag) {
-
-    showMessage(
-      "activationMessage",
-      "E-Tag information is missing.",
-      "error"
-    );
-
-    return;
-
-  }
-
-
-  const {
-    data: {
-      user
     }
-  } =
-  await supabase.auth.getUser();
 
 
-  if (!user) {
+    const button =
+      document.getElementById(
+        "updatePasswordButton"
+      );
 
-    sessionStorage.setItem(
-      "pendingTag",
-      tag.tag_code
-    );
+    button.disabled =
+      true;
 
-    showSignup(
-      tag.tag_code
-    );
+    button.textContent =
+      "Updating...";
 
-    return;
+
+    try {
+
+      const {
+        error
+      } =
+      await supabase.auth.updateUser({
+
+        password:
+          password
+
+      });
+
+
+      if (error) {
+
+        showMessage(
+          "updatePasswordMessage",
+          error.message,
+          "error"
+        );
+
+        return;
+
+      }
+
+
+      showMessage(
+        "updatePasswordMessage",
+        "Password updated successfully.",
+        "success"
+      );
+
+
+      setTimeout(
+        async () => {
+
+          await loadDashboard();
+
+        },
+        1000
+      );
+
+
+    } finally {
+
+      button.disabled =
+        false;
+
+      button.textContent =
+        "Update Password";
+
+    }
 
   }
-
-
-  const result =
-  await activateTag(
-    tag.tag_code,
-    user
-  );
-
-
-  if (!result.success) {
-
-    showMessage(
-      "activationMessage",
-      result.message,
-      "error"
-    );
-
-    return;
-
-  }
-
-
-  sessionStorage.removeItem(
-    "pendingTag"
-  );
-
-
-  await loadPublicTag(
-    tag.tag_code
-  );
-
-}
 );
 
 
-/*
-=====================================================
-AFTER LOGIN / CONFIRMATION
-=====================================================
-*/
+/* =====================================================
+   SHOW SIGNUP
+===================================================== */
+
+document
+.getElementById("showSignup")
+.addEventListener(
+  "click",
+  () => {
+
+    const pendingTag =
+      sessionStorage.getItem(
+        "pendingTag"
+      );
+
+    showSignup(
+      pendingTag
+    );
+
+  }
+);
+
+
+/* =====================================================
+   SHOW LOGIN
+===================================================== */
+
+document
+.getElementById("showLogin")
+.addEventListener(
+  "click",
+  showLogin
+);
+
+
+/* =====================================================
+   AFTER LOGIN
+===================================================== */
 
 async function afterLogin() {
 
@@ -2098,7 +1853,7 @@ async function afterLogin() {
       user
     }
   } =
-  await supabase.auth.getUser();
+    await supabase.auth.getUser();
 
 
   if (!user) {
@@ -2110,70 +1865,24 @@ async function afterLogin() {
   }
 
 
-  /*
-   * If an E-Tag is waiting for activation,
-   * activate it after email confirmation/login.
-   */
+  /* ================================================
+     PASSWORD RESET SESSION
+  ================================================= */
 
-  const pendingTag =
-  sessionStorage.getItem(
-    "pendingTag"
-  );
+  if (
+    sessionStorage.getItem(
+      "passwordReset"
+    ) === "true"
+  ) {
 
-
-  if (pendingTag) {
-
-    const result =
-    await activateTag(
-      pendingTag,
-      user
+    sessionStorage.removeItem(
+      "passwordReset"
     );
-
-
-    if (result.success) {
-
-      sessionStorage.removeItem(
-        "pendingTag"
-      );
-
-
-      await loadPublicTag(
-        pendingTag
-      );
-
-      return;
-
-    }
-
-
-    /*
-     * If tag belongs to another user,
-     * don't destroy the account.
-     */
 
     hideAll();
 
-    publicTagSection.classList.remove(
+    updatePasswordSection.classList.remove(
       "hidden"
-    );
-
-    document
-    .getElementById("publicLoading")
-    .classList.add("hidden");
-
-    document
-    .getElementById("activationBox")
-    .classList.remove("hidden");
-
-    document
-    .getElementById("activationTagId")
-    .textContent =
-    "E-Tag: " + pendingTag;
-
-    showMessage(
-      "activationMessage",
-      result.message,
-      "error"
     );
 
     return;
@@ -2181,40 +1890,43 @@ async function afterLogin() {
   }
 
 
-  /*
-   * Edit request
-   */
+  /* ================================================
+     EDIT TAG
+  ================================================= */
 
   const editTagCode =
-  sessionStorage.getItem(
-    "editTagCode"
-  );
+    sessionStorage.getItem(
+      "editTagCode"
+    );
 
 
   if (editTagCode) {
+
+    const {
+      data: editTag,
+      error
+    } =
+      await supabase
+      .from("nfc_tags")
+      .select(
+        "id,tag_code,owner_id,active"
+      )
+      .eq(
+        "tag_code",
+        editTagCode
+      )
+      .maybeSingle();
+
 
     sessionStorage.removeItem(
       "editTagCode"
     );
 
 
-    const {
-      data: editTag,
-      error
-    } =
-    await supabase
-    .from("nfc_tags")
-    .select(
-      "id,tag_code,owner_id,active"
-    )
-    .eq(
-      "tag_code",
-      editTagCode
-    )
-    .maybeSingle();
-
-
-    if (error || !editTag) {
+    if (
+      error ||
+      !editTag
+    ) {
 
       showLogin();
 
@@ -2270,16 +1982,454 @@ async function afterLogin() {
   }
 
 
+  /* ================================================
+     PENDING ACTIVATION
+  ================================================= */
+
+  const pendingTag =
+    sessionStorage.getItem(
+      "pendingTag"
+    );
+
+
+  if (pendingTag) {
+
+    const result =
+      await activateTag(
+        pendingTag,
+        user
+      );
+
+
+    if (result.success) {
+
+      sessionStorage.removeItem(
+        "pendingTag"
+      );
+
+      await loadPublicTag(
+        pendingTag
+      );
+
+      return;
+
+    }
+
+
+    hideAll();
+
+    publicTagSection.classList.remove(
+      "hidden"
+    );
+
+    document
+    .getElementById(
+      "publicLoading"
+    )
+    .classList.add(
+      "hidden"
+    );
+
+    document
+    .getElementById(
+      "activationBox"
+    )
+    .classList.remove(
+      "hidden"
+    );
+
+    document
+    .getElementById(
+      "activationTagId"
+    )
+    .textContent =
+      "E-Tag: " + pendingTag;
+
+    showMessage(
+      "activationMessage",
+      result.message,
+      "error"
+    );
+
+    return;
+
+  }
+
+
   await loadDashboard();
 
 }
 
 
-/*
-=====================================================
-DASHBOARD
-=====================================================
-*/
+/* =====================================================
+   ACTIVATE TAG
+===================================================== */
+
+async function activateTag(
+  tagCode,
+  user
+) {
+
+  if (!tagCode) {
+
+    return {
+      success: false,
+      message: "E-Tag code is missing."
+    };
+
+  }
+
+
+  if (!user) {
+
+    return {
+      success: false,
+      message: "You must login first."
+    };
+
+  }
+
+
+  /* ================================================
+     GET TAG
+  ================================================= */
+
+  const {
+    data: tag,
+    error: tagError
+  } =
+    await supabase
+    .from("nfc_tags")
+    .select(
+      "id,tag_code,owner_id,active"
+    )
+    .eq(
+      "tag_code",
+      tagCode
+    )
+    .maybeSingle();
+
+
+  if (tagError) {
+
+    return {
+      success: false,
+      message:
+        "Could not find E-Tag: " +
+        tagError.message
+    };
+
+  }
+
+
+  if (!tag) {
+
+    return {
+      success: false,
+      message:
+        "E-Tag " +
+        tagCode +
+        " does not exist."
+    };
+
+  }
+
+
+  /* ================================================
+     ALREADY OWNED
+  ================================================= */
+
+  if (
+    tag.owner_id === user.id &&
+    tag.active === true
+  ) {
+
+    return {
+      success: true,
+      message:
+        "E-Tag already belongs to you."
+    };
+
+  }
+
+
+  /* ================================================
+     OWNED BY SOMEONE ELSE
+  ================================================= */
+
+  if (
+    tag.owner_id !== null &&
+    tag.owner_id !== user.id
+  ) {
+
+    return {
+      success: false,
+      message:
+        "This E-Tag has already been activated by another account."
+    };
+
+  }
+
+
+  /* ================================================
+     MUST BE INACTIVE
+  ================================================= */
+
+  if (
+    tag.active !== false ||
+    tag.owner_id !== null
+  ) {
+
+    return {
+      success: false,
+      message:
+        "This E-Tag cannot be activated."
+    };
+
+  }
+
+
+  /* ================================================
+     CREATE PROFILE FIRST
+     
+     IMPORTANT:
+     
+     profiles.id = auth.users.id
+     
+     This prevents the foreign-key problem.
+  ================================================= */
+
+  const {
+    data: existingProfile,
+    error: profileCheckError
+  } =
+    await supabase
+    .from("profiles")
+    .select("id")
+    .eq(
+      "id",
+      user.id
+    )
+    .maybeSingle();
+
+
+  if (profileCheckError) {
+
+    return {
+      success: false,
+      message:
+        "Could not check user profile: " +
+        profileCheckError.message
+    };
+
+  }
+
+
+  if (!existingProfile) {
+
+    const {
+      error: profileInsertError
+    } =
+      await supabase
+      .from("profiles")
+      .insert({
+
+        id:
+          user.id,
+
+        email:
+          user.email || "",
+
+        display_name:
+          "",
+
+        bio:
+          "",
+
+        phone:
+          "",
+
+        whatsapp:
+          "",
+
+        template:
+          "boy"
+
+      });
+
+
+    if (profileInsertError) {
+
+      return {
+        success: false,
+        message:
+          "Could not create user profile: " +
+          profileInsertError.message
+      };
+
+    }
+
+  }
+
+
+  /* ================================================
+     LINK TAG TO USER
+  ================================================= */
+
+  const {
+    data: updatedTags,
+    error: updateError
+  } =
+    await supabase
+    .from("nfc_tags")
+    .update({
+
+      owner_id:
+        user.id,
+
+      active:
+        true
+
+    })
+    .eq(
+      "id",
+      tag.id
+    )
+    .is(
+      "owner_id",
+      null
+    )
+    .eq(
+      "active",
+      false
+    )
+    .select(
+      "id,tag_code,owner_id,active"
+    );
+
+
+  if (updateError) {
+
+    return {
+      success: false,
+      message:
+        "Activation failed: " +
+        updateError.message
+    };
+
+  }
+
+
+  if (
+    !updatedTags ||
+    updatedTags.length === 0
+  ) {
+
+    return {
+      success: false,
+      message:
+        "Activation was not allowed. The E-Tag may already belong to another account."
+    };
+
+  }
+
+
+  return {
+    success: true,
+    message:
+      "E-Tag activated successfully."
+  };
+
+}
+
+
+/* =====================================================
+   ACTIVATE BUTTON
+===================================================== */
+
+document
+.getElementById("activateButton")
+.addEventListener(
+  "click",
+  async () => {
+
+    const tag =
+      window.currentTag;
+
+
+    if (!tag) {
+
+      showMessage(
+        "activationMessage",
+        "E-Tag information is missing.",
+        "error"
+      );
+
+      return;
+
+    }
+
+
+    const {
+      data: {
+        user
+      }
+    } =
+      await supabase.auth.getUser();
+
+
+    if (!user) {
+
+      sessionStorage.setItem(
+        "pendingTag",
+        tag.tag_code
+      );
+
+      showSignup(
+        tag.tag_code
+      );
+
+      return;
+
+    }
+
+
+    const result =
+      await activateTag(
+        tag.tag_code,
+        user
+      );
+
+
+    if (!result.success) {
+
+      showMessage(
+        "activationMessage",
+        result.message,
+        "error"
+      );
+
+      return;
+
+    }
+
+
+    sessionStorage.removeItem(
+      "pendingTag"
+    );
+
+
+    await loadPublicTag(
+      tag.tag_code
+    );
+
+  }
+);
+
+
+/* =====================================================
+   DASHBOARD
+===================================================== */
 
 async function loadDashboard() {
 
@@ -2288,7 +2438,7 @@ async function loadDashboard() {
       user
     }
   } =
-  await supabase.auth.getUser();
+    await supabase.auth.getUser();
 
 
   if (!user) {
@@ -2319,26 +2469,26 @@ async function loadDashboard() {
 }
 
 
-/*
-=====================================================
-LOAD PROFILE
-=====================================================
-*/
+/* =====================================================
+   LOAD PROFILE
+===================================================== */
 
-async function loadProfile(userId) {
+async function loadProfile(
+  userId
+) {
 
   const {
     data,
     error
   } =
-  await supabase
-  .from("profiles")
-  .select("*")
-  .eq(
-    "id",
-    userId
-  )
-  .maybeSingle();
+    await supabase
+    .from("profiles")
+    .select("*")
+    .eq(
+      "id",
+      userId
+    )
+    .maybeSingle();
 
 
   if (error) {
@@ -2367,31 +2517,31 @@ async function loadProfile(userId) {
   document
   .getElementById("displayName")
   .value =
-  data.display_name || "";
+    data.display_name || "";
 
 
   document
   .getElementById("bio")
   .value =
-  data.bio || "";
+    data.bio || "";
 
 
   document
   .getElementById("phone")
   .value =
-  data.phone || "";
+    data.phone || "";
 
 
   document
   .getElementById("whatsapp")
   .value =
-  data.whatsapp || "";
+    data.whatsapp || "";
 
 
   document
   .getElementById("publicEmail")
   .value =
-  data.email || "";
+    data.email || "";
 
 
   setSelectedTemplate(
@@ -2406,215 +2556,214 @@ async function loadProfile(userId) {
 }
 
 
-/*
-=====================================================
-SAVE PROFILE
-=====================================================
-*/
+/* =====================================================
+   SAVE PROFILE
+===================================================== */
 
 document
 .getElementById("saveProfileButton")
 .addEventListener(
-"click",
-async () => {
-
-  const {
-    data: {
-      user
-    }
-  } =
-  await supabase.auth.getUser();
-
-
-  if (!user) {
-
-    showLogin();
-
-    return;
-
-  }
-
-
-  const profile = {
-
-    id:
-    user.id,
-
-    display_name:
-    document
-    .getElementById("displayName")
-    .value
-    .trim(),
-
-    bio:
-    document
-    .getElementById("bio")
-    .value
-    .trim(),
-
-    phone:
-    document
-    .getElementById("phone")
-    .value
-    .trim(),
-
-    whatsapp:
-    document
-    .getElementById("whatsapp")
-    .value
-    .trim(),
-
-    email:
-    document
-    .getElementById("publicEmail")
-    .value
-    .trim(),
-
-    template:
-    selectedTemplate
-
-  };
-
-
-  const saveButton =
-  document.getElementById(
-    "saveProfileButton"
-  );
-
-  saveButton.disabled =
-  true;
-
-  saveButton.textContent =
-  "Saving...";
-
-
-  try {
+  "click",
+  async () => {
 
     const {
-      error
-    } =
-    await supabase
-    .from("profiles")
-    .upsert(
-      profile,
-      {
-        onConflict: "id"
+      data: {
+        user
       }
-    );
+    } =
+      await supabase.auth.getUser();
 
 
-    if (error) {
+    if (!user) {
 
-      showMessage(
-        "profileMessage",
-        error.message,
-        "error"
-      );
+      showLogin();
 
       return;
 
     }
 
 
-    updatePreview(
-      profile
-    );
+    const profile = {
+
+      id:
+        user.id,
+
+      display_name:
+        document
+        .getElementById("displayName")
+        .value
+        .trim(),
+
+      bio:
+        document
+        .getElementById("bio")
+        .value
+        .trim(),
+
+      phone:
+        document
+        .getElementById("phone")
+        .value
+        .trim(),
+
+      whatsapp:
+        document
+        .getElementById("whatsapp")
+        .value
+        .trim(),
+
+      email:
+        document
+        .getElementById("publicEmail")
+        .value
+        .trim(),
+
+      template:
+        selectedTemplate
+
+    };
 
 
-    showMessage(
-      "profileMessage",
-      "Profile saved successfully.",
-      "success"
-    );
+    const saveButton =
+      document.getElementById(
+        "saveProfileButton"
+      );
 
-
-  } finally {
 
     saveButton.disabled =
-    false;
+      true;
 
     saveButton.textContent =
-    "Save Profile";
+      "Saving...";
+
+
+    try {
+
+      const {
+        error
+      } =
+        await supabase
+        .from("profiles")
+        .upsert(
+          profile,
+          {
+            onConflict:
+              "id"
+          }
+        );
+
+
+      if (error) {
+
+        showMessage(
+          "profileMessage",
+          error.message,
+          "error"
+        );
+
+        return;
+
+      }
+
+
+      updatePreview(
+        profile
+      );
+
+
+      showMessage(
+        "profileMessage",
+        "Profile saved successfully.",
+        "success"
+      );
+
+    } finally {
+
+      saveButton.disabled =
+        false;
+
+      saveButton.textContent =
+        "Save Profile";
+
+    }
 
   }
-
-}
 );
 
 
-/*
-=====================================================
-PREVIEW
-=====================================================
-*/
+/* =====================================================
+   PREVIEW
+===================================================== */
 
-function updatePreview(data) {
+function updatePreview(
+  data
+) {
 
   const name =
-  data.display_name ||
-  "Your Name";
+    data.display_name ||
+    "Your Name";
 
 
   document
   .getElementById("previewName")
   .textContent =
-  name;
+    name;
 
 
   document
   .getElementById("previewBio")
   .textContent =
-  data.bio ||
-  "Your digital identity";
+    data.bio ||
+    "Your digital identity";
 
 
   document
   .getElementById("avatar")
   .textContent =
-  name
-  .charAt(0)
-  .toUpperCase();
+    name
+    .charAt(0)
+    .toUpperCase();
 
 }
 
 
-/*
-=====================================================
-LOAD USER TAGS
-=====================================================
-*/
+/* =====================================================
+   LOAD USER TAGS
+===================================================== */
 
-async function loadTags(userId) {
+async function loadTags(
+  userId
+) {
 
   const container =
-  document.getElementById(
-    "tagsContainer"
-  );
+    document.getElementById(
+      "tagsContainer"
+    );
 
 
   const {
     data,
     error
   } =
-  await supabase
-  .from("nfc_tags")
-  .select("*")
-  .eq(
-    "owner_id",
-    userId
-  )
-  .order(
-    "created_at",
-    {
-      ascending: false
-    }
-  );
+    await supabase
+    .from("nfc_tags")
+    .select("*")
+    .eq(
+      "owner_id",
+      userId
+    )
+    .order(
+      "created_at",
+      {
+        ascending: false
+      }
+    );
 
 
   if (error) {
 
     container.textContent =
-    "Unable to load E-Tags.";
+      "Unable to load E-Tags.";
 
     console.error(
       error
@@ -2631,7 +2780,7 @@ async function loadTags(userId) {
   ) {
 
     container.textContent =
-    "No E-Tags assigned yet.";
+      "No E-Tags assigned yet.";
 
     return;
 
@@ -2639,101 +2788,114 @@ async function loadTags(userId) {
 
 
   container.innerHTML =
-  "";
+    "";
 
 
-  data.forEach(tag => {
+  data.forEach(
+    tag => {
 
-    const div =
-    document.createElement(
-      "div"
-    );
-
-    div.className =
-    "tag";
+      const div =
+        document.createElement(
+          "div"
+        );
 
 
-    const url =
-    SITE_URL +
-    "id/" +
-    encodeURIComponent(
-      tag.tag_code
-    );
+      div.className =
+        "tag";
 
 
-    div.innerHTML = `
-
-      <div class="tag-code">
-        ${escapeHtml(tag.tag_code)}
-      </div>
-
-      <div class="status">
-        ${tag.active ? "Active" : "Inactive"}
-      </div>
-
-      <div style="
-        margin-top:8px;
-        font-size:12px;
-        word-break:break-all;
-      ">
-        ${escapeHtml(url)}
-      </div>
-
-    `;
+      const url =
+        SITE_URL +
+        "id/" +
+        encodeURIComponent(
+          tag.tag_code
+        );
 
 
-    container.appendChild(
-      div
-    );
+      div.innerHTML = `
 
-  });
+        <div class="tag-code">
+          ${escapeHtml(
+            tag.tag_code
+          )}
+        </div>
+
+        <div class="status">
+          ${tag.active ? "Active" : "Inactive"}
+        </div>
+
+        <div style="
+          margin-top:8px;
+          font-size:12px;
+          word-break:break-all;
+        ">
+          ${escapeHtml(url)}
+        </div>
+
+      `;
+
+
+      container.appendChild(
+        div
+      );
+
+    }
+  );
 
 }
 
 
-/*
-=====================================================
-GET TAG CODE
-=====================================================
-*/
+/* =====================================================
+   GET TAG CODE FROM URL
+===================================================== */
 
 function getTagCode() {
 
   const path =
-  window.location.pathname;
+    window.location.pathname;
 
 
   const marker =
-  "/E-Tag/id/";
+    "/E-Tag/id/";
 
 
   const position =
-  path.indexOf(
-    marker
-  );
-
-
-  if (position !== -1) {
-
-    let code =
-    path.substring(
-      position +
-      marker.length
+    path.indexOf(
+      marker
     );
 
 
+  if (
+    position !== -1
+  ) {
+
+    let code =
+      path.substring(
+        position +
+        marker.length
+      );
+
+
     code =
-    code
-    .split("/")[0]
-    .split("?")[0]
-    .trim();
+      code
+      .split("/")[0]
+      .split("?")[0]
+      .trim();
 
 
     if (code) {
 
-      return decodeURIComponent(
-        code
-      );
+      try {
+
+        return decodeURIComponent(
+          code
+        );
+
+      } catch {
+
+        return code;
+
+      }
 
     }
 
@@ -2741,51 +2903,43 @@ function getTagCode() {
 
 
   const params =
-  new URLSearchParams(
-    window.location.search
-  );
-
-
-  const tag =
-  params.get("tag");
-
-
-  if (tag) {
-
-    return tag;
-
-  }
+    new URLSearchParams(
+      window.location.search
+    );
 
 
   const route =
-  params.get("route");
+    params.get("route");
 
 
   if (route) {
 
-    let decoded =
-    route;
+    let decoded;
 
 
     try {
 
       decoded =
-      decodeURIComponent(
-        route
-      );
+        decodeURIComponent(
+          route
+        );
 
-    } catch {}
+    } catch {
 
+      decoded =
+        route;
+
+    }
 
 
     const routeMarker =
-    "/E-Tag/id/";
+      "/E-Tag/id/";
 
 
     const routePosition =
-    decoded.indexOf(
-      routeMarker
-    );
+      decoded.indexOf(
+        routeMarker
+      );
 
 
     if (
@@ -2793,24 +2947,32 @@ function getTagCode() {
     ) {
 
       let code =
-      decoded.substring(
-        routePosition +
-        routeMarker.length
-      );
+        decoded.substring(
+          routePosition +
+          routeMarker.length
+        );
 
 
       code =
-      code
-      .split("/")[0]
-      .split("?")[0]
-      .trim();
+        code
+        .split("/")[0]
+        .split("?")[0]
+        .trim();
 
 
       if (code) {
 
-        return decodeURIComponent(
-          code
-        );
+        try {
+
+          return decodeURIComponent(
+            code
+          );
+
+        } catch {
+
+          return code;
+
+        }
 
       }
 
@@ -2824,15 +2986,16 @@ function getTagCode() {
 }
 
 
-/*
-=====================================================
-LOAD PUBLIC TAG
-=====================================================
-*/
+/* =====================================================
+   LOAD PUBLIC TAG
+===================================================== */
 
-async function loadPublicTag(tagCode) {
+async function loadPublicTag(
+  tagCode
+) {
 
   hideAll();
+
 
   publicTagSection.classList.remove(
     "hidden"
@@ -2841,37 +3004,46 @@ async function loadPublicTag(tagCode) {
 
   document
   .getElementById("publicLoading")
-  .classList.remove("hidden");
+  .classList.remove(
+    "hidden"
+  );
 
 
   document
   .getElementById("activationBox")
-  .classList.add("hidden");
+  .classList.add(
+    "hidden"
+  );
 
 
   document
   .getElementById("publicProfileBox")
-  .classList.add("hidden");
+  .classList.add(
+    "hidden"
+  );
 
 
   const {
     data,
     error
   } =
-  await supabase
-  .from("nfc_tags")
-  .select(
-    "id,tag_code,owner_id,active,created_at"
-  )
-  .eq(
-    "tag_code",
-    tagCode
-  );
+    await supabase
+    .from("nfc_tags")
+    .select(
+      "id,tag_code,owner_id,active,created_at"
+    )
+    .eq(
+      "tag_code",
+      tagCode
+    )
+    .maybeSingle();
 
 
   document
   .getElementById("publicLoading")
-  .classList.add("hidden");
+  .classList.add(
+    "hidden"
+  );
 
 
   if (error) {
@@ -2886,10 +3058,7 @@ async function loadPublicTag(tagCode) {
   }
 
 
-  if (
-    !data ||
-    data.length === 0
-  ) {
+  if (!data) {
 
     showNotFound(
       "No E-Tag found: " +
@@ -2902,16 +3071,16 @@ async function loadPublicTag(tagCode) {
 
 
   const tag =
-  data[0];
+    data;
 
 
-  currentTag =
-  tag;
+  window.currentTag =
+    tag;
 
 
-  /*
-   * UNUSED TAG
-   */
+  /* ================================================
+     UNACTIVATED TAG
+  ================================================= */
 
   if (
     tag.active === false &&
@@ -2919,15 +3088,21 @@ async function loadPublicTag(tagCode) {
   ) {
 
     document
-    .getElementById("activationBox")
-    .classList.remove("hidden");
+    .getElementById(
+      "activationBox"
+    )
+    .classList.remove(
+      "hidden"
+    );
 
 
     document
-    .getElementById("activationTagId")
+    .getElementById(
+      "activationTagId"
+    )
     .textContent =
-    "E-Tag: " +
-    tag.tag_code;
+      "E-Tag: " +
+      tag.tag_code;
 
 
     return;
@@ -2935,9 +3110,9 @@ async function loadPublicTag(tagCode) {
   }
 
 
-  /*
-   * ACTIVE TAG
-   */
+  /* ================================================
+     ACTIVE TAG
+  ================================================= */
 
   if (
     tag.active === true &&
@@ -2960,13 +3135,13 @@ async function loadPublicTag(tagCode) {
 }
 
 
-/*
-=====================================================
-PUBLIC PROFILE
-=====================================================
-*/
+/* =====================================================
+   LOAD PUBLIC PROFILE
+===================================================== */
 
-async function loadPublicProfile(tag) {
+async function loadPublicProfile(
+  tag
+) {
 
   if (!tag.owner_id) {
 
@@ -2983,16 +3158,16 @@ async function loadPublicProfile(tag) {
     data: profile,
     error
   } =
-  await supabase
-  .from("profiles")
-  .select(
-    "id,display_name,bio,phone,whatsapp,email,template"
-  )
-  .eq(
-    "id",
-    tag.owner_id
-  )
-  .maybeSingle();
+    await supabase
+    .from("profiles")
+    .select(
+      "id,display_name,bio,phone,whatsapp,email,template"
+    )
+    .eq(
+      "id",
+      tag.owner_id
+    )
+    .maybeSingle();
 
 
   if (error) {
@@ -3019,72 +3194,92 @@ async function loadPublicProfile(tag) {
 
 
   document
-  .getElementById("publicProfileBox")
-  .classList.remove("hidden");
+  .getElementById(
+    "activationBox"
+  )
+  .classList.add(
+    "hidden"
+  );
 
 
-  const template =
-  profile.template ||
-  "boy";
+  document
+  .getElementById(
+    "publicProfileBox"
+  )
+  .classList.remove(
+    "hidden"
+  );
 
 
   applyPublicTemplate(
-    template
+    profile.template || "boy"
   );
 
 
   const name =
-  profile.display_name ||
-  "Unnamed E-Tag";
+    profile.display_name ||
+    "Unnamed E-Tag";
+
+
+  const bio =
+    profile.bio ||
+    "Digital Identity";
 
 
   document
-  .getElementById("publicName")
+  .getElementById(
+    "publicName"
+  )
   .textContent =
-  name;
+    name;
 
 
   document
-  .getElementById("publicBio")
+  .getElementById(
+    "publicBio"
+  )
   .textContent =
-  profile.bio ||
-  "Digital Identity";
+    bio;
 
 
   document
-  .getElementById("publicAvatar")
+  .getElementById(
+    "publicAvatar"
+  )
   .textContent =
-  name
-  .charAt(0)
-  .toUpperCase();
+    name
+    .charAt(0)
+    .toUpperCase();
 
 
   const buttons =
-  document.getElementById(
-    "publicButtons"
-  );
+    document.getElementById(
+      "publicButtons"
+    );
 
 
   buttons.innerHTML =
-  "";
+    "";
 
 
-  if (profile.phone) {
+  if (
+    profile.phone
+  ) {
 
     const a =
-    document.createElement(
-      "a"
-    );
+      document.createElement(
+        "a"
+      );
 
     a.className =
-    "info-button";
+      "info-button";
 
     a.href =
-    "tel:" +
-    profile.phone;
+      "tel:" +
+      profile.phone;
 
     a.textContent =
-    "📞 Call";
+      "📞 Call";
 
     buttons.appendChild(
       a
@@ -3093,36 +3288,38 @@ async function loadPublicProfile(tag) {
   }
 
 
-  if (profile.whatsapp) {
+  if (
+    profile.whatsapp
+  ) {
 
     const clean =
-    profile.whatsapp
-    .replace(
-      /[^0-9]/g,
-      ""
-    );
+      profile.whatsapp
+      .replace(
+        /[^0-9]/g,
+        ""
+      );
 
 
     const a =
-    document.createElement(
-      "a"
-    );
+      document.createElement(
+        "a"
+      );
 
     a.className =
-    "info-button";
+      "info-button";
 
     a.href =
-    "https://wa.me/" +
-    clean;
+      "https://wa.me/" +
+      clean;
 
     a.target =
-    "_blank";
+      "_blank";
 
     a.rel =
-    "noopener noreferrer";
+      "noopener noreferrer";
 
     a.textContent =
-    "💬 WhatsApp";
+      "💬 WhatsApp";
 
     buttons.appendChild(
       a
@@ -3131,22 +3328,24 @@ async function loadPublicProfile(tag) {
   }
 
 
-  if (profile.email) {
+  if (
+    profile.email
+  ) {
 
     const a =
-    document.createElement(
-      "a"
-    );
+      document.createElement(
+        "a"
+      );
 
     a.className =
-    "info-button";
+      "info-button";
 
     a.href =
-    "mailto:" +
-    profile.email;
+      "mailto:" +
+      profile.email;
 
     a.textContent =
-    "✉️ Email";
+      "✉️ Email";
 
     buttons.appendChild(
       a
@@ -3155,15 +3354,10 @@ async function loadPublicProfile(tag) {
   }
 
 
-  /*
-   * EDIT BUTTON IS ALWAYS VISIBLE
-   * BUT LOGIN + OWNER CHECK IS REQUIRED.
-   */
-
   const ownerEditButton =
-  document.getElementById(
-    "ownerEditButton"
-  );
+    document.getElementById(
+      "ownerEditButton"
+    );
 
 
   ownerEditButton.classList.remove(
@@ -3171,19 +3365,19 @@ async function loadPublicProfile(tag) {
   );
 
 
-  currentTag =
-  tag;
+  window.currentTag =
+    tag;
 
 }
 
 
-/*
-=====================================================
-PUBLIC TEMPLATE
-=====================================================
-*/
+/* =====================================================
+   APPLY PUBLIC TEMPLATE
+===================================================== */
 
-function applyPublicTemplate(template) {
+function applyPublicTemplate(
+  template
+) {
 
   const validTemplates = [
     "boy",
@@ -3200,15 +3394,15 @@ function applyPublicTemplate(template) {
   ) {
 
     template =
-    "boy";
+      "boy";
 
   }
 
 
   const box =
-  document.getElementById(
-    "publicTemplate"
-  );
+    document.getElementById(
+      "publicTemplate"
+    );
 
 
   box.classList.remove(
@@ -3225,146 +3419,121 @@ function applyPublicTemplate(template) {
   );
 
 
+  const badge =
+    document.getElementById(
+      "publicTemplateBadge"
+    );
+
+
   const names = {
 
     boy:
-    "BOY",
+      "BOY",
 
     girl:
-    "GIRL",
+      "GIRL",
 
     business:
-    "BUSINESS",
+      "BUSINESS",
 
     couple:
-    "COUPLE"
+      "COUPLE"
 
   };
 
 
-  document
-  .getElementById(
-    "publicTemplateBadge"
-  )
-  .textContent =
-  names[template];
+  badge.textContent =
+    names[template];
 
 }
 
 
-/*
-=====================================================
-EDIT PROFILE
-=====================================================
-*/
+/* =====================================================
+   OWNER EDIT BUTTON
+===================================================== */
 
 document
 .getElementById("ownerEditButton")
 .addEventListener(
-"click",
-async () => {
+  "click",
+  async () => {
 
-  const tag =
-  currentTag;
-
-
-  if (!tag) {
-
-    showLogin();
-
-    showMessage(
-      "loginMessage",
-      "E-Tag information is missing.",
-      "error"
-    );
-
-    return;
-
-  }
+    const tag =
+      window.currentTag;
 
 
-  const {
-    data: {
-      user
+    if (!tag) {
+
+      showLogin();
+
+      return;
+
     }
-  } =
-  await supabase.auth.getUser();
 
 
-  /*
-   * NOT LOGGED IN
-   */
-
-  if (!user) {
-
-    sessionStorage.setItem(
-      "editTagCode",
-      tag.tag_code
-    );
+    const {
+      data: {
+        user
+      }
+    } =
+      await supabase.auth.getUser();
 
 
-    showLogin();
+    if (!user) {
+
+      sessionStorage.setItem(
+        "editTagCode",
+        tag.tag_code
+      );
 
 
-    showMessage(
-      "loginMessage",
-      "Login with the account that owns this E-Tag.",
-      "error"
-    );
+      showLogin();
 
 
-    return;
+      showMessage(
+        "loginMessage",
+        "Login to edit this E-Tag.",
+        "error"
+      );
 
-  }
+      return;
 
-
-  /*
-   * LOGGED IN BUT WRONG USER
-   */
-
-  if (
-    user.id !== tag.owner_id
-  ) {
-
-    showMessage(
-      "loginMessage",
-      "This account does not own this E-Tag.",
-      "error"
-    );
+    }
 
 
-    setTimeout(
-      () => {
-        showLogin();
-      },
-      500
-    );
+    if (
+      user.id !== tag.owner_id
+    ) {
+
+      showLogin();
+
+      showMessage(
+        "loginMessage",
+        "This account is not the owner of this E-Tag.",
+        "error"
+      );
+
+      return;
+
+    }
 
 
-    return;
+    await loadDashboard();
 
   }
-
-
-  /*
-   * OWNER
-   */
-
-  await loadDashboard();
-
-}
 );
 
 
-/*
-=====================================================
-NOT FOUND
-=====================================================
-*/
+/* =====================================================
+   NOT FOUND
+===================================================== */
 
-function showNotFound(message) {
+function showNotFound(
+  message
+) {
 
   hideAll();
+
 
   notFoundSection.classList.remove(
     "hidden"
@@ -3372,290 +3541,266 @@ function showNotFound(message) {
 
 
   document
-  .getElementById("notFoundMessage")
+  .getElementById(
+    "notFoundMessage"
+  )
   .textContent =
-  message ||
-  "This E-Tag does not exist.";
+    message ||
+    "This E-Tag does not exist.";
 
 }
 
 
-/*
-=====================================================
-ESCAPE HTML
-=====================================================
-*/
+/* =====================================================
+   ESCAPE HTML
+===================================================== */
 
-function escapeHtml(value) {
+function escapeHtml(
+  value
+) {
 
   return String(value)
 
-  .replaceAll(
-    "&",
-    "&amp;"
-  )
+    .replaceAll(
+      "&",
+      "&amp;"
+    )
 
-  .replaceAll(
-    "<",
-    "&lt;"
-  )
+    .replaceAll(
+      "<",
+      "&lt;"
+    )
 
-  .replaceAll(
-    ">",
-    "&gt;"
-  )
+    .replaceAll(
+      ">",
+      "&gt;"
+    )
 
-  .replaceAll(
-    '"',
-    "&quot;"
-  )
+    .replaceAll(
+      '"',
+      "&quot;"
+    )
 
-  .replaceAll(
-    "'",
-    "&#039;"
-  );
+    .replaceAll(
+      "'",
+      "&#039;"
+    );
 
 }
 
 
-/*
-=====================================================
-LOGOUT
-=====================================================
-*/
+/* =====================================================
+   LOGOUT
+===================================================== */
 
 document
 .getElementById("logoutButton")
 .addEventListener(
-"click",
-async () => {
+  "click",
+  async () => {
 
-  await supabase.auth.signOut();
-
-
-  sessionStorage.removeItem(
-    "pendingTag"
-  );
+    await supabase.auth.signOut();
 
 
-  sessionStorage.removeItem(
-    "editTagCode"
-  );
+    sessionStorage.removeItem(
+      "pendingTag"
+    );
 
 
-  showLogin();
+    sessionStorage.removeItem(
+      "editTagCode"
+    );
 
-}
+
+    showLogin();
+
+  }
 );
 
 
-/*
-=====================================================
-AUTH STATE
-=====================================================
-*/
+/* =====================================================
+   AUTH STATE
+===================================================== */
 
 supabase
 .auth
 .onAuthStateChange(
-async (
-  event,
-  session
-) => {
+  async (
+    event,
+    session
+  ) => {
 
-  /*
-   * PASSWORD RESET
-   */
+    if (
+      event === "PASSWORD_RECOVERY"
+    ) {
 
-  if (
-    event === "PASSWORD_RECOVERY"
-  ) {
+      sessionStorage.setItem(
+        "passwordReset",
+        "true"
+      );
 
-    hideAll();
 
-    newPasswordSection.classList.remove(
-      "hidden"
-    );
+      hideAll();
 
-    return;
+
+      updatePasswordSection.classList.remove(
+        "hidden"
+      );
+
+
+      return;
+
+    }
+
+
+    if (
+      event === "SIGNED_OUT"
+    ) {
+
+      showLogin();
+
+      return;
+
+    }
+
+
+    if (
+      event === "SIGNED_IN" &&
+      session
+    ) {
+
+      await afterLogin();
+
+    }
 
   }
-
-
-  /*
-   * SIGNED OUT
-   */
-
-  if (
-    event === "SIGNED_OUT"
-  ) {
-
-    showLogin();
-
-  }
-
-}
 );
 
 
-/*
-=====================================================
-START APP
-=====================================================
-*/
+/* =====================================================
+   START APP
+===================================================== */
 
 async function startApp() {
 
   const params =
-  new URLSearchParams(
-    window.location.search
-  );
-
-
-  /*
-   * PASSWORD RESET LINK
-   */
-
-  const resetMode =
-  params.get("reset");
-
-
-  if (resetMode === "1") {
-
-    /*
-     * Supabase may fire PASSWORD_RECOVERY
-     * after establishing the recovery session.
-     */
-
-    const {
-      data: {
-        session
-      }
-    } =
-    await supabase.auth.getSession();
-
-
-    if (session) {
-
-      hideAll();
-
-      newPasswordSection.classList.remove(
-        "hidden"
-      );
-
-      return;
-
-    }
-
-  }
-
-
-  /*
-   * EMAIL CONFIRMATION
-   *
-   * Supabase redirects here after
-   * the user clicks confirmation email.
-   */
-
-  const confirmed =
-  params.get("confirmed");
-
-
-  if (confirmed === "1") {
-
-    const tagFromURL =
-    params.get("tag");
-
-
-    if (tagFromURL) {
-
-      sessionStorage.setItem(
-        "pendingTag",
-        tagFromURL
-      );
-
-    }
-
-
-    const {
-      data: {
-        session
-      }
-    } =
-    await supabase.auth.getSession();
-
-
-    if (session) {
-
-      await afterLogin();
-
-      return;
-
-    }
-
-    /*
-     * If confirmation did not establish
-     * a session, show login.
-     */
-
-    showLogin();
-
-    showMessage(
-      "loginMessage",
-      "Email confirmed. Please login to finish activating your E-Tag.",
-      "success"
+    new URLSearchParams(
+      window.location.search
     );
+
+
+  /* ================================================
+     PASSWORD RECOVERY
+  ================================================= */
+
+  const hash =
+    window.location.hash;
+
+
+  if (
+    hash.includes(
+      "type=recovery"
+    )
+  ) {
+
+    sessionStorage.setItem(
+      "passwordReset",
+      "true"
+    );
+
+
+    hideAll();
+
+
+    updatePasswordSection.classList.remove(
+      "hidden"
+    );
+
 
     return;
 
   }
 
 
-  /*
-   * NORMAL E-TAG PAGE
-   */
+  /* ================================================
+     TAG PAGE
+  ================================================= */
 
   const tagCode =
-  getTagCode();
+    getTagCode();
 
 
   if (tagCode) {
 
-    /*
-     * Save it so signup/login can continue
-     * the activation flow.
-     */
+    const {
+      data: {
+        session
+      }
+    } =
+      await supabase.auth.getSession();
 
-    sessionStorage.setItem(
-      "pendingTag",
-      tagCode
-    );
+
+    if (
+      session
+    ) {
+
+      const pendingTag =
+        sessionStorage.getItem(
+          "pendingTag"
+        );
+
+
+      if (
+        pendingTag === tagCode
+      ) {
+
+        const result =
+          await activateTag(
+            tagCode,
+            session.user
+          );
+
+
+        if (
+          result.success
+        ) {
+
+          sessionStorage.removeItem(
+            "pendingTag"
+          );
+
+        }
+
+      }
+
+    }
 
 
     await loadPublicTag(
       tagCode
     );
 
+
     return;
 
   }
 
 
-  /*
-   * NORMAL WEBSITE LOGIN
-   */
+  /* ================================================
+     NORMAL LOGIN / DASHBOARD
+  ================================================= */
 
   const {
     data: {
       session
     }
   } =
-  await supabase.auth.getSession();
+    await supabase.auth.getSession();
 
 
   if (session) {
 
-    await loadDashboard();
+    await afterLogin();
 
   } else {
 
