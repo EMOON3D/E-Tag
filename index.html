@@ -262,7 +262,6 @@
         Loading E-Tag...
     </div>
 
-
     <div
         id="mainView"
         class="hidden"
@@ -311,7 +310,6 @@
             </div>
 
         </div>
-
 
         <div
             id="authCard"
@@ -411,7 +409,6 @@
 
         </div>
 
-
         <div
             id="alreadyActivatedCard"
             class="card hidden"
@@ -421,7 +418,7 @@
 
                 <h1 class="title">
                     E-Tag Already Activated
-                </h1>
+                </1>
 
                 <p class="subtitle">
                     This E-Tag has already been connected to an account.
@@ -442,7 +439,6 @@
             </div>
 
         </div>
-
 
         <div
             id="ownerProfileCard"
@@ -509,7 +505,6 @@
 
         </div>
 
-
         <div
             id="publicProfileCard"
             class="card hidden"
@@ -567,7 +562,6 @@
 
 </div>
 
-
 <script type="module">
 
     import {
@@ -577,7 +571,6 @@
 
     const SUPABASE_URL =
         "https://zuptxhcjzhqynrquyray.supabase.co";
-
 
     const SUPABASE_PUBLISHABLE_KEY =
         "sb_publishable_1sa0MtE83MZXETR5JLakJA_fRVrjDJI";
@@ -598,174 +591,106 @@
 
 
     const loadingView =
-        document.getElementById(
-            "loadingView"
-        );
+        document.getElementById("loadingView");
 
     const mainView =
-        document.getElementById(
-            "mainView"
-        );
+        document.getElementById("mainView");
 
     const activationCard =
-        document.getElementById(
-            "activationCard"
-        );
+        document.getElementById("activationCard");
 
     const activationTagCode =
-        document.getElementById(
-            "activationTagCode"
-        );
+        document.getElementById("activationTagCode");
 
     const loginButton =
-        document.getElementById(
-            "loginButton"
-        );
+        document.getElementById("loginButton");
 
     const signupButton =
-        document.getElementById(
-            "signupButton"
-        );
+        document.getElementById("signupButton");
 
     const authCard =
-        document.getElementById(
-            "authCard"
-        );
+        document.getElementById("authCard");
 
     const authTitle =
-        document.getElementById(
-            "authTitle"
-        );
+        document.getElementById("authTitle");
 
     const authSubtitle =
-        document.getElementById(
-            "authSubtitle"
-        );
+        document.getElementById("authSubtitle");
 
     const emailInput =
-        document.getElementById(
-            "email"
-        );
+        document.getElementById("email");
 
     const passwordInput =
-        document.getElementById(
-            "password"
-        );
+        document.getElementById("password");
 
     const confirmPasswordInput =
-        document.getElementById(
-            "confirmPassword"
-        );
+        document.getElementById("confirmPassword");
 
     const confirmPasswordGroup =
-        document.getElementById(
-            "confirmPasswordGroup"
-        );
+        document.getElementById("confirmPasswordGroup");
 
     const authSubmitButton =
-        document.getElementById(
-            "authSubmitButton"
-        );
+        document.getElementById("authSubmitButton");
 
     const authBackButton =
-        document.getElementById(
-            "authBackButton"
-        );
+        document.getElementById("authBackButton");
 
     const authMessage =
-        document.getElementById(
-            "authMessage"
-        );
+        document.getElementById("authMessage");
 
     const alreadyActivatedCard =
-        document.getElementById(
-            "alreadyActivatedCard"
-        );
+        document.getElementById("alreadyActivatedCard");
 
     const alreadyActivatedTagCode =
-        document.getElementById(
-            "alreadyActivatedTagCode"
-        );
+        document.getElementById("alreadyActivatedTagCode");
 
     const alreadyActivatedMessage =
-        document.getElementById(
-            "alreadyActivatedMessage"
-        );
+        document.getElementById("alreadyActivatedMessage");
 
     const ownerProfileCard =
-        document.getElementById(
-            "ownerProfileCard"
-        );
+        document.getElementById("ownerProfileCard");
 
     const ownerAvatar =
-        document.getElementById(
-            "ownerAvatar"
-        );
+        document.getElementById("ownerAvatar");
 
     const ownerName =
-        document.getElementById(
-            "ownerName"
-        );
+        document.getElementById("ownerName");
 
     const ownerBio =
-        document.getElementById(
-            "ownerBio"
-        );
+        document.getElementById("ownerBio");
 
     const ownerPhone =
-        document.getElementById(
-            "ownerPhone"
-        );
+        document.getElementById("ownerPhone");
 
     const ownerWhatsapp =
-        document.getElementById(
-            "ownerWhatsapp"
-        );
+        document.getElementById("ownerWhatsapp");
 
     const ownerEmail =
-        document.getElementById(
-            "ownerEmail"
-        );
+        document.getElementById("ownerEmail");
 
     const logoutButton =
-        document.getElementById(
-            "logoutButton"
-        );
+        document.getElementById("logoutButton");
 
     const publicProfileCard =
-        document.getElementById(
-            "publicProfileCard"
-        );
+        document.getElementById("publicProfileCard");
 
     const publicAvatar =
-        document.getElementById(
-            "publicAvatar"
-        );
+        document.getElementById("publicAvatar");
 
     const publicName =
-        document.getElementById(
-            "publicName"
-        );
+        document.getElementById("publicName");
 
     const publicBio =
-        document.getElementById(
-            "publicBio"
-        );
+        document.getElementById("publicBio");
 
     const publicPhone =
-        document.getElementById(
-            "publicPhone"
-        );
+        document.getElementById("publicPhone");
 
     const publicWhatsapp =
-        document.getElementById(
-            "publicWhatsapp"
-        );
+        document.getElementById("publicWhatsapp");
 
     const publicEmail =
-        document.getElementById(
-            "publicEmail"
-        );
+        document.getElementById("publicEmail");
 
 
     let currentTag = null;
@@ -781,8 +706,12 @@
             );
 
 
+        const pathname =
+            url.pathname;
+
+
         const directMatch =
-            url.pathname.match(
+            pathname.match(
                 /\/id\/([^\/?#]+)\/?$/i
             );
 
@@ -801,9 +730,7 @@
 
 
         const tagParam =
-            url.searchParams.get(
-                "tag"
-            );
+            url.searchParams.get("tag");
 
 
         if (
@@ -819,9 +746,7 @@
 
 
         const idParam =
-            url.searchParams.get(
-                "id"
-            );
+            url.searchParams.get("id");
 
 
         if (
@@ -836,70 +761,59 @@
         }
 
 
-        const pathSegments =
-            url.pathname
-                .split("/")
-                .filter(
-                    Boolean
-                );
-
-
-        const idIndex =
-            pathSegments.findIndex(
-                (segment) =>
-                    segment.toLowerCase() === "id"
-            );
-
-
-        if (
-            idIndex !== -1 &&
-            pathSegments[idIndex + 1]
-        ) {
-
-            return decodeURIComponent(
-                pathSegments[idIndex + 1]
-            )
-                .trim()
-                .toUpperCase();
-        }
-
-
         return null;
     }
 
 
-    function cleanTagUrl(
+    function canonicalTagUrl(
         tagCode
     ) {
+
+        return (
+            `${window.location.origin}` +
+            `/E-Tag/id/${encodeURIComponent(tagCode)}`
+        );
+    }
+
+
+    function cleanAuthCallbackUrl() {
+
+        const url =
+            new URL(
+                window.location.href
+            );
+
+
+        const tagCode =
+            url.searchParams.get("tag");
+
 
         if (
             !tagCode
         ) {
-            return;
+
+            return null;
         }
 
 
-        const cleanUrl =
-            `${window.location.origin}/E-Tag/id/${encodeURIComponent(
+        const cleanTag =
+            decodeURIComponent(
                 tagCode
-            )}`;
+            )
+                .trim()
+                .toUpperCase();
 
 
-        const currentUrl =
-            window.location.href;
+        window.history.replaceState(
+            {},
+            document.title,
+            canonicalTagUrl(
+                cleanTag
+            )
+        );
 
 
-        if (
-            currentUrl !==
-            cleanUrl
-        ) {
-
-            window.history.replaceState(
-                {},
-                document.title,
-                cleanUrl
-            );
-        }
+        return cleanTag;
     }
 
 
@@ -941,9 +855,12 @@
     }
 
 
-    async function loadTag() {
+    async function loadTag(
+        suppliedTagCode = null
+    ) {
 
         const tagCode =
+            suppliedTagCode ||
             getTagCodeFromUrl();
 
 
@@ -956,11 +873,6 @@
 
             return;
         }
-
-
-        cleanTagUrl(
-            tagCode
-        );
 
 
         const {
@@ -1012,7 +924,6 @@
 
         activationTagCode.textContent =
             tag.tag_code;
-
 
         alreadyActivatedTagCode.textContent =
             tag.tag_code;
@@ -1594,8 +1505,8 @@
                 }
 
 
-                const redirectUrl =
-                    `${window.location.origin}/E-Tag/?tag=${encodeURIComponent(
+                const callbackUrl =
+                    `${window.location.origin}/E-Tag/auth-callback.html?tag=${encodeURIComponent(
                         currentTag.tag_code
                     )}`;
 
@@ -1610,7 +1521,7 @@
                             password,
                             options: {
                                 emailRedirectTo:
-                                    redirectUrl
+                                    callbackUrl
                             }
                         }
                     );
@@ -1645,7 +1556,7 @@
 
                 showMessage(
                     authMessage,
-                    "Account created. Check your email to confirm your account, then return to this E-Tag.",
+                    "Account created. Check your email to confirm your account.",
                     "success"
                 );
 
@@ -2195,7 +2106,22 @@
     );
 
 
-    loadTag();
+    const callbackTag =
+        cleanAuthCallbackUrl();
+
+
+    if (
+        callbackTag
+    ) {
+
+        await loadTag(
+            callbackTag
+        );
+
+    } else {
+
+        await loadTag();
+    }
 
 </script>
 
