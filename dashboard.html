@@ -12,7 +12,6 @@
     <title>E-Tag Dashboard</title>
 
     <style>
-
         * {
             box-sizing: border-box;
         }
@@ -20,7 +19,6 @@
         body {
             margin: 0;
             min-height: 100vh;
-
             font-family:
                 Inter,
                 system-ui,
@@ -28,18 +26,12 @@
                 BlinkMacSystemFont,
                 "Segoe UI",
                 sans-serif;
-
             background: #f5f7fb;
             color: #111827;
         }
 
         .app {
-            width:
-                min(
-                    calc(100% - 24px),
-                    1100px
-                );
-
+            width: min(calc(100% - 24px), 1100px);
             margin: 0 auto;
             padding: 24px 0 50px;
         }
@@ -60,30 +52,21 @@
 
         .card {
             background: #ffffff;
-
-            border:
-                1px solid #e5e7eb;
-
+            border: 1px solid #e5e7eb;
             border-radius: 20px;
-
             padding: 22px;
-
             box-shadow:
-                0 10px 35px
-                rgba(
+                0 10px 35px rgba(
                     0,
                     0,
                     0,
-                    .05
+                    0.05
                 );
         }
 
         .layout {
             display: grid;
-
-            grid-template-columns:
-                1fr 1fr;
-
+            grid-template-columns: 1fr 1fr;
             gap: 20px;
         }
 
@@ -98,32 +81,20 @@
 
         .field label {
             display: block;
-
             margin-bottom: 7px;
-
             font-size: 13px;
             font-weight: 700;
         }
 
         .input,
-        .textarea,
-        .select {
+        .textarea {
             width: 100%;
-
-            border:
-                1px solid #d1d5db;
-
+            border: 1px solid #d1d5db;
             border-radius: 11px;
-
-            padding:
-                12px 13px;
-
+            padding: 12px 13px;
             font-size: 15px;
-
             font-family: inherit;
-
             outline: none;
-
             background: #ffffff;
         }
 
@@ -133,39 +104,29 @@
         }
 
         .input:focus,
-        .textarea:focus,
-        .select:focus {
+        .textarea:focus {
             border-color: #111827;
-
             box-shadow:
                 0 0 0 3px
                 rgba(
                     17,
                     24,
                     39,
-                    .08
+                    0.08
                 );
         }
 
         .choice-grid {
             display: grid;
-
-            grid-template-columns:
-                repeat(3, 1fr);
-
+            grid-template-columns: repeat(3, 1fr);
             gap: 10px;
         }
 
         .choice {
-            border:
-                2px solid #e5e7eb;
-
+            border: 2px solid #e5e7eb;
             border-radius: 14px;
-
             padding: 14px;
-
             cursor: pointer;
-
             text-align: center;
         }
 
@@ -184,102 +145,54 @@
             font-weight: 800;
         }
 
-        .theme-grid {
-            display: grid;
-
-            grid-template-columns:
-                repeat(2, 1fr);
-
-            gap: 10px;
-        }
-
-        .theme-option {
-            border:
-                2px solid #e5e7eb;
-
-            border-radius: 14px;
-
-            padding: 14px;
-
-            cursor: pointer;
-
-            text-align: center;
-        }
-
-        .theme-option.active {
-            border-color: #111827;
-            background: #f9fafb;
-        }
-
-        .theme-icon {
-            font-size: 25px;
-            margin-bottom: 6px;
-        }
-
-        .theme-name {
-            font-size: 14px;
-            font-weight: 800;
-        }
-
+        .theme-grid,
         .avatar-mode-grid {
             display: grid;
-
-            grid-template-columns:
-                repeat(2, 1fr);
-
+            grid-template-columns: repeat(2, 1fr);
             gap: 10px;
         }
 
+        .theme-option,
         .avatar-mode {
-            border:
-                2px solid #e5e7eb;
-
+            border: 2px solid #e5e7eb;
             border-radius: 14px;
-
-            padding: 13px;
-
+            padding: 14px;
             cursor: pointer;
-
             text-align: center;
         }
 
+        .theme-option.active,
         .avatar-mode.active {
             border-color: #111827;
             background: #f9fafb;
         }
 
+        .theme-icon,
         .avatar-mode-icon {
             font-size: 25px;
             margin-bottom: 6px;
         }
 
+        .theme-name,
         .avatar-mode-name {
-            font-size: 13px;
+            font-size: 14px;
             font-weight: 800;
         }
 
         .character-grid {
             display: grid;
-
-            grid-template-columns:
-                repeat(3, 1fr);
-
+            grid-template-columns: repeat(3, 1fr);
             gap: 10px;
-
             margin-top: 12px;
         }
 
         .character-option {
-            border:
-                2px solid #e5e7eb;
-
+            border: 2px solid #e5e7eb;
             border-radius: 14px;
-
             padding: 8px;
-
             cursor: pointer;
-
             text-align: center;
+            background: #ffffff;
         }
 
         .character-option.active {
@@ -289,51 +202,36 @@
 
         .character-option img {
             width: 100%;
-
             aspect-ratio: 1;
-
             object-fit: contain;
-
             border-radius: 10px;
-
             background: #f3f4f6;
         }
 
         .character-option-name {
             margin-top: 7px;
-
             font-size: 11px;
             font-weight: 800;
         }
 
         .avatar-section {
             display: flex;
-
             align-items: flex-start;
-
             gap: 18px;
-
             margin-bottom: 18px;
         }
 
         .avatar {
             width: 96px;
             height: 96px;
-
             flex-shrink: 0;
-
             border-radius: 50%;
-
             overflow: hidden;
-
             background: #e5e7eb;
-
             display: flex;
             align-items: center;
             justify-content: center;
-
             color: #6b7280;
-
             font-size: 28px;
             font-weight: 800;
         }
@@ -341,7 +239,6 @@
         .avatar img {
             width: 100%;
             height: 100%;
-
             object-fit: cover;
         }
 
@@ -360,46 +257,33 @@
 
         .upload-label {
             display: inline-flex;
-
-            padding:
-                11px 14px;
-
+            padding: 11px 14px;
             border-radius: 11px;
-
             background: #eef2f7;
             color: #111827;
-
             font-size: 14px;
             font-weight: 700;
-
             cursor: pointer;
         }
 
         .upload-help {
             margin-top: 8px;
-
             color: #6b7280;
-
             font-size: 12px;
             line-height: 1.5;
         }
 
         .upload-status {
             margin-top: 8px;
-
             font-size: 12px;
-
             line-height: 1.5;
         }
 
         .subsection {
             margin-top: 26px;
             margin-bottom: 18px;
-
             padding-top: 20px;
-
-            border-top:
-                1px solid #e5e7eb;
+            border-top: 1px solid #e5e7eb;
         }
 
         .subsection h3 {
@@ -409,30 +293,22 @@
 
         .button-row {
             display: flex;
-
             gap: 10px;
-
             margin-top: 20px;
         }
 
         .button {
             border: 0;
-
             border-radius: 11px;
-
-            padding:
-                13px 16px;
-
+            padding: 13px 16px;
             font-size: 14px;
             font-weight: 700;
-
             cursor: pointer;
-
             font-family: inherit;
         }
 
         .button:disabled {
-            opacity: .55;
+            opacity: 0.55;
             cursor: not-allowed;
         }
 
@@ -448,18 +324,11 @@
 
         .message {
             display: none;
-
             margin-bottom: 16px;
-
-            padding:
-                13px 14px;
-
+            padding: 13px 14px;
             border-radius: 11px;
-
             font-size: 14px;
-
             line-height: 1.5;
-
             word-break: break-word;
         }
 
@@ -469,103 +338,70 @@
 
         .message.success {
             background: #ecfdf5;
-
             color: #065f46;
-
-            border:
-                1px solid #a7f3d0;
+            border: 1px solid #a7f3d0;
         }
 
         .message.error {
             background: #fef2f2;
-
             color: #991b1b;
-
-            border:
-                1px solid #fecaca;
+            border: 1px solid #fecaca;
         }
 
         .tag-info {
             display: flex;
-
             gap: 10px;
-
             flex-wrap: wrap;
-
             margin-bottom: 20px;
         }
 
         .tag-badge {
             display: inline-flex;
-
-            padding:
-                7px 10px;
-
+            padding: 7px 10px;
             border-radius: 999px;
-
             background: #eef2f7;
-
             color: #374151;
-
             font-size: 12px;
             font-weight: 700;
         }
 
         .preview-shell {
             padding: 14px;
-
             min-height: 520px;
-
             border-radius: 18px;
-
             background: #f5f7fb;
         }
 
         .preview {
             overflow: hidden;
-
             max-width: 430px;
-
             margin: 0 auto;
-
             border-radius: 26px;
-
             background: #ffffff;
-
             text-align: center;
         }
 
         .preview-top {
-            padding:
-                32px 22px;
-
+            padding: 32px 22px;
             background:
                 linear-gradient(
                     145deg,
                     #111827,
                     #1f2937
                 );
-
             color: #ffffff;
         }
 
         .preview-avatar {
             width: 100px;
             height: 100px;
-
-            margin:
-                0 auto 16px;
-
+            margin: 0 auto 16px;
             border-radius: 50%;
-
             overflow: hidden;
-
             background: #374151;
-
             display: flex;
             align-items: center;
             justify-content: center;
-
             font-size: 30px;
             font-weight: 800;
         }
@@ -573,7 +409,6 @@
         .preview-avatar img {
             width: 100%;
             height: 100%;
-
             object-fit: cover;
         }
 
@@ -584,75 +419,52 @@
 
         .preview-name {
             margin: 0;
-
             font-size: 27px;
             line-height: 1.2;
         }
 
         .preview-type {
             display: inline-flex;
-
             margin-top: 10px;
-
-            padding:
-                6px 10px;
-
+            padding: 6px 10px;
             border-radius: 999px;
-
-            background:
-                rgba(
-                    255,
-                    255,
-                    255,
-                    .12
-                );
-
+            background: rgba(
+                255,
+                255,
+                255,
+                0.12
+            );
             font-size: 11px;
             font-weight: 800;
         }
 
         .preview-bio {
-            margin:
-                10px 0 0;
-
+            margin: 10px 0 0;
             color: #d1d5db;
-
             line-height: 1.6;
-
             white-space: pre-wrap;
         }
 
         .preview-content {
             padding: 18px;
-
             display: grid;
-
             gap: 9px;
         }
 
         .preview-button {
             display: block;
-
-            padding:
-                12px 14px;
-
+            padding: 12px 14px;
             border-radius: 11px;
-
             background: #111827;
             color: #ffffff;
-
             text-decoration: none;
-
             font-size: 13px;
             font-weight: 800;
         }
 
         .loading {
             text-align: center;
-
-            padding:
-                40px 20px;
-
+            padding: 40px 20px;
             color: #6b7280;
         }
 
@@ -661,19 +473,14 @@
         }
 
         @media (max-width: 900px) {
-
             .layout {
                 grid-template-columns: 1fr;
             }
-
         }
 
         @media (max-width: 600px) {
-
             .app {
-                width:
-                    calc(100% - 16px);
-
+                width: calc(100% - 16px);
                 padding-top: 16px;
             }
 
@@ -686,8 +493,7 @@
             }
 
             .character-grid {
-                grid-template-columns:
-                    repeat(2, 1fr);
+                grid-template-columns: repeat(2, 1fr);
             }
 
             .avatar-section {
@@ -701,13 +507,9 @@
             .button-row {
                 flex-direction: column;
             }
-
         }
-
     </style>
-
 </head>
-
 
 <body>
 
@@ -748,9 +550,7 @@
                 E-Tag
             </span>
 
-            <span
-                class="tag-badge"
-            >
+            <span class="tag-badge">
                 Active
             </span>
 
@@ -764,7 +564,6 @@
 
 
         <div class="layout">
-
 
             <section class="card">
 
@@ -905,15 +704,11 @@
                             data-avatar-type="upload"
                         >
 
-                            <div
-                                class="avatar-mode-icon"
-                            >
+                            <div class="avatar-mode-icon">
                                 📷
                             </div>
 
-                            <div
-                                class="avatar-mode-name"
-                            >
+                            <div class="avatar-mode-name">
                                 Upload My Photo
                             </div>
 
@@ -925,15 +720,11 @@
                             data-avatar-type="character"
                         >
 
-                            <div
-                                class="avatar-mode-icon"
-                            >
+                            <div class="avatar-mode-icon">
                                 🎨
                             </div>
 
-                            <div
-                                class="avatar-mode-name"
-                            >
+                            <div class="avatar-mode-name">
                                 Use Character
                             </div>
 
@@ -1102,7 +893,6 @@
 
 
                         <div class="field">
-
                             <label>
                                 Facebook Username
                             </label>
@@ -1112,12 +902,10 @@
                                 class="input"
                                 type="text"
                             >
-
                         </div>
 
 
                         <div class="field">
-
                             <label>
                                 Instagram Username
                             </label>
@@ -1127,12 +915,10 @@
                                 class="input"
                                 type="text"
                             >
-
                         </div>
 
 
                         <div class="field">
-
                             <label>
                                 TikTok Username
                             </label>
@@ -1142,12 +928,10 @@
                                 class="input"
                                 type="text"
                             >
-
                         </div>
 
 
                         <div class="field">
-
                             <label>
                                 YouTube Username
                             </label>
@@ -1157,12 +941,10 @@
                                 class="input"
                                 type="text"
                             >
-
                         </div>
 
 
                         <div class="field">
-
                             <label>
                                 WhatsApp Number
                             </label>
@@ -1172,12 +954,10 @@
                                 class="input"
                                 type="tel"
                             >
-
                         </div>
 
 
                         <div class="field">
-
                             <label>
                                 Discord Username
                             </label>
@@ -1187,12 +967,10 @@
                                 class="input"
                                 type="text"
                             >
-
                         </div>
 
 
                         <div class="field">
-
                             <label>
                                 Telegram Username
                             </label>
@@ -1202,7 +980,6 @@
                                 class="input"
                                 type="text"
                             >
-
                         </div>
 
                     </div>
@@ -1724,8 +1501,6 @@
             </section>
 
 
-            <!-- PREVIEW -->
-
             <section class="card">
 
                 <h2 class="section-title">
@@ -1839,87 +1614,70 @@
     const CHARACTER_LIBRARY = {
 
         men: [
-
             {
                 id: "men-01",
                 name: "Men 1",
                 src:
                     "/E-Tag/assets/characters/men/men-01.svg"
             },
-
             {
                 id: "men-02",
                 name: "Men 2",
                 src:
                     "/E-Tag/assets/characters/men/men-02.svg"
             },
-
             {
                 id: "men-03",
                 name: "Men 3",
                 src:
                     "/E-Tag/assets/characters/men/men-03.svg"
             }
-
         ],
 
-
         women: [
-
             {
                 id: "women-01",
                 name: "Women 1",
                 src:
                     "/E-Tag/assets/characters/women/women-01.svg"
             },
-
             {
                 id: "women-02",
                 name: "Women 2",
                 src:
                     "/E-Tag/assets/characters/women/women-02.svg"
             },
-
             {
                 id: "women-03",
                 name: "Women 3",
                 src:
                     "/E-Tag/assets/characters/women/women-03.svg"
             }
-
         ],
 
-
         couple: [
-
             {
                 id: "couple-01",
                 name: "Couple 1",
                 src:
                     "/E-Tag/assets/characters/couple/couple-01.svg"
             },
-
             {
                 id: "couple-02",
                 name: "Couple 2",
                 src:
                     "/E-Tag/assets/characters/couple/couple-02.svg"
             }
-
         ],
 
-
         business: [
-
             {
                 id: "business-01",
                 name: "Business 1",
                 src:
                     "/E-Tag/assets/characters/business/business-01.svg"
             }
-
         ]
-
     };
 
 
@@ -1929,14 +1687,9 @@
             SUPABASE_PUBLISHABLE_KEY,
             {
                 auth: {
-                    persistSession:
-                        true,
-
-                    autoRefreshToken:
-                        true,
-
-                    detectSessionInUrl:
-                        true
+                    persistSession: true,
+                    autoRefreshToken: true,
+                    detectSessionInUrl: true
                 }
             }
         );
@@ -1947,144 +1700,120 @@
             "loading"
         );
 
-
     const dashboard =
         document.getElementById(
             "dashboard"
         );
-
 
     const message =
         document.getElementById(
             "message"
         );
 
-
     const tagBadge =
         document.getElementById(
             "tagBadge"
         );
-
 
     const profileTypeChoices =
         document.querySelectorAll(
             "#profileTypeChoices .choice"
         );
 
-
     const personalThemeChoices =
         document.querySelectorAll(
             "#personalThemeGrid .theme-option"
         );
-
 
     const avatarModeChoices =
         document.querySelectorAll(
             "#avatarModeGrid .avatar-mode"
         );
 
-
     const personalThemeSection =
         document.getElementById(
             "personalThemeSection"
         );
-
 
     const personalFields =
         document.getElementById(
             "personalFields"
         );
 
-
     const coupleFields =
         document.getElementById(
             "coupleFields"
         );
-
 
     const businessFields =
         document.getElementById(
             "businessFields"
         );
 
-
     const uploadSection =
         document.getElementById(
             "uploadSection"
         );
-
 
     const characterSection =
         document.getElementById(
             "characterSection"
         );
 
-
     const characterGrid =
         document.getElementById(
             "characterGrid"
         );
-
 
     const avatar =
         document.getElementById(
             "avatar"
         );
 
-
     const previewAvatar =
         document.getElementById(
             "previewAvatar"
         );
-
 
     const avatarFile =
         document.getElementById(
             "avatarFile"
         );
 
-
     const uploadStatus =
         document.getElementById(
             "uploadStatus"
         );
-
 
     const saveButton =
         document.getElementById(
             "saveButton"
         );
 
-
     const logoutButton =
         document.getElementById(
             "logoutButton"
         );
-
 
     const openPublicButton =
         document.getElementById(
             "openPublicButton"
         );
 
-
     const previewName =
         document.getElementById(
             "previewName"
         );
-
 
     const previewType =
         document.getElementById(
             "previewType"
         );
 
-
     const previewBio =
         document.getElementById(
             "previewBio"
         );
-
 
     const previewContent =
         document.getElementById(
@@ -2140,50 +1869,44 @@
         "onlineStore",
         "bookingUrl",
         "menuUrl"
-
     ];
 
 
     const fields = {};
 
 
-    for (
-        const id of fieldIds
-    ) {
+    fieldIds.forEach(
+        id => {
 
-        fields[id] =
-            document.getElementById(
-                id
-            );
-    }
+            fields[id] =
+                document.getElementById(
+                    id
+                );
+        }
+    );
 
 
     let currentUser =
         null;
 
-
     let currentTag =
         null;
-
 
     let profileExists =
         false;
 
-
     let currentProfileType =
         "personal";
-
 
     let currentTemplate =
         "men";
 
-
     let avatarType =
         "upload";
 
-
     let characterId =
         "";
+
 
 
     function getValue(
@@ -2302,75 +2025,6 @@
     }
 
 
-    function getDisplayName() {
-
-        if (
-            currentProfileType ===
-            "couple"
-        ) {
-
-            return (
-                getValue(
-                    "coupleName"
-                ) ||
-                "Our Story"
-            );
-        }
-
-
-        if (
-            currentProfileType ===
-            "business"
-        ) {
-
-            return (
-                getValue(
-                    "businessName"
-                ) ||
-                "Business"
-            );
-        }
-
-
-        return (
-            getValue(
-                "personalName"
-            ) ||
-            "E-Tag User"
-        );
-    }
-
-
-    function getBio() {
-
-        if (
-            currentProfileType ===
-            "couple"
-        ) {
-
-            return getValue(
-                "coupleBio"
-            );
-        }
-
-
-        if (
-            currentProfileType ===
-            "business"
-        ) {
-
-            return getValue(
-                "businessDescription"
-            );
-        }
-
-
-        return getValue(
-            "personalBio"
-        );
-    }
-
-
     function initials(
         value
     ) {
@@ -2444,6 +2098,75 @@
     }
 
 
+    function getDisplayName() {
+
+        if (
+            currentProfileType ===
+            "couple"
+        ) {
+
+            return (
+                getValue(
+                    "coupleName"
+                ) ||
+                "Our Story"
+            );
+        }
+
+
+        if (
+            currentProfileType ===
+            "business"
+        ) {
+
+            return (
+                getValue(
+                    "businessName"
+                ) ||
+                "Business"
+            );
+        }
+
+
+        return (
+            getValue(
+                "personalName"
+            ) ||
+            "E-Tag User"
+        );
+    }
+
+
+    function getBio() {
+
+        if (
+            currentProfileType ===
+            "couple"
+        ) {
+
+            return getValue(
+                "coupleBio"
+            );
+        }
+
+
+        if (
+            currentProfileType ===
+            "business"
+        ) {
+
+            return getValue(
+                "businessDescription"
+            );
+        }
+
+
+        return getValue(
+            "personalBio"
+        );
+    }
+
+
     function getCharacterGroup() {
 
         if (
@@ -2491,10 +2214,7 @@
             );
 
 
-        return (
-            selected?.src ||
-            ""
-        );
+        return selected?.src || "";
     }
 
 
@@ -2519,8 +2239,7 @@
         url
     ) {
 
-        element.innerHTML =
-            "";
+        element.innerHTML = "";
 
         element.classList.remove(
             "character"
@@ -2531,15 +2250,34 @@
             url
         ) {
 
-            element.innerHTML =
-                `
-                    <img
-                        src="${escapeAttribute(
-                            url
-                        )}"
-                        alt="Profile"
-                    >
-                `;
+            const image =
+                document.createElement(
+                    "img"
+                );
+
+
+            image.src =
+                url;
+
+            image.alt =
+                "Profile";
+
+
+            image.onerror =
+                () => {
+
+                    element.classList.remove(
+                        "character"
+                    );
+
+                    element.innerHTML =
+                        "";
+
+                    element.textContent =
+                        initials(
+                            name
+                        );
+                };
 
 
             if (
@@ -2552,6 +2290,10 @@
                 );
             }
 
+
+            element.appendChild(
+                image
+            );
 
             return;
         }
@@ -2578,36 +2320,32 @@
         );
 
 
-        personalThemeSection
-            .classList.toggle(
-                "hidden",
-                currentProfileType !==
-                    "personal"
-            );
+        personalThemeSection.classList.toggle(
+            "hidden",
+            currentProfileType !==
+                "personal"
+        );
 
 
-        personalFields
-            .classList.toggle(
-                "hidden",
-                currentProfileType !==
-                    "personal"
-            );
+        personalFields.classList.toggle(
+            "hidden",
+            currentProfileType !==
+                "personal"
+        );
 
 
-        coupleFields
-            .classList.toggle(
-                "hidden",
-                currentProfileType !==
-                    "couple"
-            );
+        coupleFields.classList.toggle(
+            "hidden",
+            currentProfileType !==
+                "couple"
+        );
 
 
-        businessFields
-            .classList.toggle(
-                "hidden",
-                currentProfileType !==
-                    "business"
-            );
+        businessFields.classList.toggle(
+            "hidden",
+            currentProfileType !==
+                "business"
+        );
     }
 
 
@@ -2671,18 +2409,6 @@
             "";
 
 
-        if (
-            characters.length ===
-            0
-        ) {
-
-            characterGrid.textContent =
-                "No characters available yet.";
-
-            return;
-        }
-
-
         characters.forEach(
             character => {
 
@@ -2733,10 +2459,8 @@
                         avatarType =
                             "character";
 
-
                         characterId =
                             character.id;
-
 
                         renderAvatarMode();
 
@@ -2758,12 +2482,10 @@
     function renderAll() {
 
         renderProfileType();
-
         renderThemeOptions();
-
         renderAvatarMode();
-
         renderCharacters();
+
 
         renderAvatar(
             avatar,
@@ -2771,7 +2493,61 @@
             getPreviewImage()
         );
 
+
         updatePreview();
+    }
+
+
+    function cleanNumber(
+        value
+    ) {
+
+        return String(
+            value || ""
+        )
+            .replace(
+                /\D/g,
+                ""
+            );
+    }
+
+
+    function stripAt(
+        value
+    ) {
+
+        return String(
+            value || ""
+        )
+            .trim()
+            .replace(
+                /^@/,
+                ""
+            );
+    }
+
+
+    function normalizeUrl(
+        value
+    ) {
+
+        const v =
+            String(
+                value || ""
+            ).trim();
+
+
+        if (
+            /^https?:\/\//i.test(
+                v
+            )
+        ) {
+
+            return v;
+        }
+
+
+        return `https://${v}`;
     }
 
 
@@ -2826,7 +2602,7 @@
             "";
 
 
-        const add =
+        const addButton =
             (
                 label,
                 href
@@ -2873,52 +2649,58 @@
             "personal"
         ) {
 
-            if (
+            const phone =
                 getValue(
                     "personalPhone"
-                )
-            ) {
-
-                add(
-                    "Call",
-                    `tel:${encodeURIComponent(
-                        getValue(
-                            "personalPhone"
-                        )
-                    )}`
                 );
-            }
 
 
-            if (
+            const whatsapp =
                 getValue(
                     "personalWhatsapp"
-                )
+                );
+
+
+            const instagram =
+                getValue(
+                    "instagram"
+                );
+
+
+            if (
+                phone
             ) {
 
-                add(
-                    "WhatsApp",
-                    `https://wa.me/${cleanNumber(
-                        getValue(
-                            "personalWhatsapp"
-                        )
+                addButton(
+                    "Call",
+                    `tel:${encodeURIComponent(
+                        phone
                     )}`
                 );
             }
 
 
             if (
-                getValue(
-                    "instagram"
-                )
+                whatsapp
             ) {
 
-                add(
+                addButton(
+                    "WhatsApp",
+                    `https://wa.me/${cleanNumber(
+                        whatsapp
+                    )}`
+                );
+            }
+
+
+            if (
+                instagram
+            ) {
+
+                addButton(
                     "Instagram",
                     `https://instagram.com/${stripAt(
-                        getValue(
-                            "instagram"
-                        )
+                        instagram
                     )}`
                 );
             }
@@ -2930,18 +2712,20 @@
             "couple"
         ) {
 
-            if (
+            const whatsapp =
                 getValue(
                     "coupleWhatsapp"
-                )
+                );
+
+
+            if (
+                whatsapp
             ) {
 
-                add(
+                addButton(
                     "WhatsApp",
                     `https://wa.me/${cleanNumber(
-                        getValue(
-                            "coupleWhatsapp"
-                        )
+                        whatsapp
                     )}`
                 );
             }
@@ -2953,52 +2737,58 @@
             "business"
         ) {
 
-            if (
+            const phone =
                 getValue(
                     "businessPhone"
-                )
-            ) {
-
-                add(
-                    "Call Business",
-                    `tel:${encodeURIComponent(
-                        getValue(
-                            "businessPhone"
-                        )
-                    )}`
                 );
-            }
 
 
-            if (
+            const whatsapp =
                 getValue(
                     "businessWhatsapp"
-                )
+                );
+
+
+            const website =
+                getValue(
+                    "website"
+                );
+
+
+            if (
+                phone
             ) {
 
-                add(
-                    "WhatsApp",
-                    `https://wa.me/${cleanNumber(
-                        getValue(
-                            "businessWhatsapp"
-                        )
+                addButton(
+                    "Call Business",
+                    `tel:${encodeURIComponent(
+                        phone
                     )}`
                 );
             }
 
 
             if (
-                getValue(
-                    "website"
-                )
+                whatsapp
             ) {
 
-                add(
+                addButton(
+                    "WhatsApp",
+                    `https://wa.me/${cleanNumber(
+                        whatsapp
+                    )}`
+                );
+            }
+
+
+            if (
+                website
+            ) {
+
+                addButton(
                     "Website",
                     normalizeUrl(
-                        getValue(
-                            "website"
-                        )
+                        website
                     )
                 );
             }
@@ -3010,64 +2800,11 @@
             0
         ) {
 
-            add(
+            addButton(
                 "Public Profile",
                 "#"
             );
         }
-    }
-
-
-    function cleanNumber(
-        value
-    ) {
-
-        return String(
-            value || ""
-        )
-            .replace(
-                /\D/g,
-                ""
-            );
-    }
-
-
-    function stripAt(
-        value
-    ) {
-
-        return String(
-            value || ""
-        )
-            .trim()
-            .replace(
-                /^@/,
-                ""
-            );
-    }
-
-
-    function normalizeUrl(
-        value
-    ) {
-
-        const v =
-            String(
-                value || ""
-            ).trim();
-
-
-        if (
-            /^https?:\/\//i.test(
-                v
-            )
-        ) {
-
-            return v;
-        }
-
-
-        return `https://${v}`;
     }
 
 
@@ -3670,10 +3407,8 @@
 
 
         const {
-            data:
-                sessionData,
-            error:
-                sessionError
+            data: sessionData,
+            error: sessionError
         } =
             await supabase.auth.getSession();
 
@@ -3706,11 +3441,9 @@
             await fetch(
                 AVATAR_UPLOAD_FUNCTION,
                 {
-                    method:
-                        "POST",
+                    method: "POST",
 
                     headers: {
-
                         "Authorization":
                             `Bearer ${sessionData.session.access_token}`,
 
@@ -3738,8 +3471,18 @@
             );
 
 
-        const result =
-            await response.json();
+        let result;
+
+        try {
+
+            result =
+                await response.json();
+
+        } catch {
+
+            result =
+                null;
+        }
 
 
         if (
@@ -3749,9 +3492,7 @@
 
             throw new Error(
                 result?.message ||
-                `Upload URL request failed: ${
-                    response.status
-                }`
+                `Upload URL request failed: ${response.status}`
             );
         }
 
@@ -3764,17 +3505,14 @@
             await fetch(
                 result.uploadUrl,
                 {
-                    method:
-                        "PUT",
+                    method: "PUT",
 
                     headers: {
-
                         "Content-Type":
                             file.type
                     },
 
-                    body:
-                        file
+                    body: file
                 }
             );
 
@@ -3784,9 +3522,7 @@
         ) {
 
             throw new Error(
-                `R2 upload failed: ${
-                    uploadResponse.status
-                }`
+                `R2 upload failed: ${uploadResponse.status}`
             );
         }
 
@@ -3819,10 +3555,8 @@
 
 
             const {
-                data:
-                    sessionData,
-                error:
-                    sessionError
+                data: sessionData,
+                error: sessionError
             } =
                 await supabase.auth.getSession();
 
@@ -3862,10 +3596,8 @@
 
 
             const {
-                data:
-                    tag,
-                error:
-                    tagError
+                data: tag,
+                error: tagError
             } =
                 await supabase
                     .from(
@@ -3919,10 +3651,8 @@
 
 
             const {
-                data:
-                    profile,
-                error:
-                    profileError
+                data: profile,
+                error: profileError
             } =
                 await supabase
                     .from(
@@ -3955,7 +3685,6 @@
                 profileExists =
                     true;
 
-
                 fillProfile(
                     profile
                 );
@@ -3965,22 +3694,20 @@
                 profileExists =
                     false;
 
-
                 currentProfileType =
                     "personal";
-
 
                 currentTemplate =
                     "men";
 
-
                 avatarType =
                     "upload";
-
 
                 characterId =
                     "";
 
+                currentAvatarUrl =
+                    "";
 
                 renderAll();
             }
@@ -4011,7 +3738,6 @@
             dashboard.classList.remove(
                 "hidden"
             );
-
 
         } catch (
             error
@@ -4145,7 +3871,6 @@
                 "success"
             );
 
-
         } catch (
             error
         ) {
@@ -4277,7 +4002,7 @@
 
                     if (
                         avatarType ===
-                            "character"
+                        "character"
                     ) {
 
                         renderCharacters();
@@ -4351,33 +4076,31 @@
     );
 
 
-    for (
-        const id of fieldIds
-    ) {
+    /*
+     * IMPORTANT:
+     * This uses fieldIds, not ids.
+     */
 
-        const field =
-            fields[id];
+    fieldIds.forEach(
+        id => {
+
+            if (
+                fields[id]
+            ) {
+
+                fields[id].addEventListener(
+                    "input",
+                    updatePreview
+                );
 
 
-        if (
-            !field
-        ) {
-
-            continue;
+                fields[id].addEventListener(
+                    "change",
+                    updatePreview
+                );
+            }
         }
-
-
-        field.addEventListener(
-            "input",
-            updatePreview
-        );
-
-
-        field.addEventListener(
-            "change",
-            updatePreview
-        );
-    }
+    );
 
 
     saveButton.addEventListener(
@@ -4422,9 +4145,7 @@
 
 
     supabase.auth.onAuthStateChange(
-        (
-            event
-        ) => {
+        event => {
 
             if (
                 event ===
@@ -4456,6 +4177,10 @@
     );
 
 
+    /*
+     * Start dashboard.
+     */
+
     loadDashboard()
         .catch(
             error => {
@@ -4474,10 +4199,17 @@
 
                 loading.style.color =
                     "#991b1b";
+
+                loading.style.background =
+                    "#fef2f2";
+
+                loading.style.borderColor =
+                    "#fecaca";
             }
         );
 
 </script>
 
 </body>
+
 </html>
