@@ -147,11 +147,6 @@
             color: #111827;
         }
 
-        .danger {
-            background: #fee2e2;
-            color: #991b1b;
-        }
-
         .message {
             display: none;
             margin-bottom: 16px;
@@ -454,16 +449,12 @@
         <div class="layout">
 
 
-            <!-- PROFILE EDITOR -->
-
             <section class="card">
 
                 <h2>
                     Your Public Profile
                 </h2>
 
-
-                <!-- AVATAR -->
 
                 <div class="avatar-section">
 
@@ -507,8 +498,6 @@
                 </div>
 
 
-                <!-- NAME -->
-
                 <div class="field">
 
                     <label for="displayName">
@@ -526,8 +515,6 @@
                 </div>
 
 
-                <!-- BIO -->
-
                 <div class="field">
 
                     <label for="bio">
@@ -543,8 +530,6 @@
 
                 </div>
 
-
-                <!-- PHONE -->
 
                 <div class="field">
 
@@ -563,8 +548,6 @@
                 </div>
 
 
-                <!-- WHATSAPP -->
-
                 <div class="field">
 
                     <label for="whatsapp">
@@ -582,8 +565,6 @@
                 </div>
 
 
-                <!-- PUBLIC EMAIL -->
-
                 <div class="field">
 
                     <label for="publicEmail">
@@ -600,8 +581,6 @@
 
                 </div>
 
-
-                <!-- PROFILE TYPE -->
 
                 <div class="field">
 
@@ -630,8 +609,6 @@
 
                 </div>
 
-
-                <!-- TEMPLATE -->
 
                 <div class="field">
 
@@ -687,8 +664,6 @@
 
             </section>
 
-
-            <!-- PUBLIC PREVIEW -->
 
             <section class="card">
 
@@ -1107,24 +1082,13 @@
             displayName.value.trim() ||
             "E-Tag User";
 
-        const bioValue =
-            bio.value.trim();
-
-        const phoneValue =
-            phone.value.trim();
-
-        const whatsappValue =
-            whatsapp.value.trim();
-
-        const emailValue =
-            publicEmail.value.trim();
-
 
         previewName.textContent =
             name;
 
+
         previewBio.textContent =
-            bioValue;
+            bio.value.trim();
 
 
         updateAvatar(
@@ -1132,6 +1096,10 @@
             name,
             currentAvatarUrl
         );
+
+
+        const phoneValue =
+            phone.value.trim();
 
 
         if (
@@ -1153,6 +1121,10 @@
                 "hidden"
             );
         }
+
+
+        const whatsappValue =
+            whatsapp.value.trim();
 
 
         if (
@@ -1190,6 +1162,10 @@
                 "hidden"
             );
         }
+
+
+        const emailValue =
+            publicEmail.value.trim();
 
 
         if (
@@ -1265,10 +1241,58 @@
     }
 
 
+    async function reloadStoredProfile() {
+
+        const {
+            data,
+            error
+        } =
+            await supabase
+                .from(
+                    "profiles"
+                )
+                .select(
+                    "id,display_name,bio,phone,whatsapp,email,profile_type,avatar_url,created_at,updated_at,template"
+                )
+                .eq(
+                    "id",
+                    currentUser.id
+                )
+                .maybeSingle();
+
+
+        if (
+            error
+        ) {
+
+            throw error;
+        }
+
+
+        if (
+            !data
+        ) {
+
+            throw new Error(
+                "Profile was not found after saving."
+            );
+        }
+
+
+        profileExists =
+            true;
+
+
+        fillForm(
+            data
+        );
+
+
+        return data;
+    }
+
+
     async function loadDashboard() {
-
-        clearMessage();
-
 
         const {
             data: sessionData,
@@ -1360,10 +1384,9 @@
         tagBadge.textContent =
             tag.tag_code;
 
+
         statusBadge.textContent =
-            tag.active
-                ? "Active"
-                : "Inactive";
+            "Active";
 
 
         const {
@@ -1434,14 +1457,10 @@
         }
 
 
-        const publicUrl =
+        openPublicButton.dataset.url =
             `${window.location.origin}/E-Tag/id/${encodeURIComponent(
                 tag.tag_code
             )}`;
-
-
-        openPublicButton.dataset.url =
-            publicUrl;
 
 
         loadingCard.classList.add(
@@ -1496,8 +1515,7 @@
 
         const {
             data: sessionData,
-            error:
-                sessionError
+            error: sessionError
         } =
             await supabase.auth.getSession();
 
@@ -1508,7 +1526,7 @@
         ) {
 
             throw new Error(
-                "Your login session has expired. Please login again."
+                "Your login session has expired."
             );
         }
 
@@ -1552,7 +1570,7 @@
             );
 
 
-        let result;
+        let result = null;
 
 
         try {
@@ -1579,11 +1597,11 @@
         }
 
 
-        const {
-            uploadUrl,
-            objectKey
-        } =
-            result;
+        const uploadUrl =
+            result.uploadUrl;
+
+        const objectKey =
+            result.objectKey;
 
 
         if (
@@ -1592,7 +1610,7 @@
         ) {
 
             throw new Error(
-                "The upload function returned an invalid upload URL."
+                "Invalid upload URL returned by the Edge Function."
             );
         }
 
@@ -1624,30 +1642,8 @@
             !uploadResponse.ok
         ) {
 
-            let uploadText =
-                "";
-
-            try {
-
-                uploadText =
-                    await uploadResponse.text();
-
-            } catch {
-
-                uploadText =
-                    "";
-            }
-
-
             throw new Error(
-                `R2 upload failed (${uploadResponse.status}). ${
-                    uploadText
-                        ? uploadText.substring(
-                            0,
-                            300
-                        )
-                        : ""
-                }`
+                `R2 upload failed (${uploadResponse.status}).`
             );
         }
 
@@ -1672,7 +1668,7 @@
 
 
         setUploadStatus(
-            "Photo uploaded successfully.",
+            "Photo uploaded successfully. Click Save Profile.",
             true
         );
 
@@ -1701,55 +1697,52 @@
             "Saving...";
 
 
-        const now =
-            new Date().toISOString();
-
-
-        const profileData = {
-
-            id:
-                currentUser.id,
-
-            display_name:
-                displayName.value.trim(),
-
-            bio:
-                bio.value.trim(),
-
-            phone:
-                phone.value.trim(),
-
-            whatsapp:
-                whatsapp.value.trim(),
-
-            email:
-                publicEmail.value.trim(),
-
-            profile_type:
-                profileType.value,
-
-            avatar_url:
-                currentAvatarUrl ||
-                null,
-
-            template:
-                template.value,
-
-            updated_at:
-                now
-        };
-
-
         try {
 
-            let result;
+            const now =
+                new Date().toISOString();
+
+
+            const profileData = {
+
+                display_name:
+                    displayName.value.trim(),
+
+                bio:
+                    bio.value.trim(),
+
+                phone:
+                    phone.value.trim(),
+
+                whatsapp:
+                    whatsapp.value.trim(),
+
+                email:
+                    publicEmail.value.trim(),
+
+                profile_type:
+                    profileType.value,
+
+                avatar_url:
+                    currentAvatarUrl ||
+                    null,
+
+                template:
+                    template.value,
+
+                updated_at:
+                    now
+            };
 
 
             if (
                 profileExists
             ) {
 
-                result =
+                const {
+                    error:
+                        updateError
+                } =
                     await supabase
                         .from(
                             "profiles"
@@ -1759,51 +1752,72 @@
                         )
                         .eq(
                             "id",
-                            currentUser.id
-                        )
-                        .select()
-                        .single();
+                            currentUser.id );
+
+
+                if (
+                    updateError
+                ) {
+
+                    throw updateError;
+                }
 
             } else {
 
-                result =
+                const {
+                    error:
+                        insertError
+                } =
                     await supabase
                         .from(
                             "profiles"
                         )
                         .insert(
                             {
+                                id:
+                                    currentUser.id,
                                 ...profileData,
                                 created_at:
                                     now
                             }
-                        )
-                        .select()
-                        .single();
+                        );
+
+
+                if (
+                    insertError
+                ) {
+
+                    throw insertError;
+                }
             }
+
+
+            const storedProfile =
+                await reloadStoredProfile();
 
 
             if (
-                result.error
+                storedProfile.avatar_url !==
+                (
+                    currentAvatarUrl ||
+                    null
+                )
             ) {
 
-                throw result.error;
+                throw new Error(
+                    "The profile was saved, but the avatar URL was not stored correctly."
+                );
             }
 
 
-            profileExists =
-                true;
-
-
-            fillForm(
-                result.data
-            );
-
-
             showMessage(
-                "Public profile saved successfully.",
+                "Profile saved successfully.",
                 "success"
             );
+
+
+            avatarFile.value =
+                "";
 
         } catch (
             error
@@ -1835,60 +1849,6 @@
     }
 
 
-    function previewSelectedImage(
-        file
-    ) {
-
-        if (
-            !file
-        ) {
-
-            return;
-        }
-
-
-        if (
-            !ALLOWED_TYPES.has(
-                file.type
-            )
-        ) {
-
-            return;
-        }
-
-
-        if (
-            file.size >
-            MAX_FILE_SIZE
-        ) {
-
-            return;
-        }
-
-
-        const localUrl =
-            URL.createObjectURL(
-                file
-            );
-
-
-        updateAvatar(
-            avatarPreview,
-            displayName.value.trim() ||
-                "E-Tag User",
-            localUrl
-        );
-
-
-        updateAvatar(
-            previewAvatar,
-            displayName.value.trim() ||
-                "E-Tag User",
-            localUrl
-        );
-    }
-
-
     avatarFile.addEventListener(
         "change",
         async () => {
@@ -1907,22 +1867,9 @@
 
             try {
 
-                previewSelectedImage(
+                await uploadAvatar(
                     file
                 );
-
-
-                const uploadedUrl =
-                    await uploadAvatar(
-                        file
-                    );
-
-
-                currentAvatarUrl =
-                    uploadedUrl;
-
-
-                updatePreview();
 
             } catch (
                 error
@@ -1935,8 +1882,7 @@
 
 
                 setUploadStatus(
-                    error.message,
-                    false
+                    error.message
                 );
 
 
@@ -1944,30 +1890,7 @@
                     "";
 
 
-                if (
-                    currentAvatarUrl
-                ) {
-
-                    updateAvatar(
-                        avatarPreview,
-                        displayName.value.trim() ||
-                            "E-Tag User",
-                        currentAvatarUrl
-                    );
-
-                    updatePreview();
-
-                } else {
-
-                    updateAvatar(
-                        avatarPreview,
-                        displayName.value.trim() ||
-                            "E-Tag User",
-                        ""
-                    );
-
-                    updatePreview();
-                }
+                await reloadStoredProfile();
             }
         }
     );
