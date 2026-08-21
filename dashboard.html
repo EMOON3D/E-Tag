@@ -2,6 +2,7 @@
 <html lang="en">
 
 <head>
+
     <meta charset="UTF-8">
 
     <meta
@@ -34,10 +35,11 @@
         }
 
         .app {
-            width: min(
-                calc(100% - 24px),
-                1100px
-            );
+            width:
+                min(
+                    calc(100% - 24px),
+                    1100px
+                );
 
             margin: 0 auto;
             padding: 24px 0 50px;
@@ -62,6 +64,7 @@
             border: 1px solid #e5e7eb;
             border-radius: 20px;
             padding: 22px;
+
             box-shadow:
                 0 10px 35px rgba(
                     0,
@@ -108,9 +111,11 @@
                 12px 13px;
 
             font-size: 15px;
+
             font-family: inherit;
 
             outline: none;
+
             background: #ffffff;
         }
 
@@ -134,96 +139,6 @@
                 );
         }
 
-        .button-row {
-            display: flex;
-            gap: 10px;
-            margin-top: 20px;
-        }
-
-        .button {
-            border: 0;
-            border-radius: 11px;
-
-            padding:
-                13px 16px;
-
-            font-size: 14px;
-            font-weight: 700;
-
-            cursor: pointer;
-            font-family: inherit;
-        }
-
-        .button:disabled {
-            opacity: 0.55;
-            cursor: not-allowed;
-        }
-
-        .primary {
-            background: #111827;
-            color: #ffffff;
-        }
-
-        .secondary {
-            background: #eef2f7;
-            color: #111827;
-        }
-
-        .message {
-            display: none;
-
-            margin-bottom: 16px;
-            padding: 12px 14px;
-
-            border-radius: 11px;
-
-            font-size: 14px;
-            line-height: 1.5;
-
-            word-break: break-word;
-        }
-
-        .message.show {
-            display: block;
-        }
-
-        .message.success {
-            background: #ecfdf5;
-            color: #065f46;
-            border:
-                1px solid #a7f3d0;
-        }
-
-        .message.error {
-            background: #fef2f2;
-            color: #991b1b;
-            border:
-                1px solid #fecaca;
-        }
-
-        .tag-info {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-
-            margin-bottom: 20px;
-        }
-
-        .tag-badge {
-            display: inline-flex;
-
-            padding:
-                7px 10px;
-
-            border-radius: 999px;
-
-            background: #eef2f7;
-            color: #374151;
-
-            font-size: 12px;
-            font-weight: 700;
-        }
-
         .choice-grid {
             display: grid;
             grid-template-columns:
@@ -241,16 +156,8 @@
             padding: 14px;
 
             cursor: pointer;
+
             text-align: center;
-
-            transition:
-                border-color .15s ease,
-                transform .15s ease;
-        }
-
-        .choice:hover {
-            transform:
-                translateY(-2px);
         }
 
         .choice.active {
@@ -264,8 +171,8 @@
         }
 
         .choice-name {
-            font-weight: 800;
             font-size: 14px;
+            font-weight: 800;
         }
 
         .theme-grid {
@@ -281,9 +188,11 @@
                 2px solid #e5e7eb;
 
             border-radius: 14px;
+
             padding: 14px;
 
             cursor: pointer;
+
             text-align: center;
         }
 
@@ -302,12 +211,98 @@
             font-weight: 800;
         }
 
+        .avatar-mode-grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(2, 1fr);
+
+            gap: 10px;
+        }
+
+        .avatar-mode {
+            border:
+                2px solid #e5e7eb;
+
+            border-radius: 14px;
+
+            padding: 13px;
+
+            cursor: pointer;
+
+            text-align: center;
+        }
+
+        .avatar-mode.active {
+            border-color: #111827;
+            background: #f9fafb;
+        }
+
+        .avatar-mode-icon {
+            font-size: 25px;
+            margin-bottom: 6px;
+        }
+
+        .avatar-mode-name {
+            font-size: 13px;
+            font-weight: 800;
+        }
+
+        .character-grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 10px;
+
+            margin-top: 12px;
+        }
+
+        .character-option {
+            border:
+                2px solid #e5e7eb;
+
+            border-radius: 14px;
+
+            padding: 8px;
+
+            cursor: pointer;
+
+            text-align: center;
+
+            background: #ffffff;
+        }
+
+        .character-option.active {
+            border-color: #111827;
+            background: #f9fafb;
+        }
+
+        .character-option img {
+            width: 100%;
+            aspect-ratio: 1;
+            object-fit: contain;
+
+            border-radius: 10px;
+
+            background: #f3f4f6;
+        }
+
+        .character-option-name {
+            margin-top: 7px;
+
+            font-size: 11px;
+            font-weight: 800;
+        }
+
         .avatar-section {
             display: flex;
             align-items: flex-start;
 
             gap: 18px;
-            margin-bottom: 22px;
+
+            margin-bottom: 18px;
         }
 
         .avatar {
@@ -317,6 +312,7 @@
             flex-shrink: 0;
 
             border-radius: 50%;
+
             overflow: hidden;
 
             background: #e5e7eb;
@@ -334,6 +330,7 @@
         .avatar img {
             width: 100%;
             height: 100%;
+
             object-fit: cover;
         }
 
@@ -391,8 +388,100 @@
             font-size: 17px;
         }
 
-        .hidden {
-            display: none !important;
+        .button-row {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .button {
+            border: 0;
+
+            border-radius: 11px;
+
+            padding:
+                13px 16px;
+
+            font-size: 14px;
+            font-weight: 700;
+
+            cursor: pointer;
+            font-family: inherit;
+        }
+
+        .button:disabled {
+            opacity: 0.55;
+            cursor: not-allowed;
+        }
+
+        .primary {
+            background: #111827;
+            color: #ffffff;
+        }
+
+        .secondary {
+            background: #eef2f7;
+            color: #111827;
+        }
+
+        .message {
+            display: none;
+
+            margin-bottom: 16px;
+
+            padding:
+                12px 14px;
+
+            border-radius: 11px;
+
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .message.show {
+            display: block;
+        }
+
+        .message.success {
+            background: #ecfdf5;
+            color: #065f46;
+
+            border:
+                1px solid #a7f3d0;
+        }
+
+        .message.error {
+            background: #fef2f2;
+            color: #991b1b;
+
+            border:
+                1px solid #fecaca;
+        }
+
+        .tag-info {
+            display: flex;
+
+            gap: 10px;
+
+            flex-wrap: wrap;
+
+            margin-bottom: 20px;
+        }
+
+        .tag-badge {
+            display: inline-flex;
+
+            padding:
+                7px 10px;
+
+            border-radius: 999px;
+
+            background: #eef2f7;
+
+            color: #374151;
+
+            font-size: 12px;
+            font-weight: 700;
         }
 
         .preview-shell {
@@ -409,7 +498,6 @@
             overflow: hidden;
 
             max-width: 430px;
-            min-height: 500px;
 
             margin: 0 auto;
 
@@ -421,7 +509,8 @@
         }
 
         .preview-top {
-            padding: 32px 22px;
+            padding:
+                32px 22px;
 
             background:
                 linear-gradient(
@@ -441,6 +530,7 @@
                 0 auto 16px;
 
             border-radius: 50%;
+
             overflow: hidden;
 
             background: #374151;
@@ -456,6 +546,7 @@
         .preview-avatar img {
             width: 100%;
             height: 100%;
+
             object-fit: cover;
         }
 
@@ -515,6 +606,7 @@
             border-radius: 11px;
 
             background: #111827;
+
             color: #ffffff;
 
             text-decoration: none;
@@ -523,13 +615,12 @@
             font-weight: 800;
         }
 
-        .small-note {
-            color: #6b7280;
-            font-size: 12px;
-            line-height: 1.5;
+        .hidden {
+            display: none !important;
         }
 
         @media (max-width: 900px) {
+
             .layout {
                 grid-template-columns: 1fr;
             }
@@ -553,9 +644,9 @@
                     1fr;
             }
 
-            .theme-grid {
+            .character-grid {
                 grid-template-columns:
-                    1fr 1fr;
+                    repeat(2, 1fr);
             }
 
             .avatar-section {
@@ -574,6 +665,7 @@
         }
 
     </style>
+
 </head>
 
 
@@ -762,14 +854,62 @@
                 </div>
 
 
-                <!-- IMAGE -->
+                <!-- AVATAR MODE -->
 
                 <div class="field">
 
-                    <label id="imageLabel">
-                        Profile Photo
+                    <label>
+                        Profile Image
                     </label>
 
+
+                    <div
+                        id="avatarModeGrid"
+                        class="avatar-mode-grid"
+                    >
+
+                        <div
+                            class="avatar-mode"
+                            data-avatar-type="upload"
+                        >
+
+                            <div class="avatar-mode-icon">
+                                📷
+                            </div>
+
+                            <div class="avatar-mode-name">
+                                Upload My Photo
+                            </div>
+
+                        </div>
+
+
+                        <div
+                            class="avatar-mode"
+                            data-avatar-type="character"
+                        >
+
+                            <div class="avatar-mode-icon">
+                                🎨
+                            </div>
+
+                            <div class="avatar-mode-name">
+                                Use Character
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- UPLOAD -->
+
+                <div
+                    id="uploadSection"
+                    class="field"
+                >
 
                     <div class="avatar-section">
 
@@ -782,6 +922,7 @@
                         <div class="avatar-tools">
 
                             <label
+                                id="uploadLabel"
                                 for="avatarFile"
                                 class="upload-label"
                             >
@@ -811,6 +952,26 @@
                         </div>
 
                     </div>
+
+                </div>
+
+
+                <!-- CHARACTERS -->
+
+                <div
+                    id="characterSection"
+                    class="field hidden"
+                >
+
+                    <label>
+                        Choose Character
+                    </label>
+
+
+                    <div
+                        id="characterGrid"
+                        class="character-grid"
+                    ></div>
 
                 </div>
 
@@ -857,7 +1018,6 @@
                                 type="number"
                                 min="1"
                                 max="120"
-                                inputmode="numeric"
                             >
 
                         </div>
@@ -874,7 +1034,6 @@
                                 class="input"
                                 type="tel"
                                 maxlength="30"
-                                placeholder="+94..."
                             >
 
                         </div>
@@ -905,7 +1064,6 @@
 
 
                         <div class="field">
-
                             <label for="facebook">
                                 Facebook Username
                             </label>
@@ -914,15 +1072,11 @@
                                 id="facebook"
                                 class="input"
                                 type="text"
-                                maxlength="100"
-                                placeholder="username"
                             >
-
                         </div>
 
 
                         <div class="field">
-
                             <label for="instagram">
                                 Instagram Username
                             </label>
@@ -931,15 +1085,11 @@
                                 id="instagram"
                                 class="input"
                                 type="text"
-                                maxlength="100"
-                                placeholder="username"
                             >
-
                         </div>
 
 
                         <div class="field">
-
                             <label for="tiktok">
                                 TikTok Username
                             </label>
@@ -948,15 +1098,11 @@
                                 id="tiktok"
                                 class="input"
                                 type="text"
-                                maxlength="100"
-                                placeholder="username"
                             >
-
                         </div>
 
 
                         <div class="field">
-
                             <label for="youtube">
                                 YouTube Username
                             </label>
@@ -965,15 +1111,11 @@
                                 id="youtube"
                                 class="input"
                                 type="text"
-                                maxlength="150"
-                                placeholder="channel username"
                             >
-
                         </div>
 
 
                         <div class="field">
-
                             <label for="personalWhatsapp">
                                 WhatsApp Number
                             </label>
@@ -982,15 +1124,11 @@
                                 id="personalWhatsapp"
                                 class="input"
                                 type="tel"
-                                maxlength="30"
-                                placeholder="+94..."
                             >
-
                         </div>
 
 
                         <div class="field">
-
                             <label for="discord">
                                 Discord Username
                             </label>
@@ -999,14 +1137,11 @@
                                 id="discord"
                                 class="input"
                                 type="text"
-                                maxlength="100"
                             >
-
                         </div>
 
 
                         <div class="field">
-
                             <label for="telegram">
                                 Telegram Username
                             </label>
@@ -1015,9 +1150,7 @@
                                 id="telegram"
                                 class="input"
                                 type="text"
-                                maxlength="100"
                             >
-
                         </div>
 
                     </div>
@@ -1040,7 +1173,6 @@
 
 
                         <div class="field">
-
                             <label for="coupleName">
                                 Couple Name
                             </label>
@@ -1049,15 +1181,12 @@
                                 id="coupleName"
                                 class="input"
                                 type="text"
-                                maxlength="120"
                                 placeholder="Gayana ❤️ Tharu"
                             >
-
                         </div>
 
 
                         <div class="field">
-
                             <label for="person1Name">
                                 Person 1 Name
                             </label>
@@ -1066,14 +1195,11 @@
                                 id="person1Name"
                                 class="input"
                                 type="text"
-                                maxlength="100"
                             >
-
                         </div>
 
 
                         <div class="field">
-
                             <label for="person2Name">
                                 Person 2 Name
                             </label>
@@ -1082,16 +1208,13 @@
                                 id="person2Name"
                                 class="input"
                                 type="text"
-                                maxlength="100"
                             >
-
                         </div>
 
 
                         <div class="field">
-
                             <label for="anniversaryDate">
-                                Relationship Date / Anniversary
+                                Relationship Date
                             </label>
 
                             <input
@@ -1099,12 +1222,10 @@
                                 class="input"
                                 type="date"
                             >
-
                         </div>
 
 
                         <div class="field">
-
                             <label for="ourStory">
                                 Our Story
                             </label>
@@ -1112,15 +1233,11 @@
                             <textarea
                                 id="ourStory"
                                 class="textarea"
-                                maxlength="2000"
-                                placeholder="Tell your story..."
                             ></textarea>
-
                         </div>
 
 
                         <div class="field">
-
                             <label for="coupleBio">
                                 Short Couple Bio
                             </label>
@@ -1128,9 +1245,7 @@
                             <textarea
                                 id="coupleBio"
                                 class="textarea"
-                                maxlength="500"
                             ></textarea>
-
                         </div>
 
                     </div>
@@ -1144,7 +1259,6 @@
 
 
                         <div class="field">
-
                             <label for="person1Instagram">
                                 Person 1 Instagram
                             </label>
@@ -1153,14 +1267,11 @@
                                 id="person1Instagram"
                                 class="input"
                                 type="text"
-                                maxlength="100"
                             >
-
                         </div>
 
 
                         <div class="field">
-
                             <label for="person2Instagram">
                                 Person 2 Instagram
                             </label>
@@ -1169,14 +1280,11 @@
                                 id="person2Instagram"
                                 class="input"
                                 type="text"
-                                maxlength="100"
                             >
-
                         </div>
 
 
                         <div class="field">
-
                             <label for="person1Tiktok">
                                 Person 1 TikTok
                             </label>
@@ -1185,14 +1293,11 @@
                                 id="person1Tiktok"
                                 class="input"
                                 type="text"
-                                maxlength="100"
                             >
-
                         </div>
 
 
                         <div class="field">
-
                             <label for="person2Tiktok">
                                 Person 2 TikTok
                             </label>
@@ -1201,14 +1306,11 @@
                                 id="person2Tiktok"
                                 class="input"
                                 type="text"
-                                maxlength="100"
                             >
-
                         </div>
 
 
                         <div class="field">
-
                             <label for="sharedYoutube">
                                 Shared YouTube
                             </label>
@@ -1217,31 +1319,24 @@
                                 id="sharedYoutube"
                                 class="input"
                                 type="text"
-                                maxlength="150"
                             >
-
                         </div>
 
 
                         <div class="field">
-
                             <label for="coupleWhatsapp">
-                                WhatsApp / Contact
+                                WhatsApp
                             </label>
 
                             <input
                                 id="coupleWhatsapp"
                                 class="input"
                                 type="tel"
-                                maxlength="30"
-                                placeholder="+94..."
                             >
-
                         </div>
 
 
                         <div class="field">
-
                             <label for="otherSocialLinks">
                                 Other Social Links
                             </label>
@@ -1251,7 +1346,6 @@
                                 class="textarea"
                                 placeholder="One URL per line"
                             ></textarea>
-
                         </div>
 
                     </div>
@@ -1274,7 +1368,6 @@
 
 
                         <div class="field">
-
                             <label for="businessName">
                                 Business Name
                             </label>
@@ -1283,14 +1376,11 @@
                                 id="businessName"
                                 class="input"
                                 type="text"
-                                maxlength="150"
                             >
-
                         </div>
 
 
                         <div class="field">
-
                             <label for="businessCategory">
                                 Business Category
                             </label>
@@ -1299,15 +1389,11 @@
                                 id="businessCategory"
                                 class="input"
                                 type="text"
-                                maxlength="100"
-                                placeholder="Restaurant, Salon, Shop..."
                             >
-
                         </div>
 
 
                         <div class="field">
-
                             <label for="businessDescription">
                                 Short Description
                             </label>
@@ -1315,30 +1401,24 @@
                             <textarea
                                 id="businessDescription"
                                 class="textarea"
-                                maxlength="1000"
                             ></textarea>
-
                         </div>
 
 
                         <div class="field">
-
                             <label for="businessPhone">
-                                Phone Number
+                                Phone
                             </label>
 
                             <input
                                 id="businessPhone"
                                 class="input"
                                 type="tel"
-                                maxlength="30"
                             >
-
                         </div>
 
 
                         <div class="field">
-
                             <label for="businessWhatsapp">
                                 WhatsApp
                             </label>
@@ -1347,14 +1427,11 @@
                                 id="businessWhatsapp"
                                 class="input"
                                 type="tel"
-                                maxlength="30"
                             >
-
                         </div>
 
 
                         <div class="field">
-
                             <label for="businessEmail">
                                 Email
                             </label>
@@ -1363,14 +1440,11 @@
                                 id="businessEmail"
                                 class="input"
                                 type="email"
-                                maxlength="150"
                             >
-
                         </div>
 
 
                         <div class="field">
-
                             <label for="businessLocation">
                                 Business Location
                             </label>
@@ -1379,14 +1453,11 @@
                                 id="businessLocation"
                                 class="input"
                                 type="text"
-                                maxlength="250"
                             >
-
                         </div>
 
 
                         <div class="field">
-
                             <label for="openingHours">
                                 Opening Hours
                             </label>
@@ -1394,15 +1465,12 @@
                             <textarea
                                 id="openingHours"
                                 class="textarea"
-                                maxlength="1000"
-                                placeholder="Mon-Fri: 9:00 AM - 6:00 PM"
+                                placeholder="Mon-Fri: 9 AM - 6 PM"
                             ></textarea>
-
                         </div>
 
 
                         <div class="field">
-
                             <label for="website">
                                 Website
                             </label>
@@ -1411,10 +1479,8 @@
                                 id="website"
                                 class="input"
                                 type="url"
-                                maxlength="500"
                                 placeholder="https://..."
                             >
-
                         </div>
 
                     </div>
@@ -1428,7 +1494,6 @@
 
 
                         <div class="field">
-
                             <label for="businessFacebook">
                                 Facebook
                             </label>
@@ -1437,14 +1502,11 @@
                                 id="businessFacebook"
                                 class="input"
                                 type="text"
-                                maxlength="200"
                             >
-
                         </div>
 
 
                         <div class="field">
-
                             <label for="businessInstagram">
                                 Instagram
                             </label>
@@ -1453,14 +1515,11 @@
                                 id="businessInstagram"
                                 class="input"
                                 type="text"
-                                maxlength="200"
                             >
-
                         </div>
 
 
                         <div class="field">
-
                             <label for="businessTiktok">
                                 TikTok
                             </label>
@@ -1469,14 +1528,11 @@
                                 id="businessTiktok"
                                 class="input"
                                 type="text"
-                                maxlength="200"
                             >
-
                         </div>
 
 
                         <div class="field">
-
                             <label for="businessYoutube">
                                 YouTube
                             </label>
@@ -1485,14 +1541,11 @@
                                 id="businessYoutube"
                                 class="input"
                                 type="text"
-                                maxlength="200"
                             >
-
                         </div>
 
 
                         <div class="field">
-
                             <label for="businessTelegram">
                                 Telegram
                             </label>
@@ -1501,14 +1554,11 @@
                                 id="businessTelegram"
                                 class="input"
                                 type="text"
-                                maxlength="200"
                             >
-
                         </div>
 
 
                         <div class="field">
-
                             <label for="linkedin">
                                 LinkedIn
                             </label>
@@ -1517,9 +1567,7 @@
                                 id="linkedin"
                                 class="input"
                                 type="text"
-                                maxlength="200"
                             >
-
                         </div>
 
                     </div>
@@ -1533,7 +1581,6 @@
 
 
                         <div class="field">
-
                             <label for="googleMaps">
                                 Google Maps
                             </label>
@@ -1542,14 +1589,11 @@
                                 id="googleMaps"
                                 class="input"
                                 type="url"
-                                maxlength="500"
                             >
-
                         </div>
 
 
                         <div class="field">
-
                             <label for="onlineStore">
                                 Online Store
                             </label>
@@ -1558,14 +1602,11 @@
                                 id="onlineStore"
                                 class="input"
                                 type="url"
-                                maxlength="500"
                             >
-
                         </div>
 
 
                         <div class="field">
-
                             <label for="bookingUrl">
                                 Booking Link
                             </label>
@@ -1574,14 +1615,11 @@
                                 id="bookingUrl"
                                 class="input"
                                 type="url"
-                                maxlength="500"
                             >
-
                         </div>
 
 
                         <div class="field">
-
                             <label for="menuUrl">
                                 Menu / Catalogue
                             </label>
@@ -1590,9 +1628,7 @@
                                 id="menuUrl"
                                 class="input"
                                 type="url"
-                                maxlength="500"
                             >
-
                         </div>
 
                     </div>
@@ -1624,37 +1660,13 @@
             </section>
 
 
-            <!-- LIVE PREVIEW -->
+            <!-- PREVIEW -->
 
             <section class="card">
 
-                <div
-                    style="
-                        display:flex;
-                        justify-content:space-between;
-                        gap:10px;
-                        align-items:center;
-                        margin-bottom:18px;
-                    "
-                >
-
-                    <h2
-                        class="section-title"
-                        style="margin:0;"
-                    >
-                        Live Preview
-                    </h2>
-
-
-                    <button
-                        id="openPublicButton"
-                        class="button secondary"
-                        type="button"
-                    >
-                        Open Public
-                    </button>
-
-                </div>
+                <h2 class="section-title">
+                    Live Preview
+                </h2>
 
 
                 <div class="preview-shell">
@@ -1696,28 +1708,21 @@
                         <div
                             id="previewContent"
                             class="preview-content"
-                        >
-
-                            <a
-                                class="preview-button"
-                                href="#"
-                            >
-                                Profile Preview
-                            </a>
-
-                        </div>
+                        ></div>
 
                     </div>
 
                 </div>
 
 
-                <p
-                    class="small-note"
-                    style="margin-top:14px;"
+                <button
+                    id="openPublicButton"
+                    class="button secondary"
+                    type="button"
+                    style="width:100%;margin-top:14px;"
                 >
-                    The final public page uses the selected theme HTML file.
-                </p>
+                    Open Public Profile
+                </button>
 
             </section>
 
@@ -1764,15 +1769,113 @@
         ]);
 
 
+    const CHARACTER_LIBRARY = {
+
+        men: [
+            {
+                id:
+                    "men-01",
+                name:
+                    "Men 1",
+                src:
+                    "/E-Tag/assets/characters/men/men-01.svg"
+            },
+
+            {
+                id:
+                    "men-02",
+                name:
+                    "Men 2",
+                src:
+                    "/E-Tag/assets/characters/men/men-02.svg"
+            },
+
+            {
+                id:
+                    "men-03",
+                name:
+                    "Men 3",
+                src:
+                    "/E-Tag/assets/characters/men/men-03.svg"
+            }
+        ],
+
+        women: [
+            {
+                id:
+                    "women-01",
+                name:
+                    "Women 1",
+                src:
+                    "/E-Tag/assets/characters/women/women-01.svg"
+            },
+
+            {
+                id:
+                    "women-02",
+                name:
+                    "Women 2",
+                src:
+                    "/E-Tag/assets/characters/women/women-02.svg"
+            },
+
+            {
+                id:
+                    "women-03",
+                name:
+                    "Women 3",
+                src:
+                    "/E-Tag/assets/characters/women/women-03.svg"
+            }
+        ],
+
+        couple: [
+            {
+                id:
+                    "couple-01",
+                name:
+                    "Couple 1",
+                src:
+                    "/E-Tag/assets/characters/couple/couple-01.svg"
+            },
+
+            {
+                id:
+                    "couple-02",
+                name:
+                    "Couple 2",
+                src:
+                    "/E-Tag/assets/characters/couple/couple-02.svg"
+            }
+        ],
+
+        business: [
+            {
+                id:
+                    "business-01",
+                name:
+                    "Business 1",
+                src:
+                    "/E-Tag/assets/characters/business/business-01.svg"
+            }
+        ]
+    };
+
+
     const supabase =
         createClient(
             SUPABASE_URL,
             SUPABASE_PUBLISHABLE_KEY,
             {
                 auth: {
-                    persistSession: true,
-                    autoRefreshToken: true,
-                    detectSessionInUrl: true
+                    persistSession:
+                        true,
+
+                    autoRefreshToken:
+                        true,
+
+                    detectSessionInUrl:
+                        true
                 }
             }
         );
@@ -1783,126 +1886,120 @@
             "loading"
         );
 
-
     const dashboard =
         document.getElementById(
             "dashboard"
         );
-
 
     const message =
         document.getElementById(
             "message"
         );
 
-
     const tagBadge =
         document.getElementById(
             "tagBadge"
         );
-
 
     const profileTypeChoices =
         document.querySelectorAll(
             "#profileTypeChoices .choice"
         );
 
-
     const personalThemeChoices =
         document.querySelectorAll(
             "#personalThemeGrid .theme-option"
         );
 
+    const avatarModeChoices =
+        document.querySelectorAll(
+            "#avatarModeGrid .avatar-mode"
+        );
 
     const personalThemeSection =
         document.getElementById(
             "personalThemeSection"
         );
 
-
     const personalFields =
         document.getElementById(
             "personalFields"
         );
-
 
     const coupleFields =
         document.getElementById(
             "coupleFields"
         );
 
-
     const businessFields =
         document.getElementById(
             "businessFields"
         );
 
-
-    const imageLabel =
+    const uploadSection =
         document.getElementById(
-            "imageLabel"
+            "uploadSection"
         );
 
+    const characterSection =
+        document.getElementById(
+            "characterSection"
+        );
+
+    const characterGrid =
+        document.getElementById(
+            "characterGrid"
+        );
 
     const avatar =
         document.getElementById(
             "avatar"
         );
 
+    const previewAvatar =
+        document.getElementById(
+            "previewAvatar"
+        );
 
     const avatarFile =
         document.getElementById(
             "avatarFile"
         );
 
-
     const uploadStatus =
         document.getElementById(
             "uploadStatus"
         );
-
 
     const saveButton =
         document.getElementById(
             "saveButton"
         );
 
-
     const logoutButton =
         document.getElementById(
             "logoutButton"
         );
-
 
     const openPublicButton =
         document.getElementById(
             "openPublicButton"
         );
 
-
-    const previewAvatar =
-        document.getElementById(
-            "previewAvatar"
-        );
-
-
     const previewName =
         document.getElementById(
             "previewName"
         );
-
 
     const previewType =
         document.getElementById(
             "previewType"
         );
 
-
     const previewBio =
         document.getElementById(
             "previewBio"
         );
-
 
     const previewContent =
         document.getElementById(
@@ -1910,31 +2007,7 @@
         );
 
 
-    let currentUser =
-        null;
-
-
-    let currentTag =
-        null;
-
-
-    let profileExists =
-        false;
-
-
-    let currentAvatarUrl =
-        "";
-
-
-    let currentProfileType =
-        "personal";
-
-
-    let currentTemplate =
-        "men";
-
-
-    const fieldIds = [
+    const ids = [
 
         "personalName",
         "age",
@@ -1985,13 +2058,13 @@
     ];
 
 
-    const els = {};
+    const fields = {};
 
 
-    fieldIds.forEach(
+    ids.forEach(
         id => {
 
-            els[id] =
+            fields[id] =
                 document.getElementById(
                     id
                 );
@@ -1999,12 +2072,34 @@
     );
 
 
-    function value(
+    let currentUser =
+        null;
+
+    let currentTag =
+        null;
+
+    let profileExists =
+        false;
+
+    let currentProfileType =
+        "personal";
+
+    let currentTemplate =
+        "men";
+
+    let avatarType =
+        "upload";
+
+    let characterId =
+        "";
+
+
+    function getValue(
         id
     ) {
 
         return (
-            els[id]?.value ||
+            fields[id]?.value ||
             ""
         ).trim();
     }
@@ -2012,16 +2107,15 @@
 
     function setValue(
         id,
-        data
+        value
     ) {
 
         if (
-            els[id]
+            fields[id]
         ) {
 
-            els[id].value =
-                data ??
-                "";
+            fields[id].value =
+                value ?? "";
         }
     }
 
@@ -2039,11 +2133,11 @@
     }
 
 
-    function getInitials(
+    function initials(
         name
     ) {
 
-        const words =
+        const p =
             String(
                 name || ""
             )
@@ -2057,8 +2151,7 @@
 
 
         if (
-            words.length ===
-            0
+            p.length === 0
         ) {
 
             return "?";
@@ -2066,12 +2159,11 @@
 
 
         if (
-            words.length ===
-            1
+            p.length === 1
         ) {
 
-            return words[0]
-                .substring(
+            return p[0]
+                .slice(
                     0,
                     2
                 )
@@ -2080,41 +2172,9 @@
 
 
         return (
-            words[0][0] +
-            words[
-                words.length - 1
-            ][0]
+            p[0][0] +
+            p[p.length - 1][0]
         ).toUpperCase();
-    }
-
-
-    function renderAvatar(
-        element,
-        name,
-        url
-    ) {
-
-        if (
-            url
-        ) {
-
-            element.innerHTML =
-                `
-                    <img
-                        src="${escapeAttribute(
-                            url
-                        )}"
-                        alt="Profile"
-                    >
-                `;
-
-        } else {
-
-            element.textContent =
-                getInitials(
-                    name
-                );
-        }
     }
 
 
@@ -2144,21 +2204,50 @@
     }
 
 
-    function normalizeTemplate(
-        template
+    function renderAvatar(
+        element,
+        name,
+        imageUrl
     ) {
 
-        const value =
+        if (
+            imageUrl
+        ) {
+
+            element.innerHTML =
+                `
+                    <img
+                        src="${escapeAttribute(
+                            imageUrl
+                        )}"
+                        alt="Profile"
+                    >
+                `;
+
+        } else {
+
+            element.textContent =
+                initials(
+                    name
+                );
+        }
+    }
+
+
+    function normalizeTemplate(
+        value
+    ) {
+
+        const v =
             String(
-                template || ""
+                value || ""
             )
                 .trim()
                 .toLowerCase();
 
 
         if (
-            value ===
-            "boy"
+            v === "boy"
         ) {
 
             return "men";
@@ -2166,8 +2255,7 @@
 
 
         if (
-            value ===
-            "girl"
+            v === "girl"
         ) {
 
             return "women";
@@ -2180,45 +2268,14 @@
                 "women",
                 "couple",
                 "business"
-            ].includes(
-                value
-            )
+            ].includes(v)
         ) {
 
-            return value;
+            return v;
         }
 
 
         return "men";
-    }
-
-
-    function normalizeProfileType(
-        type
-    ) {
-
-        const value =
-            String(
-                type || ""
-            )
-                .trim()
-                .toLowerCase();
-
-
-        if (
-            [
-                "couple",
-                "business"
-            ].includes(
-                value
-            )
-        ) {
-
-            return value;
-        }
-
-
-        return "personal";
     }
 
 
@@ -2227,17 +2284,22 @@
     ) {
 
         currentProfileType =
-            normalizeProfileType(
+            [
+                "couple",
+                "business"
+            ].includes(
                 type
-            );
+            )
+                ? type
+                : "personal";
 
 
         profileTypeChoices.forEach(
-            choice => {
+            el => {
 
-                choice.classList.toggle(
+                el.classList.toggle(
                     "active",
-                    choice.dataset.type ===
+                    el.dataset.type ===
                         currentProfileType
                 );
             }
@@ -2276,76 +2338,593 @@
             );
 
 
-        if (
-            currentProfileType ===
-            "couple"
-        ) {
+        renderAvatarModeUI();
 
-            currentTemplate =
-                "couple";
-
-            imageLabel.textContent =
-                "Couple Photo";
-
-        } else if (
-            currentProfileType ===
-            "business"
-        ) {
-
-            currentTemplate =
-                "business";
-
-            imageLabel.textContent =
-                "Business Logo";
-
-        } else {
-
-            imageLabel.textContent =
-                "Profile Photo";
-
-
-            if (
-                ![
-                    "men",
-                    "women"
-                ].includes(
-                    currentTemplate
-                )
-            ) {
-
-                currentTemplate =
-                    "men";
-            }
-        }
-
-
-        updateThemeChoices();
+        renderCharacterOptions();
 
         updatePreview();
     }
 
 
-    function updateThemeChoices() {
+    function setAvatarType(
+        type
+    ) {
 
-        personalThemeChoices.forEach(
-            choice => {
+        avatarType =
+            type === "character"
+                ? "character"
+                : "upload";
 
-                choice.classList.toggle(
+
+        avatarModeChoices.forEach(
+            el => {
+
+                el.classList.toggle(
                     "active",
-                    choice.dataset.template ===
-                        currentTemplate
+                    el.dataset.avatarType ===
+                        avatarType
+                );
+            }
+        );
+
+
+        renderAvatarModeUI();
+
+        updatePreview();
+    }
+
+
+    function renderAvatarModeUI() {
+
+        uploadSection.classList.toggle(
+            "hidden",
+            avatarType !==
+                "upload"
+        );
+
+
+        characterSection.classList.toggle(
+            "hidden",
+            avatarType !==
+                "character"
+        );
+    }
+
+
+    function getCharacterGroup() {
+
+        if (
+            currentProfileType ===
+            "couple"
+        ) {
+
+            return "couple";
+        }
+
+
+        if (
+            currentProfileType ===
+            "business"
+        ) {
+
+            return "business";
+        }
+
+
+        return currentTemplate ===
+            "women"
+                ? "women"
+                : "men";
+    }
+
+
+    function renderCharacterOptions() {
+
+        const group =
+            getCharacterGroup();
+
+
+        const list =
+            CHARACTER_LIBRARY[
+                group
+            ] || [];
+
+
+        characterGrid.innerHTML =
+            "";
+
+
+        list.forEach(
+            character => {
+
+                const option =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                option.className =
+                    "character-option";
+
+
+                if (
+                    character.id ===
+                    characterId
+                ) {
+
+                    option.classList.add(
+                        "active"
+                    );
+                }
+
+
+                option.innerHTML =
+                    `
+                        <img
+                            src="${character.src}"
+                            alt="${character.name}"
+                        >
+
+                        <div class="character-option-name">
+                            ${character.name}
+                        </div>
+                    `;
+
+
+                option.addEventListener(
+                    "click",
+                    () => {
+
+                        characterId =
+                            character.id;
+
+                        avatarType =
+                            "character";
+
+                        setAvatarType(
+                            "character"
+                        );
+
+                        renderCharacterOptions();
+
+                        updatePreview();
+                    }
+                );
+
+
+                characterGrid.appendChild(
+                    option
                 );
             }
         );
     }
 
 
-    function buildProfileObject() {
+    function getSelectedCharacterUrl() {
+
+        const group =
+            getCharacterGroup();
+
+
+        const list =
+            CHARACTER_LIBRARY[
+                group
+            ] || [];
+
+
+        const selected =
+            list.find(
+                c =>
+                    c.id ===
+                    characterId
+            );
+
+
+        return selected?.src ||
+            "";
+    }
+
+
+    function getDisplayName() {
+
+        if (
+            currentProfileType ===
+            "couple"
+        ) {
+
+            return (
+                getValue(
+                    "coupleName"
+                ) ||
+                "Our Story"
+            );
+        }
+
+
+        if (
+            currentProfileType ===
+            "business"
+        ) {
+
+            return (
+                getValue(
+                    "businessName"
+                ) ||
+                "Business"
+            );
+        }
+
+
+        return (
+            getValue(
+                "personalName"
+            ) ||
+            "E-Tag User"
+        );
+    }
+
+
+    function getBio() {
+
+        if (
+            currentProfileType ===
+            "couple"
+        ) {
+
+            return getValue(
+                "coupleBio"
+            );
+        }
+
+
+        if (
+            currentProfileType ===
+            "business"
+        ) {
+
+            return (
+                getValue(
+                    "businessDescription"
+                )
+            );
+        }
+
+
+        return getValue(
+            "personalBio"
+        );
+    }
+
+
+    function getPreviewImage() {
+
+        if (
+            avatarType ===
+            "character"
+        ) {
+
+            return getSelectedCharacterUrl();
+        }
+
+
+        return currentAvatarUrl;
+    }
+
+
+    function updatePreview() {
+
+        const displayName =
+            getDisplayName();
+
+
+        previewName.textContent =
+            displayName;
+
+
+        previewBio.textContent =
+            getBio();
+
+
+        if (
+            currentProfileType ===
+            "couple"
+        ) {
+
+            previewType.textContent =
+                "Couple";
+
+        } else if (
+            currentProfileType ===
+            "business"
+        ) {
+
+            previewType.textContent =
+                "Business";
+
+        } else {
+
+            previewType.textContent =
+                currentTemplate ===
+                    "women"
+                        ? "Personal · Women"
+                        : "Personal · Men";
+        }
+
+
+        const image =
+            getPreviewImage();
+
+
+        renderAvatar(
+            previewAvatar,
+            displayName,
+            image
+        );
+
+
+        previewContent.innerHTML =
+            "";
+
+
+        const buttons = [];
+
+
+        if (
+            currentProfileType ===
+            "personal"
+        ) {
+
+            if (
+                getValue(
+                    "personalPhone"
+                )
+            ) {
+
+                buttons.push(
+                    [
+                        "Call",
+                        `tel:${encodeURIComponent(
+                            getValue(
+                                "personalPhone"
+                            )
+                        )}`
+                    ]
+                );
+            }
+
+
+            if (
+                getValue(
+                    "personalWhatsapp"
+                )
+            ) {
+
+                buttons.push(
+                    [
+                        "WhatsApp",
+                        `https://wa.me/${cleanNumber(
+                            getValue(
+                                "personalWhatsapp"
+                            )
+                        )}`
+                    ]
+                );
+            }
+
+
+            if (
+                getValue(
+                    "instagram"
+                )
+            ) {
+
+                buttons.push(
+                    [
+                        "Instagram",
+                        `https://instagram.com/${stripAt(
+                            getValue(
+                                "instagram"
+                            )
+                        )}`
+                    ]
+                );
+            }
+        }
+
+
+        if (
+            currentProfileType ===
+            "couple"
+        ) {
+
+            if (
+                getValue(
+                    "coupleWhatsapp"
+                )
+            ) {
+
+                buttons.push(
+                    [
+                        "WhatsApp",
+                        `https://wa.me/${cleanNumber(
+                            getValue(
+                                "coupleWhatsapp"
+                            )
+                        )}`
+                    ]
+                );
+            }
+        }
+
+
+        if (
+            currentProfileType ===
+            "business"
+        ) {
+
+            if (
+                getValue(
+                    "businessPhone"
+                )
+            ) {
+
+                buttons.push(
+                    [
+                        "Call Business",
+                        `tel:${encodeURIComponent(
+                            getValue(
+                                "businessPhone"
+                            )
+                        )}`
+                    ]
+                );
+            }
+
+
+            if (
+                getValue(
+                    "businessWhatsapp"
+                )
+            ) {
+
+                buttons.push(
+                    [
+                        "WhatsApp",
+                        `https://wa.me/${cleanNumber(
+                            getValue(
+                                "businessWhatsapp"
+                            )
+                        )}`
+                    ]
+                );
+            }
+
+
+            if (
+                getValue(
+                    "website"
+                )
+            ) {
+
+                buttons.push(
+                    [
+                        "Website",
+                        normalizeUrl(
+                            getValue(
+                                "website"
+                            )
+                        )
+                    ]
+                );
+            }
+        }
+
+
+        if (
+            buttons.length ===
+            0
+        ) {
+
+            buttons.push(
+                [
+                    "Public Profile",
+                    "#"
+                ]
+            );
+        }
+
+
+        buttons.forEach(
+            button => {
+
+                const a =
+                    document.createElement(
+                        "a"
+                    );
+
+
+                a.className =
+                    "preview-button";
+
+
+                a.textContent =
+                    button[0];
+
+
+                a.href =
+                    button[1];
+
+
+                if (
+                    button[1] !== "#"
+                ) {
+
+                    a.target =
+                        "_blank";
+
+                    a.rel =
+                        "noopener";
+                }
+
+
+                previewContent.appendChild(
+                    a
+                );
+            }
+        );
+    }
+
+
+    function cleanNumber(
+        value
+    ) {
+
+        return String(
+            value || ""
+        )
+            .replace(
+                /\D/g,
+                ""
+            );
+    }
+
+
+    function stripAt(
+        value
+    ) {
+
+        return String(
+            value || ""
+        )
+            .trim()
+            .replace(
+                /^@/,
+                ""
+            );
+    }
+
+
+    function normalizeUrl(
+        value
+    ) {
+
+        if (
+            /^https?:\/\//i.test(
+                value
+            )
+        ) {
+
+            return value;
+        }
+
+
+        return `https://${value}`;
+    }
+
+
+    function buildProfileData() {
 
         const base = {
-
-            id:
-                currentUser.id,
 
             profile_type:
                 currentProfileType,
@@ -2354,11 +2933,22 @@
                 currentTemplate,
 
             avatar_type:
-                "upload",
+                avatarType,
+
+            character_id:
+                avatarType ===
+                    "character"
+                        ? characterId
+                        : null,
 
             avatar_url:
-                currentAvatarUrl ||
-                null,
+                avatarType ===
+                    "upload"
+                        ? (
+                            currentAvatarUrl ||
+                            null
+                        )
+                        : null,
 
             updated_at:
                 new Date()
@@ -2376,59 +2966,63 @@
                 ...base,
 
                 display_name:
-                    value(
+                    getValue(
                         "personalName"
                     ),
 
                 age:
-                    value("age")
+                    getValue(
+                        "age"
+                    )
                         ? Number(
-                            value("age")
+                            getValue(
+                                "age"
+                            )
                         )
                         : null,
 
                 phone:
-                    value(
+                    getValue(
                         "personalPhone"
                     ),
 
                 bio:
-                    value(
+                    getValue(
                         "personalBio"
                     ),
 
                 facebook:
-                    value(
+                    getValue(
                         "facebook"
                     ),
 
                 instagram:
-                    value(
+                    getValue(
                         "instagram"
                     ),
 
                 tiktok:
-                    value(
+                    getValue(
                         "tiktok"
                     ),
 
                 youtube:
-                    value(
+                    getValue(
                         "youtube"
                     ),
 
                 whatsapp:
-                    value(
+                    getValue(
                         "personalWhatsapp"
                     ),
 
                 discord:
-                    value(
+                    getValue(
                         "discord"
                     ),
 
                 telegram:
-                    value(
+                    getValue(
                         "telegram"
                     )
             };
@@ -2445,73 +3039,73 @@
                 ...base,
 
                 display_name:
-                    value(
+                    getValue(
                         "coupleName"
                     ),
 
                 bio:
-                    value(
+                    getValue(
                         "coupleBio"
                     ),
 
                 couple_name:
-                    value(
+                    getValue(
                         "coupleName"
                     ),
 
                 person1_name:
-                    value(
+                    getValue(
                         "person1Name"
                     ),
 
                 person2_name:
-                    value(
+                    getValue(
                         "person2Name"
                     ),
 
                 anniversary_date:
-                    value(
+                    getValue(
                         "anniversaryDate"
                     ) ||
                     null,
 
                 our_story:
-                    value(
+                    getValue(
                         "ourStory"
                     ),
 
                 person1_instagram:
-                    value(
+                    getValue(
                         "person1Instagram"
                     ),
 
                 person2_instagram:
-                    value(
+                    getValue(
                         "person2Instagram"
                     ),
 
                 person1_tiktok:
-                    value(
+                    getValue(
                         "person1Tiktok"
                     ),
 
                 person2_tiktok:
-                    value(
+                    getValue(
                         "person2Tiktok"
                     ),
 
                 shared_youtube:
-                    value(
+                    getValue(
                         "sharedYoutube"
                     ),
 
                 whatsapp:
-                    value(
+                    getValue(
                         "coupleWhatsapp"
                     ),
 
                 other_social_links:
-                    value(
+                    getValue(
                         "otherSocialLinks"
                     )
             };
@@ -2523,107 +3117,107 @@
             ...base,
 
             display_name:
-                value(
+                getValue(
                     "businessName"
                 ),
 
             bio:
-                value(
+                getValue(
                     "businessDescription"
                 ),
 
             business_name:
-                value(
+                getValue(
                     "businessName"
                 ),
 
             business_category:
-                value(
+                getValue(
                     "businessCategory"
                 ),
 
             business_description:
-                value(
+                getValue(
                     "businessDescription"
                 ),
 
             phone:
-                value(
+                getValue(
                     "businessPhone"
                 ),
 
             whatsapp:
-                value(
+                getValue(
                     "businessWhatsapp"
                 ),
 
             email:
-                value(
+                getValue(
                     "businessEmail"
                 ),
 
             business_location:
-                value(
+                getValue(
                     "businessLocation"
                 ),
 
             opening_hours:
-                value(
+                getValue(
                     "openingHours"
                 ),
 
             website:
-                value(
+                getValue(
                     "website"
                 ),
 
             facebook:
-                value(
+                getValue(
                     "businessFacebook"
                 ),
 
             instagram:
-                value(
+                getValue(
                     "businessInstagram"
                 ),
 
             tiktok:
-                value(
+                getValue(
                     "businessTiktok"
                 ),
 
             youtube:
-                value(
+                getValue(
                     "businessYoutube"
                 ),
 
             telegram:
-                value(
+                getValue(
                     "businessTelegram"
                 ),
 
             linkedin:
-                value(
+                getValue(
                     "linkedin"
                 ),
 
             google_maps:
-                value(
+                getValue(
                     "googleMaps"
                 ),
 
             online_store:
-                value(
+                getValue(
                     "onlineStore"
                 ),
 
             booking_url:
-                value(
+                getValue(
                     "bookingUrl"
                 ),
 
             menu_url:
-                value(
+                getValue(
                     "menuUrl"
                 )
         };
@@ -2635,15 +3229,32 @@
     ) {
 
         currentProfileType =
-            normalizeProfileType(
+            [
+                "couple",
+                "business"
+            ].includes(
                 profile.profile_type
-            );
+            )
+                ? profile.profile_type
+                : "personal";
 
 
         currentTemplate =
             normalizeTemplate(
                 profile.template
             );
+
+
+        avatarType =
+            profile.avatar_type ===
+                "character"
+                    ? "character"
+                    : "upload";
+
+
+        characterId =
+            profile.character_id ||
+            "";
 
 
         currentAvatarUrl =
@@ -2776,8 +3387,8 @@
 
         setValue(
             "businessName",
-            profile.business_name
-                || profile.display_name
+            profile.business_name ||
+            profile.display_name
         );
 
         setValue(
@@ -2787,8 +3398,8 @@
 
         setValue(
             "businessDescription",
-            profile.business_description
-                || profile.bio
+            profile.business_description ||
+            profile.bio
         );
 
         setValue(
@@ -2877,419 +3488,22 @@
         );
 
 
+        setAvatarType(
+            avatarType
+        );
+
+
+        renderCharacterOptions();
+
+
         renderAvatar(
             avatar,
-            valueForPreviewName(
-                profile
-            ),
-            currentAvatarUrl
+            getDisplayName(),
+            getPreviewImage()
         );
 
 
         updatePreview();
-    }
-
-
-    function valueForPreviewName(
-        profile
-    ) {
-
-        if (
-            currentProfileType ===
-            "couple"
-        ) {
-
-            return (
-                value(
-                    "coupleName"
-                ) ||
-                "Gayana ❤️ Tharu"
-            );
-        }
-
-
-        if (
-            currentProfileType ===
-            "business"
-        ) {
-
-            return (
-                value(
-                    "businessName"
-                ) ||
-                "Business"
-            );
-        }
-
-
-        return (
-            value(
-                "personalName"
-            ) ||
-            "E-Tag User"
-        );
-    }
-
-
-    function updatePreview() {
-
-        const displayName =
-            valueForPreviewName(
-                {}
-            );
-
-
-        const profileLabel =
-            currentProfileType ===
-            "couple"
-
-                ? "Couple"
-
-                : currentProfileType ===
-                    "business"
-
-                    ? "Business"
-
-                    : currentTemplate ===
-                        "women"
-
-                        ? "Personal · Women"
-
-                        : "Personal · Men";
-
-
-        previewName.textContent =
-            displayName;
-
-
-        previewType.textContent =
-            profileLabel;
-
-
-        if (
-            currentProfileType ===
-            "personal"
-        ) {
-
-            previewBio.textContent =
-                value(
-                    "personalBio"
-                );
-
-        } else if (
-            currentProfileType ===
-            "couple"
-        ) {
-
-            previewBio.textContent =
-                value(
-                    "coupleBio"
-                );
-
-        } else {
-
-            previewBio.textContent =
-                value(
-                    "businessDescription"
-                );
-        }
-
-
-        renderAvatar(
-            previewAvatar,
-            displayName,
-            currentAvatarUrl
-        );
-
-
-        previewContent.innerHTML =
-            "";
-
-
-        const links = [];
-
-
-        if (
-            currentProfileType ===
-            "personal"
-        ) {
-
-            if (
-                value("personalPhone")
-            ) {
-
-                links.push(
-                    [
-                        "Call",
-                        `tel:${encodeURIComponent(
-                            value(
-                                "personalPhone"
-                            )
-                        )}`
-                    ]
-                );
-            }
-
-
-            if (
-                value(
-                    "personalWhatsapp"
-                )
-            ) {
-
-                links.push(
-                    [
-                        "WhatsApp",
-                        `https://wa.me/${cleanNumber(
-                            value(
-                                "personalWhatsapp"
-                            )
-                        )}`
-                    ]
-                );
-            }
-
-
-            if (
-                value("instagram")
-            ) {
-
-                links.push(
-                    [
-                        "Instagram",
-                        `https://instagram.com/${stripAt(
-                            value("instagram")
-                        )}`
-                    ]
-                );
-            }
-        }
-
-
-        if (
-            currentProfileType ===
-            "couple"
-        ) {
-
-            if (
-                value(
-                    "coupleWhatsapp"
-                )
-            ) {
-
-                links.push(
-                    [
-                        "WhatsApp",
-                        `https://wa.me/${cleanNumber(
-                            value(
-                                "coupleWhatsapp"
-                            )
-                        )}`
-                    ]
-                );
-            }
-
-
-            if (
-                value(
-                    "person1Instagram"
-                )
-            ) {
-
-                links.push(
-                    [
-                        "Person 1 Instagram",
-                        `https://instagram.com/${stripAt(
-                            value(
-                                "person1Instagram"
-                            )
-                        )}`
-                    ]
-                );
-            }
-
-
-            if (
-                value(
-                    "person2Instagram"
-                )
-            ) {
-
-                links.push(
-                    [
-                        "Person 2 Instagram",
-                        `https://instagram.com/${stripAt(
-                            value(
-                                "person2Instagram"
-                            )
-                        )}`
-                    ]
-                );
-            }
-        }
-
-
-        if (
-            currentProfileType ===
-            "business"
-        ) {
-
-            if (
-                value(
-                    "businessPhone"
-                )
-            ) {
-
-                links.push(
-                    [
-                        "Call Business",
-                        `tel:${encodeURIComponent(
-                            value(
-                                "businessPhone"
-                            )
-                        )}`
-                    ]
-                );
-            }
-
-
-            if (
-                value(
-                    "businessWhatsapp"
-                )
-            ) {
-
-                links.push(
-                    [
-                        "WhatsApp",
-                        `https://wa.me/${cleanNumber(
-                            value(
-                                "businessWhatsapp"
-                            )
-                        )}`
-                    ]
-                );
-            }
-
-
-            if (
-                value("website")
-            ) {
-
-                links.push(
-                    [
-                        "Website",
-                        normalizeUrl(
-                            value(
-                                "website"
-                            )
-                        )
-                    ]
-                );
-            }
-        }
-
-
-        if (
-            links.length ===
-            0
-        ) {
-
-            links.push(
-                [
-                    "Profile Preview",
-                    "#"
-                ]
-            );
-        }
-
-
-        links.forEach(
-            link => {
-
-                const a =
-                    document.createElement(
-                        "a"
-                    );
-
-
-                a.className =
-                    "preview-button";
-
-
-                a.textContent =
-                    link[0];
-
-
-                a.href =
-                    link[1];
-
-
-                if (
-                    link[1] !==
-                    "#"
-                ) {
-
-                    a.target =
-                        "_blank";
-
-                    a.rel =
-                        "noopener";
-                }
-
-
-                previewContent.appendChild(
-                    a
-                );
-            }
-        );
-    }
-
-
-    function stripAt(
-        value
-    ) {
-
-        return String(
-            value || ""
-        )
-            .trim()
-            .replace(
-                /^@/,
-                ""
-            );
-    }
-
-
-    function cleanNumber(
-        value
-    ) {
-
-        return String(
-            value || ""
-        )
-            .replace(
-                /\D/g,
-                ""
-            );
-    }
-
-
-    function normalizeUrl(
-        value
-    ) {
-
-        if (
-            /^https?:\/\//i.test(
-                value
-            )
-        ) {
-
-            return value;
-        }
-
-
-        return `https://${value}`;
     }
 
 
@@ -3329,7 +3543,8 @@
 
 
         const {
-            data: sessionData
+            data:
+                sessionData
         } =
             await supabase.auth.getSession();
 
@@ -3404,7 +3619,7 @@
             "Uploading photo...";
 
 
-        const uploadResponse =
+        const uploaded =
             await fetch(
                 result.uploadUrl,
                 {
@@ -3423,11 +3638,11 @@
 
 
         if (
-            !uploadResponse.ok
+            !uploaded.ok
         ) {
 
             throw new Error(
-                `R2 upload failed (${uploadResponse.status}).`
+                `R2 upload failed (${uploaded.status}).`
             );
         }
 
@@ -3436,11 +3651,18 @@
             `${R2_PUBLIC_URL}/${result.objectKey}`;
 
 
+        avatarType =
+            "upload";
+
+
+        setAvatarType(
+            "upload"
+        );
+
+
         renderAvatar(
             avatar,
-            valueForPreviewName(
-                {}
-            ),
+            getDisplayName(),
             currentAvatarUrl
         );
 
@@ -3451,25 +3673,22 @@
         uploadStatus.textContent =
             "Photo uploaded. Click Save Profile.";
 
-
         uploadStatus.style.color =
             "#065f46";
     }
 
 
-    async function loadProfile() {
+    async function load() {
 
         const {
-            data: sessionData,
-            error:
-                sessionError
+            data:
+                sessionData
         } =
             await supabase.auth.getSession();
 
 
         if (
-            sessionError ||
-            !sessionData.session
+            !sessionData?.session
         ) {
 
             window.location.replace(
@@ -3485,8 +3704,7 @@
 
 
         const {
-            data: tag,
-            error: tagError
+            data: tag
         } =
             await supabase
                 .from(
@@ -3508,7 +3726,6 @@
 
 
         if (
-            tagError ||
             !tag
         ) {
 
@@ -3528,8 +3745,7 @@
 
 
         const {
-            data: profile,
-            error: profileError
+            data: profile
         } =
             await supabase
                 .from(
@@ -3546,22 +3762,12 @@
 
 
         if (
-            profileError
-        ) {
-
-            loading.textContent =
-                `Unable to load profile: ${profileError.message}`;
-
-            return;
-        }
-
-
-        if (
             profile
         ) {
 
             profileExists =
                 true;
+
 
             fillProfile(
                 profile
@@ -3572,19 +3778,30 @@
             profileExists =
                 false;
 
+
             setProfileType(
                 "personal"
             );
+
 
             currentTemplate =
                 "men";
 
 
-            renderAvatar(
-                avatar,
-                "E-Tag User",
-                ""
+            avatarType =
+                "upload";
+
+
+            characterId =
+                "";
+
+
+            setAvatarType(
+                "upload"
             );
+
+
+            renderCharacterOptions();
 
 
             updatePreview();
@@ -3596,9 +3813,11 @@
 
                 window.open(
                     `${window.location.origin}/E-Tag/?tag=${encodeURIComponent(
-                        currentTag.tag_code
+                        tag.tag_code
                     )}`,
+
                     "_blank",
+
                     "noopener,noreferrer"
                 );
             };
@@ -3608,6 +3827,7 @@
             "hidden"
         );
 
+
         dashboard.classList.remove(
             "hidden"
         );
@@ -3615,14 +3835,6 @@
 
 
     async function saveProfile() {
-
-        if (
-            !currentUser
-        ) {
-
-            return;
-        }
-
 
         saveButton.disabled =
             true;
@@ -3635,7 +3847,7 @@
         try {
 
             const data =
-                buildProfileObject();
+                buildProfileData();
 
 
             if (
@@ -3676,6 +3888,9 @@
                         )
                         .insert(
                             {
+                                id:
+                                    currentUser.id,
+
                                 ...data,
 
                                 created_at:
@@ -3702,7 +3917,6 @@
                 "Profile saved successfully.",
                 "success"
             );
-
 
         } catch (
             error
@@ -3757,6 +3971,19 @@
                     currentTemplate =
                         choice.dataset.template;
 
+
+                    if (
+                        avatarType ===
+                        "character"
+                    ) {
+
+                        characterId =
+                            "";
+
+                        renderCharacterOptions();
+                    }
+
+
                     updateThemeChoices();
 
                     updatePreview();
@@ -3764,6 +3991,38 @@
             );
         }
     );
+
+
+    avatarModeChoices.forEach(
+        choice => {
+
+            choice.addEventListener(
+                "click",
+                () => {
+
+                    setAvatarType(
+                        choice.dataset.avatarType
+                    );
+                }
+            );
+        }
+    );
+
+
+    function updateThemeChoices() {
+
+        personalThemeChoices
+            .forEach(
+                choice => {
+
+                    choice.classList.toggle(
+                        "active",
+                        choice.dataset.template ===
+                            currentTemplate
+                    );
+                }
+            );
+    }
 
 
     avatarFile.addEventListener(
@@ -3805,23 +4064,25 @@
     );
 
 
-    [
-        ...Object.values(
-            els
-        )
-    ].forEach(
-        element => {
+    fields.personalName.addEventListener(
+        "input",
+        updatePreview
+    );
+
+
+    ids.forEach(
+        id => {
 
             if (
-                element
+                fields[id]
             ) {
 
-                element.addEventListener(
+                fields[id].addEventListener(
                     "input",
                     updatePreview
                 );
 
-                element.addEventListener(
+                fields[id].addEventListener(
                     "change",
                     updatePreview
                 );
@@ -3847,30 +4108,19 @@
             await supabase.auth.signOut();
 
 
-            if (
+            window.location.replace(
                 tagCode
-            ) {
-
-                window.location.replace(
-                    `/E-Tag/?tag=${encodeURIComponent(
+                    ? `/E-Tag/?tag=${encodeURIComponent(
                         tagCode
                     )}`
-                );
-
-            } else {
-
-                window.location.replace(
-                    "/E-Tag/"
-                );
-            }
+                    : "/E-Tag/"
+            );
         }
     );
 
 
     supabase.auth.onAuthStateChange(
-        (
-            event
-        ) => {
+        event => {
 
             if (
                 event ===
@@ -3881,28 +4131,21 @@
                     currentTag?.tag_code;
 
 
-                if (
+                window.location.replace(
                     tagCode
-                ) {
-
-                    window.location.replace(
-                        `/E-Tag/?tag=${encodeURIComponent(
+                        ? `/E-Tag/?tag=${encodeURIComponent(
                             tagCode
                         )}`
-                    );
-
-                } else {
-
-                    window.location.replace(
-                        "/E-Tag/"
-                    );
-                }
+                        : "/E-Tag/"
+                );
             }
         }
     );
 
 
-    loadProfile();
+    updateThemeChoices();
+
+    load();
 
 </script>
 
