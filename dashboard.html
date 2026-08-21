@@ -12,6 +12,7 @@
     <title>E-Tag Dashboard</title>
 
     <style>
+
         * {
             box-sizing: border-box;
         }
@@ -19,6 +20,7 @@
         body {
             margin: 0;
             min-height: 100vh;
+
             font-family:
                 Inter,
                 system-ui,
@@ -26,12 +28,18 @@
                 BlinkMacSystemFont,
                 "Segoe UI",
                 sans-serif;
+
             background: #f5f7fb;
             color: #111827;
         }
 
         .app {
-            width: min(calc(100% - 24px), 1100px);
+            width:
+                min(
+                    calc(100% - 24px),
+                    1100px
+                );
+
             margin: 0 auto;
             padding: 24px 0 50px;
         }
@@ -52,11 +60,17 @@
 
         .card {
             background: #ffffff;
-            border: 1px solid #e5e7eb;
+
+            border:
+                1px solid #e5e7eb;
+
             border-radius: 20px;
+
             padding: 22px;
+
             box-shadow:
-                0 10px 35px rgba(
+                0 10px 35px
+                rgba(
                     0,
                     0,
                     0,
@@ -66,7 +80,10 @@
 
         .layout {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+
+            grid-template-columns:
+                1fr 1fr;
+
             gap: 20px;
         }
 
@@ -81,7 +98,9 @@
 
         .field label {
             display: block;
+
             margin-bottom: 7px;
+
             font-size: 13px;
             font-weight: 700;
         }
@@ -89,12 +108,21 @@
         .input,
         .textarea {
             width: 100%;
-            border: 1px solid #d1d5db;
+
+            border:
+                1px solid #d1d5db;
+
             border-radius: 11px;
-            padding: 12px 13px;
+
+            padding:
+                12px 13px;
+
             font-size: 15px;
+
             font-family: inherit;
+
             outline: none;
+
             background: #ffffff;
         }
 
@@ -106,6 +134,7 @@
         .input:focus,
         .textarea:focus {
             border-color: #111827;
+
             box-shadow:
                 0 0 0 3px
                 rgba(
@@ -118,15 +147,23 @@
 
         .choice-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
             gap: 10px;
         }
 
         .choice {
-            border: 2px solid #e5e7eb;
+            border:
+                2px solid #e5e7eb;
+
             border-radius: 14px;
+
             padding: 14px;
+
             cursor: pointer;
+
             text-align: center;
         }
 
@@ -145,53 +182,103 @@
             font-weight: 800;
         }
 
-        .theme-grid,
-        .avatar-mode-grid {
+        .theme-grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
+
+            grid-template-columns:
+                repeat(2, 1fr);
+
             gap: 10px;
         }
 
-        .theme-option,
-        .avatar-mode {
-            border: 2px solid #e5e7eb;
+        .theme-option {
+            border:
+                2px solid #e5e7eb;
+
             border-radius: 14px;
+
             padding: 14px;
+
             cursor: pointer;
+
             text-align: center;
         }
 
-        .theme-option.active,
+        .theme-option.active {
+            border-color: #111827;
+            background: #f9fafb;
+        }
+
+        .theme-icon {
+            font-size: 25px;
+            margin-bottom: 6px;
+        }
+
+        .theme-name {
+            font-size: 14px;
+            font-weight: 800;
+        }
+
+        .avatar-mode-grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(2, 1fr);
+
+            gap: 10px;
+        }
+
+        .avatar-mode {
+            border:
+                2px solid #e5e7eb;
+
+            border-radius: 14px;
+
+            padding: 13px;
+
+            cursor: pointer;
+
+            text-align: center;
+        }
+
         .avatar-mode.active {
             border-color: #111827;
             background: #f9fafb;
         }
 
-        .theme-icon,
         .avatar-mode-icon {
             font-size: 25px;
             margin-bottom: 6px;
         }
 
-        .theme-name,
         .avatar-mode-name {
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 800;
         }
 
         .character-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
             gap: 10px;
+
             margin-top: 12px;
         }
 
         .character-option {
-            border: 2px solid #e5e7eb;
+            border:
+                2px solid #e5e7eb;
+
             border-radius: 14px;
+
             padding: 8px;
+
             cursor: pointer;
+
             text-align: center;
+
             background: #ffffff;
         }
 
@@ -202,36 +289,51 @@
 
         .character-option img {
             width: 100%;
+
             aspect-ratio: 1;
+
             object-fit: contain;
+
             border-radius: 10px;
+
             background: #f3f4f6;
         }
 
         .character-option-name {
             margin-top: 7px;
+
             font-size: 11px;
             font-weight: 800;
         }
 
         .avatar-section {
             display: flex;
+
             align-items: flex-start;
+
             gap: 18px;
+
             margin-bottom: 18px;
         }
 
         .avatar {
             width: 96px;
             height: 96px;
+
             flex-shrink: 0;
+
             border-radius: 50%;
+
             overflow: hidden;
+
             background: #e5e7eb;
+
             display: flex;
             align-items: center;
             justify-content: center;
+
             color: #6b7280;
+
             font-size: 28px;
             font-weight: 800;
         }
@@ -239,6 +341,7 @@
         .avatar img {
             width: 100%;
             height: 100%;
+
             object-fit: cover;
         }
 
@@ -257,33 +360,46 @@
 
         .upload-label {
             display: inline-flex;
-            padding: 11px 14px;
+
+            padding:
+                11px 14px;
+
             border-radius: 11px;
+
             background: #eef2f7;
             color: #111827;
+
             font-size: 14px;
             font-weight: 700;
+
             cursor: pointer;
         }
 
         .upload-help {
             margin-top: 8px;
+
             color: #6b7280;
+
             font-size: 12px;
             line-height: 1.5;
         }
 
         .upload-status {
             margin-top: 8px;
+
             font-size: 12px;
+
             line-height: 1.5;
         }
 
         .subsection {
             margin-top: 26px;
             margin-bottom: 18px;
+
             padding-top: 20px;
-            border-top: 1px solid #e5e7eb;
+
+            border-top:
+                1px solid #e5e7eb;
         }
 
         .subsection h3 {
@@ -299,11 +415,17 @@
 
         .button {
             border: 0;
+
             border-radius: 11px;
-            padding: 13px 16px;
+
+            padding:
+                13px 16px;
+
             font-size: 14px;
             font-weight: 700;
+
             cursor: pointer;
+
             font-family: inherit;
         }
 
@@ -324,11 +446,18 @@
 
         .message {
             display: none;
+
             margin-bottom: 16px;
-            padding: 13px 14px;
+
+            padding:
+                13px 14px;
+
             border-radius: 11px;
+
             font-size: 14px;
+
             line-height: 1.5;
+
             word-break: break-word;
         }
 
@@ -338,70 +467,103 @@
 
         .message.success {
             background: #ecfdf5;
+
             color: #065f46;
-            border: 1px solid #a7f3d0;
+
+            border:
+                1px solid #a7f3d0;
         }
 
         .message.error {
             background: #fef2f2;
+
             color: #991b1b;
-            border: 1px solid #fecaca;
+
+            border:
+                1px solid #fecaca;
         }
 
         .tag-info {
             display: flex;
+
             gap: 10px;
+
             flex-wrap: wrap;
+
             margin-bottom: 20px;
         }
 
         .tag-badge {
             display: inline-flex;
-            padding: 7px 10px;
+
+            padding:
+                7px 10px;
+
             border-radius: 999px;
+
             background: #eef2f7;
+
             color: #374151;
+
             font-size: 12px;
             font-weight: 700;
         }
 
         .preview-shell {
             padding: 14px;
+
             min-height: 520px;
+
             border-radius: 18px;
+
             background: #f5f7fb;
         }
 
         .preview {
             overflow: hidden;
+
             max-width: 430px;
+
             margin: 0 auto;
+
             border-radius: 26px;
+
             background: #ffffff;
+
             text-align: center;
         }
 
         .preview-top {
-            padding: 32px 22px;
+            padding:
+                32px 22px;
+
             background:
                 linear-gradient(
                     145deg,
                     #111827,
                     #1f2937
                 );
+
             color: #ffffff;
         }
 
         .preview-avatar {
             width: 100px;
             height: 100px;
-            margin: 0 auto 16px;
+
+            margin:
+                0 auto 16px;
+
             border-radius: 50%;
+
             overflow: hidden;
+
             background: #374151;
+
             display: flex;
             align-items: center;
             justify-content: center;
+
             font-size: 30px;
             font-weight: 800;
         }
@@ -409,6 +571,7 @@
         .preview-avatar img {
             width: 100%;
             height: 100%;
+
             object-fit: cover;
         }
 
@@ -419,52 +582,75 @@
 
         .preview-name {
             margin: 0;
+
             font-size: 27px;
             line-height: 1.2;
         }
 
         .preview-type {
             display: inline-flex;
+
             margin-top: 10px;
-            padding: 6px 10px;
+
+            padding:
+                6px 10px;
+
             border-radius: 999px;
-            background: rgba(
-                255,
-                255,
-                255,
-                0.12
-            );
+
+            background:
+                rgba(
+                    255,
+                    255,
+                    255,
+                    0.12
+                );
+
             font-size: 11px;
             font-weight: 800;
         }
 
         .preview-bio {
-            margin: 10px 0 0;
+            margin:
+                10px 0 0;
+
             color: #d1d5db;
+
             line-height: 1.6;
+
             white-space: pre-wrap;
         }
 
         .preview-content {
             padding: 18px;
+
             display: grid;
+
             gap: 9px;
         }
 
         .preview-button {
             display: block;
-            padding: 12px 14px;
+
+            padding:
+                12px 14px;
+
             border-radius: 11px;
+
             background: #111827;
             color: #ffffff;
+
             text-decoration: none;
+
             font-size: 13px;
             font-weight: 800;
         }
 
         .loading {
             text-align: center;
-            padding: 40px 20px;
+
+            padding:
+                40px 20px;
+
             color: #6b7280;
         }
 
@@ -473,14 +659,19 @@
         }
 
         @media (max-width: 900px) {
+
             .layout {
                 grid-template-columns: 1fr;
             }
+
         }
 
         @media (max-width: 600px) {
+
             .app {
-                width: calc(100% - 16px);
+                width:
+                    calc(100% - 16px);
+
                 padding-top: 16px;
             }
 
@@ -493,7 +684,8 @@
             }
 
             .character-grid {
-                grid-template-columns: repeat(2, 1fr);
+                grid-template-columns:
+                    repeat(2, 1fr);
             }
 
             .avatar-section {
@@ -507,9 +699,12 @@
             .button-row {
                 flex-direction: column;
             }
+
         }
+
     </style>
 </head>
+
 
 <body>
 
@@ -565,12 +760,17 @@
 
         <div class="layout">
 
+
+            <!-- EDITOR -->
+
             <section class="card">
 
                 <h2 class="section-title">
                     Profile
                 </h2>
 
+
+                <!-- PROFILE TYPE -->
 
                 <div class="field">
 
@@ -636,6 +836,8 @@
                 </div>
 
 
+                <!-- PERSONAL STYLE -->
+
                 <div
                     id="personalThemeSection"
                     class="field"
@@ -687,6 +889,8 @@
                 </div>
 
 
+                <!-- AVATAR TYPE -->
+
                 <div class="field">
 
                     <label>
@@ -735,6 +939,8 @@
                 </div>
 
 
+                <!-- UPLOAD -->
+
                 <div
                     id="uploadSection"
                     class="field"
@@ -748,9 +954,7 @@
                         ></div>
 
 
-                        <div
-                            class="avatar-tools"
-                        >
+                        <div class="avatar-tools">
 
                             <label
                                 for="avatarFile"
@@ -786,6 +990,8 @@
                 </div>
 
 
+                <!-- CHARACTERS -->
+
                 <div
                     id="characterSection"
                     class="field hidden"
@@ -804,7 +1010,7 @@
                 </div>
 
 
-                <!-- PERSONAL -->
+                <!-- PERSONAL FIELDS -->
 
                 <div
                     id="personalFields"
@@ -893,6 +1099,7 @@
 
 
                         <div class="field">
+
                             <label>
                                 Facebook Username
                             </label>
@@ -902,10 +1109,12 @@
                                 class="input"
                                 type="text"
                             >
+
                         </div>
 
 
                         <div class="field">
+
                             <label>
                                 Instagram Username
                             </label>
@@ -915,10 +1124,12 @@
                                 class="input"
                                 type="text"
                             >
+
                         </div>
 
 
                         <div class="field">
+
                             <label>
                                 TikTok Username
                             </label>
@@ -928,10 +1139,12 @@
                                 class="input"
                                 type="text"
                             >
+
                         </div>
 
 
                         <div class="field">
+
                             <label>
                                 YouTube Username
                             </label>
@@ -941,10 +1154,12 @@
                                 class="input"
                                 type="text"
                             >
+
                         </div>
 
 
                         <div class="field">
+
                             <label>
                                 WhatsApp Number
                             </label>
@@ -954,10 +1169,12 @@
                                 class="input"
                                 type="tel"
                             >
+
                         </div>
 
 
                         <div class="field">
+
                             <label>
                                 Discord Username
                             </label>
@@ -967,10 +1184,12 @@
                                 class="input"
                                 type="text"
                             >
+
                         </div>
 
 
                         <div class="field">
+
                             <label>
                                 Telegram Username
                             </label>
@@ -980,6 +1199,7 @@
                                 class="input"
                                 type="text"
                             >
+
                         </div>
 
                     </div>
@@ -987,7 +1207,7 @@
                 </div>
 
 
-                <!-- COUPLE -->
+                <!-- COUPLE FIELDS -->
 
                 <div
                     id="coupleFields"
@@ -1011,6 +1231,7 @@
                                 id="coupleName"
                                 class="input"
                                 type="text"
+                                maxlength="120"
                                 placeholder="Gayana ❤️ Tharu"
                             >
 
@@ -1100,6 +1321,7 @@
 
 
                         <div class="field">
+
                             <label>
                                 Person 1 Instagram
                             </label>
@@ -1109,10 +1331,12 @@
                                 class="input"
                                 type="text"
                             >
+
                         </div>
 
 
                         <div class="field">
+
                             <label>
                                 Person 2 Instagram
                             </label>
@@ -1122,10 +1346,12 @@
                                 class="input"
                                 type="text"
                             >
+
                         </div>
 
 
                         <div class="field">
+
                             <label>
                                 Person 1 TikTok
                             </label>
@@ -1135,10 +1361,12 @@
                                 class="input"
                                 type="text"
                             >
+
                         </div>
 
 
                         <div class="field">
+
                             <label>
                                 Person 2 TikTok
                             </label>
@@ -1148,10 +1376,12 @@
                                 class="input"
                                 type="text"
                             >
+
                         </div>
 
 
                         <div class="field">
+
                             <label>
                                 Shared YouTube
                             </label>
@@ -1161,10 +1391,12 @@
                                 class="input"
                                 type="text"
                             >
+
                         </div>
 
 
                         <div class="field">
+
                             <label>
                                 WhatsApp
                             </label>
@@ -1174,10 +1406,12 @@
                                 class="input"
                                 type="tel"
                             >
+
                         </div>
 
 
                         <div class="field">
+
                             <label>
                                 Other Social Links
                             </label>
@@ -1187,6 +1421,7 @@
                                 class="textarea"
                                 placeholder="One URL per line"
                             ></textarea>
+
                         </div>
 
                     </div>
@@ -1194,7 +1429,7 @@
                 </div>
 
 
-                <!-- BUSINESS -->
+                <!-- BUSINESS FIELDS -->
 
                 <div
                     id="businessFields"
@@ -1209,6 +1444,7 @@
 
 
                         <div class="field">
+
                             <label>
                                 Business Name
                             </label>
@@ -1218,10 +1454,12 @@
                                 class="input"
                                 type="text"
                             >
+
                         </div>
 
 
                         <div class="field">
+
                             <label>
                                 Business Category
                             </label>
@@ -1231,10 +1469,12 @@
                                 class="input"
                                 type="text"
                             >
+
                         </div>
 
 
                         <div class="field">
+
                             <label>
                                 Short Description
                             </label>
@@ -1243,10 +1483,12 @@
                                 id="businessDescription"
                                 class="textarea"
                             ></textarea>
+
                         </div>
 
 
                         <div class="field">
+
                             <label>
                                 Phone
                             </label>
@@ -1256,10 +1498,12 @@
                                 class="input"
                                 type="tel"
                             >
+
                         </div>
 
 
                         <div class="field">
+
                             <label>
                                 WhatsApp
                             </label>
@@ -1269,10 +1513,12 @@
                                 class="input"
                                 type="tel"
                             >
+
                         </div>
 
 
                         <div class="field">
+
                             <label>
                                 Email
                             </label>
@@ -1282,10 +1528,12 @@
                                 class="input"
                                 type="email"
                             >
+
                         </div>
 
 
                         <div class="field">
+
                             <label>
                                 Business Location
                             </label>
@@ -1295,10 +1543,12 @@
                                 class="input"
                                 type="text"
                             >
+
                         </div>
 
 
                         <div class="field">
+
                             <label>
                                 Opening Hours
                             </label>
@@ -1308,10 +1558,12 @@
                                 class="textarea"
                                 placeholder="Mon-Fri: 9 AM - 6 PM"
                             ></textarea>
+
                         </div>
 
 
                         <div class="field">
+
                             <label>
                                 Website
                             </label>
@@ -1322,6 +1574,7 @@
                                 type="url"
                                 placeholder="https://..."
                             >
+
                         </div>
 
                     </div>
@@ -1335,6 +1588,7 @@
 
 
                         <div class="field">
+
                             <label>
                                 Facebook
                             </label>
@@ -1344,10 +1598,12 @@
                                 class="input"
                                 type="text"
                             >
+
                         </div>
 
 
                         <div class="field">
+
                             <label>
                                 Instagram
                             </label>
@@ -1357,10 +1613,12 @@
                                 class="input"
                                 type="text"
                             >
+
                         </div>
 
 
                         <div class="field">
+
                             <label>
                                 TikTok
                             </label>
@@ -1370,10 +1628,12 @@
                                 class="input"
                                 type="text"
                             >
+
                         </div>
 
 
                         <div class="field">
+
                             <label>
                                 YouTube
                             </label>
@@ -1383,10 +1643,12 @@
                                 class="input"
                                 type="text"
                             >
+
                         </div>
 
 
                         <div class="field">
+
                             <label>
                                 Telegram
                             </label>
@@ -1396,10 +1658,12 @@
                                 class="input"
                                 type="text"
                             >
+
                         </div>
 
 
                         <div class="field">
+
                             <label>
                                 LinkedIn
                             </label>
@@ -1409,6 +1673,7 @@
                                 class="input"
                                 type="text"
                             >
+
                         </div>
 
                     </div>
@@ -1422,6 +1687,7 @@
 
 
                         <div class="field">
+
                             <label>
                                 Google Maps
                             </label>
@@ -1431,10 +1697,12 @@
                                 class="input"
                                 type="url"
                             >
+
                         </div>
 
 
                         <div class="field">
+
                             <label>
                                 Online Store
                             </label>
@@ -1444,10 +1712,12 @@
                                 class="input"
                                 type="url"
                             >
+
                         </div>
 
 
                         <div class="field">
+
                             <label>
                                 Booking Link
                             </label>
@@ -1457,10 +1727,12 @@
                                 class="input"
                                 type="url"
                             >
+
                         </div>
 
 
                         <div class="field">
+
                             <label>
                                 Menu / Catalogue
                             </label>
@@ -1470,6 +1742,7 @@
                                 class="input"
                                 type="url"
                             >
+
                         </div>
 
                     </div>
@@ -1500,6 +1773,8 @@
 
             </section>
 
+
+            <!-- LIVE PREVIEW -->
 
             <section class="card">
 
@@ -1614,70 +1889,84 @@
     const CHARACTER_LIBRARY = {
 
         men: [
+
             {
                 id: "men-01",
                 name: "Men 1",
                 src:
                     "/E-Tag/assets/characters/men/men-01.svg"
             },
+
             {
                 id: "men-02",
                 name: "Men 2",
                 src:
                     "/E-Tag/assets/characters/men/men-02.svg"
             },
+
             {
                 id: "men-03",
                 name: "Men 3",
                 src:
                     "/E-Tag/assets/characters/men/men-03.svg"
             }
+
         ],
 
         women: [
+
             {
                 id: "women-01",
                 name: "Women 1",
                 src:
                     "/E-Tag/assets/characters/women/women-01.svg"
             },
+
             {
                 id: "women-02",
                 name: "Women 2",
                 src:
                     "/E-Tag/assets/characters/women/women-02.svg"
             },
+
             {
                 id: "women-03",
                 name: "Women 3",
                 src:
                     "/E-Tag/assets/characters/women/women-03.svg"
             }
+
         ],
 
         couple: [
+
             {
                 id: "couple-01",
                 name: "Couple 1",
                 src:
                     "/E-Tag/assets/characters/couple/couple-01.svg"
             },
+
             {
                 id: "couple-02",
                 name: "Couple 2",
                 src:
                     "/E-Tag/assets/characters/couple/couple-02.svg"
             }
+
         ],
 
         business: [
+
             {
                 id: "business-01",
                 name: "Business 1",
                 src:
                     "/E-Tag/assets/characters/business/business-01.svg"
             }
+
         ]
+
     };
 
 
@@ -1687,9 +1976,14 @@
             SUPABASE_PUBLISHABLE_KEY,
             {
                 auth: {
-                    persistSession: true,
-                    autoRefreshToken: true,
-                    detectSessionInUrl: true
+                    persistSession:
+                        true,
+
+                    autoRefreshToken:
+                        true,
+
+                    detectSessionInUrl:
+                        true
                 }
             }
         );
@@ -1869,6 +2163,7 @@
         "onlineStore",
         "bookingUrl",
         "menuUrl"
+
     ];
 
 
@@ -1882,31 +2177,48 @@
                 document.getElementById(
                     id
                 );
+
         }
     );
 
 
+    /*
+     * Application state
+     *
+     * IMPORTANT:
+     * currentAvatarUrl is explicitly declared.
+     */
+
     let currentUser =
         null;
+
 
     let currentTag =
         null;
 
+
     let profileExists =
         false;
+
 
     let currentProfileType =
         "personal";
 
+
     let currentTemplate =
         "men";
+
 
     let avatarType =
         "upload";
 
+
     let characterId =
         "";
 
+
+    let currentAvatarUrl =
+        "";
 
 
     function getValue(
@@ -1917,6 +2229,7 @@
             fields[id]?.value ||
             ""
         ).trim();
+
     }
 
 
@@ -1931,7 +2244,9 @@
 
             fields[id].value =
                 value ?? "";
+
         }
+
     }
 
 
@@ -1945,6 +2260,7 @@
 
         message.className =
             `message show ${type}`;
+
     }
 
 
@@ -1965,6 +2281,7 @@
         ) {
 
             return "men";
+
         }
 
 
@@ -1973,6 +2290,7 @@
         ) {
 
             return "women";
+
         }
 
 
@@ -1986,10 +2304,12 @@
         ) {
 
             return v;
+
         }
 
 
         return "men";
+
     }
 
 
@@ -2010,6 +2330,7 @@
         ) {
 
             return "couple";
+
         }
 
 
@@ -2018,10 +2339,12 @@
         ) {
 
             return "business";
+
         }
 
 
         return "personal";
+
     }
 
 
@@ -2047,6 +2370,7 @@
         ) {
 
             return "?";
+
         }
 
 
@@ -2060,6 +2384,7 @@
                     2
                 )
                 .toUpperCase();
+
         }
 
 
@@ -2069,6 +2394,7 @@
                 parts.length - 1
             ][0]
         ).toUpperCase();
+
     }
 
 
@@ -2095,6 +2421,7 @@
                 ">",
                 "&gt;"
             );
+
     }
 
 
@@ -2111,6 +2438,7 @@
                 ) ||
                 "Our Story"
             );
+
         }
 
 
@@ -2125,6 +2453,7 @@
                 ) ||
                 "Business"
             );
+
         }
 
 
@@ -2134,6 +2463,7 @@
             ) ||
             "E-Tag User"
         );
+
     }
 
 
@@ -2147,6 +2477,7 @@
             return getValue(
                 "coupleBio"
             );
+
         }
 
 
@@ -2158,12 +2489,14 @@
             return getValue(
                 "businessDescription"
             );
+
         }
 
 
         return getValue(
             "personalBio"
         );
+
     }
 
 
@@ -2175,6 +2508,7 @@
         ) {
 
             return "couple";
+
         }
 
 
@@ -2184,6 +2518,7 @@
         ) {
 
             return "business";
+
         }
 
 
@@ -2191,6 +2526,7 @@
             "women"
                 ? "women"
                 : "men";
+
     }
 
 
@@ -2214,7 +2550,11 @@
             );
 
 
-        return selected?.src || "";
+        return (
+            selected?.src ||
+            ""
+        );
+
     }
 
 
@@ -2226,10 +2566,12 @@
         ) {
 
             return getCharacterUrl();
+
         }
 
 
         return currentAvatarUrl;
+
     }
 
 
@@ -2239,7 +2581,8 @@
         url
     ) {
 
-        element.innerHTML = "";
+        element.innerHTML =
+            "";
 
         element.classList.remove(
             "character"
@@ -2266,17 +2609,18 @@
             image.onerror =
                 () => {
 
+                    element.innerHTML =
+                        "";
+
                     element.classList.remove(
                         "character"
                     );
-
-                    element.innerHTML =
-                        "";
 
                     element.textContent =
                         initials(
                             name
                         );
+
                 };
 
 
@@ -2288,6 +2632,7 @@
                 element.classList.add(
                     "character"
                 );
+
             }
 
 
@@ -2296,6 +2641,7 @@
             );
 
             return;
+
         }
 
 
@@ -2303,6 +2649,7 @@
             initials(
                 name
             );
+
     }
 
 
@@ -2316,6 +2663,7 @@
                     choice.dataset.type ===
                         currentProfileType
                 );
+
             }
         );
 
@@ -2346,6 +2694,7 @@
             currentProfileType !==
                 "business"
         );
+
     }
 
 
@@ -2359,8 +2708,10 @@
                     choice.dataset.template ===
                         currentTemplate
                 );
+
             }
         );
+
     }
 
 
@@ -2374,6 +2725,7 @@
                     choice.dataset.avatarType ===
                         avatarType
                 );
+
             }
         );
 
@@ -2390,6 +2742,7 @@
             avatarType !==
                 "character"
         );
+
     }
 
 
@@ -2407,6 +2760,19 @@
 
         characterGrid.innerHTML =
             "";
+
+
+        if (
+            characters.length ===
+            0
+        ) {
+
+            characterGrid.textContent =
+                "No characters available yet.";
+
+            return;
+
+        }
 
 
         characters.forEach(
@@ -2430,6 +2796,7 @@
                     option.classList.add(
                         "active"
                     );
+
                 }
 
 
@@ -2444,7 +2811,9 @@
                             )}"
                         >
 
-                        <div class="character-option-name">
+                        <div
+                            class="character-option-name"
+                        >
                             ${escapeAttribute(
                                 character.name
                             )}
@@ -2459,14 +2828,17 @@
                         avatarType =
                             "character";
 
+
                         characterId =
                             character.id;
+
 
                         renderAvatarMode();
 
                         renderCharacters();
 
                         updatePreview();
+
                     }
                 );
 
@@ -2474,16 +2846,21 @@
                 characterGrid.appendChild(
                     option
                 );
+
             }
         );
+
     }
 
 
     function renderAll() {
 
         renderProfileType();
+
         renderThemeOptions();
+
         renderAvatarMode();
+
         renderCharacters();
 
 
@@ -2495,6 +2872,7 @@
 
 
         updatePreview();
+
     }
 
 
@@ -2509,6 +2887,7 @@
                 /\D/g,
                 ""
             );
+
     }
 
 
@@ -2524,6 +2903,7 @@
                 /^@/,
                 ""
             );
+
     }
 
 
@@ -2544,10 +2924,12 @@
         ) {
 
             return v;
+
         }
 
 
         return `https://${v}`;
+
     }
 
 
@@ -2588,6 +2970,7 @@
                     "women"
                         ? "Personal · Women"
                         : "Personal · Men";
+
         }
 
 
@@ -2635,12 +3018,14 @@
 
                     a.rel =
                         "noopener";
+
                 }
 
 
                 previewContent.appendChild(
                     a
                 );
+
             };
 
 
@@ -2677,6 +3062,7 @@
                         phone
                     )}`
                 );
+
             }
 
 
@@ -2690,6 +3076,7 @@
                         whatsapp
                     )}`
                 );
+
             }
 
 
@@ -2703,7 +3090,9 @@
                         instagram
                     )}`
                 );
+
             }
+
         }
 
 
@@ -2728,7 +3117,9 @@
                         whatsapp
                     )}`
                 );
+
             }
+
         }
 
 
@@ -2765,6 +3156,7 @@
                         phone
                     )}`
                 );
+
             }
 
 
@@ -2778,6 +3170,7 @@
                         whatsapp
                     )}`
                 );
+
             }
 
 
@@ -2791,7 +3184,9 @@
                         website
                     )
                 );
+
             }
+
         }
 
 
@@ -2804,7 +3199,9 @@
                 "Public Profile",
                 "#"
             );
+
         }
+
     }
 
 
@@ -2815,20 +3212,24 @@
             profile_type:
                 currentProfileType,
 
+
             template:
                 currentProfileType ===
                     "personal"
                         ? currentTemplate
                         : currentProfileType,
 
+
             avatar_type:
                 avatarType,
+
 
             character_id:
                 avatarType ===
                     "character"
                         ? characterId
                         : null,
+
 
             avatar_url:
                 avatarType ===
@@ -2839,9 +3240,11 @@
                         )
                         : null,
 
+
             updated_at:
                 new Date()
                     .toISOString()
+
         };
 
 
@@ -2854,10 +3257,12 @@
 
                 ...base,
 
+
                 display_name:
                     getValue(
                         "personalName"
                     ),
+
 
                 age:
                     getValue(
@@ -2870,51 +3275,62 @@
                         )
                         : null,
 
+
                 phone:
                     getValue(
                         "personalPhone"
                     ),
+
 
                 bio:
                     getValue(
                         "personalBio"
                     ),
 
+
                 facebook:
                     getValue(
                         "facebook"
                     ),
+
 
                 instagram:
                     getValue(
                         "instagram"
                     ),
 
+
                 tiktok:
                     getValue(
                         "tiktok"
                     ),
+
 
                 youtube:
                     getValue(
                         "youtube"
                     ),
 
+
                 whatsapp:
                     getValue(
                         "personalWhatsapp"
                     ),
+
 
                 discord:
                     getValue(
                         "discord"
                     ),
 
+
                 telegram:
                     getValue(
                         "telegram"
                     )
+
             };
+
         }
 
 
@@ -2927,30 +3343,36 @@
 
                 ...base,
 
+
                 display_name:
                     getValue(
                         "coupleName"
                     ),
+
 
                 bio:
                     getValue(
                         "coupleBio"
                     ),
 
+
                 couple_name:
                     getValue(
                         "coupleName"
                     ),
+
 
                 person1_name:
                     getValue(
                         "person1Name"
                     ),
 
+
                 person2_name:
                     getValue(
                         "person2Name"
                     ),
+
 
                 anniversary_date:
                     getValue(
@@ -2958,46 +3380,56 @@
                     ) ||
                     null,
 
+
                 our_story:
                     getValue(
                         "ourStory"
                     ),
+
 
                 person1_instagram:
                     getValue(
                         "person1Instagram"
                     ),
 
+
                 person2_instagram:
                     getValue(
                         "person2Instagram"
                     ),
+
 
                 person1_tiktok:
                     getValue(
                         "person1Tiktok"
                     ),
 
+
                 person2_tiktok:
                     getValue(
                         "person2Tiktok"
                     ),
+
 
                 shared_youtube:
                     getValue(
                         "sharedYoutube"
                     ),
 
+
                 whatsapp:
                     getValue(
                         "coupleWhatsapp"
                     ),
 
+
                 other_social_links:
                     getValue(
                         "otherSocialLinks"
                     )
+
             };
+
         }
 
 
@@ -3005,111 +3437,134 @@
 
             ...base,
 
+
             display_name:
                 getValue(
                     "businessName"
                 ),
+
 
             bio:
                 getValue(
                     "businessDescription"
                 ),
 
+
             business_name:
                 getValue(
                     "businessName"
                 ),
+
 
             business_category:
                 getValue(
                     "businessCategory"
                 ),
 
+
             business_description:
                 getValue(
                     "businessDescription"
                 ),
+
 
             phone:
                 getValue(
                     "businessPhone"
                 ),
 
+
             whatsapp:
                 getValue(
                     "businessWhatsapp"
                 ),
+
 
             email:
                 getValue(
                     "businessEmail"
                 ),
 
+
             business_location:
                 getValue(
                     "businessLocation"
                 ),
+
 
             opening_hours:
                 getValue(
                     "openingHours"
                 ),
 
+
             website:
                 getValue(
                     "website"
                 ),
+
 
             facebook:
                 getValue(
                     "businessFacebook"
                 ),
 
+
             instagram:
                 getValue(
                     "businessInstagram"
                 ),
+
 
             tiktok:
                 getValue(
                     "businessTiktok"
                 ),
 
+
             youtube:
                 getValue(
                     "businessYoutube"
                 ),
+
 
             telegram:
                 getValue(
                     "businessTelegram"
                 ),
 
+
             linkedin:
                 getValue(
                     "linkedin"
                 ),
+
 
             google_maps:
                 getValue(
                     "googleMaps"
                 ),
 
+
             online_store:
                 getValue(
                     "onlineStore"
                 ),
+
 
             booking_url:
                 getValue(
                     "bookingUrl"
                 ),
 
+
             menu_url:
                 getValue(
                     "menuUrl"
                 )
+
         };
+
     }
 
 
@@ -3368,6 +3823,7 @@
 
 
         renderAll();
+
     }
 
 
@@ -3380,6 +3836,7 @@
         ) {
 
             return;
+
         }
 
 
@@ -3392,6 +3849,7 @@
             throw new Error(
                 "Only JPG, PNG and WEBP images are allowed."
             );
+
         }
 
 
@@ -3403,12 +3861,15 @@
             throw new Error(
                 "Image must be 1 MB or smaller."
             );
+
         }
 
 
         const {
-            data: sessionData,
-            error: sessionError
+            data:
+                sessionData,
+            error:
+                sessionError
         } =
             await supabase.auth.getSession();
 
@@ -3418,8 +3879,11 @@
         ) {
 
             throw new Error(
-                `Session error: ${sessionError.message}`
+                `Session error: ${
+                    sessionError.message
+                }`
             );
+
         }
 
 
@@ -3430,6 +3894,7 @@
             throw new Error(
                 "Your login session has expired."
             );
+
         }
 
 
@@ -3441,22 +3906,29 @@
             await fetch(
                 AVATAR_UPLOAD_FUNCTION,
                 {
-                    method: "POST",
+
+                    method:
+                        "POST",
 
                     headers: {
+
                         "Authorization":
-                            `Bearer ${sessionData.session.access_token}`,
+                            `Bearer ${
+                                sessionData.session.access_token
+                            }`,
 
                         "apikey":
                             SUPABASE_PUBLISHABLE_KEY,
 
                         "Content-Type":
                             "application/json"
+
                     },
 
                     body:
                         JSON.stringify(
                             {
+
                                 fileName:
                                     file.name,
 
@@ -3465,13 +3937,16 @@
 
                                 fileSize:
                                     file.size
+
                             }
                         )
+
                 }
             );
 
 
         let result;
+
 
         try {
 
@@ -3482,6 +3957,7 @@
 
             result =
                 null;
+
         }
 
 
@@ -3492,8 +3968,11 @@
 
             throw new Error(
                 result?.message ||
-                `Upload URL request failed: ${response.status}`
+                `Upload URL request failed: ${
+                    response.status
+                }`
             );
+
         }
 
 
@@ -3505,14 +3984,20 @@
             await fetch(
                 result.uploadUrl,
                 {
-                    method: "PUT",
+
+                    method:
+                        "PUT",
 
                     headers: {
+
                         "Content-Type":
                             file.type
+
                     },
 
-                    body: file
+                    body:
+                        file
+
                 }
             );
 
@@ -3522,8 +4007,11 @@
         ) {
 
             throw new Error(
-                `R2 upload failed: ${uploadResponse.status}`
+                `R2 upload failed: ${
+                    uploadResponse.status
+                }`
             );
+
         }
 
 
@@ -3541,8 +4029,10 @@
         uploadStatus.textContent =
             "Photo uploaded. Click Save Profile.";
 
+
         uploadStatus.style.color =
             "#065f46";
+
     }
 
 
@@ -3555,8 +4045,10 @@
 
 
             const {
-                data: sessionData,
-                error: sessionError
+                data:
+                    sessionData,
+                error:
+                    sessionError
             } =
                 await supabase.auth.getSession();
 
@@ -3566,8 +4058,11 @@
             ) {
 
                 throw new Error(
-                    `Session error: ${sessionError.message}`
+                    `Session error: ${
+                        sessionError.message
+                    }`
                 );
+
             }
 
 
@@ -3584,6 +4079,7 @@
                 );
 
                 return;
+
             }
 
 
@@ -3596,8 +4092,10 @@
 
 
             const {
-                data: tag,
-                error: tagError
+                data:
+                    tag,
+                error:
+                    tagError
             } =
                 await supabase
                     .from(
@@ -3623,8 +4121,11 @@
             ) {
 
                 throw new Error(
-                    `E-Tag lookup failed: ${tagError.message}`
+                    `E-Tag lookup failed: ${
+                        tagError.message
+                    }`
                 );
+
             }
 
 
@@ -3635,6 +4136,7 @@
                 throw new Error(
                     "No active E-Tag was found for this account."
                 );
+
             }
 
 
@@ -3651,8 +4153,10 @@
 
 
             const {
-                data: profile,
-                error: profileError
+                data:
+                    profile,
+                error:
+                    profileError
             } =
                 await supabase
                     .from(
@@ -3673,8 +4177,11 @@
             ) {
 
                 throw new Error(
-                    `Profile lookup failed: ${profileError.message}`
+                    `Profile lookup failed: ${
+                        profileError.message
+                    }`
                 );
+
             }
 
 
@@ -3685,6 +4192,7 @@
                 profileExists =
                     true;
 
+
                 fillProfile(
                     profile
                 );
@@ -3694,22 +4202,29 @@
                 profileExists =
                     false;
 
+
                 currentProfileType =
                     "personal";
+
 
                 currentTemplate =
                     "men";
 
+
                 avatarType =
                     "upload";
+
 
                 characterId =
                     "";
 
+
                 currentAvatarUrl =
                     "";
 
+
                 renderAll();
+
             }
 
 
@@ -3727,6 +4242,7 @@
                         "_blank",
                         "noopener,noreferrer"
                     );
+
                 };
 
 
@@ -3738,6 +4254,7 @@
             dashboard.classList.remove(
                 "hidden"
             );
+
 
         } catch (
             error
@@ -3766,7 +4283,9 @@
 
             loading.style.borderColor =
                 "#fecaca";
+
         }
+
     }
 
 
@@ -3782,6 +4301,7 @@
             );
 
             return;
+
         }
 
 
@@ -3824,8 +4344,11 @@
                 ) {
 
                     throw new Error(
-                        `Profile update failed: ${error.message}`
+                        `Profile update failed: ${
+                            error.message
+                        }`
                     );
+
                 }
 
             } else {
@@ -3847,6 +4370,7 @@
                                 created_at:
                                     new Date()
                                         .toISOString()
+
                             }
                         );
 
@@ -3856,13 +4380,17 @@
                 ) {
 
                     throw new Error(
-                        `Profile creation failed: ${error.message}`
+                        `Profile creation failed: ${
+                            error.message
+                        }`
                     );
+
                 }
 
 
                 profileExists =
                     true;
+
             }
 
 
@@ -3870,6 +4398,7 @@
                 "Profile saved successfully.",
                 "success"
             );
+
 
         } catch (
             error
@@ -3887,6 +4416,7 @@
                 "error"
             );
 
+
         } finally {
 
             saveButton.disabled =
@@ -3895,7 +4425,9 @@
 
             saveButton.textContent =
                 "Save Profile";
+
         }
+
     }
 
 
@@ -3939,6 +4471,7 @@
 
                         currentTemplate =
                             "men";
+
                     }
 
 
@@ -3947,8 +4480,10 @@
 
 
                     renderAll();
+
                 }
             );
+
         }
     );
 
@@ -3973,12 +4508,15 @@
 
                         characterId =
                             "";
+
                     }
 
 
                     renderAll();
+
                 }
             );
+
         }
     );
 
@@ -4014,12 +4552,15 @@
                             getDisplayName(),
                             currentAvatarUrl
                         );
+
                     }
 
 
                     updatePreview();
+
                 }
             );
+
         }
     );
 
@@ -4037,6 +4578,7 @@
             ) {
 
                 return;
+
             }
 
 
@@ -4071,14 +4613,16 @@
 
                 avatarFile.value =
                     "";
+
             }
+
         }
     );
 
 
     /*
-     * IMPORTANT:
-     * This uses fieldIds, not ids.
+     * Correct variable name:
+     * fieldIds
      */
 
     fieldIds.forEach(
@@ -4098,7 +4642,9 @@
                     "change",
                     updatePreview
                 );
+
             }
+
         }
     );
 
@@ -4138,8 +4684,11 @@
                     window.location.replace(
                         "/E-Tag/"
                     );
+
                 }
+
             }
+
         }
     );
 
@@ -4171,8 +4720,11 @@
                     window.location.replace(
                         "/E-Tag/"
                     );
+
                 }
+
             }
+
         }
     );
 
@@ -4197,14 +4749,18 @@
                         "Unknown error"
                     }`;
 
+
                 loading.style.color =
                     "#991b1b";
+
 
                 loading.style.background =
                     "#fef2f2";
 
+
                 loading.style.borderColor =
                     "#fecaca";
+
             }
         );
 
