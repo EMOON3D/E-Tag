@@ -61,7 +61,12 @@
             border-radius: 20px;
             padding: 22px;
             box-shadow:
-                0 10px 35px rgba(0, 0, 0, 0.05);
+                0 10px 35px rgba(
+                    0,
+                    0,
+                    0,
+                    0.05
+                );
         }
 
         .card h2 {
@@ -124,6 +129,7 @@
             font-size: 14px;
             font-weight: 700;
             cursor: pointer;
+            font-family: inherit;
         }
 
         .button:disabled {
@@ -192,14 +198,14 @@
 
         .avatar-section {
             display: flex;
-            align-items: center;
-            gap: 16px;
-            margin-bottom: 20px;
+            align-items: flex-start;
+            gap: 18px;
+            margin-bottom: 22px;
         }
 
         .avatar {
-            width: 86px;
-            height: 86px;
+            width: 96px;
+            height: 96px;
             border-radius: 50%;
             overflow: hidden;
             background: #e5e7eb;
@@ -216,6 +222,41 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
+        }
+
+        .avatar-tools {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        .upload-label {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 11px 14px;
+            background: #eef2f7;
+            color: #111827;
+            border-radius: 11px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .upload-help {
+            margin-top: 8px;
+            font-size: 12px;
+            line-height: 1.5;
+            color: #6b7280;
+        }
+
+        .upload-status {
+            margin-top: 8px;
+            font-size: 12px;
+            line-height: 1.5;
         }
 
         .preview-shell {
@@ -341,8 +382,11 @@
             }
 
             .avatar-section {
-                align-items: flex-start;
                 flex-direction: column;
+            }
+
+            .avatar-tools {
+                width: 100%;
             }
 
             .header h1 {
@@ -370,6 +414,7 @@
     >
 
         <header class="header">
+
             <h1>
                 E-Tag Dashboard
             </h1>
@@ -377,6 +422,7 @@
             <p>
                 Manage your public E-Tag profile.
             </p>
+
         </header>
 
 
@@ -408,6 +454,8 @@
         <div class="layout">
 
 
+            <!-- PROFILE EDITOR -->
+
             <section class="card">
 
                 <h2>
@@ -415,39 +463,51 @@
                 </h2>
 
 
+                <!-- AVATAR -->
+
                 <div class="avatar-section">
 
                     <div
                         id="avatarPreview"
                         class="avatar"
-                    >
-                    </div>
+                    ></div>
 
-                    <div>
+
+                    <div class="avatar-tools">
 
                         <label
-                            for="avatarUrl"
-                            style="
-                                display:block;
-                                font-size:13px;
-                                font-weight:700;
-                                margin-bottom:7px;
-                            "
+                            for="avatarFile"
+                            class="upload-label"
                         >
-                            Avatar URL
+                            Upload Photo
                         </label>
 
+
                         <input
-                            id="avatarUrl"
-                            class="input"
-                            type="url"
-                            placeholder="https://..."
+                            id="avatarFile"
+                            class="file-input"
+                            type="file"
+                            accept="image/jpeg,image/png,image/webp"
                         >
+
+
+                        <div class="upload-help">
+                            JPG, PNG or WEBP.
+                            Maximum file size: 1 MB.
+                        </div>
+
+
+                        <div
+                            id="uploadStatus"
+                            class="upload-status"
+                        ></div>
 
                     </div>
 
                 </div>
 
+
+                <!-- NAME -->
 
                 <div class="field">
 
@@ -466,6 +526,8 @@
                 </div>
 
 
+                <!-- BIO -->
+
                 <div class="field">
 
                     <label for="bio">
@@ -481,6 +543,8 @@
 
                 </div>
 
+
+                <!-- PHONE -->
 
                 <div class="field">
 
@@ -499,6 +563,8 @@
                 </div>
 
 
+                <!-- WHATSAPP -->
+
                 <div class="field">
 
                     <label for="whatsapp">
@@ -516,6 +582,8 @@
                 </div>
 
 
+                <!-- PUBLIC EMAIL -->
+
                 <div class="field">
 
                     <label for="publicEmail">
@@ -532,6 +600,8 @@
 
                 </div>
 
+
+                <!-- PROFILE TYPE -->
 
                 <div class="field">
 
@@ -560,6 +630,8 @@
 
                 </div>
 
+
+                <!-- TEMPLATE -->
 
                 <div class="field">
 
@@ -616,6 +688,8 @@
             </section>
 
 
+            <!-- PUBLIC PREVIEW -->
+
             <section class="card">
 
                 <div class="top-actions">
@@ -644,6 +718,7 @@
                             class="preview-avatar"
                         ></div>
 
+
                         <h1
                             id="previewName"
                             class="preview-name"
@@ -651,11 +726,11 @@
                             E-Tag User
                         </h1>
 
+
                         <p
                             id="previewBio"
                             class="preview-bio"
-                        >
-                        </p>
+                        ></p>
 
 
                         <div class="preview-actions">
@@ -667,6 +742,7 @@
                                 Call
                             </a>
 
+
                             <a
                                 id="previewWhatsapp"
                                 class="preview-button hidden"
@@ -675,6 +751,7 @@
                             >
                                 WhatsApp
                             </a>
+
 
                             <a
                                 id="previewEmail"
@@ -712,6 +789,26 @@
 
     const SUPABASE_PUBLISHABLE_KEY =
         "sb_publishable_1sa0MtE83MZXETR5JLakJA_fRVrjDJI";
+
+
+    const AVATAR_UPLOAD_FUNCTION =
+        `${SUPABASE_URL}/functions/v1/create-avatar-upload-url`;
+
+
+    const R2_PUBLIC_URL =
+        "https://pub-ff2a280f86934b4b8ef6e7aaf243e6e3.r2.dev";
+
+
+    const MAX_FILE_SIZE =
+        1024 * 1024;
+
+
+    const ALLOWED_TYPES =
+        new Set([
+            "image/jpeg",
+            "image/png",
+            "image/webp"
+        ]);
 
 
     const supabase =
@@ -753,14 +850,19 @@
             "statusBadge"
         );
 
-    const avatarUrl =
+    const avatarFile =
         document.getElementById(
-            "avatarUrl"
+            "avatarFile"
         );
 
     const avatarPreview =
         document.getElementById(
             "avatarPreview"
+        );
+
+    const uploadStatus =
+        document.getElementById(
+            "uploadStatus"
         );
 
     const displayName =
@@ -844,11 +946,17 @@
         );
 
 
-    let currentUser = null;
+    let currentUser =
+        null;
 
-    let currentTag = null;
+    let currentTag =
+        null;
 
-    let profileExists = false;
+    let profileExists =
+        false;
+
+    let currentAvatarUrl =
+        "";
 
 
     function showMessage(
@@ -874,14 +982,33 @@
     }
 
 
+    function setUploadStatus(
+        text,
+        success = false
+    ) {
+
+        uploadStatus.textContent =
+            text;
+
+        uploadStatus.style.color =
+            success
+                ? "#065f46"
+                : "#6b7280";
+    }
+
+
     function getInitials(
         name
     ) {
 
         const words =
-            String(name || "")
+            String(
+                name || ""
+            )
                 .trim()
-                .split(/\s+/)
+                .split(
+                    /\s+/
+                )
                 .filter(
                     Boolean
                 );
@@ -941,67 +1068,6 @@
     }
 
 
-    function normalizeWhatsapp(
-        value
-    ) {
-
-        return String(value || "")
-            .replace(
-                /\D/g,
-                ""
-            );
-    }
-
-
-    function getTagCodeFromUrl() {
-
-        const url =
-            new URL(
-                window.location.href
-            );
-
-
-        const tagParam =
-            url.searchParams.get(
-                "tag"
-            );
-
-
-        if (
-            tagParam
-        ) {
-
-            return decodeURIComponent(
-                tagParam
-            )
-                .trim()
-                .toUpperCase();
-        }
-
-
-        const pathMatch =
-            url.pathname.match(
-                /\/id\/([^\/?#]+)\/?$/i
-            );
-
-
-        if (
-            pathMatch &&
-            pathMatch[1]
-        ) {
-
-            return decodeURIComponent(
-                pathMatch[1]
-            )
-                .trim()
-                .toUpperCase();
-        }
-
-
-        return null;
-    }
-
-
     function updateAvatar(
         element,
         name,
@@ -1053,9 +1119,6 @@
         const emailValue =
             publicEmail.value.trim();
 
-        const avatarValue =
-            avatarUrl.value.trim();
-
 
         previewName.textContent =
             name;
@@ -1067,7 +1130,7 @@
         updateAvatar(
             previewAvatar,
             name,
-            avatarValue
+            currentAvatarUrl
         );
 
 
@@ -1097,17 +1160,29 @@
         ) {
 
             const number =
-                normalizeWhatsapp(
-                    whatsappValue
+                whatsappValue.replace(
+                    /\D/g,
+                    ""
                 );
 
 
-            previewWhatsapp.href =
-                `https://wa.me/${number}`;
+            if (
+                number
+            ) {
 
-            previewWhatsapp.classList.remove(
-                "hidden"
-            );
+                previewWhatsapp.href =
+                    `https://wa.me/${number}`;
+
+                previewWhatsapp.classList.remove(
+                    "hidden"
+                );
+
+            } else {
+
+                previewWhatsapp.classList.add(
+                    "hidden"
+                );
+            }
 
         } else {
 
@@ -1173,9 +1248,17 @@
                 "boy"
             ).toLowerCase();
 
-        avatarUrl.value =
+
+        currentAvatarUrl =
             profile.avatar_url ||
             "";
+
+
+        updateAvatar(
+            avatarPreview,
+            displayName.value,
+            currentAvatarUrl
+        );
 
 
         updatePreview();
@@ -1230,7 +1313,9 @@
             error: tagError
         } =
             await supabase
-                .from("nfc_tags")
+                .from(
+                    "nfc_tags"
+                )
                 .select(
                     "id,tag_code,owner_id,active"
                 )
@@ -1286,7 +1371,9 @@
             error: profileError
         } =
             await supabase
-                .from("profiles")
+                .from(
+                    "profiles"
+                )
                 .select(
                     "id,display_name,bio,phone,whatsapp,email,profile_type,avatar_url,created_at,updated_at,template"
                 )
@@ -1326,14 +1413,22 @@
 
             fillForm(
                 {
-                    display_name: "",
-                    bio: "",
-                    phone: "",
-                    whatsapp: "",
-                    email: "",
-                    profile_type: "personal",
-                    avatar_url: "",
-                    template: "boy"
+                    display_name:
+                        "",
+                    bio:
+                        "",
+                    phone:
+                        "",
+                    whatsapp:
+                        "",
+                    email:
+                        "",
+                    profile_type:
+                        "personal",
+                    avatar_url:
+                        "",
+                    template:
+                        "boy"
                 }
             );
         }
@@ -1356,6 +1451,233 @@
         dashboard.classList.remove(
             "hidden"
         );
+    }
+
+
+    async function uploadAvatar(
+        file
+    ) {
+
+        if (
+            !file
+        ) {
+
+            return null;
+        }
+
+
+        if (
+            !ALLOWED_TYPES.has(
+                file.type
+            )
+        ) {
+
+            throw new Error(
+                "Only JPG, PNG and WEBP images are allowed."
+            );
+        }
+
+
+        if (
+            file.size >
+            MAX_FILE_SIZE
+        ) {
+
+            throw new Error(
+                "Image must be 1 MB or smaller."
+            );
+        }
+
+
+        setUploadStatus(
+            "Preparing upload..."
+        );
+
+
+        const {
+            data: sessionData,
+            error:
+                sessionError
+        } =
+            await supabase.auth.getSession();
+
+
+        if (
+            sessionError ||
+            !sessionData.session
+        ) {
+
+            throw new Error(
+                "Your login session has expired. Please login again."
+            );
+        }
+
+
+        const accessToken =
+            sessionData.session.access_token;
+
+
+        const response =
+            await fetch(
+                AVATAR_UPLOAD_FUNCTION,
+                {
+                    method:
+                        "POST",
+
+                    headers: {
+                        "Authorization":
+                            `Bearer ${accessToken}`,
+
+                        "apikey":
+                            SUPABASE_PUBLISHABLE_KEY,
+
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body:
+                        JSON.stringify(
+                            {
+                                fileName:
+                                    file.name,
+
+                                contentType:
+                                    file.type,
+
+                                fileSize:
+                                    file.size
+                            }
+                        )
+                }
+            );
+
+
+        let result;
+
+
+        try {
+
+            result =
+                await response.json();
+
+        } catch {
+
+            result =
+                null;
+        }
+
+
+        if (
+            !response.ok ||
+            !result?.success
+        ) {
+
+            throw new Error(
+                result?.message ||
+                `Upload URL request failed (${response.status}).`
+            );
+        }
+
+
+        const {
+            uploadUrl,
+            objectKey
+        } =
+            result;
+
+
+        if (
+            !uploadUrl ||
+            !objectKey
+        ) {
+
+            throw new Error(
+                "The upload function returned an invalid upload URL."
+            );
+        }
+
+
+        setUploadStatus(
+            "Uploading photo..."
+        );
+
+
+        const uploadResponse =
+            await fetch(
+                uploadUrl,
+                {
+                    method:
+                        "PUT",
+
+                    headers: {
+                        "Content-Type":
+                            file.type
+                    },
+
+                    body:
+                        file
+                }
+            );
+
+
+        if (
+            !uploadResponse.ok
+        ) {
+
+            let uploadText =
+                "";
+
+            try {
+
+                uploadText =
+                    await uploadResponse.text();
+
+            } catch {
+
+                uploadText =
+                    "";
+            }
+
+
+            throw new Error(
+                `R2 upload failed (${uploadResponse.status}). ${
+                    uploadText
+                        ? uploadText.substring(
+                            0,
+                            300
+                        )
+                        : ""
+                }`
+            );
+        }
+
+
+        const publicUrl =
+            `${R2_PUBLIC_URL}/${objectKey}`;
+
+
+        currentAvatarUrl =
+            publicUrl;
+
+
+        updateAvatar(
+            avatarPreview,
+            displayName.value.trim() ||
+                "E-Tag User",
+            currentAvatarUrl
+        );
+
+
+        updatePreview();
+
+
+        setUploadStatus(
+            "Photo uploaded successfully.",
+            true
+        );
+
+
+        return publicUrl;
     }
 
 
@@ -1407,7 +1729,7 @@
                 profileType.value,
 
             avatar_url:
-                avatarUrl.value.trim() ||
+                currentAvatarUrl ||
                 null,
 
             template:
@@ -1429,7 +1751,9 @@
 
                 result =
                     await supabase
-                        .from("profiles")
+                        .from(
+                            "profiles"
+                        )
                         .update(
                             profileData
                         )
@@ -1444,7 +1768,9 @@
 
                 result =
                     await supabase
-                        .from("profiles")
+                        .from(
+                            "profiles"
+                        )
                         .insert(
                             {
                                 ...profileData,
@@ -1469,14 +1795,14 @@
                 true;
 
 
-            showMessage(
-                "Public profile saved successfully.",
-                "success"
+            fillForm(
+                result.data
             );
 
 
-            fillForm(
-                result.data
+            showMessage(
+                "Public profile saved successfully.",
+                "success"
             );
 
         } catch (
@@ -1509,36 +1835,142 @@
     }
 
 
-    async function logout() {
-
-        await supabase.auth.signOut();
-
-        window.location.replace(
-            "/E-Tag/"
-        );
-    }
-
-
-    function openPublicProfile() {
-
-        const url =
-            openPublicButton.dataset.url;
-
+    function previewSelectedImage(
+        file
+    ) {
 
         if (
-            !url
+            !file
         ) {
 
             return;
         }
 
 
-        window.open(
-            url,
-            "_blank",
-            "noopener,noreferrer"
+        if (
+            !ALLOWED_TYPES.has(
+                file.type
+            )
+        ) {
+
+            return;
+        }
+
+
+        if (
+            file.size >
+            MAX_FILE_SIZE
+        ) {
+
+            return;
+        }
+
+
+        const localUrl =
+            URL.createObjectURL(
+                file
+            );
+
+
+        updateAvatar(
+            avatarPreview,
+            displayName.value.trim() ||
+                "E-Tag User",
+            localUrl
+        );
+
+
+        updateAvatar(
+            previewAvatar,
+            displayName.value.trim() ||
+                "E-Tag User",
+            localUrl
         );
     }
+
+
+    avatarFile.addEventListener(
+        "change",
+        async () => {
+
+            const file =
+                avatarFile.files?.[0];
+
+
+            if (
+                !file
+            ) {
+
+                return;
+            }
+
+
+            try {
+
+                previewSelectedImage(
+                    file
+                );
+
+
+                const uploadedUrl =
+                    await uploadAvatar(
+                        file
+                    );
+
+
+                currentAvatarUrl =
+                    uploadedUrl;
+
+
+                updatePreview();
+
+            } catch (
+                error
+            ) {
+
+                console.error(
+                    "Avatar upload error:",
+                    error
+                );
+
+
+                setUploadStatus(
+                    error.message,
+                    false
+                );
+
+
+                avatarFile.value =
+                    "";
+
+
+                if (
+                    currentAvatarUrl
+                ) {
+
+                    updateAvatar(
+                        avatarPreview,
+                        displayName.value.trim() ||
+                            "E-Tag User",
+                        currentAvatarUrl
+                    );
+
+                    updatePreview();
+
+                } else {
+
+                    updateAvatar(
+                        avatarPreview,
+                        displayName.value.trim() ||
+                            "E-Tag User",
+                        ""
+                    );
+
+                    updatePreview();
+                }
+            }
+        }
+    );
 
 
     [
@@ -1547,7 +1979,6 @@
         phone,
         whatsapp,
         publicEmail,
-        avatarUrl,
         profileType,
         template
     ].forEach(
@@ -1574,13 +2005,36 @@
 
     logoutButton.addEventListener(
         "click",
-        logout
+        async () => {
+
+            await supabase.auth.signOut();
+
+            window.location.replace(
+                "/E-Tag/"
+            );
+        }
     );
 
 
     openPublicButton.addEventListener(
         "click",
-        openPublicProfile
+        () => {
+
+            const url =
+                openPublicButton.dataset.url;
+
+
+            if (
+                url
+            ) {
+
+                window.open(
+                    url,
+                    "_blank",
+                    "noopener,noreferrer"
+                );
+            }
+        }
     );
 
 
@@ -1591,7 +2045,8 @@
         ) => {
 
             if (
-                event === "SIGNED_OUT" ||
+                event ===
+                    "SIGNED_OUT" ||
                 !session
             ) {
 
