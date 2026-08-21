@@ -2,6 +2,7 @@
 <html lang="en">
 
 <head>
+
     <meta charset="UTF-8">
 
     <meta
@@ -12,6 +13,7 @@
     <title>E-Tag · Couple</title>
 
     <style>
+
         * {
             box-sizing: border-box;
         }
@@ -39,22 +41,30 @@
                     #f5f7fb 45%
                 );
 
-            color: #7f1d1d;
+            color:
+                #7f1d1d;
         }
 
         .page {
             width:
-                min(100%, 560px);
+                min(
+                    100%,
+                    560px
+                );
 
-            margin: 0 auto;
+            margin:
+                0 auto;
         }
 
         .profile {
-            overflow: hidden;
+            overflow:
+                hidden;
 
-            border-radius: 28px;
+            border-radius:
+                28px;
 
-            background: #ffffff;
+            background:
+                #ffffff;
 
             box-shadow:
                 0 20px 60px
@@ -70,7 +80,8 @@
             padding:
                 34px 24px 30px;
 
-            text-align: center;
+            text-align:
+                center;
 
             background:
                 linear-gradient(
@@ -82,22 +93,31 @@
         }
 
         .heart {
-            font-size: 26px;
-            margin-bottom: 8px;
+            font-size:
+                26px;
+
+            margin-bottom:
+                8px;
         }
 
         .avatar {
-            width: 132px;
-            height: 132px;
+            width:
+                132px;
+
+            height:
+                132px;
 
             margin:
                 0 auto 18px;
 
-            border-radius: 28px;
+            border-radius:
+                28px;
 
-            overflow: hidden;
+            overflow:
+                hidden;
 
-            background: #fecdd3;
+            background:
+                #fecdd3;
 
             border:
                 4px solid
@@ -108,134 +128,202 @@
                     .12
                 );
 
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            display:
+                flex;
 
-            font-size: 35px;
-            font-weight: 800;
+            align-items:
+                center;
+
+            justify-content:
+                center;
+
+            font-size:
+                35px;
+
+            font-weight:
+                800;
         }
 
         .avatar img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
+            width:
+                100%;
+
+            height:
+                100%;
+
+            object-fit:
+                cover;
         }
 
         .avatar.character img {
-            object-fit: contain;
-            padding: 8px;
+            object-fit:
+                contain;
+
+            padding:
+                8px;
         }
 
         h1 {
-            margin: 0;
+            margin:
+                0;
 
-            font-size: 30px;
-            line-height: 1.2;
+            font-size:
+                30px;
+
+            line-height:
+                1.2;
         }
 
         .people {
-            margin-top: 8px;
+            margin-top:
+                8px;
 
-            color: #9f1239;
+            color:
+                #9f1239;
 
-            font-size: 14px;
-            font-weight: 700;
+            font-size:
+                14px;
+
+            font-weight:
+                700;
         }
 
         .date {
-            margin-top: 8px;
+            margin-top:
+                8px;
 
-            color: #be123c;
+            color:
+                #be123c;
 
-            font-size: 13px;
+            font-size:
+                13px;
         }
 
         .bio,
         .story {
-            max-width: 440px;
+            max-width:
+                440px;
 
             margin:
                 14px auto 0;
 
-            line-height: 1.65;
+            line-height:
+                1.65;
 
-            white-space: pre-wrap;
+            white-space:
+                pre-wrap;
         }
 
         .bio {
-            color: #991b1b;
+            color:
+                #991b1b;
         }
 
         .story {
-            color: #7f1d1d;
+            color:
+                #7f1d1d;
         }
 
         .section {
-            padding: 20px;
+            padding:
+                20px;
         }
 
         .title {
             margin:
                 0 0 12px;
 
-            font-size: 16px;
+            font-size:
+                16px;
         }
 
         .grid {
-            display: grid;
-            gap: 9px;
+            display:
+                grid;
+
+            gap:
+                9px;
         }
 
         .button {
-            display: block;
+            display:
+                block;
 
             padding:
                 13px 14px;
 
-            border-radius: 12px;
+            border-radius:
+                12px;
 
-            background: #9f1239;
+            background:
+                #9f1239;
 
-            color: #ffffff;
+            color:
+                #ffffff;
 
-            text-decoration: none;
+            text-decoration:
+                none;
 
-            text-align: center;
+            text-align:
+                center;
 
-            font-size: 14px;
-            font-weight: 800;
+            font-size:
+                14px;
+
+            font-weight:
+                800;
         }
 
         .social {
-            background: #ffe4e6;
-            color: #9f1239;
+            background:
+                #ffe4e6;
+
+            color:
+                #9f1239;
         }
 
         .edit {
-            background: #f1f5f9;
-            color: #111827;
+            background:
+                #f1f5f9;
+
+            color:
+                #111827;
         }
 
-        .loading {
-            padding: 24px;
+        .loading,
+        .error {
+            padding:
+                24px;
 
-            border-radius: 20px;
+            border-radius:
+                20px;
 
-            background: #ffffff;
+            background:
+                #ffffff;
 
-            text-align: center;
+            color:
+                #7f1d1d;
+
+            text-align:
+                center;
         }
 
         .hidden {
-            display: none !important;
+            display:
+                none !important;
         }
+
     </style>
+
 </head>
+
 
 <body>
 
 <div class="page">
+
+
+    <!-- LOADING -->
 
     <div
         id="loading"
@@ -244,6 +332,16 @@
         Loading couple profile...
     </div>
 
+
+    <!-- ERROR -->
+
+    <div
+        id="error"
+        class="error hidden"
+    ></div>
+
+
+    <!-- PROFILE -->
 
     <div
         id="profile"
@@ -296,6 +394,8 @@
         </div>
 
 
+        <!-- CONTACT -->
+
         <div class="section">
 
             <h2 class="title">
@@ -310,6 +410,8 @@
 
         </div>
 
+
+        <!-- SOCIAL -->
 
         <div
             id="socialSection"
@@ -329,11 +431,14 @@
         </div>
 
 
+        <!-- EDIT -->
+
         <div class="section">
 
             <a
                 id="edit"
                 class="button edit"
+                href="#"
             >
                 Edit My Profile
             </a>
@@ -373,55 +478,72 @@
             "loading"
         );
 
+
+    const errorBox =
+        document.getElementById(
+            "error"
+        );
+
+
     const profile =
         document.getElementById(
             "profile"
         );
+
 
     const avatar =
         document.getElementById(
             "avatar"
         );
 
+
     const coupleName =
         document.getElementById(
             "coupleName"
         );
+
 
     const people =
         document.getElementById(
             "people"
         );
 
+
     const date =
         document.getElementById(
             "date"
         );
+
 
     const bio =
         document.getElementById(
             "bio"
         );
 
+
     const story =
         document.getElementById(
             "story"
         );
+
 
     const contacts =
         document.getElementById(
             "contacts"
         );
 
+
     const socials =
         document.getElementById(
             "socials"
         );
 
+
     const socialSection =
         document.getElementById(
             "socialSection"
         );
+
 
     const edit =
         document.getElementById(
@@ -501,8 +623,10 @@
             {
                 day:
                     "numeric",
+
                 month:
                     "long",
+
                 year:
                     "numeric"
             }
@@ -512,7 +636,7 @@
 
     function renderAvatar(
         element,
-        profile
+        data
     ) {
 
         element.innerHTML =
@@ -523,14 +647,10 @@
         );
 
 
-        const fallback =
-            "❤️";
-
-
         if (
-            profile.avatar_type ===
+            data.avatar_type ===
                 "character" &&
-            profile.character_id
+            data.character_id
         ) {
 
             const image =
@@ -541,7 +661,7 @@
 
             image.src =
                 `${CHARACTER_BASE}${encodeURIComponent(
-                    profile.character_id
+                    data.character_id
                 )}.svg`;
 
 
@@ -552,8 +672,15 @@
             image.onerror =
                 () => {
 
+                    element.innerHTML =
+                        "";
+
+                    element.classList.remove(
+                        "character"
+                    );
+
                     element.textContent =
-                        fallback;
+                        "❤️";
                 };
 
 
@@ -572,7 +699,7 @@
 
 
         if (
-            profile.avatar_url
+            data.avatar_url
         ) {
 
             const image =
@@ -582,7 +709,7 @@
 
 
             image.src =
-                profile.avatar_url;
+                data.avatar_url;
 
 
             image.alt =
@@ -592,8 +719,11 @@
             image.onerror =
                 () => {
 
+                    element.innerHTML =
+                        "";
+
                     element.textContent =
-                        fallback;
+                        "❤️";
                 };
 
 
@@ -607,7 +737,7 @@
 
 
         element.textContent =
-            fallback;
+            "❤️";
     }
 
 
@@ -618,23 +748,23 @@
         social = false
     ) {
 
-        const a =
+        const link =
             document.createElement(
                 "a"
             );
 
 
-        a.className =
+        link.className =
             social
                 ? "button social"
                 : "button";
 
 
-        a.textContent =
+        link.textContent =
             label;
 
 
-        a.href =
+        link.href =
             href;
 
 
@@ -644,16 +774,16 @@
             )
         ) {
 
-            a.target =
+            link.target =
                 "_blank";
 
-            a.rel =
+            link.rel =
                 "noopener";
         }
 
 
         parent.appendChild(
-            a
+            link
         );
 
 
@@ -678,15 +808,24 @@
             !tagCode
         ) {
 
-            loading.textContent =
+            loading.classList.add(
+                "hidden"
+            );
+
+            errorBox.textContent =
                 "Invalid E-Tag URL.";
+
+            errorBox.classList.remove(
+                "hidden"
+            );
 
             return;
         }
 
 
         const {
-            data: tag
+            data: tag,
+            error: tagError
         } =
             await supabase
                 .from(
@@ -703,20 +842,52 @@
 
 
         if (
-            !tag ||
+            tagError
+        ) {
+
+            loading.classList.add(
+                "hidden"
+            );
+
+            errorBox.textContent =
+                `Unable to load E-Tag: ${
+                    tagError.message
+                }`;
+
+            errorBox.classList.remove(
+                "hidden"
+            );
+
+            return;
+        }
+
+
+        if (
+            !tag
+        ) {
+
+            loading.textContent =
+                "E-Tag not found.";
+
+            return;
+        }
+
+
+        if (
             !tag.active ||
             !tag.owner_id
         ) {
 
             loading.textContent =
-                "E-Tag not found or not activated.";
+                "This E-Tag has not been activated.";
 
             return;
         }
 
 
         const {
-            data: p
+            data: data,
+            error: profileError
         } =
             await supabase
                 .from(
@@ -733,35 +904,60 @@
 
 
         if (
-            !p
+            profileError
         ) {
 
-            loading.textContent =
-                "Public profile not found.";
+            loading.classList.add(
+                "hidden"
+            );
+
+            errorBox.textContent =
+                `Unable to load couple profile: ${
+                    profileError.message
+                }`;
+
+            errorBox.classList.remove(
+                "hidden"
+            );
 
             return;
         }
 
 
-        coupleName.textContent =
+        if (
+            !data
+        ) {
+
+            loading.textContent =
+                "Public couple profile not found.";
+
+            return;
+        }
+
+
+        const displayName =
             clean(
-                p.couple_name
+                data.couple_name
             ) ||
             clean(
-                p.display_name
+                data.display_name
             ) ||
             "Our Story";
 
 
+        coupleName.textContent =
+            displayName;
+
+
         const person1 =
             clean(
-                p.person1_name
+                data.person1_name
             );
 
 
         const person2 =
             clean(
-                p.person2_name
+                data.person2_name
             );
 
 
@@ -771,7 +967,10 @@
         ) {
 
             people.textContent =
-                [person1, person2]
+                [
+                    person1,
+                    person2
+                ]
                     .filter(
                         Boolean
                     )
@@ -782,45 +981,58 @@
 
 
         if (
-            p.anniversary_date
+            data.anniversary_date
         ) {
 
             date.textContent =
                 `Together since ${dateLabel(
-                    p.anniversary_date
+                    data.anniversary_date
                 )}`;
         }
 
 
         bio.textContent =
             clean(
-                p.bio
+                data.bio
             );
 
 
         story.textContent =
             clean(
-                p.our_story
+                data.our_story
             );
+
+
+        if (
+            !data.our_story
+        ) {
+
+            story.style.display =
+                "none";
+        }
 
 
         renderAvatar(
             avatar,
-            p
+            data
         );
 
 
+        /* CONTACT */
+
+
         if (
-            p.whatsapp
+            data.whatsapp
         ) {
 
             const number =
                 clean(
-                    p.whatsapp
-                ).replace(
-                    /\D/g,
-                    ""
-                );
+                    data.whatsapp
+                )
+                    .replace(
+                        /\D/g,
+                        ""
+                    );
 
 
             if (
@@ -837,28 +1049,31 @@
 
 
         if (
-            p.email
+            data.email
         ) {
 
             addButton(
                 contacts,
                 "Email",
                 `mailto:${encodeURIComponent(
-                    p.email
+                    data.email
                 )}`
             );
         }
 
 
+        /* SOCIAL */
+
+
         if (
-            p.person1_instagram
+            data.person1_instagram
         ) {
 
             addButton(
                 socials,
                 "Person 1 Instagram",
                 `https://instagram.com/${username(
-                    p.person1_instagram
+                    data.person1_instagram
                 )}`,
                 true
             );
@@ -866,14 +1081,14 @@
 
 
         if (
-            p.person2_instagram
+            data.person2_instagram
         ) {
 
             addButton(
                 socials,
                 "Person 2 Instagram",
                 `https://instagram.com/${username(
-                    p.person2_instagram
+                    data.person2_instagram
                 )}`,
                 true
             );
@@ -881,14 +1096,14 @@
 
 
         if (
-            p.person1_tiktok
+            data.person1_tiktok
         ) {
 
             addButton(
                 socials,
                 "Person 1 TikTok",
                 `https://www.tiktok.com/@${username(
-                    p.person1_tiktok
+                    data.person1_tiktok
                 )}`,
                 true
             );
@@ -896,14 +1111,14 @@
 
 
         if (
-            p.person2_tiktok
+            data.person2_tiktok
         ) {
 
             addButton(
                 socials,
                 "Person 2 TikTok",
                 `https://www.tiktok.com/@${username(
-                    p.person2_tiktok
+                    data.person2_tiktok
                 )}`,
                 true
             );
@@ -911,14 +1126,14 @@
 
 
         if (
-            p.shared_youtube
+            data.shared_youtube
         ) {
 
             addButton(
                 socials,
                 "Shared YouTube",
                 `https://youtube.com/@${username(
-                    p.shared_youtube
+                    data.shared_youtube
                 )}`,
                 true
             );
@@ -926,10 +1141,10 @@
 
 
         if (
-            p.other_social_links
+            data.other_social_links
         ) {
 
-            p.other_social_links
+            data.other_social_links
                 .split(
                     "\n"
                 )
@@ -965,15 +1180,23 @@
         }
 
 
+        /*
+         * IMPORTANT FIX
+         *
+         * Logged-out user clicking this button
+         * will enter edit/login mode.
+         */
+
         edit.href =
             `/E-Tag/?tag=${encodeURIComponent(
                 tag.tag_code
-            )}`;
+            )}&edit=1`;
 
 
         loading.classList.add(
             "hidden"
         );
+
 
         profile.classList.remove(
             "hidden"
@@ -981,9 +1204,34 @@
     }
 
 
-    load();
+    load()
+        .catch(
+            error => {
+
+                console.error(
+                    "Couple profile error:",
+                    error
+                );
+
+
+                loading.classList.add(
+                    "hidden"
+                );
+
+
+                errorBox.textContent =
+                    error.message ||
+                    "Unable to load couple profile.";
+
+
+                errorBox.classList.remove(
+                    "hidden"
+                );
+            }
+        );
 
 </script>
 
 </body>
+
 </html>
