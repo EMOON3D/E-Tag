@@ -1458,7 +1458,7 @@
 
 
         openPublicButton.dataset.url =
-            `${window.location.origin}/E-Tag/id/${encodeURIComponent(
+            `${window.location.origin}/E-Tag/?tag=${encodeURIComponent(
                 tag.tag_code
             )}`;
 
@@ -1570,7 +1570,8 @@
             );
 
 
-        let result = null;
+        let result =
+            null;
 
 
         try {
@@ -1599,6 +1600,7 @@
 
         const uploadUrl =
             result.uploadUrl;
+
 
         const objectKey =
             result.objectKey;
@@ -1752,7 +1754,8 @@
                         )
                         .eq(
                             "id",
-                            currentUser.id );
+                            currentUser.id
+                        );
 
 
                 if (
@@ -1776,7 +1779,9 @@
                             {
                                 id:
                                     currentUser.id,
+
                                 ...profileData,
+
                                 created_at:
                                     now
                             }
@@ -1930,11 +1935,29 @@
         "click",
         async () => {
 
+            const tagCode =
+                currentTag?.tag_code;
+
+
             await supabase.auth.signOut();
 
-            window.location.replace(
-                "/E-Tag/"
-            );
+
+            if (
+                tagCode
+            ) {
+
+                window.location.replace(
+                    `/E-Tag/?tag=${encodeURIComponent(
+                        tagCode
+                    )}`
+                );
+
+            } else {
+
+                window.location.replace(
+                    "/E-Tag/"
+                );
+            }
         }
     );
 
@@ -1969,13 +1992,52 @@
 
             if (
                 event ===
-                    "SIGNED_OUT" ||
-                !session
+                    "SIGNED_OUT"
             ) {
 
-                window.location.replace(
-                    "/E-Tag/"
-                );
+                const tagCode =
+                    currentTag?.tag_code;
+
+
+                if (
+                    tagCode
+                ) {
+
+                    window.location.replace(
+                        `/E-Tag/?tag=${encodeURIComponent(
+                            tagCode
+                        )}`
+                    );
+
+                } else {
+
+                    window.location.replace(
+                        "/E-Tag/"
+                    );
+                }
+            }
+
+
+            if (
+                !session &&
+                event !==
+                    "INITIAL_SESSION"
+            ) {
+
+                const tagCode =
+                    currentTag?.tag_code;
+
+
+                if (
+                    tagCode
+                ) {
+
+                    window.location.replace(
+                        `/E-Tag/?tag=${encodeURIComponent(
+                            tagCode
+                        )}`
+                    );
+                }
             }
         }
     );
