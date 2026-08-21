@@ -41,7 +41,12 @@
             border-radius: 22px;
             padding: 24px;
             box-shadow:
-                0 12px 40px rgba(0, 0, 0, 0.06);
+                0 12px 40px rgba(
+                    0,
+                    0,
+                    0,
+                    0.06
+                );
         }
 
         .center {
@@ -84,6 +89,7 @@
             font-weight: 700;
             cursor: pointer;
             margin-top: 10px;
+            font-family: inherit;
         }
 
         .primary {
@@ -132,12 +138,6 @@
             border: 1px solid #fecaca;
         }
 
-        .message.success {
-            background: #ecfdf5;
-            color: #065f46;
-            border: 1px solid #a7f3d0;
-        }
-
         .message.info {
             background: #eff6ff;
             color: #1e40af;
@@ -158,9 +158,16 @@
             text-align: center;
         }
 
+        .public-theme {
+            border-radius: 26px;
+            padding: 28px 22px;
+            overflow: hidden;
+            position: relative;
+        }
+
         .avatar {
-            width: 92px;
-            height: 92px;
+            width: 96px;
+            height: 96px;
             margin: 0 auto 16px;
             border-radius: 50%;
             overflow: hidden;
@@ -181,14 +188,23 @@
 
         .profile-name {
             margin: 0;
-            font-size: 27px;
+            font-size: 28px;
+            line-height: 1.2;
         }
 
         .profile-bio {
             margin: 10px 0 0;
-            color: #6b7280;
             line-height: 1.6;
             white-space: pre-wrap;
+        }
+
+        .profile-type {
+            display: inline-flex;
+            margin-top: 12px;
+            padding: 6px 10px;
+            border-radius: 999px;
+            font-size: 11px;
+            font-weight: 800;
         }
 
         .profile-actions {
@@ -205,12 +221,152 @@
             text-align: center;
             padding: 13px 14px;
             border-radius: 12px;
-            background: #111827;
-            color: #ffffff;
             font-weight: 700;
             font-family: inherit;
             font-size: 15px;
             cursor: pointer;
+        }
+
+        .theme-men {
+            background:
+                linear-gradient(
+                    160deg,
+                    #111827 0%,
+                    #1f2937 55%,
+                    #374151 100%
+                );
+            color: #ffffff;
+        }
+
+        .theme-men .avatar {
+            border: 4px solid rgba(
+                255,
+                255,
+                255,
+                0.18
+            );
+        }
+
+        .theme-men .profile-bio {
+            color: #d1d5db;
+        }
+
+        .theme-men .profile-type {
+            background: rgba(
+                255,
+                255,
+                255,
+                0.12
+            );
+            color: #ffffff;
+        }
+
+        .theme-men .profile-button {
+            background: #ffffff;
+            color: #111827;
+        }
+
+        .theme-women {
+            background:
+                linear-gradient(
+                    160deg,
+                    #fff1f2 0%,
+                    #fce7f3 55%,
+                    #fdf2f8 100%
+                );
+            color: #831843;
+        }
+
+        .theme-women .avatar {
+            border: 4px solid rgba(
+                190,
+                24,
+                93,
+                0.12
+            );
+        }
+
+        .theme-women .profile-bio {
+            color: #9d174d;
+        }
+
+        .theme-women .profile-type {
+            background: #fbcfe8;
+            color: #9d174d;
+        }
+
+        .theme-women .profile-button {
+            background: #9d174d;
+            color: #ffffff;
+        }
+
+        .theme-couple {
+            background:
+                linear-gradient(
+                    160deg,
+                    #fff7ed 0%,
+                    #ffe4e6 50%,
+                    #fef2f2 100%
+                );
+            color: #7f1d1d;
+        }
+
+        .theme-couple .avatar {
+            border: 4px solid rgba(
+                190,
+                24,
+                93,
+                0.12
+            );
+        }
+
+        .theme-couple .profile-bio {
+            color: #991b1b;
+        }
+
+        .theme-couple .profile-type {
+            background: #fecdd3;
+            color: #9f1239;
+        }
+
+        .theme-couple .profile-button {
+            background: #9f1239;
+            color: #ffffff;
+        }
+
+        .theme-business {
+            background:
+                linear-gradient(
+                    160deg,
+                    #eff6ff 0%,
+                    #e0f2fe 55%,
+                    #f8fafc 100%
+                );
+            color: #0f172a;
+        }
+
+        .theme-business .avatar {
+            border-radius: 20px;
+            border: 4px solid rgba(
+                15,
+                23,
+                42,
+                0.08
+            );
+        }
+
+        .theme-business .profile-bio {
+            color: #334155;
+        }
+
+        .theme-business .profile-type {
+            background: #dbeafe;
+            color: #1d4ed8;
+        }
+
+        .theme-business .profile-button {
+            background: #1d4ed8;
+            color: #ffffff;
         }
 
         .input-group {
@@ -245,21 +401,13 @@
                 );
         }
 
-        .owner-label {
-            display: inline-block;
-            padding: 6px 10px;
-            border-radius: 999px;
-            background: #dcfce7;
-            color: #166534;
-            font-size: 12px;
-            font-weight: 800;
-            margin-bottom: 12px;
-        }
-
         @media (max-width: 480px) {
 
             .app {
-                width: min(100% - 16px, 520px);
+                width: min(
+                    100% - 16px,
+                    520px
+                );
                 padding-top: 16px;
             }
 
@@ -323,6 +471,7 @@
                 >
                     Login
                 </button>
+
 
                 <button
                     id="signupButton"
@@ -647,75 +796,82 @@
             class="card hidden"
         >
 
-            <div class="profile">
+            <div
+                id="ownerTheme"
+                class="public-theme theme-men"
+            >
 
-                <div
-                    id="ownerAvatar"
-                    class="avatar"
-                ></div>
+                <div class="profile">
 
+                    <div
+                        id="ownerAvatar"
+                        class="avatar"
+                    ></div>
 
-                <span class="owner-label">
-                    Your E-Tag
-                </span>
+                    <h1
+                        id="ownerName"
+                        class="profile-name"
+                    ></h1>
 
-
-                <h1
-                    id="ownerName"
-                    class="profile-name"
-                ></h1>
-
-
-                <p
-                    id="ownerBio"
-                    class="profile-bio"
-                ></p>
-
-
-                <div class="profile-actions">
-
-                    <a
-                        id="ownerPhone"
-                        class="profile-button hidden"
+                    <div
+                        id="ownerType"
+                        class="profile-type"
                     >
-                        Call
-                    </a>
+                        Personal · Men
+                    </div>
+
+                    <p
+                        id="ownerBio"
+                        class="profile-bio"
+                    ></p>
 
 
-                    <a
-                        id="ownerWhatsapp"
-                        class="profile-button hidden"
-                        target="_blank"
-                        rel="noopener"
-                    >
-                        WhatsApp
-                    </a>
+                    <div class="profile-actions">
+
+                        <a
+                            id="ownerPhone"
+                            class="profile-button hidden"
+                        >
+                            Call
+                        </a>
 
 
-                    <a
-                        id="ownerEmail"
-                        class="profile-button hidden"
-                    >
-                        Email
-                    </a>
+                        <a
+                            id="ownerWhatsapp"
+                            class="profile-button hidden"
+                            target="_blank"
+                            rel="noopener"
+                        >
+                            WhatsApp
+                        </a>
 
 
-                    <a
-                        id="editProfileButtonOwner"
-                        class="profile-button"
-                        href="/E-Tag/dashboard.html"
-                    >
-                        Edit Public Profile
-                    </a>
+                        <a
+                            id="ownerEmail"
+                            class="profile-button hidden"
+                        >
+                            Email
+                        </a>
 
 
-                    <button
-                        id="logoutButton"
-                        class="button secondary"
-                        type="button"
-                    >
-                        Logout
-                    </button>
+                        <a
+                            id="editProfileButtonOwner"
+                            class="profile-button"
+                            href="/E-Tag/dashboard.html"
+                        >
+                            Edit Public Profile
+                        </a>
+
+
+                        <button
+                            id="logoutButton"
+                            class="button secondary"
+                            type="button"
+                        >
+                            Logout
+                        </button>
+
+                    </div>
 
                 </div>
 
@@ -729,61 +885,76 @@
             class="card hidden"
         >
 
-            <div class="profile">
+            <div
+                id="publicTheme"
+                class="public-theme theme-men"
+            >
 
-                <div
-                    id="publicAvatar"
-                    class="avatar"
-                ></div>
+                <div class="profile">
 
-
-                <h1
-                    id="publicName"
-                    class="profile-name"
-                ></h1>
-
-
-                <p
-                    id="publicBio"
-                    class="profile-bio"
-                ></p>
+                    <div
+                        id="publicAvatar"
+                        class="avatar"
+                    ></div>
 
 
-                <div class="profile-actions">
+                    <h1
+                        id="publicName"
+                        class="profile-name"
+                    ></h1>
 
-                    <a
-                        id="publicPhone"
-                        class="profile-button hidden"
+
+                    <div
+                        id="publicType"
+                        class="profile-type"
                     >
-                        Call
-                    </a>
+                        Personal · Men
+                    </div>
 
 
-                    <a
-                        id="publicWhatsapp"
-                        class="profile-button hidden"
-                        target="_blank"
-                        rel="noopener"
-                    >
-                        WhatsApp
-                    </a>
+                    <p
+                        id="publicBio"
+                        class="profile-bio"
+                    ></p>
 
 
-                    <a
-                        id="publicEmail"
-                        class="profile-button hidden"
-                    >
-                        Email
-                    </a>
+                    <div class="profile-actions">
+
+                        <a
+                            id="publicPhone"
+                            class="profile-button hidden"
+                        >
+                            Call
+                        </a>
 
 
-                    <button
-                        id="editProfileButtonPublic"
-                        class="profile-button"
-                        type="button"
-                    >
-                        Edit My Profile
-                    </button>
+                        <a
+                            id="publicWhatsapp"
+                            class="profile-button hidden"
+                            target="_blank"
+                            rel="noopener"
+                        >
+                            WhatsApp
+                        </a>
+
+
+                        <a
+                            id="publicEmail"
+                            class="profile-button hidden"
+                        >
+                            Email
+                        </a>
+
+
+                        <button
+                            id="editProfileButtonPublic"
+                            class="profile-button"
+                            type="button"
+                        >
+                            Edit My Profile
+                        </button>
+
+                    </div>
 
                 </div>
 
@@ -800,7 +971,8 @@
 
     import {
         createClient
-    } from "https://esm.sh/@supabase/supabase-js@2";
+    } from
+        "https://esm.sh/@supabase/supabase-js@2";
 
 
     const SUPABASE_URL =
@@ -995,6 +1167,11 @@
             "ownerProfileCard"
         );
 
+    const ownerTheme =
+        document.getElementById(
+            "ownerTheme"
+        );
+
     const ownerAvatar =
         document.getElementById(
             "ownerAvatar"
@@ -1003,6 +1180,11 @@
     const ownerName =
         document.getElementById(
             "ownerName"
+        );
+
+    const ownerType =
+        document.getElementById(
+            "ownerType"
         );
 
     const ownerBio =
@@ -1035,6 +1217,11 @@
             "publicProfileCard"
         );
 
+    const publicTheme =
+        document.getElementById(
+            "publicTheme"
+        );
+
     const publicAvatar =
         document.getElementById(
             "publicAvatar"
@@ -1043,6 +1230,11 @@
     const publicName =
         document.getElementById(
             "publicName"
+        );
+
+    const publicType =
+        document.getElementById(
+            "publicType"
         );
 
     const publicBio =
@@ -1070,14 +1262,10 @@
             "editProfileButtonPublic"
         );
 
-    const editProfileButtonOwner =
-        document.getElementById(
-            "editProfileButtonOwner"
-        );
-
 
     let currentTag =
         null;
+
 
     let authMode =
         "login";
@@ -1190,6 +1378,169 @@
     }
 
 
+    function normalizeTemplate(
+        value
+    ) {
+
+        const normalized =
+            String(
+                value || ""
+            )
+                .trim()
+                .toLowerCase();
+
+
+        if (
+            normalized ===
+            "boy"
+        ) {
+
+            return "men";
+        }
+
+
+        if (
+            normalized ===
+            "girl"
+        ) {
+
+            return "women";
+        }
+
+
+        if (
+            [
+                "men",
+                "women",
+                "couple",
+                "business"
+            ].includes(
+                normalized
+            )
+        ) {
+
+            return normalized;
+        }
+
+
+        return "men";
+    }
+
+
+    function getTheme(
+        profile
+    ) {
+
+        const type =
+            String(
+                profile?.profile_type ||
+                "personal"
+            )
+                .trim()
+                .toLowerCase();
+
+
+        const template =
+            normalizeTemplate(
+                profile?.template
+            );
+
+
+        if (
+            type ===
+            "business"
+        ) {
+
+            return "business";
+        }
+
+
+        if (
+            type ===
+            "couple"
+        ) {
+
+            return "couple";
+        }
+
+
+        if (
+            template ===
+            "women"
+        ) {
+
+            return "women";
+        }
+
+
+        return "men";
+    }
+
+
+    function getThemeLabel(
+        profile,
+        theme
+    ) {
+
+        if (
+            theme ===
+            "business"
+        ) {
+
+            return "Business";
+        }
+
+
+        if (
+            theme ===
+            "couple"
+        ) {
+
+            return "Couple";
+        }
+
+
+        if (
+            theme ===
+            "women"
+        ) {
+
+            return "Personal · Women";
+        }
+
+
+        return "Personal · Men";
+    }
+
+
+    function applyTheme(
+        element,
+        profile
+    ) {
+
+        const theme =
+            getTheme(
+                profile
+            );
+
+
+        element.classList.remove(
+            "theme-men",
+            "theme-women",
+            "theme-couple",
+            "theme-business"
+        );
+
+
+        element.classList.add(
+            `theme-${theme}`
+        );
+
+
+        return theme;
+    }
+
+
     function getInitials(
         name
     ) {
@@ -1208,7 +1559,8 @@
 
 
         if (
-            words.length === 0
+            words.length ===
+            0
         ) {
 
             return "?";
@@ -1216,7 +1568,8 @@
 
 
         if (
-            words.length === 1
+            words.length ===
+            1
         ) {
 
             return words[0]
@@ -1414,7 +1767,7 @@
         if (
             user &&
             user.id ===
-                currentTag.owner_id
+            currentTag.owner_id
         ) {
 
             await loadOwnerProfile(
@@ -1444,7 +1797,7 @@
                     "profiles"
                 )
                 .select(
-                    "id,display_name,bio,phone,whatsapp,email,profile_type,avatar_url,created_at,updated_at,template"
+                    "id,display_name,bio,phone,whatsapp,email,profile_type,avatar_url,template"
                 )
                 .eq(
                     "id",
@@ -1456,11 +1809,6 @@
         if (
             error
         ) {
-
-            console.error(
-                "Profile lookup error:",
-                error
-            );
 
             return null;
         }
@@ -1504,16 +1852,27 @@
         renderProfile(
             profile,
             {
+                theme:
+                    ownerTheme,
+
                 avatar:
                     ownerAvatar,
+
                 name:
                     ownerName,
+
+                type:
+                    ownerType,
+
                 bio:
                     ownerBio,
+
                 phone:
                     ownerPhone,
+
                 whatsapp:
                     ownerWhatsapp,
+
                 email:
                     ownerEmail
             }
@@ -1557,16 +1916,27 @@
         renderProfile(
             profile,
             {
+                theme:
+                    publicTheme,
+
                 avatar:
                     publicAvatar,
+
                 name:
                     publicName,
+
+                type:
+                    publicType,
+
                 bio:
                     publicBio,
+
                 phone:
                     publicPhone,
+
                 whatsapp:
                     publicWhatsapp,
+
                 email:
                     publicEmail
             }
@@ -1586,11 +1956,30 @@
 
         const name =
             profile.display_name ||
-            "E-Tag User";
+            (
+                profile.profile_type ===
+                "business"
+                    ? "Business"
+                    : "E-Tag User"
+            );
+
+
+        const theme =
+            applyTheme(
+                elements.theme,
+                profile
+            );
 
 
         elements.name.textContent =
             name;
+
+
+        elements.type.textContent =
+            getThemeLabel(
+                profile,
+                theme
+            );
 
 
         elements.bio.textContent =
@@ -1637,12 +2026,23 @@
                 );
 
 
-            elements.whatsapp.href =
-                `https://wa.me/${number}`;
+            if (
+                number
+            ) {
 
-            elements.whatsapp.classList.remove(
-                "hidden"
-            );
+                elements.whatsapp.href =
+                    `https://wa.me/${number}`;
+
+                elements.whatsapp.classList.remove(
+                    "hidden"
+                );
+
+            } else {
+
+                elements.whatsapp.classList.add(
+                    "hidden"
+                );
+            }
 
         } else {
 
@@ -1939,7 +2339,7 @@
                 showMessage(
                     authMessage,
                     "Account created. Check your email to confirm your account.",
-                    "success"
+                    "info"
                 );
 
                 return;
@@ -2264,7 +2664,7 @@
             showMessage(
                 resetMessage,
                 "Password reset email sent. Check your inbox and spam folder.",
-                "success"
+                "info"
             );
 
         } catch (
@@ -2597,26 +2997,36 @@
                     {
                         id:
                             userId,
+
                         display_name:
                             "",
+
                         bio:
                             "",
+
                         phone:
                             "",
+
                         whatsapp:
                             "",
+
                         email:
                             "",
+
                         profile_type:
                             "personal",
+
                         avatar_url:
                             null,
+
                         created_at:
                             now,
+
                         updated_at:
                             now,
+
                         template:
-                            "boy"
+                            "men"
                     }
                 );
 
@@ -2641,9 +3051,29 @@
 
     async function logout() {
 
+        const tagCode =
+            currentTag?.tag_code;
+
+
         await supabase.auth.signOut();
 
-        window.location.reload();
+
+        if (
+            tagCode
+        ) {
+
+            window.location.replace(
+                `/E-Tag/?tag=${encodeURIComponent(
+                    tagCode
+                )}`
+            );
+
+        } else {
+
+            window.location.replace(
+                "/E-Tag/"
+            );
+        }
     }
 
 
@@ -2716,6 +3146,12 @@
     );
 
 
+    editProfileButtonPublic.addEventListener(
+        "click",
+        showEditLogin
+    );
+
+
     editBackButton.addEventListener(
         "click",
         async () => {
@@ -2726,6 +3162,12 @@
 
             await renderTagState();
         }
+    );
+
+
+    editLoginButton.addEventListener(
+        "click",
+        submitEditLogin
     );
 
 
@@ -2742,28 +3184,6 @@
     );
 
 
-    editProfileButtonPublic.addEventListener(
-        "click",
-        showEditLogin
-    );
-
-
-    editProfileButtonOwner.addEventListener(
-        "click",
-        () => {
-
-            window.location.href =
-                "/E-Tag/dashboard.html";
-        }
-    );
-
-
-    editLoginButton.addEventListener(
-        "click",
-        submitEditLogin
-    );
-
-
     logoutButton.addEventListener(
         "click",
         logout
@@ -2777,7 +3197,8 @@
         ) => {
 
             if (
-                event === "SIGNED_IN" &&
+                event ===
+                    "SIGNED_IN" &&
                 session?.user &&
                 currentTag
             ) {
@@ -2821,7 +3242,8 @@
 
 
             if (
-                event === "SIGNED_OUT"
+                event ===
+                "SIGNED_OUT"
             ) {
 
                 if (
