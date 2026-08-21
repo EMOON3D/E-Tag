@@ -2,6 +2,7 @@
 <html lang="en">
 
 <head>
+
     <meta charset="UTF-8">
 
     <meta
@@ -12,6 +13,7 @@
     <title>E-Tag · Women</title>
 
     <style>
+
         * {
             box-sizing: border-box;
         }
@@ -19,7 +21,9 @@
         body {
             margin: 0;
             min-height: 100vh;
-            padding: 24px 12px 40px;
+
+            padding:
+                24px 12px 40px;
 
             font-family:
                 Inter,
@@ -41,28 +45,39 @@
         }
 
         .page {
-            width: min(100%, 560px);
-            margin: 0 auto;
+            width:
+                min(100%, 560px);
+
+            margin:
+                0 auto;
         }
 
         .profile {
-            overflow: hidden;
-            border-radius: 28px;
+            overflow:
+                hidden;
 
-            background: #ffffff;
+            border-radius:
+                28px;
+
+            background:
+                #ffffff;
 
             box-shadow:
-                0 20px 60px rgba(
+                0 20px 60px
+                rgba(
                     131,
                     24,
                     67,
-                    0.12
+                    .12
                 );
         }
 
         .hero {
-            padding: 34px 24px 28px;
-            text-align: center;
+            padding:
+                34px 24px 28px;
+
+            text-align:
+                center;
 
             background:
                 linear-gradient(
@@ -74,14 +89,23 @@
         }
 
         .avatar {
-            width: 120px;
-            height: 120px;
-            margin: 0 auto 18px;
+            width:
+                120px;
 
-            border-radius: 50%;
-            overflow: hidden;
+            height:
+                120px;
 
-            background: #fbcfe8;
+            margin:
+                0 auto 18px;
+
+            border-radius:
+                50%;
+
+            overflow:
+                hidden;
+
+            background:
+                #fbcfe8;
 
             border:
                 4px solid
@@ -89,134 +113,205 @@
                     190,
                     24,
                     93,
-                    0.12
+                    .12
                 );
 
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            display:
+                flex;
 
-            font-size: 35px;
-            font-weight: 800;
+            align-items:
+                center;
+
+            justify-content:
+                center;
+
+            font-size:
+                35px;
+
+            font-weight:
+                800;
         }
 
         .avatar img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
+            width:
+                100%;
+
+            height:
+                100%;
+
+            object-fit:
+                cover;
         }
 
         .avatar.character img {
-            object-fit: contain;
-            padding: 8px;
+            object-fit:
+                contain;
+
+            padding:
+                8px;
         }
 
         h1 {
-            margin: 0;
+            margin:
+                0;
 
-            font-size: 30px;
-            line-height: 1.2;
+            font-size:
+                30px;
+
+            line-height:
+                1.2;
         }
 
         .age {
-            margin-top: 8px;
+            margin-top:
+                8px;
 
-            color: #be185d;
+            color:
+                #be185d;
 
-            font-size: 14px;
+            font-size:
+                14px;
         }
 
         .bio {
-            max-width: 440px;
+            max-width:
+                440px;
 
             margin:
                 14px auto 0;
 
-            color: #9d174d;
+            color:
+                #9d174d;
 
-            line-height: 1.65;
+            line-height:
+                1.65;
 
-            white-space: pre-wrap;
+            white-space:
+                pre-wrap;
         }
 
         .section {
-            padding: 20px;
+            padding:
+                20px;
         }
 
         .section-title {
             margin:
                 0 0 12px;
 
-            font-size: 16px;
+            font-size:
+                16px;
         }
 
         .actions,
         .socials {
-            display: grid;
-            gap: 10px;
+            display:
+                grid;
+
+            gap:
+                10px;
         }
 
         .action {
-            display: block;
+            display:
+                block;
 
             padding:
                 13px 14px;
 
-            border-radius: 12px;
+            border-radius:
+                12px;
 
-            background: #9d174d;
-            color: #ffffff;
+            background:
+                #9d174d;
 
-            text-decoration: none;
-            text-align: center;
+            color:
+                #ffffff;
 
-            font-size: 14px;
-            font-weight: 800;
+            text-decoration:
+                none;
+
+            text-align:
+                center;
+
+            font-size:
+                14px;
+
+            font-weight:
+                800;
         }
 
         .social {
-            display: block;
+            display:
+                block;
 
             padding:
                 11px 13px;
 
-            border-radius: 10px;
+            border-radius:
+                10px;
 
-            background: #fce7f3;
-            color: #9d174d;
+            background:
+                #fce7f3;
 
-            text-decoration: none;
-            text-align: center;
+            color:
+                #9d174d;
 
-            font-size: 13px;
-            font-weight: 700;
+            text-decoration:
+                none;
+
+            text-align:
+                center;
+
+            font-size:
+                13px;
+
+            font-weight:
+                700;
         }
 
         .edit {
-            background: #fbcfe8;
-            color: #9d174d;
+            background:
+                #fbcfe8;
+
+            color:
+                #9d174d;
         }
 
         .loading,
         .error {
-            padding: 24px;
-            border-radius: 20px;
+            padding:
+                24px;
 
-            background: #ffffff;
-            color: #831843;
+            border-radius:
+                20px;
 
-            text-align: center;
+            background:
+                #ffffff;
+
+            color:
+                #831843;
+
+            text-align:
+                center;
         }
 
         .hidden {
-            display: none !important;
+            display:
+                none !important;
         }
+
     </style>
+
 </head>
+
 
 <body>
 
 <div class="page">
+
+
+    <!-- LOADING -->
 
     <div
         id="loading"
@@ -226,11 +321,15 @@
     </div>
 
 
+    <!-- ERROR -->
+
     <div
         id="error"
         class="error hidden"
     ></div>
 
+
+    <!-- PROFILE -->
 
     <div
         id="profile"
@@ -245,7 +344,9 @@
             ></div>
 
 
-            <h1 id="name">
+            <h1
+                id="name"
+            >
                 E-Tag User
             </h1>
 
@@ -264,6 +365,8 @@
         </div>
 
 
+        <!-- CONTACT -->
+
         <div class="section">
 
             <h2 class="section-title">
@@ -278,6 +381,8 @@
 
         </div>
 
+
+        <!-- SOCIAL -->
 
         <div
             id="socialSection"
@@ -297,11 +402,14 @@
         </div>
 
 
+        <!-- EDIT -->
+
         <div class="section">
 
             <a
                 id="edit"
                 class="action edit"
+                href="#"
             >
                 Edit My Profile
             </a>
@@ -341,50 +449,60 @@
             "loading"
         );
 
+
     const errorBox =
         document.getElementById(
             "error"
         );
+
 
     const profile =
         document.getElementById(
             "profile"
         );
 
+
     const avatar =
         document.getElementById(
             "avatar"
         );
+
 
     const name =
         document.getElementById(
             "name"
         );
 
+
     const age =
         document.getElementById(
             "age"
         );
+
 
     const bio =
         document.getElementById(
             "bio"
         );
 
+
     const contacts =
         document.getElementById(
             "contacts"
         );
+
 
     const socials =
         document.getElementById(
             "socials"
         );
 
+
     const socialSection =
         document.getElementById(
             "socialSection"
         );
+
 
     const edit =
         document.getElementById(
@@ -464,9 +582,22 @@
     }
 
 
+    function username(
+        value
+    ) {
+
+        return clean(
+            value
+        ).replace(
+            /^@/,
+            ""
+        );
+    }
+
+
     function renderAvatar(
         element,
-        profile
+        data
     ) {
 
         element.innerHTML =
@@ -479,15 +610,19 @@
 
         const displayName =
             clean(
-                profile.display_name
+                data.display_name
             ) ||
             "E-Tag User";
 
 
+        /*
+         * CHARACTER
+         */
+
         if (
-            profile.avatar_type ===
+            data.avatar_type ===
                 "character" &&
-            profile.character_id
+            data.character_id
         ) {
 
             const image =
@@ -498,7 +633,7 @@
 
             image.src =
                 `${CHARACTER_BASE}${encodeURIComponent(
-                    profile.character_id
+                    data.character_id
                 )}.svg`;
 
 
@@ -508,6 +643,9 @@
 
             image.onerror =
                 () => {
+
+                    element.innerHTML =
+                        "";
 
                     element.classList.remove(
                         "character"
@@ -534,8 +672,12 @@
         }
 
 
+        /*
+         * UPLOADED PHOTO
+         */
+
         if (
-            profile.avatar_url
+            data.avatar_url
         ) {
 
             const image =
@@ -545,7 +687,7 @@
 
 
             image.src =
-                profile.avatar_url;
+                data.avatar_url;
 
 
             image.alt =
@@ -554,6 +696,9 @@
 
             image.onerror =
                 () => {
+
+                    element.innerHTML =
+                        "";
 
                     element.textContent =
                         initials(
@@ -570,6 +715,10 @@
             return;
         }
 
+
+        /*
+         * FALLBACK
+         */
 
         element.textContent =
             initials(
@@ -662,19 +811,6 @@
     }
 
 
-    function username(
-        value
-    ) {
-
-        return clean(
-            value
-        ).replace(
-            /^@/,
-            ""
-        );
-    }
-
-
     async function load() {
 
         const tagCode =
@@ -685,16 +821,28 @@
             !tagCode
         ) {
 
-            loading.textContent =
+            loading.classList.add(
+                "hidden"
+            );
+
+            errorBox.textContent =
                 "Invalid E-Tag URL.";
+
+            errorBox.classList.remove(
+                "hidden"
+            );
 
             return;
         }
 
 
+        /*
+         * LOAD TAG
+         */
+
         const {
             data: tag,
-            error
+            error: tagError
         } =
             await supabase
                 .from(
@@ -711,8 +859,7 @@
 
 
         if (
-            error ||
-            !tag
+            tagError
         ) {
 
             loading.classList.add(
@@ -720,11 +867,24 @@
             );
 
             errorBox.textContent =
-                "Unable to load this E-Tag.";
+                `Unable to load E-Tag: ${
+                    tagError.message
+                }`;
 
             errorBox.classList.remove(
                 "hidden"
             );
+
+            return;
+        }
+
+
+        if (
+            !tag
+        ) {
+
+            loading.textContent =
+                "E-Tag not found.";
 
             return;
         }
@@ -742,8 +902,13 @@
         }
 
 
+        /*
+         * LOAD PROFILE
+         */
+
         const {
-            data: p
+            data: data,
+            error: profileError
         } =
             await supabase
                 .from(
@@ -760,7 +925,28 @@
 
 
         if (
-            !p
+            profileError
+        ) {
+
+            loading.classList.add(
+                "hidden"
+            );
+
+            errorBox.textContent =
+                `Unable to load profile: ${
+                    profileError.message
+                }`;
+
+            errorBox.classList.remove(
+                "hidden"
+            );
+
+            return;
+        }
+
+
+        if (
+            !data
         ) {
 
             loading.textContent =
@@ -770,9 +956,13 @@
         }
 
 
+        /*
+         * PROFILE CONTENT
+         */
+
         const displayName =
             clean(
-                p.display_name
+                data.display_name
             ) ||
             "E-Tag User";
 
@@ -782,47 +972,52 @@
 
 
         age.textContent =
-            p.age
-                ? `${p.age} years old`
+            data.age
+                ? `${data.age} years old`
                 : "";
 
 
         bio.textContent =
             clean(
-                p.bio
+                data.bio
             );
 
 
         renderAvatar(
             avatar,
-            p
+            data
         );
 
 
+        /*
+         * CONTACT
+         */
+
         if (
-            p.phone
+            data.phone
         ) {
 
             addContact(
                 "Call",
                 `tel:${encodeURIComponent(
-                    p.phone
+                    data.phone
                 )}`
             );
         }
 
 
         if (
-            p.whatsapp
+            data.whatsapp
         ) {
 
             const number =
                 clean(
-                    p.whatsapp
-                ).replace(
-                    /\D/g,
-                    ""
-                );
+                    data.whatsapp
+                )
+                    .replace(
+                        /\D/g,
+                        ""
+                    );
 
 
             if (
@@ -838,85 +1033,89 @@
 
 
         if (
-            p.email
+            data.email
         ) {
 
             addContact(
                 "Email",
                 `mailto:${encodeURIComponent(
-                    p.email
+                    data.email
                 )}`
             );
         }
 
 
+        /*
+         * SOCIAL
+         */
+
         if (
-            p.facebook
+            data.facebook
         ) {
 
             addSocial(
                 "Facebook",
                 `https://facebook.com/${username(
-                    p.facebook
+                    data.facebook
                 )}`
             );
         }
 
 
         if (
-            p.instagram
+            data.instagram
         ) {
 
             addSocial(
                 "Instagram",
                 `https://instagram.com/${username(
-                    p.instagram
+                    data.instagram
                 )}`
             );
         }
 
 
         if (
-            p.tiktok
+            data.tiktok
         ) {
 
             addSocial(
                 "TikTok",
                 `https://www.tiktok.com/@${username(
-                    p.tiktok
+                    data.tiktok
                 )}`
             );
         }
 
 
         if (
-            p.youtube
+            data.youtube
         ) {
 
             addSocial(
                 "YouTube",
                 `https://youtube.com/@${username(
-                    p.youtube
+                    data.youtube
                 )}`
             );
         }
 
 
         if (
-            p.telegram
+            data.telegram
         ) {
 
             addSocial(
                 "Telegram",
                 `https://t.me/${username(
-                    p.telegram
+                    data.telegram
                 )}`
             );
         }
 
 
         if (
-            p.discord
+            data.discord
         ) {
 
             addSocial(
@@ -926,15 +1125,23 @@
         }
 
 
+        /*
+         * IMPORTANT FIX
+         *
+         * Edit My Profile now enters
+         * explicit edit mode.
+         */
+
         edit.href =
             `/E-Tag/?tag=${encodeURIComponent(
                 tag.tag_code
-            )}`;
+            )}&edit=1`;
 
 
         loading.classList.add(
             "hidden"
         );
+
 
         profile.classList.remove(
             "hidden"
@@ -942,9 +1149,34 @@
     }
 
 
-    load();
+    load()
+        .catch(
+            error => {
+
+                console.error(
+                    "Women profile error:",
+                    error
+                );
+
+
+                loading.classList.add(
+                    "hidden"
+                );
+
+
+                errorBox.textContent =
+                    error.message ||
+                    "Unable to load profile.";
+
+
+                errorBox.classList.remove(
+                    "hidden"
+                );
+            }
+        );
 
 </script>
 
 </body>
+
 </html>
