@@ -18,8 +18,13 @@
             box-sizing: border-box;
         }
 
+        html,
         body {
             margin: 0;
+            min-height: 100%;
+        }
+
+        body {
             min-height: 100vh;
 
             font-family:
@@ -49,7 +54,8 @@
         }
 
         .card {
-            background: #ffffff;
+            background:
+                #ffffff;
 
             border:
                 1px solid #e5e7eb;
@@ -71,7 +77,8 @@
         }
 
         .center {
-            text-align: center;
+            text-align:
+                center;
         }
 
         h1 {
@@ -83,7 +90,8 @@
         }
 
         p {
-            margin: 0;
+            margin:
+                0;
 
             color:
                 #6b7280;
@@ -127,7 +135,8 @@
             width:
                 100%;
 
-            border: 0;
+            border:
+                0;
 
             border-radius:
                 12px;
@@ -174,7 +183,8 @@
             margin-top:
                 12px;
 
-            border: 0;
+            border:
+                0;
 
             background:
                 transparent;
@@ -323,14 +333,15 @@
 
 <div class="app">
 
-
     <!-- LOADING -->
 
     <div
         id="loadingCard"
         class="card loading"
     >
+
         Loading E-Tag...
+
     </div>
 
 
@@ -347,7 +358,9 @@
                 E-Tag Error
             </h1>
 
-            <p id="errorText"></p>
+            <p
+                id="errorText"
+            ></p>
 
             <button
                 id="retryButton"
@@ -412,7 +425,7 @@
     </div>
 
 
-    <!-- LOGIN / SIGNUP -->
+    <!-- AUTH -->
 
     <div
         id="authCard"
@@ -421,11 +434,15 @@
 
         <div class="center">
 
-            <h1 id="authTitle">
+            <h1
+                id="authTitle"
+            >
                 Login
             </h1>
 
-            <p id="authSubtitle">
+            <p
+                id="authSubtitle"
+            >
                 Login to activate your E-Tag.
             </p>
 
@@ -705,7 +722,6 @@
         </div>
 
     </div>
-
 
 </div>
 
@@ -987,49 +1003,36 @@
 
     function isEditMode() {
 
-        const url =
-            new URL(
-                window.location.href
-            );
-
-
-        return (
-            url.searchParams.get(
+        return new URL(
+            window.location.href
+        )
+            .searchParams
+            .get(
                 "edit"
-            ) === "1"
-        );
+            ) === "1";
     }
 
 
     function hideEverything() {
 
-        loadingCard.classList.add(
-            "hidden"
-        );
+        [
+            loadingCard,
+            errorCard,
+            activationCard,
+            authCard,
+            editCard,
+            resetCard,
+            alreadyCard
+        ]
+            .forEach(
+                element => {
 
-        errorCard.classList.add(
-            "hidden"
-        );
+                    element.classList.add(
+                        "hidden"
+                    );
 
-        activationCard.classList.add(
-            "hidden"
-        );
-
-        authCard.classList.add(
-            "hidden"
-        );
-
-        editCard.classList.add(
-            "hidden"
-        );
-
-        resetCard.classList.add(
-            "hidden"
-        );
-
-        alreadyCard.classList.add(
-            "hidden"
-        );
+                }
+            );
     }
 
 
@@ -1045,7 +1048,7 @@
     }
 
 
-    function message(
+    function showMessage(
         element,
         text,
         type
@@ -1059,62 +1062,7 @@
     }
 
 
-    function getTheme(
-        profile
-    ) {
-
-        const type =
-            String(
-                profile?.profile_type ||
-                "personal"
-            )
-                .trim()
-                .toLowerCase();
-
-
-        if (
-            type ===
-            "couple"
-        ) {
-
-            return "couple";
-        }
-
-
-        if (
-            type ===
-            "business"
-        ) {
-
-            return "business";
-        }
-
-
-        const template =
-            String(
-                profile?.template ||
-                "men"
-            )
-                .trim()
-                .toLowerCase();
-
-
-        if (
-            template ===
-            "women" ||
-            template ===
-            "girl"
-        ) {
-
-            return "women";
-        }
-
-
-        return "men";
-    }
-
-
-    async function getTag() {
+    async function getCurrentTag() {
 
         const code =
             getTagCode();
@@ -1188,7 +1136,7 @@
     }
 
 
-    async function getSessionUser() {
+    async function getCurrentUser() {
 
         const {
             data,
@@ -1214,30 +1162,351 @@
     }
 
 
-    async function loadPage() {
+    async function getPublicProfile(
+        ownerId
+    ) {
 
-        try {
+        const {
+            data,
+            error
+        } =
+            await supabase
+                .from(
+                    "profiles"
+                )
+                .select(
+                    "profile_type,template"
+                )
+                .eq(
+                    "id",
+                    ownerId
+                )
+                .maybeSingle();
 
-            loadingCard.classList.remove(
-                "hidden"
+
+        if (
+            error
+        ) {
+
+            throw new Error(
+                `Profile lookup failed: ${error.message}`
+            );
+        }
+
+
+        return data;
+    }
+
+
+    function getThemeName(
+        profile
+    ) {
+
+        const type =
+            String(
+                profile?.profile_type ||
+                "personal"
+            )
+                .trim()
+                .toLowerCase();
+
+
+        if (
+            type ===
+            "couple"
+        ) {
+
+            return "couple";
+        }
+
+
+        if (
+            type ===
+            "business"
+        ) {
+
+            return "business";
+        }
+
+
+        const template =
+            String(
+                profile?.template ||
+                "men"
+            )
+                .trim()
+                .toLowerCase();
+
+
+        if (
+            template ===
+                "women" ||
+            template ===
+                "girl"
+        ) {
+
+            return "women";
+        }
+
+
+        return "men";
+    }
+
+
+    /*
+     * IMPORTANT
+     *
+     * The theme is loaded into THIS PAGE.
+     *
+     * The browser URL stays:
+     *
+     * /E-Tag/?tag=ASD
+     *
+     * We do not navigate to /themes/*.html.
+     */
+
+    async function renderTheme(
+        theme
+    ) {
+
+        const themeUrl =
+            `/E-Tag/themes/${theme}.html`;
+
+
+        const response =
+            await fetch(
+                themeUrl,
+                {
+                    cache:
+                        "no-cache"
+                }
             );
 
 
+        if (
+            !response.ok
+        ) {
+
+            throw new Error(
+                `Unable to load ${theme} theme. HTTP ${response.status}.`
+            );
+        }
+
+
+        const html =
+            await response.text();
+
+
+        const parser =
+            new DOMParser();
+
+
+        const parsed =
+            parser.parseFromString(
+                html,
+                "text/html"
+            );
+
+
+        if (
+            !parsed.body
+        ) {
+
+            throw new Error(
+                "Theme HTML is invalid."
+            );
+        }
+
+
+        /*
+         * Save scripts BEFORE replacing the page.
+         */
+
+        const scripts =
+            Array.from(
+                parsed.querySelectorAll(
+                    "script"
+                )
+            )
+                .map(
+                    oldScript => {
+
+                        return {
+
+                            src:
+                                oldScript.getAttribute(
+                                    "src"
+                                ),
+
+                            type:
+                                oldScript.getAttribute(
+                                    "type"
+                                ),
+
+                            async:
+                                oldScript.hasAttribute(
+                                    "async"
+                                ),
+
+                            defer:
+                                oldScript.hasAttribute(
+                                    "defer"
+                                ),
+
+                            text:
+                                oldScript.textContent ||
+                                ""
+
+                        };
+
+                    }
+                );
+
+
+        /*
+         * Replace document title.
+         */
+
+        document.title =
+            parsed.title ||
+            "E-Tag";
+
+
+        /*
+         * Replace HEAD.
+         *
+         * Theme CSS comes with the theme.
+         */
+
+        document.head.innerHTML =
+            parsed.head.innerHTML;
+
+
+        /*
+         * Replace BODY.
+         *
+         * Scripts are removed temporarily.
+         */
+
+        const bodyClone =
+            parsed.body.cloneNode(
+                true
+            );
+
+
+        bodyClone
+            .querySelectorAll(
+                "script"
+            )
+            .forEach(
+                script => {
+
+                    script.remove();
+
+                }
+            );
+
+
+        document.body.innerHTML =
+            "";
+
+
+        Array.from(
+            bodyClone.childNodes
+        )
+            .forEach(
+                node => {
+
+                    document.body.appendChild(
+                        node
+                    );
+
+                }
+            );
+
+
+        /*
+         * Re-create scripts so the theme JS executes.
+         */
+
+        for (
+            const definition of scripts
+        ) {
+
+            const script =
+                document.createElement(
+                    "script"
+                );
+
+
+            if (
+                definition.type
+            ) {
+
+                script.type =
+                    definition.type;
+            }
+
+
+            if (
+                definition.src
+            ) {
+
+                script.src =
+                    definition.src;
+
+            } else {
+
+                script.textContent =
+                    definition.text;
+            }
+
+
+            if (
+                definition.async
+            ) {
+
+                script.async =
+                    true;
+            }
+
+
+            if (
+                definition.defer
+            ) {
+
+                script.defer =
+                    true;
+            }
+
+
+            document.body.appendChild(
+                script
+            );
+        }
+
+    }
+
+
+    async function loadPublicProfile() {
+
+        loadingCard.classList.remove(
+            "hidden"
+        );
+
+
+        try {
+
             const tag =
-                await getTag();
+                await getCurrentTag();
 
-
-            /*
-             * Always check the current auth session
-             * BEFORE deciding what page to show.
-             */
 
             const user =
-                await getSessionUser();
+                await getCurrentUser();
 
 
             /*
-             * E-Tag not activated
+             * Not activated.
              */
 
             if (
@@ -1254,33 +1523,29 @@
 
 
             /*
-             * Owner already logged in
-             */
-
-            if (
-                user &&
-                user.id ===
-                    tag.owner_id
-            ) {
-
-                window.location.replace(
-                    "/E-Tag/dashboard.html"
-                );
-
-                return;
-            }
-
-
-            /*
              * EDIT MODE
              *
-             * This check MUST happen before the
-             * public-theme redirect.
+             * If owner is already logged in,
+             * go directly to dashboard.
              */
 
             if (
                 isEditMode()
             ) {
+
+                if (
+                    user &&
+                    user.id ===
+                        tag.owner_id
+                ) {
+
+                    window.location.replace(
+                        "/E-Tag/dashboard.html"
+                    );
+
+                    return;
+                }
+
 
                 show(
                     editCard
@@ -1291,36 +1556,20 @@
 
 
             /*
-             * NORMAL PUBLIC PROFILE
+             * NORMAL PUBLIC VIEW
+             *
+             * IMPORTANT:
+             *
+             * Even if the owner is logged in,
+             * we still show the public profile.
+             *
+             * We DO NOT redirect to dashboard.
              */
 
-            const {
-                data: profile,
-                error:
-                    profileError
-            } =
-                await supabase
-                    .from(
-                        "profiles"
-                    )
-                    .select(
-                        "profile_type,template,avatar_type,character_id,avatar_url"
-                    )
-                    .eq(
-                        "id",
-                        tag.owner_id
-                    )
-                    .maybeSingle();
-
-
-            if (
-                profileError
-            ) {
-
-                throw new Error(
-                    `Profile lookup failed: ${profileError.message}`
+            const profile =
+                await getPublicProfile(
+                    tag.owner_id
                 );
-            }
 
 
             if (
@@ -1336,15 +1585,13 @@
 
 
             const theme =
-                getTheme(
+                getThemeName(
                     profile
                 );
 
 
-            window.location.replace(
-                `/E-Tag/themes/${theme}.html?tag=${encodeURIComponent(
-                    tag.tag_code
-                )}`
+            await renderTheme(
+                theme
             );
 
         } catch (
@@ -1352,14 +1599,14 @@
         ) {
 
             console.error(
-                "E-Tag error:",
+                "E-Tag load error:",
                 error
             );
 
 
             errorText.textContent =
                 error.message ||
-                "Unable to load this E-Tag.";
+                "Unable to load E-Tag.";
 
 
             show(
@@ -1429,6 +1676,7 @@
             authForgotButton.classList.remove(
                 "hidden"
             );
+
         }
 
 
@@ -1453,7 +1701,7 @@
             !password
         ) {
 
-            message(
+            showMessage(
                 authMessage,
                 "Please enter your email and password.",
                 "error"
@@ -1474,13 +1722,13 @@
                 "signup"
             ) {
 
-                const confirm =
+                const confirmation =
                     authConfirmPassword.value;
 
 
                 if (
                     password !==
-                    confirm
+                    confirmation
                 ) {
 
                     throw new Error(
@@ -1499,17 +1747,18 @@
                     data,
                     error
                 } =
-                    await supabase.auth.signUp(
-                        {
-                            email,
-                            password,
+                    await supabase.auth
+                        .signUp(
+                            {
+                                email,
+                                password,
 
-                            options: {
-                                emailRedirectTo:
-                                    redirectUrl
+                                options: {
+                                    emailRedirectTo:
+                                        redirectUrl
+                                }
                             }
-                        }
-                    );
+                        );
 
 
                 if (
@@ -1532,7 +1781,7 @@
                 }
 
 
-                message(
+                showMessage(
                     authMessage,
                     "Account created. Check your email to confirm your account.",
                     "success"
@@ -1571,15 +1820,13 @@
                 window.location.replace(
                     "/E-Tag/dashboard.html"
                 );
-
-                return;
             }
 
         } catch (
             error
         ) {
 
-            message(
+            showMessage(
                 authMessage,
                 error.message ||
                 "Login failed.",
@@ -1609,7 +1856,7 @@
             !password
         ) {
 
-            message(
+            showMessage(
                 editMessage,
                 "Please enter your email and password.",
                 "error"
@@ -1628,10 +1875,6 @@
 
 
         try {
-
-            /*
-             * Login first.
-             */
 
             const {
                 data,
@@ -1659,13 +1902,13 @@
             ) {
 
                 throw new Error(
-                    "Login succeeded but no user session was returned."
+                    "No user session was returned."
                 );
             }
 
 
             /*
-             * Re-read the E-Tag AFTER login.
+             * Verify ownership.
              */
 
             const {
@@ -1691,23 +1934,12 @@
                 tagError
             ) {
 
-                throw new Error(
-                    `Unable to verify E-Tag ownership: ${tagError.message}`
-                );
+                throw tagError;
             }
 
 
             if (
-                !tag
-            ) {
-
-                throw new Error(
-                    "E-Tag no longer exists."
-                );
-            }
-
-
-            if (
+                !tag ||
                 !tag.active
             ) {
 
@@ -1716,10 +1948,6 @@
                 );
             }
 
-
-            /*
-             * SECURITY CHECK.
-             */
 
             if (
                 tag.owner_id !==
@@ -1735,10 +1963,6 @@
             }
 
 
-            /*
-             * Correct owner.
-             */
-
             window.location.replace(
                 "/E-Tag/dashboard.html"
             );
@@ -1747,7 +1971,7 @@
             error
         ) {
 
-            message(
+            showMessage(
                 editMessage,
                 error.message ||
                 "Unable to login.",
@@ -1776,7 +2000,7 @@
             !email
         ) {
 
-            message(
+            showMessage(
                 resetMessage,
                 "Please enter your email.",
                 "error"
@@ -1813,7 +2037,7 @@
             }
 
 
-            message(
+            showMessage(
                 resetMessage,
                 "Password reset email sent.",
                 "success"
@@ -1823,10 +2047,10 @@
             error
         ) {
 
-            message(
+            showMessage(
                 resetMessage,
                 error.message ||
-                "Unable to send password reset email.",
+                "Unable to send reset email.",
                 "error"
             );
 
@@ -1932,23 +2156,23 @@
 
     authBackButton.addEventListener(
         "click",
-        loadPage
+        loadPublicProfile
     );
 
 
     resetBackButton.addEventListener(
         "click",
-        loadPage
+        loadPublicProfile
     );
 
 
     retryButton.addEventListener(
         "click",
-        loadPage
+        loadPublicProfile
     );
 
 
-    loadPage();
+    loadPublicProfile();
 
 </script>
 
