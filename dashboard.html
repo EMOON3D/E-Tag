@@ -12,7 +12,6 @@
     <title>E-Tag Dashboard</title>
 
     <style>
-
         * {
             box-sizing: border-box;
         }
@@ -60,17 +59,12 @@
 
         .card {
             background: #ffffff;
-
-            border:
-                1px solid #e5e7eb;
-
+            border: 1px solid #e5e7eb;
             border-radius: 20px;
-
             padding: 22px;
 
             box-shadow:
-                0 10px 35px
-                rgba(
+                0 10px 35px rgba(
                     0,
                     0,
                     0,
@@ -80,10 +74,7 @@
 
         .layout {
             display: grid;
-
-            grid-template-columns:
-                1fr 1fr;
-
+            grid-template-columns: 1fr 1fr;
             gap: 20px;
         }
 
@@ -98,7 +89,6 @@
 
         .field label {
             display: block;
-
             margin-bottom: 7px;
 
             font-size: 13px;
@@ -118,11 +108,9 @@
                 12px 13px;
 
             font-size: 15px;
-
             font-family: inherit;
 
             outline: none;
-
             background: #ffffff;
         }
 
@@ -163,7 +151,6 @@
             padding: 14px;
 
             cursor: pointer;
-
             text-align: center;
         }
 
@@ -200,7 +187,6 @@
             padding: 14px;
 
             cursor: pointer;
-
             text-align: center;
         }
 
@@ -237,7 +223,6 @@
             padding: 13px;
 
             cursor: pointer;
-
             text-align: center;
         }
 
@@ -276,7 +261,6 @@
             padding: 8px;
 
             cursor: pointer;
-
             text-align: center;
 
             background: #ffffff;
@@ -289,13 +273,11 @@
 
         .character-option img {
             width: 100%;
-
             aspect-ratio: 1;
 
             object-fit: contain;
 
             border-radius: 10px;
-
             background: #f3f4f6;
         }
 
@@ -323,7 +305,6 @@
             flex-shrink: 0;
 
             border-radius: 50%;
-
             overflow: hidden;
 
             background: #e5e7eb;
@@ -341,7 +322,6 @@
         .avatar img {
             width: 100%;
             height: 100%;
-
             object-fit: cover;
         }
 
@@ -388,7 +368,6 @@
             margin-top: 8px;
 
             font-size: 12px;
-
             line-height: 1.5;
         }
 
@@ -409,7 +388,9 @@
 
         .button-row {
             display: flex;
+
             gap: 10px;
+
             margin-top: 20px;
         }
 
@@ -425,12 +406,11 @@
             font-weight: 700;
 
             cursor: pointer;
-
             font-family: inherit;
         }
 
         .button:disabled {
-            opacity: 0.55;
+            opacity: .55;
             cursor: not-allowed;
         }
 
@@ -455,7 +435,6 @@
             border-radius: 11px;
 
             font-size: 14px;
-
             line-height: 1.5;
 
             word-break: break-word;
@@ -467,7 +446,6 @@
 
         .message.success {
             background: #ecfdf5;
-
             color: #065f46;
 
             border:
@@ -476,7 +454,6 @@
 
         .message.error {
             background: #fef2f2;
-
             color: #991b1b;
 
             border:
@@ -555,7 +532,6 @@
                 0 auto 16px;
 
             border-radius: 50%;
-
             overflow: hidden;
 
             background: #374151;
@@ -571,7 +547,6 @@
         .preview-avatar img {
             width: 100%;
             height: 100%;
-
             object-fit: cover;
         }
 
@@ -602,7 +577,7 @@
                     255,
                     255,
                     255,
-                    0.12
+                    .12
                 );
 
             font-size: 11px;
@@ -624,7 +599,6 @@
             padding: 18px;
 
             display: grid;
-
             gap: 9px;
         }
 
@@ -637,6 +611,7 @@
             border-radius: 11px;
 
             background: #111827;
+
             color: #ffffff;
 
             text-decoration: none;
@@ -663,7 +638,6 @@
             .layout {
                 grid-template-columns: 1fr;
             }
-
         }
 
         @media (max-width: 600px) {
@@ -699,9 +673,7 @@
             .button-row {
                 flex-direction: column;
             }
-
         }
-
     </style>
 </head>
 
@@ -1010,7 +982,7 @@
                 </div>
 
 
-                <!-- PERSONAL FIELDS -->
+                <!-- PERSONAL -->
 
                 <div
                     id="personalFields"
@@ -1025,7 +997,6 @@
 
 
                         <div class="field">
-
                             <label>
                                 Name
                             </label>
@@ -1036,12 +1007,10 @@
                                 type="text"
                                 maxlength="100"
                             >
-
                         </div>
 
 
                         <div class="field">
-
                             <label>
                                 Age
                             </label>
@@ -1053,12 +1022,10 @@
                                 min="1"
                                 max="120"
                             >
-
                         </div>
 
 
                         <div class="field">
-
                             <label>
                                 Phone Number
                             </label>
@@ -1070,12 +1037,10 @@
                                 maxlength="30"
                                 placeholder="+94..."
                             >
-
                         </div>
 
 
                         <div class="field">
-
                             <label>
                                 Short Bio
                             </label>
@@ -1085,7 +1050,6 @@
                                 class="textarea"
                                 maxlength="500"
                             ></textarea>
-
                         </div>
 
                     </div>
@@ -1099,7 +1063,6 @@
 
 
                         <div class="field">
-
                             <label>
                                 Facebook Username
                             </label>
@@ -1109,12 +1072,10 @@
                                 class="input"
                                 type="text"
                             >
-
                         </div>
 
 
                         <div class="field">
-
                             <label>
                                 Instagram Username
                             </label>
@@ -1124,12 +1085,10 @@
                                 class="input"
                                 type="text"
                             >
-
                         </div>
 
 
                         <div class="field">
-
                             <label>
                                 TikTok Username
                             </label>
@@ -1139,12 +1098,10 @@
                                 class="input"
                                 type="text"
                             >
-
                         </div>
 
 
                         <div class="field">
-
                             <label>
                                 YouTube Username
                             </label>
@@ -1154,12 +1111,10 @@
                                 class="input"
                                 type="text"
                             >
-
                         </div>
 
 
                         <div class="field">
-
                             <label>
                                 WhatsApp Number
                             </label>
@@ -1169,12 +1124,10 @@
                                 class="input"
                                 type="tel"
                             >
-
                         </div>
 
 
                         <div class="field">
-
                             <label>
                                 Discord Username
                             </label>
@@ -1184,12 +1137,10 @@
                                 class="input"
                                 type="text"
                             >
-
                         </div>
 
 
                         <div class="field">
-
                             <label>
                                 Telegram Username
                             </label>
@@ -1199,7 +1150,6 @@
                                 class="input"
                                 type="text"
                             >
-
                         </div>
 
                     </div>
@@ -1207,7 +1157,7 @@
                 </div>
 
 
-                <!-- COUPLE FIELDS -->
+                <!-- COUPLE -->
 
                 <div
                     id="coupleFields"
@@ -1222,7 +1172,6 @@
 
 
                         <div class="field">
-
                             <label>
                                 Couple Name
                             </label>
@@ -1234,12 +1183,10 @@
                                 maxlength="120"
                                 placeholder="Gayana ❤️ Tharu"
                             >
-
                         </div>
 
 
                         <div class="field">
-
                             <label>
                                 Person 1 Name
                             </label>
@@ -1249,12 +1196,10 @@
                                 class="input"
                                 type="text"
                             >
-
                         </div>
 
 
                         <div class="field">
-
                             <label>
                                 Person 2 Name
                             </label>
@@ -1264,12 +1209,10 @@
                                 class="input"
                                 type="text"
                             >
-
                         </div>
 
 
                         <div class="field">
-
                             <label>
                                 Relationship Date
                             </label>
@@ -1279,12 +1222,10 @@
                                 class="input"
                                 type="date"
                             >
-
                         </div>
 
 
                         <div class="field">
-
                             <label>
                                 Our Story
                             </label>
@@ -1293,12 +1234,10 @@
                                 id="ourStory"
                                 class="textarea"
                             ></textarea>
-
                         </div>
 
 
                         <div class="field">
-
                             <label>
                                 Short Couple Bio
                             </label>
@@ -1307,7 +1246,6 @@
                                 id="coupleBio"
                                 class="textarea"
                             ></textarea>
-
                         </div>
 
                     </div>
@@ -1321,7 +1259,6 @@
 
 
                         <div class="field">
-
                             <label>
                                 Person 1 Instagram
                             </label>
@@ -1331,12 +1268,10 @@
                                 class="input"
                                 type="text"
                             >
-
                         </div>
 
 
                         <div class="field">
-
                             <label>
                                 Person 2 Instagram
                             </label>
@@ -1346,12 +1281,10 @@
                                 class="input"
                                 type="text"
                             >
-
                         </div>
 
 
                         <div class="field">
-
                             <label>
                                 Person 1 TikTok
                             </label>
@@ -1361,12 +1294,10 @@
                                 class="input"
                                 type="text"
                             >
-
                         </div>
 
 
                         <div class="field">
-
                             <label>
                                 Person 2 TikTok
                             </label>
@@ -1376,12 +1307,10 @@
                                 class="input"
                                 type="text"
                             >
-
                         </div>
 
 
                         <div class="field">
-
                             <label>
                                 Shared YouTube
                             </label>
@@ -1391,12 +1320,10 @@
                                 class="input"
                                 type="text"
                             >
-
                         </div>
 
 
                         <div class="field">
-
                             <label>
                                 WhatsApp
                             </label>
@@ -1406,12 +1333,10 @@
                                 class="input"
                                 type="tel"
                             >
-
                         </div>
 
 
                         <div class="field">
-
                             <label>
                                 Other Social Links
                             </label>
@@ -1421,7 +1346,6 @@
                                 class="textarea"
                                 placeholder="One URL per line"
                             ></textarea>
-
                         </div>
 
                     </div>
@@ -1429,7 +1353,7 @@
                 </div>
 
 
-                <!-- BUSINESS FIELDS -->
+                <!-- BUSINESS -->
 
                 <div
                     id="businessFields"
@@ -1444,7 +1368,6 @@
 
 
                         <div class="field">
-
                             <label>
                                 Business Name
                             </label>
@@ -1454,12 +1377,10 @@
                                 class="input"
                                 type="text"
                             >
-
                         </div>
 
 
                         <div class="field">
-
                             <label>
                                 Business Category
                             </label>
@@ -1469,12 +1390,10 @@
                                 class="input"
                                 type="text"
                             >
-
                         </div>
 
 
                         <div class="field">
-
                             <label>
                                 Short Description
                             </label>
@@ -1483,12 +1402,10 @@
                                 id="businessDescription"
                                 class="textarea"
                             ></textarea>
-
                         </div>
 
 
                         <div class="field">
-
                             <label>
                                 Phone
                             </label>
@@ -1498,12 +1415,10 @@
                                 class="input"
                                 type="tel"
                             >
-
                         </div>
 
 
                         <div class="field">
-
                             <label>
                                 WhatsApp
                             </label>
@@ -1513,12 +1428,10 @@
                                 class="input"
                                 type="tel"
                             >
-
                         </div>
 
 
                         <div class="field">
-
                             <label>
                                 Email
                             </label>
@@ -1528,12 +1441,10 @@
                                 class="input"
                                 type="email"
                             >
-
                         </div>
 
 
                         <div class="field">
-
                             <label>
                                 Business Location
                             </label>
@@ -1543,12 +1454,10 @@
                                 class="input"
                                 type="text"
                             >
-
                         </div>
 
 
                         <div class="field">
-
                             <label>
                                 Opening Hours
                             </label>
@@ -1558,12 +1467,10 @@
                                 class="textarea"
                                 placeholder="Mon-Fri: 9 AM - 6 PM"
                             ></textarea>
-
                         </div>
 
 
                         <div class="field">
-
                             <label>
                                 Website
                             </label>
@@ -1574,7 +1481,6 @@
                                 type="url"
                                 placeholder="https://..."
                             >
-
                         </div>
 
                     </div>
@@ -1588,7 +1494,6 @@
 
 
                         <div class="field">
-
                             <label>
                                 Facebook
                             </label>
@@ -1598,12 +1503,10 @@
                                 class="input"
                                 type="text"
                             >
-
                         </div>
 
 
                         <div class="field">
-
                             <label>
                                 Instagram
                             </label>
@@ -1613,12 +1516,10 @@
                                 class="input"
                                 type="text"
                             >
-
                         </div>
 
 
                         <div class="field">
-
                             <label>
                                 TikTok
                             </label>
@@ -1628,12 +1529,10 @@
                                 class="input"
                                 type="text"
                             >
-
                         </div>
 
 
                         <div class="field">
-
                             <label>
                                 YouTube
                             </label>
@@ -1643,12 +1542,10 @@
                                 class="input"
                                 type="text"
                             >
-
                         </div>
 
 
                         <div class="field">
-
                             <label>
                                 Telegram
                             </label>
@@ -1658,12 +1555,10 @@
                                 class="input"
                                 type="text"
                             >
-
                         </div>
 
 
                         <div class="field">
-
                             <label>
                                 LinkedIn
                             </label>
@@ -1673,7 +1568,6 @@
                                 class="input"
                                 type="text"
                             >
-
                         </div>
 
                     </div>
@@ -1687,7 +1581,6 @@
 
 
                         <div class="field">
-
                             <label>
                                 Google Maps
                             </label>
@@ -1697,12 +1590,10 @@
                                 class="input"
                                 type="url"
                             >
-
                         </div>
 
 
                         <div class="field">
-
                             <label>
                                 Online Store
                             </label>
@@ -1712,12 +1603,10 @@
                                 class="input"
                                 type="url"
                             >
-
                         </div>
 
 
                         <div class="field">
-
                             <label>
                                 Booking Link
                             </label>
@@ -1727,12 +1616,10 @@
                                 class="input"
                                 type="url"
                             >
-
                         </div>
 
 
                         <div class="field">
-
                             <label>
                                 Menu / Catalogue
                             </label>
@@ -1742,7 +1629,6 @@
                                 class="input"
                                 type="url"
                             >
-
                         </div>
 
                     </div>
@@ -2181,13 +2067,6 @@
         }
     );
 
-
-    /*
-     * Application state
-     *
-     * IMPORTANT:
-     * currentAvatarUrl is explicitly declared.
-     */
 
     let currentUser =
         null;
@@ -2933,6 +2812,43 @@
     }
 
 
+    function getPublicThemeName() {
+
+        if (
+            currentProfileType ===
+            "couple"
+        ) {
+
+            return "couple";
+
+        }
+
+
+        if (
+            currentProfileType ===
+            "business"
+        ) {
+
+            return "business";
+
+        }
+
+
+        if (
+            currentTemplate ===
+            "women"
+        ) {
+
+            return "women";
+
+        }
+
+
+        return "men";
+
+    }
+
+
     function updatePreview() {
 
         const name =
@@ -3257,12 +3173,10 @@
 
                 ...base,
 
-
                 display_name:
                     getValue(
                         "personalName"
                     ),
-
 
                 age:
                     getValue(
@@ -3275,54 +3189,45 @@
                         )
                         : null,
 
-
                 phone:
                     getValue(
                         "personalPhone"
                     ),
-
 
                 bio:
                     getValue(
                         "personalBio"
                     ),
 
-
                 facebook:
                     getValue(
                         "facebook"
                     ),
-
 
                 instagram:
                     getValue(
                         "instagram"
                     ),
 
-
                 tiktok:
                     getValue(
                         "tiktok"
                     ),
-
 
                 youtube:
                     getValue(
                         "youtube"
                     ),
 
-
                 whatsapp:
                     getValue(
                         "personalWhatsapp"
                     ),
 
-
                 discord:
                     getValue(
                         "discord"
                     ),
-
 
                 telegram:
                     getValue(
@@ -3343,36 +3248,30 @@
 
                 ...base,
 
-
                 display_name:
                     getValue(
                         "coupleName"
                     ),
-
 
                 bio:
                     getValue(
                         "coupleBio"
                     ),
 
-
                 couple_name:
                     getValue(
                         "coupleName"
                     ),
-
 
                 person1_name:
                     getValue(
                         "person1Name"
                     ),
 
-
                 person2_name:
                     getValue(
                         "person2Name"
                     ),
-
 
                 anniversary_date:
                     getValue(
@@ -3380,48 +3279,40 @@
                     ) ||
                     null,
 
-
                 our_story:
                     getValue(
                         "ourStory"
                     ),
-
 
                 person1_instagram:
                     getValue(
                         "person1Instagram"
                     ),
 
-
                 person2_instagram:
                     getValue(
                         "person2Instagram"
                     ),
-
 
                 person1_tiktok:
                     getValue(
                         "person1Tiktok"
                     ),
 
-
                 person2_tiktok:
                     getValue(
                         "person2Tiktok"
                     ),
-
 
                 shared_youtube:
                     getValue(
                         "sharedYoutube"
                     ),
 
-
                 whatsapp:
                     getValue(
                         "coupleWhatsapp"
                     ),
-
 
                 other_social_links:
                     getValue(
@@ -3437,126 +3328,105 @@
 
             ...base,
 
-
             display_name:
                 getValue(
                     "businessName"
                 ),
-
 
             bio:
                 getValue(
                     "businessDescription"
                 ),
 
-
             business_name:
                 getValue(
                     "businessName"
                 ),
-
 
             business_category:
                 getValue(
                     "businessCategory"
                 ),
 
-
             business_description:
                 getValue(
                     "businessDescription"
                 ),
-
 
             phone:
                 getValue(
                     "businessPhone"
                 ),
 
-
             whatsapp:
                 getValue(
                     "businessWhatsapp"
                 ),
-
 
             email:
                 getValue(
                     "businessEmail"
                 ),
 
-
             business_location:
                 getValue(
                     "businessLocation"
                 ),
-
 
             opening_hours:
                 getValue(
                     "openingHours"
                 ),
 
-
             website:
                 getValue(
                     "website"
                 ),
-
 
             facebook:
                 getValue(
                     "businessFacebook"
                 ),
 
-
             instagram:
                 getValue(
                     "businessInstagram"
                 ),
-
 
             tiktok:
                 getValue(
                     "businessTiktok"
                 ),
 
-
             youtube:
                 getValue(
                     "businessYoutube"
                 ),
-
 
             telegram:
                 getValue(
                     "businessTelegram"
                 ),
 
-
             linkedin:
                 getValue(
                     "linkedin"
                 ),
-
 
             google_maps:
                 getValue(
                     "googleMaps"
                 ),
 
-
             online_store:
                 getValue(
                     "onlineStore"
                 ),
 
-
             booking_url:
                 getValue(
                     "bookingUrl"
                 ),
-
 
             menu_url:
                 getValue(
@@ -3783,16 +3653,19 @@
 
         setValue(
             "businessTiktok",
+            profile.business_tiktok ||
             profile.tiktok
         );
 
         setValue(
             "businessYoutube",
+            profile.business_youtube ||
             profile.youtube
         );
 
         setValue(
             "businessTelegram",
+            profile.business_telegram ||
             profile.telegram
         );
 
@@ -4228,11 +4101,24 @@
             }
 
 
+            /*
+             * IMPORTANT:
+             *
+             * Open Public Profile goes directly
+             * to the selected theme.
+             *
+             * It does NOT go through index.html.
+             */
+
             openPublicButton.onclick =
                 () => {
 
+                    const theme =
+                        getPublicThemeName();
+
+
                     const url =
-                        `${window.location.origin}/E-Tag/?tag=${encodeURIComponent(
+                        `${window.location.origin}/E-Tag/themes/${theme}.html?tag=${encodeURIComponent(
                             currentTag.tag_code
                         )}`;
 
@@ -4362,6 +4248,7 @@
                         )
                         .insert(
                             {
+
                                 id:
                                     currentUser.id,
 
@@ -4620,11 +4507,6 @@
     );
 
 
-    /*
-     * Correct variable name:
-     * fieldIds
-     */
-
     fieldIds.forEach(
         id => {
 
@@ -4728,10 +4610,6 @@
         }
     );
 
-
-    /*
-     * Start dashboard.
-     */
 
     loadDashboard()
         .catch(
