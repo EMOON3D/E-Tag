@@ -12,7 +12,6 @@
     <title>E-Tag · Couple</title>
 
     <style>
-
         * {
             box-sizing: border-box;
         }
@@ -27,12 +26,15 @@
             font-family:
                 Inter,
                 system-ui,
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
                 sans-serif;
 
             background:
                 linear-gradient(
                     180deg,
-                    #ffe4e6,
+                    #ffe4e6 0%,
                     #fff7ed 45%,
                     #f5f7fb 45%
                 );
@@ -118,6 +120,11 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
+        }
+
+        .avatar.character img {
+            object-fit: contain;
+            padding: 8px;
         }
 
         h1 {
@@ -223,10 +230,8 @@
         .hidden {
             display: none !important;
         }
-
     </style>
 </head>
-
 
 <body>
 
@@ -368,66 +373,55 @@
             "loading"
         );
 
-
     const profile =
         document.getElementById(
             "profile"
         );
-
 
     const avatar =
         document.getElementById(
             "avatar"
         );
 
-
     const coupleName =
         document.getElementById(
             "coupleName"
         );
-
 
     const people =
         document.getElementById(
             "people"
         );
 
-
     const date =
         document.getElementById(
             "date"
         );
-
 
     const bio =
         document.getElementById(
             "bio"
         );
 
-
     const story =
         document.getElementById(
             "story"
         );
-
 
     const contacts =
         document.getElementById(
             "contacts"
         );
 
-
     const socials =
         document.getElementById(
             "socials"
         );
 
-
     const socialSection =
         document.getElementById(
             "socialSection"
         );
-
 
     const edit =
         document.getElementById(
@@ -435,10 +429,14 @@
         );
 
 
-    function tag() {
+    const CHARACTER_BASE =
+        "/E-Tag/assets/characters/couple/";
+
+
+    function getTagCode() {
 
         return new URL(
-            location.href
+            window.location.href
         )
             .searchParams
             .get(
@@ -457,24 +455,166 @@
     }
 
 
-    function user(
+    function username(
         value
     ) {
 
         return clean(
             value
-        )
-            .replace(
-                /^@/,
-                ""
-            );
+        ).replace(
+            /^@/,
+            ""
+        );
     }
 
 
-    function add(
+    function dateLabel(
+        value
+    ) {
+
+        if (
+            !value
+        ) {
+
+            return "";
+        }
+
+
+        const parsed =
+            new Date(
+                `${value}T00:00:00`
+            );
+
+
+        if (
+            Number.isNaN(
+                parsed.getTime()
+            )
+        ) {
+
+            return value;
+        }
+
+
+        return parsed.toLocaleDateString(
+            undefined,
+            {
+                day:
+                    "numeric",
+                month:
+                    "long",
+                year:
+                    "numeric"
+            }
+        );
+    }
+
+
+    function renderAvatar(
+        element,
+        profile
+    ) {
+
+        element.innerHTML =
+            "";
+
+        element.classList.remove(
+            "character"
+        );
+
+
+        const fallback =
+            "❤️";
+
+
+        if (
+            profile.avatar_type ===
+                "character" &&
+            profile.character_id
+        ) {
+
+            const image =
+                document.createElement(
+                    "img"
+                );
+
+
+            image.src =
+                `${CHARACTER_BASE}${encodeURIComponent(
+                    profile.character_id
+                )}.svg`;
+
+
+            image.alt =
+                "Couple character";
+
+
+            image.onerror =
+                () => {
+
+                    element.textContent =
+                        fallback;
+                };
+
+
+            element.classList.add(
+                "character"
+            );
+
+
+            element.appendChild(
+                image
+            );
+
+
+            return;
+        }
+
+
+        if (
+            profile.avatar_url
+        ) {
+
+            const image =
+                document.createElement(
+                    "img"
+                );
+
+
+            image.src =
+                profile.avatar_url;
+
+
+            image.alt =
+                "Couple photo";
+
+
+            image.onerror =
+                () => {
+
+                    element.textContent =
+                        fallback;
+                };
+
+
+            element.appendChild(
+                image
+            );
+
+
+            return;
+        }
+
+
+        element.textContent =
+            fallback;
+    }
+
+
+    function addButton(
         parent,
         label,
-        url,
+        href,
         social = false
     ) {
 
@@ -495,11 +635,11 @@
 
 
         a.href =
-            url;
+            href;
 
 
         if (
-            url.startsWith(
+            href.startsWith(
                 "http"
             )
         ) {
@@ -528,56 +668,14 @@
     }
 
 
-    function dateLabel(
-        value
-    ) {
-
-        if (
-            !value
-        ) {
-
-            return "";
-        }
-
-
-        const d =
-            new Date(
-                `${value}T00:00:00`
-            );
-
-
-        if (
-            Number.isNaN(
-                d.getTime()
-            )
-        ) {
-
-            return value;
-        }
-
-
-        return d.toLocaleDateString(
-            undefined,
-            {
-                day:
-                    "numeric",
-                month:
-                    "long",
-                year:
-                    "numeric"
-            }
-        );
-    }
-
-
     async function load() {
 
-        const code =
-            tag();
+        const tagCode =
+            getTagCode();
 
 
         if (
-            !code
+            !tagCode
         ) {
 
             loading.textContent =
@@ -588,7 +686,7 @@
 
 
         const {
-            data: t
+            data: tag
         } =
             await supabase
                 .from(
@@ -599,15 +697,15 @@
                 )
                 .eq(
                     "tag_code",
-                    code
+                    tagCode
                 )
                 .maybeSingle();
 
 
         if (
-            !t ||
-            !t.active ||
-            !t.owner_id
+            !tag ||
+            !tag.active ||
+            !tag.owner_id
         ) {
 
             loading.textContent =
@@ -629,7 +727,7 @@
                 )
                 .eq(
                     "id",
-                    t.owner_id
+                    tag.owner_id
                 )
                 .maybeSingle();
 
@@ -674,19 +772,24 @@
 
             people.textContent =
                 [person1, person2]
-                    .filter(Boolean)
+                    .filter(
+                        Boolean
+                    )
                     .join(
                         " ❤️ "
                     );
         }
 
 
-        date.textContent =
+        if (
             p.anniversary_date
-                ? `Together since ${dateLabel(
+        ) {
+
+            date.textContent =
+                `Together since ${dateLabel(
                     p.anniversary_date
-                )}`
-                : "";
+                )}`;
+        }
 
 
         bio.textContent =
@@ -701,23 +804,10 @@
             );
 
 
-        if (
-            p.avatar_url
-        ) {
-
-            avatar.innerHTML =
-                `
-                    <img
-                        src="${p.avatar_url}"
-                        alt="Couple"
-                    >
-                `;
-
-        } else {
-
-            avatar.textContent =
-                "❤️";
-        }
+        renderAvatar(
+            avatar,
+            p
+        );
 
 
         if (
@@ -737,7 +827,7 @@
                 number
             ) {
 
-                add(
+                addButton(
                     contacts,
                     "WhatsApp",
                     `https://wa.me/${number}`
@@ -750,7 +840,7 @@
             p.email
         ) {
 
-            add(
+            addButton(
                 contacts,
                 "Email",
                 `mailto:${encodeURIComponent(
@@ -764,10 +854,10 @@
             p.person1_instagram
         ) {
 
-            add(
+            addButton(
                 socials,
                 "Person 1 Instagram",
-                `https://instagram.com/${user(
+                `https://instagram.com/${username(
                     p.person1_instagram
                 )}`,
                 true
@@ -779,10 +869,10 @@
             p.person2_instagram
         ) {
 
-            add(
+            addButton(
                 socials,
                 "Person 2 Instagram",
-                `https://instagram.com/${user(
+                `https://instagram.com/${username(
                     p.person2_instagram
                 )}`,
                 true
@@ -794,10 +884,10 @@
             p.person1_tiktok
         ) {
 
-            add(
+            addButton(
                 socials,
                 "Person 1 TikTok",
-                `https://www.tiktok.com/@${user(
+                `https://www.tiktok.com/@${username(
                     p.person1_tiktok
                 )}`,
                 true
@@ -809,10 +899,10 @@
             p.person2_tiktok
         ) {
 
-            add(
+            addButton(
                 socials,
                 "Person 2 TikTok",
-                `https://www.tiktok.com/@${user(
+                `https://www.tiktok.com/@${username(
                     p.person2_tiktok
                 )}`,
                 true
@@ -824,10 +914,10 @@
             p.shared_youtube
         ) {
 
-            add(
+            addButton(
                 socials,
                 "Shared YouTube",
-                `https://youtube.com/@${user(
+                `https://youtube.com/@${username(
                     p.shared_youtube
                 )}`,
                 true
@@ -840,17 +930,23 @@
         ) {
 
             p.other_social_links
-                .split("\n")
+                .split(
+                    "\n"
+                )
                 .map(
-                    x => x.trim()
+                    value =>
+                        value.trim()
                 )
                 .filter(
                     Boolean
                 )
                 .forEach(
-                    (url, index) => {
+                    (
+                        url,
+                        index
+                    ) => {
 
-                        const normalized =
+                        const safeUrl =
                             /^https?:\/\//i.test(
                                 url
                             )
@@ -858,10 +954,10 @@
                                 : `https://${url}`;
 
 
-                        add(
+                        addButton(
                             socials,
                             `Other Link ${index + 1}`,
-                            normalized,
+                            safeUrl,
                             true
                         );
                     }
@@ -871,14 +967,13 @@
 
         edit.href =
             `/E-Tag/?tag=${encodeURIComponent(
-                t.tag_code
+                tag.tag_code
             )}`;
 
 
         loading.classList.add(
             "hidden"
         );
-
 
         profile.classList.remove(
             "hidden"
