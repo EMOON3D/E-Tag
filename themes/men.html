@@ -12,7 +12,6 @@
     <title>E-Tag · Men</title>
 
     <style>
-
         * {
             box-sizing: border-box;
         }
@@ -20,13 +19,14 @@
         body {
             margin: 0;
             min-height: 100vh;
-
-            padding:
-                24px 12px 40px;
+            padding: 24px 12px 40px;
 
             font-family:
                 Inter,
                 system-ui,
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
                 sans-serif;
 
             background:
@@ -37,39 +37,30 @@
                     #f5f7fb 45%
                 );
 
-            color: #ffffff;
+            color: #111827;
         }
 
         .page {
-            width:
-                min(100%, 560px);
-
+            width: min(100%, 560px);
             margin: 0 auto;
         }
 
         .profile {
             overflow: hidden;
-
             border-radius: 28px;
-
             background: #ffffff;
 
-            color: #111827;
-
             box-shadow:
-                0 20px 60px
-                rgba(
+                0 20px 60px rgba(
                     0,
                     0,
                     0,
-                    .18
+                    0.18
                 );
         }
 
         .hero {
-            padding:
-                34px 24px 28px;
-
+            padding: 34px 24px 28px;
             text-align: center;
 
             background:
@@ -86,12 +77,9 @@
         .avatar {
             width: 120px;
             height: 120px;
-
-            margin:
-                0 auto 18px;
+            margin: 0 auto 18px;
 
             border-radius: 50%;
-
             overflow: hidden;
 
             background: #374151;
@@ -106,7 +94,7 @@
                     255,
                     255,
                     255,
-                    .16
+                    0.16
                 );
 
             font-size: 35px;
@@ -119,47 +107,44 @@
             object-fit: cover;
         }
 
+        .avatar.character img {
+            object-fit: contain;
+            padding: 8px;
+        }
+
         h1 {
             margin: 0;
-
             font-size: 30px;
             line-height: 1.2;
         }
 
         .age {
             margin-top: 8px;
-
             color: #9ca3af;
-
             font-size: 14px;
         }
 
         .bio {
             max-width: 440px;
-
-            margin:
-                14px auto 0;
+            margin: 14px auto 0;
 
             color: #d1d5db;
-
             line-height: 1.65;
 
             white-space: pre-wrap;
         }
 
         .section {
-            padding:
-                20px;
+            padding: 20px;
         }
 
         .section-title {
-            margin:
-                0 0 12px;
-
+            margin: 0 0 12px;
             font-size: 16px;
         }
 
-        .actions {
+        .actions,
+        .socials {
             display: grid;
             gap: 10px;
         }
@@ -167,8 +152,7 @@
         .action {
             display: block;
 
-            padding:
-                13px 14px;
+            padding: 13px 14px;
 
             border-radius: 12px;
 
@@ -176,32 +160,23 @@
             color: #ffffff;
 
             text-decoration: none;
-
             text-align: center;
 
             font-size: 14px;
             font-weight: 800;
         }
 
-        .socials {
-            display: grid;
-            gap: 9px;
-        }
-
         .social {
             display: block;
 
-            padding:
-                11px 13px;
+            padding: 11px 13px;
 
             border-radius: 10px;
 
             background: #f3f4f6;
-
             color: #111827;
 
             text-decoration: none;
-
             text-align: center;
 
             font-size: 13px;
@@ -209,21 +184,16 @@
         }
 
         .edit {
-            margin-top: 10px;
-
             background: #e5e7eb;
-
             color: #111827;
         }
 
         .loading,
         .error {
             padding: 24px;
-
             border-radius: 20px;
 
             background: #ffffff;
-
             color: #111827;
 
             text-align: center;
@@ -232,10 +202,8 @@
         .hidden {
             display: none !important;
         }
-
     </style>
 </head>
-
 
 <body>
 
@@ -268,9 +236,7 @@
             ></div>
 
 
-            <h1
-                id="name"
-            >
+            <h1 id="name">
                 E-Tag User
             </h1>
 
@@ -298,7 +264,6 @@
                 Contact
             </h2>
 
-
             <div
                 id="contacts"
                 class="actions"
@@ -315,7 +280,6 @@
             <h2 class="section-title">
                 Social
             </h2>
-
 
             <div
                 id="socials"
@@ -369,60 +333,50 @@
             "loading"
         );
 
-
     const errorBox =
         document.getElementById(
             "error"
         );
-
 
     const profile =
         document.getElementById(
             "profile"
         );
 
-
     const avatar =
         document.getElementById(
             "avatar"
         );
-
 
     const name =
         document.getElementById(
             "name"
         );
 
-
     const age =
         document.getElementById(
             "age"
         );
-
 
     const bio =
         document.getElementById(
             "bio"
         );
 
-
     const contacts =
         document.getElementById(
             "contacts"
         );
-
 
     const socials =
         document.getElementById(
             "socials"
         );
 
-
     const socialSection =
         document.getElementById(
             "socialSection"
         );
-
 
     const edit =
         document.getElementById(
@@ -430,141 +384,265 @@
         );
 
 
-    function getTag() {
+    const CHARACTER_BASE =
+        "/E-Tag/assets/characters/men/";
+
+
+    function getTagCode() {
 
         return new URL(
-            location.href
+            window.location.href
         )
             .searchParams
-            .get(
-                "tag"
-            );
+            .get("tag");
     }
 
 
-    function text(
+    function clean(
         value
     ) {
 
         return String(
-            value ||
-            ""
-        )
-            .trim();
+            value || ""
+        ).trim();
     }
 
 
-    function initial(
+    function initials(
         value
     ) {
 
         const parts =
-            text(
+            clean(
                 value
             )
                 .split(
                     /\s+/
+                )
+                .filter(
+                    Boolean
                 );
 
 
         if (
-            parts.length ===
-            1
+            parts.length === 0
+        ) {
+
+            return "?";
+        }
+
+
+        if (
+            parts.length === 1
         ) {
 
             return parts[0]
-                .slice(0, 2)
+                .substring(
+                    0,
+                    2
+                )
                 .toUpperCase();
         }
 
 
         return (
-            parts[0]?.[0] ||
-            "E"
-        ) +
-        (
-            parts[1]?.[0] ||
-            "T"
-        );
+            parts[0][0] +
+            parts[
+                parts.length - 1
+            ][0]
+        ).toUpperCase();
     }
 
 
-    function addLink(
-        parent,
-        label,
-        url
+    function renderAvatar(
+        element,
+        profile
     ) {
 
-        const a =
+        element.innerHTML =
+            "";
+
+        element.classList.remove(
+            "character"
+        );
+
+
+        const displayName =
+            clean(
+                profile.display_name
+            ) ||
+            "E-Tag User";
+
+
+        if (
+            profile.avatar_type ===
+            "character" &&
+            profile.character_id
+        ) {
+
+            const image =
+                document.createElement(
+                    "img"
+                );
+
+
+            image.src =
+                `${CHARACTER_BASE}${encodeURIComponent(
+                    profile.character_id
+                )}.svg`;
+
+
+            image.alt =
+                "Character";
+
+
+            image.onerror =
+                () => {
+
+                    element.classList.remove(
+                        "character"
+                    );
+
+                    element.textContent =
+                        initials(
+                            displayName
+                        );
+                };
+
+
+            element.classList.add(
+                "character"
+            );
+
+
+            element.appendChild(
+                image
+            );
+
+
+            return;
+        }
+
+
+        if (
+            profile.avatar_url
+        ) {
+
+            const image =
+                document.createElement(
+                    "img"
+                );
+
+
+            image.src =
+                profile.avatar_url;
+
+
+            image.alt =
+                "Profile photo";
+
+
+            image.onerror =
+                () => {
+
+                    element.textContent =
+                        initials(
+                            displayName
+                        );
+                };
+
+
+            element.appendChild(
+                image
+            );
+
+
+            return;
+        }
+
+
+        element.textContent =
+            initials(
+                displayName
+            );
+    }
+
+
+    function addContact(
+        label,
+        href
+    ) {
+
+        const link =
             document.createElement(
                 "a"
             );
 
 
-        a.className =
+        link.className =
             "action";
 
 
-        a.textContent =
+        link.textContent =
             label;
 
 
-        a.href =
-            url;
+        link.href =
+            href;
 
 
         if (
-            url.startsWith(
+            href.startsWith(
                 "http"
             )
         ) {
 
-            a.target =
+            link.target =
                 "_blank";
 
-            a.rel =
+            link.rel =
                 "noopener";
         }
 
 
-        parent.appendChild(
-            a
+        contacts.appendChild(
+            link
         );
     }
 
 
     function addSocial(
         label,
-        url
+        href
     ) {
 
-        const a =
+        const link =
             document.createElement(
                 "a"
             );
 
 
-        a.className =
+        link.className =
             "social";
 
 
-        a.textContent =
+        link.textContent =
             label;
 
 
-        a.href =
-            url;
+        link.href =
+            href;
 
 
-        a.target =
+        link.target =
             "_blank";
 
-        a.rel =
+        link.rel =
             "noopener";
 
 
         socials.appendChild(
-            a
+            link
         );
 
 
@@ -578,7 +656,7 @@
         value
     ) {
 
-        return text(
+        return clean(
             value
         ).replace(
             /^@/,
@@ -590,7 +668,7 @@
     async function load() {
 
         const tagCode =
-            getTag();
+            getTagCode();
 
 
         if (
@@ -605,7 +683,8 @@
 
 
         const {
-            data: tag
+            data: tag,
+            error: tagError
         } =
             await supabase
                 .from(
@@ -622,20 +701,40 @@
 
 
         if (
-            !tag ||
+            tagError ||
+            !tag
+        ) {
+
+            loading.classList.add(
+                "hidden"
+            );
+
+            errorBox.textContent =
+                "Unable to load this E-Tag.";
+
+            errorBox.classList.remove(
+                "hidden"
+            );
+
+            return;
+        }
+
+
+        if (
             !tag.active ||
             !tag.owner_id
         ) {
 
             loading.textContent =
-                "E-Tag not found or not activated.";
+                "This E-Tag has not been activated.";
 
             return;
         }
 
 
         const {
-            data: p
+            data: p,
+            error: profileError
         } =
             await supabase
                 .from(
@@ -652,6 +751,7 @@
 
 
         if (
+            profileError ||
             !p
         ) {
 
@@ -663,7 +763,7 @@
 
 
         const displayName =
-            text(
+            clean(
                 p.display_name
             ) ||
             "E-Tag User";
@@ -680,38 +780,22 @@
 
 
         bio.textContent =
-            text(
+            clean(
                 p.bio
             );
 
 
-        if (
-            p.avatar_url
-        ) {
-
-            avatar.innerHTML =
-                `
-                    <img
-                        src="${p.avatar_url}"
-                        alt="Profile photo"
-                    >
-                `;
-
-        } else {
-
-            avatar.textContent =
-                initial(
-                    displayName
-                );
-        }
+        renderAvatar(
+            avatar,
+            p
+        );
 
 
         if (
             p.phone
         ) {
 
-            addLink(
-                contacts,
+            addContact(
                 "Call",
                 `tel:${encodeURIComponent(
                     p.phone
@@ -725,21 +809,19 @@
         ) {
 
             const number =
-                text(
+                clean(
                     p.whatsapp
-                )
-                    .replace(
-                        /\D/g,
-                        ""
-                    );
+                ).replace(
+                    /\D/g,
+                    ""
+                );
 
 
             if (
                 number
             ) {
 
-                addLink(
-                    contacts,
+                addContact(
                     "WhatsApp",
                     `https://wa.me/${number}`
                 );
@@ -751,8 +833,7 @@
             p.email
         ) {
 
-            addLink(
-                contacts,
+            addContact(
                 "Email",
                 `mailto:${encodeURIComponent(
                     p.email
@@ -832,7 +913,7 @@
 
             addSocial(
                 "Discord",
-                `https://discord.com/`
+                "https://discord.com/"
             );
         }
 
@@ -846,7 +927,6 @@
         loading.classList.add(
             "hidden"
         );
-
 
         profile.classList.remove(
             "hidden"
