@@ -21,6 +21,7 @@
         html,
         body {
             margin: 0;
+            width: 100%;
             min-height: 100%;
         }
 
@@ -37,34 +38,27 @@
 
             background: #f5f7fb;
             color: #111827;
-
-            padding:
-                20px 12px;
         }
 
-        .app {
-            width:
-                min(
-                    100%,
-                    520px
-                );
+        .screen {
+            width: min(
+                calc(100% - 24px),
+                520px
+            );
 
-            margin:
-                0 auto;
+            margin: 0 auto;
+            padding: 24px 0 40px;
         }
 
         .card {
-            background:
-                #ffffff;
+            background: #ffffff;
 
             border:
                 1px solid #e5e7eb;
 
-            border-radius:
-                22px;
+            border-radius: 22px;
 
-            padding:
-                24px;
+            padding: 24px;
 
             box-shadow:
                 0 12px 40px
@@ -72,184 +66,129 @@
                     0,
                     0,
                     0,
-                    .06
+                    0.06
                 );
         }
 
         .center {
-            text-align:
-                center;
+            text-align: center;
         }
 
         h1 {
-            margin:
-                0 0 8px;
+            margin: 0 0 8px;
 
-            font-size:
-                28px;
+            font-size: 28px;
+            line-height: 1.2;
         }
 
         p {
-            margin:
-                0;
+            margin: 0;
 
-            color:
-                #6b7280;
+            color: #6b7280;
 
-            line-height:
-                1.6;
+            line-height: 1.6;
         }
 
         .tag {
-            display:
-                inline-block;
+            display: inline-block;
 
-            margin-top:
-                14px;
+            margin-top: 14px;
 
-            padding:
-                7px 11px;
+            padding: 7px 11px;
 
-            border-radius:
-                999px;
+            border-radius: 999px;
 
-            background:
-                #eef2f7;
+            background: #eef2f7;
+            color: #374151;
 
-            color:
-                #374151;
-
-            font-size:
-                13px;
-
-            font-weight:
-                700;
+            font-size: 13px;
+            font-weight: 700;
         }
 
         .section {
-            margin-top:
-                22px;
+            margin-top: 22px;
         }
 
         .button {
-            width:
-                100%;
+            width: 100%;
 
-            border:
-                0;
+            border: 0;
 
-            border-radius:
-                12px;
+            border-radius: 12px;
 
-            padding:
-                14px 16px;
+            padding: 14px 16px;
 
-            margin-top:
-                10px;
+            margin-top: 10px;
 
-            font-family:
-                inherit;
+            font-family: inherit;
 
-            font-size:
-                15px;
+            font-size: 15px;
+            font-weight: 700;
 
-            font-weight:
-                700;
-
-            cursor:
-                pointer;
+            cursor: pointer;
         }
 
         .primary {
-            background:
-                #111827;
-
-            color:
-                #ffffff;
+            background: #111827;
+            color: #ffffff;
         }
 
         .secondary {
-            background:
-                #eef2f7;
-
-            color:
-                #111827;
+            background: #eef2f7;
+            color: #111827;
         }
 
         .link-button {
-            width:
-                100%;
+            width: 100%;
 
-            margin-top:
-                12px;
+            margin-top: 12px;
 
-            border:
-                0;
+            border: 0;
 
-            background:
-                transparent;
+            background: transparent;
 
-            color:
-                #2563eb;
+            color: #2563eb;
 
-            font-family:
-                inherit;
+            font-family: inherit;
 
-            font-size:
-                14px;
+            font-size: 14px;
+            font-weight: 700;
 
-            font-weight:
-                700;
-
-            cursor:
-                pointer;
+            cursor: pointer;
         }
 
         .field {
-            margin-top:
-                14px;
+            margin-top: 14px;
         }
 
         label {
-            display:
-                block;
+            display: block;
 
-            margin-bottom:
-                7px;
+            margin-bottom: 7px;
 
-            font-size:
-                13px;
-
-            font-weight:
-                700;
+            font-size: 13px;
+            font-weight: 700;
         }
 
         input {
-            width:
-                100%;
+            width: 100%;
 
-            padding:
-                13px 14px;
+            padding: 13px 14px;
 
             border:
                 1px solid #d1d5db;
 
-            border-radius:
-                11px;
+            border-radius: 11px;
 
-            outline:
-                none;
+            outline: none;
 
-            font-family:
-                inherit;
+            font-family: inherit;
 
-            font-size:
-                15px;
+            font-size: 15px;
         }
 
         input:focus {
-            border-color:
-                #111827;
+            border-color: #111827;
 
             box-shadow:
                 0 0 0 3px
@@ -257,71 +196,114 @@
                     17,
                     24,
                     39,
-                    .08
+                    0.08
                 );
         }
 
         .message {
-            display:
-                none;
+            display: none;
 
-            margin-top:
-                16px;
+            margin-top: 16px;
 
-            padding:
-                13px 14px;
+            padding: 13px 14px;
 
-            border-radius:
-                12px;
+            border-radius: 12px;
 
-            font-size:
-                14px;
+            font-size: 14px;
 
-            line-height:
-                1.5;
+            line-height: 1.5;
 
-            word-break:
-                break-word;
+            word-break: break-word;
         }
 
         .message.show {
-            display:
-                block;
+            display: block;
         }
 
         .message.error {
-            background:
-                #fef2f2;
+            background: #fef2f2;
 
-            color:
-                #991b1b;
+            color: #991b1b;
 
             border:
                 1px solid #fecaca;
         }
 
         .message.success {
-            background:
-                #ecfdf5;
+            background: #ecfdf5;
 
-            color:
-                #065f46;
+            color: #065f46;
 
             border:
                 1px solid #a7f3d0;
         }
 
         .loading {
-            text-align:
-                center;
+            text-align: center;
 
-            color:
-                #6b7280;
+            color: #6b7280;
         }
 
         .hidden {
-            display:
-                none !important;
+            display: none !important;
+        }
+
+        /*
+         * PUBLIC PROFILE FRAME
+         *
+         * The iframe loads the selected theme,
+         * but the browser URL remains:
+         *
+         * /E-Tag/?tag=ASD
+         */
+
+        #themeContainer {
+            width: 100%;
+
+            min-height: 100vh;
+        }
+
+        #themeFrame {
+            display: block;
+
+            width: 100%;
+
+            min-height: 100vh;
+
+            border: 0;
+
+            margin: 0;
+            padding: 0;
+
+            background: transparent;
+        }
+
+        body.public-mode {
+            padding: 0;
+            background: transparent;
+        }
+
+        body.public-mode #themeContainer {
+            min-height: 100vh;
+        }
+
+        @media (max-width: 480px) {
+
+            .screen {
+                width:
+                    calc(100% - 16px);
+
+                padding-top: 16px;
+            }
+
+            .card {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 25px;
+            }
+
         }
 
     </style>
@@ -331,7 +313,14 @@
 
 <body>
 
-<div class="app">
+
+<!-- NORMAL AUTH / ERROR SCREENS -->
+
+<div
+    id="screen"
+    class="screen"
+>
+
 
     <!-- LOADING -->
 
@@ -631,7 +620,7 @@
     </div>
 
 
-    <!-- RESET -->
+    <!-- PASSWORD RESET -->
 
     <div
         id="resetCard"
@@ -726,6 +715,23 @@
 </div>
 
 
+<!-- PUBLIC THEME -->
+
+<div
+    id="themeContainer"
+    class="hidden"
+>
+
+    <iframe
+        id="themeFrame"
+        title="E-Tag Public Profile"
+        loading="eager"
+        referrerpolicy="same-origin"
+    ></iframe>
+
+</div>
+
+
 <script type="module">
 
     import {
@@ -758,6 +764,12 @@
                         true
                 }
             }
+        );
+
+
+    const screen =
+        document.getElementById(
+            "screen"
         );
 
 
@@ -965,6 +977,18 @@
         );
 
 
+    const themeContainer =
+        document.getElementById(
+            "themeContainer"
+        );
+
+
+    const themeFrame =
+        document.getElementById(
+            "themeFrame"
+        );
+
+
     let currentTag =
         null;
 
@@ -1013,34 +1037,70 @@
     }
 
 
-    function hideEverything() {
+    function hideAllScreens() {
 
-        [
-            loadingCard,
-            errorCard,
-            activationCard,
-            authCard,
-            editCard,
-            resetCard,
-            alreadyCard
-        ]
-            .forEach(
-                element => {
+        screen.classList.add(
+            "hidden"
+        );
 
-                    element.classList.add(
-                        "hidden"
-                    );
 
-                }
-            );
+        loadingCard.classList.add(
+            "hidden"
+        );
+
+
+        errorCard.classList.add(
+            "hidden"
+        );
+
+
+        activationCard.classList.add(
+            "hidden"
+        );
+
+
+        authCard.classList.add(
+            "hidden"
+        );
+
+
+        editCard.classList.add(
+            "hidden"
+        );
+
+
+        resetCard.classList.add(
+            "hidden"
+        );
+
+
+        alreadyCard.classList.add(
+            "hidden"
+        );
     }
 
 
-    function show(
+    function showScreen(
         element
     ) {
 
-        hideEverything();
+        themeContainer.classList.add(
+            "hidden"
+        );
+
+
+        document.body.classList.remove(
+            "public-mode"
+        );
+
+
+        hideAllScreens();
+
+
+        screen.classList.remove(
+            "hidden"
+        );
+
 
         element.classList.remove(
             "hidden"
@@ -1062,14 +1122,14 @@
     }
 
 
-    async function getCurrentTag() {
+    async function getTag() {
 
-        const code =
+        const tagCode =
             getTagCode();
 
 
         if (
-            !code
+            !tagCode
         ) {
 
             throw new Error(
@@ -1091,7 +1151,7 @@
                 )
                 .eq(
                     "tag_code",
-                    code
+                    tagCode
                 )
                 .maybeSingle();
 
@@ -1111,7 +1171,7 @@
         ) {
 
             throw new Error(
-                `E-Tag "${code}" was not found.`
+                `E-Tag "${tagCode}" was not found.`
             );
         }
 
@@ -1162,7 +1222,7 @@
     }
 
 
-    async function getPublicProfile(
+    async function getProfileType(
         ownerId
     ) {
 
@@ -1202,7 +1262,7 @@
         profile
     ) {
 
-        const type =
+        const profileType =
             String(
                 profile?.profile_type ||
                 "personal"
@@ -1212,7 +1272,7 @@
 
 
         if (
-            type ===
+            profileType ===
             "couple"
         ) {
 
@@ -1221,7 +1281,7 @@
 
 
         if (
-            type ===
+            profileType ===
             "business"
         ) {
 
@@ -1253,252 +1313,54 @@
     }
 
 
-    /*
-     * IMPORTANT
-     *
-     * The theme is loaded into THIS PAGE.
-     *
-     * The browser URL stays:
-     *
-     * /E-Tag/?tag=ASD
-     *
-     * We do not navigate to /themes/*.html.
-     */
-
-    async function renderTheme(
-        theme
+    function showPublicTheme(
+        theme,
+        tagCode
     ) {
 
-        const themeUrl =
-            `/E-Tag/themes/${theme}.html`;
-
-
-        const response =
-            await fetch(
-                themeUrl,
-                {
-                    cache:
-                        "no-cache"
-                }
-            );
-
-
-        if (
-            !response.ok
-        ) {
-
-            throw new Error(
-                `Unable to load ${theme} theme. HTTP ${response.status}.`
-            );
-        }
-
-
-        const html =
-            await response.text();
-
-
-        const parser =
-            new DOMParser();
-
-
-        const parsed =
-            parser.parseFromString(
-                html,
-                "text/html"
-            );
-
-
-        if (
-            !parsed.body
-        ) {
-
-            throw new Error(
-                "Theme HTML is invalid."
-            );
-        }
-
-
         /*
-         * Save scripts BEFORE replacing the page.
-         */
-
-        const scripts =
-            Array.from(
-                parsed.querySelectorAll(
-                    "script"
-                )
-            )
-                .map(
-                    oldScript => {
-
-                        return {
-
-                            src:
-                                oldScript.getAttribute(
-                                    "src"
-                                ),
-
-                            type:
-                                oldScript.getAttribute(
-                                    "type"
-                                ),
-
-                            async:
-                                oldScript.hasAttribute(
-                                    "async"
-                                ),
-
-                            defer:
-                                oldScript.hasAttribute(
-                                    "defer"
-                                ),
-
-                            text:
-                                oldScript.textContent ||
-                                ""
-
-                        };
-
-                    }
-                );
-
-
-        /*
-         * Replace document title.
-         */
-
-        document.title =
-            parsed.title ||
-            "E-Tag";
-
-
-        /*
-         * Replace HEAD.
+         * IMPORTANT:
          *
-         * Theme CSS comes with the theme.
-         */
-
-        document.head.innerHTML =
-            parsed.head.innerHTML;
-
-
-        /*
-         * Replace BODY.
+         * This changes ONLY the iframe URL.
          *
-         * Scripts are removed temporarily.
+         * The browser URL remains:
+         *
+         * /E-Tag/?tag=ASD
          */
 
-        const bodyClone =
-            parsed.body.cloneNode(
-                true
-            );
+        themeFrame.src =
+            `/E-Tag/themes/${theme}.html?tag=${encodeURIComponent(
+                tagCode
+            )}`;
 
 
-        bodyClone
-            .querySelectorAll(
-                "script"
-            )
-            .forEach(
-                script => {
-
-                    script.remove();
-
-                }
-            );
-
-
-        document.body.innerHTML =
-            "";
-
-
-        Array.from(
-            bodyClone.childNodes
-        )
-            .forEach(
-                node => {
-
-                    document.body.appendChild(
-                        node
-                    );
-
-                }
-            );
-
-
-        /*
-         * Re-create scripts so the theme JS executes.
-         */
-
-        for (
-            const definition of scripts
-        ) {
-
-            const script =
-                document.createElement(
-                    "script"
-                );
-
-
-            if (
-                definition.type
-            ) {
-
-                script.type =
-                    definition.type;
-            }
-
-
-            if (
-                definition.src
-            ) {
-
-                script.src =
-                    definition.src;
-
-            } else {
-
-                script.textContent =
-                    definition.text;
-            }
-
-
-            if (
-                definition.async
-            ) {
-
-                script.async =
-                    true;
-            }
-
-
-            if (
-                definition.defer
-            ) {
-
-                script.defer =
-                    true;
-            }
-
-
-            document.body.appendChild(
-                script
-            );
-        }
-
-    }
-
-
-    async function loadPublicProfile() {
-
-        loadingCard.classList.remove(
+        screen.classList.add(
             "hidden"
         );
 
 
+        themeContainer.classList.remove(
+            "hidden"
+        );
+
+
+        document.body.classList.add(
+            "public-mode"
+        );
+    }
+
+
+    async function loadPage() {
+
         try {
 
+            showScreen(
+                loadingCard
+            );
+
+
             const tag =
-                await getCurrentTag();
+                await getTag();
 
 
             const user =
@@ -1506,7 +1368,7 @@
 
 
             /*
-             * Not activated.
+             * UNACTIVATED
              */
 
             if (
@@ -1514,7 +1376,7 @@
                 !tag.owner_id
             ) {
 
-                show(
+                showScreen(
                     activationCard
                 );
 
@@ -1525,8 +1387,7 @@
             /*
              * EDIT MODE
              *
-             * If owner is already logged in,
-             * go directly to dashboard.
+             * /E-Tag/?tag=ASD&edit=1
              */
 
             if (
@@ -1547,7 +1408,7 @@
                 }
 
 
-                show(
+                showScreen(
                     editCard
                 );
 
@@ -1558,16 +1419,12 @@
             /*
              * NORMAL PUBLIC VIEW
              *
-             * IMPORTANT:
-             *
              * Even if the owner is logged in,
-             * we still show the public profile.
-             *
-             * We DO NOT redirect to dashboard.
+             * we NEVER redirect to dashboard.
              */
 
             const profile =
-                await getPublicProfile(
+                await getProfileType(
                     tag.owner_id
                 );
 
@@ -1576,7 +1433,7 @@
                 !profile
             ) {
 
-                show(
+                showScreen(
                     alreadyCard
                 );
 
@@ -1590,9 +1447,11 @@
                 );
 
 
-            await renderTheme(
-                theme
+            showPublicTheme(
+                theme,
+                tag.tag_code
             );
+
 
         } catch (
             error
@@ -1609,7 +1468,7 @@
                 "Unable to load E-Tag.";
 
 
-            show(
+            showScreen(
                 errorCard
             );
         }
@@ -1629,8 +1488,7 @@
 
 
         if (
-            mode ===
-            "signup"
+            mode === "signup"
         ) {
 
             authTitle.textContent =
@@ -1676,11 +1534,10 @@
             authForgotButton.classList.remove(
                 "hidden"
             );
-
         }
 
 
-        show(
+        showScreen(
             authCard
         );
     }
@@ -1822,6 +1679,7 @@
                 );
             }
 
+
         } catch (
             error
         ) {
@@ -1907,10 +1765,6 @@
             }
 
 
-            /*
-             * Verify ownership.
-             */
-
             const {
                 data: tag,
                 error:
@@ -1967,6 +1821,7 @@
                 "/E-Tag/dashboard.html"
             );
 
+
         } catch (
             error
         ) {
@@ -1977,6 +1832,7 @@
                 "Unable to login.",
                 "error"
             );
+
 
         } finally {
 
@@ -2043,6 +1899,7 @@
                 "success"
             );
 
+
         } catch (
             error
         ) {
@@ -2050,9 +1907,10 @@
             showMessage(
                 resetMessage,
                 error.message ||
-                "Unable to send reset email.",
+                "Unable to send password reset email.",
                 "error"
             );
+
 
         } finally {
 
@@ -2103,7 +1961,7 @@
             resetEmail.value =
                 authEmail.value.trim();
 
-            show(
+            showScreen(
                 resetCard
             );
         }
@@ -2117,7 +1975,7 @@
             resetEmail.value =
                 editEmail.value.trim();
 
-            show(
+            showScreen(
                 resetCard
             );
         }
@@ -2134,13 +1992,17 @@
         "click",
         () => {
 
+            const tagCode =
+                currentTag?.tag_code;
+
+
             if (
-                currentTag?.tag_code
+                tagCode
             ) {
 
                 window.location.replace(
                     `/E-Tag/?tag=${encodeURIComponent(
-                        currentTag.tag_code
+                        tagCode
                     )}`
                 );
 
@@ -2156,23 +2018,23 @@
 
     authBackButton.addEventListener(
         "click",
-        loadPublicProfile
+        loadPage
     );
 
 
     resetBackButton.addEventListener(
         "click",
-        loadPublicProfile
+        loadPage
     );
 
 
     retryButton.addEventListener(
         "click",
-        loadPublicProfile
+        loadPage
     );
 
 
-    loadPublicProfile();
+    loadPage();
 
 </script>
 
