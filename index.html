@@ -25,6 +25,7 @@
                 BlinkMacSystemFont,
                 "Segoe UI",
                 sans-serif;
+
             background: #f5f7fb;
             color: #111827;
         }
@@ -133,6 +134,7 @@
         }
 
         .message.error {
+            display: block;
             background: #fef2f2;
             color: #991b1b;
             border: 1px solid #fecaca;
@@ -152,221 +154,6 @@
 
         .hidden {
             display: none !important;
-        }
-
-        .profile {
-            text-align: center;
-        }
-
-        .public-theme {
-            border-radius: 26px;
-            padding: 28px 22px;
-            overflow: hidden;
-            position: relative;
-        }
-
-        .avatar {
-            width: 96px;
-            height: 96px;
-            margin: 0 auto 16px;
-            border-radius: 50%;
-            overflow: hidden;
-            background: #e5e7eb;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 30px;
-            font-weight: 800;
-            color: #6b7280;
-        }
-
-        .avatar img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .profile-name {
-            margin: 0;
-            font-size: 28px;
-            line-height: 1.2;
-        }
-
-        .profile-bio {
-            margin: 10px 0 0;
-            line-height: 1.6;
-            white-space: pre-wrap;
-        }
-
-        .profile-type {
-            display: inline-flex;
-            margin-top: 12px;
-            padding: 6px 10px;
-            border-radius: 999px;
-            font-size: 11px;
-            font-weight: 800;
-        }
-
-        .profile-actions {
-            margin-top: 24px;
-            display: grid;
-            gap: 10px;
-        }
-
-        .profile-button {
-            display: block;
-            width: 100%;
-            border: 0;
-            text-decoration: none;
-            text-align: center;
-            padding: 13px 14px;
-            border-radius: 12px;
-            font-weight: 700;
-            font-family: inherit;
-            font-size: 15px;
-            cursor: pointer;
-        }
-
-        .theme-men {
-            background:
-                linear-gradient(
-                    160deg,
-                    #111827 0%,
-                    #1f2937 55%,
-                    #374151 100%
-                );
-            color: #ffffff;
-        }
-
-        .theme-men .avatar {
-            border: 4px solid rgba(
-                255,
-                255,
-                255,
-                0.18
-            );
-        }
-
-        .theme-men .profile-bio {
-            color: #d1d5db;
-        }
-
-        .theme-men .profile-type {
-            background: rgba(
-                255,
-                255,
-                255,
-                0.12
-            );
-            color: #ffffff;
-        }
-
-        .theme-men .profile-button {
-            background: #ffffff;
-            color: #111827;
-        }
-
-        .theme-women {
-            background:
-                linear-gradient(
-                    160deg,
-                    #fff1f2 0%,
-                    #fce7f3 55%,
-                    #fdf2f8 100%
-                );
-            color: #831843;
-        }
-
-        .theme-women .avatar {
-            border: 4px solid rgba(
-                190,
-                24,
-                93,
-                0.12
-            );
-        }
-
-        .theme-women .profile-bio {
-            color: #9d174d;
-        }
-
-        .theme-women .profile-type {
-            background: #fbcfe8;
-            color: #9d174d;
-        }
-
-        .theme-women .profile-button {
-            background: #9d174d;
-            color: #ffffff;
-        }
-
-        .theme-couple {
-            background:
-                linear-gradient(
-                    160deg,
-                    #fff7ed 0%,
-                    #ffe4e6 50%,
-                    #fef2f2 100%
-                );
-            color: #7f1d1d;
-        }
-
-        .theme-couple .avatar {
-            border: 4px solid rgba(
-                190,
-                24,
-                93,
-                0.12
-            );
-        }
-
-        .theme-couple .profile-bio {
-            color: #991b1b;
-        }
-
-        .theme-couple .profile-type {
-            background: #fecdd3;
-            color: #9f1239;
-        }
-
-        .theme-couple .profile-button {
-            background: #9f1239;
-            color: #ffffff;
-        }
-
-        .theme-business {
-            background:
-                linear-gradient(
-                    160deg,
-                    #eff6ff 0%,
-                    #e0f2fe 55%,
-                    #f8fafc 100%
-                );
-            color: #0f172a;
-        }
-
-        .theme-business .avatar {
-            border-radius: 20px;
-            border: 4px solid rgba(
-                15,
-                23,
-                42,
-                0.08
-            );
-        }
-
-        .theme-business .profile-bio {
-            color: #334155;
-        }
-
-        .theme-business .profile-type {
-            background: #dbeafe;
-            color: #1d4ed8;
-        }
-
-        .theme-business .profile-button {
-            background: #1d4ed8;
-            color: #ffffff;
         }
 
         .input-group {
@@ -408,6 +195,7 @@
                     100% - 16px,
                     520px
                 );
+
                 padding-top: 16px;
             }
 
@@ -438,6 +226,8 @@
         id="mainView"
         class="hidden"
     >
+
+        <!-- ACTIVATION -->
 
         <div
             id="activationCard"
@@ -485,6 +275,8 @@
 
         </div>
 
+
+        <!-- AUTH -->
 
         <div
             id="authCard"
@@ -600,6 +392,8 @@
         </div>
 
 
+        <!-- EDIT LOGIN -->
+
         <div
             id="editLoginCard"
             class="card hidden"
@@ -694,6 +488,8 @@
         </div>
 
 
+        <!-- RESET -->
+
         <div
             id="forgotPasswordCard"
             class="card hidden"
@@ -758,6 +554,8 @@
         </div>
 
 
+        <!-- ALREADY ACTIVATED -->
+
         <div
             id="alreadyActivatedCard"
             class="card hidden"
@@ -786,178 +584,6 @@
                 class="message info show"
             >
                 This E-Tag cannot be activated by another account.
-            </div>
-
-        </div>
-
-
-        <div
-            id="ownerProfileCard"
-            class="card hidden"
-        >
-
-            <div
-                id="ownerTheme"
-                class="public-theme theme-men"
-            >
-
-                <div class="profile">
-
-                    <div
-                        id="ownerAvatar"
-                        class="avatar"
-                    ></div>
-
-                    <h1
-                        id="ownerName"
-                        class="profile-name"
-                    ></h1>
-
-                    <div
-                        id="ownerType"
-                        class="profile-type"
-                    >
-                        Personal · Men
-                    </div>
-
-                    <p
-                        id="ownerBio"
-                        class="profile-bio"
-                    ></p>
-
-
-                    <div class="profile-actions">
-
-                        <a
-                            id="ownerPhone"
-                            class="profile-button hidden"
-                        >
-                            Call
-                        </a>
-
-
-                        <a
-                            id="ownerWhatsapp"
-                            class="profile-button hidden"
-                            target="_blank"
-                            rel="noopener"
-                        >
-                            WhatsApp
-                        </a>
-
-
-                        <a
-                            id="ownerEmail"
-                            class="profile-button hidden"
-                        >
-                            Email
-                        </a>
-
-
-                        <a
-                            id="editProfileButtonOwner"
-                            class="profile-button"
-                            href="/E-Tag/dashboard.html"
-                        >
-                            Edit Public Profile
-                        </a>
-
-
-                        <button
-                            id="logoutButton"
-                            class="button secondary"
-                            type="button"
-                        >
-                            Logout
-                        </button>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </div>
-
-
-        <div
-            id="publicProfileCard"
-            class="card hidden"
-        >
-
-            <div
-                id="publicTheme"
-                class="public-theme theme-men"
-            >
-
-                <div class="profile">
-
-                    <div
-                        id="publicAvatar"
-                        class="avatar"
-                    ></div>
-
-
-                    <h1
-                        id="publicName"
-                        class="profile-name"
-                    ></h1>
-
-
-                    <div
-                        id="publicType"
-                        class="profile-type"
-                    >
-                        Personal · Men
-                    </div>
-
-
-                    <p
-                        id="publicBio"
-                        class="profile-bio"
-                    ></p>
-
-
-                    <div class="profile-actions">
-
-                        <a
-                            id="publicPhone"
-                            class="profile-button hidden"
-                        >
-                            Call
-                        </a>
-
-
-                        <a
-                            id="publicWhatsapp"
-                            class="profile-button hidden"
-                            target="_blank"
-                            rel="noopener"
-                        >
-                            WhatsApp
-                        </a>
-
-
-                        <a
-                            id="publicEmail"
-                            class="profile-button hidden"
-                        >
-                            Email
-                        </a>
-
-
-                        <button
-                            id="editProfileButtonPublic"
-                            class="profile-button"
-                            type="button"
-                        >
-                            Edit My Profile
-                        </button>
-
-                    </div>
-
-                </div>
-
             </div>
 
         </div>
@@ -1002,264 +628,196 @@
             "loadingView"
         );
 
+
     const mainView =
         document.getElementById(
             "mainView"
         );
+
 
     const activationCard =
         document.getElementById(
             "activationCard"
         );
 
+
     const activationTagCode =
         document.getElementById(
             "activationTagCode"
         );
+
 
     const loginButton =
         document.getElementById(
             "loginButton"
         );
 
+
     const signupButton =
         document.getElementById(
             "signupButton"
         );
+
 
     const authCard =
         document.getElementById(
             "authCard"
         );
 
+
     const authTitle =
         document.getElementById(
             "authTitle"
         );
+
 
     const authSubtitle =
         document.getElementById(
             "authSubtitle"
         );
 
+
     const emailInput =
         document.getElementById(
             "email"
         );
+
 
     const passwordInput =
         document.getElementById(
             "password"
         );
 
+
     const confirmPasswordInput =
         document.getElementById(
             "confirmPassword"
         );
+
 
     const confirmPasswordGroup =
         document.getElementById(
             "confirmPasswordGroup"
         );
 
+
     const authSubmitButton =
         document.getElementById(
             "authSubmitButton"
         );
+
 
     const forgotPasswordButton =
         document.getElementById(
             "forgotPasswordButton"
         );
 
+
     const authBackButton =
         document.getElementById(
             "authBackButton"
         );
+
 
     const authMessage =
         document.getElementById(
             "authMessage"
         );
 
+
     const editLoginCard =
         document.getElementById(
             "editLoginCard"
         );
+
 
     const editLoginTagCode =
         document.getElementById(
             "editLoginTagCode"
         );
 
+
     const editEmail =
         document.getElementById(
             "editEmail"
         );
+
 
     const editPassword =
         document.getElementById(
             "editPassword"
         );
 
+
     const editLoginButton =
         document.getElementById(
             "editLoginButton"
         );
+
 
     const editForgotPasswordButton =
         document.getElementById(
             "editForgotPasswordButton"
         );
 
+
     const editBackButton =
         document.getElementById(
             "editBackButton"
         );
+
 
     const editLoginMessage =
         document.getElementById(
             "editLoginMessage"
         );
 
+
     const forgotPasswordCard =
         document.getElementById(
             "forgotPasswordCard"
         );
+
 
     const resetEmail =
         document.getElementById(
             "resetEmail"
         );
 
+
     const sendResetButton =
         document.getElementById(
             "sendResetButton"
         );
+
 
     const resetBackButton =
         document.getElementById(
             "resetBackButton"
         );
 
+
     const resetMessage =
         document.getElementById(
             "resetMessage"
         );
+
 
     const alreadyActivatedCard =
         document.getElementById(
             "alreadyActivatedCard"
         );
 
+
     const alreadyActivatedTagCode =
         document.getElementById(
             "alreadyActivatedTagCode"
         );
 
+
     const alreadyActivatedMessage =
         document.getElementById(
             "alreadyActivatedMessage"
-        );
-
-    const ownerProfileCard =
-        document.getElementById(
-            "ownerProfileCard"
-        );
-
-    const ownerTheme =
-        document.getElementById(
-            "ownerTheme"
-        );
-
-    const ownerAvatar =
-        document.getElementById(
-            "ownerAvatar"
-        );
-
-    const ownerName =
-        document.getElementById(
-            "ownerName"
-        );
-
-    const ownerType =
-        document.getElementById(
-            "ownerType"
-        );
-
-    const ownerBio =
-        document.getElementById(
-            "ownerBio"
-        );
-
-    const ownerPhone =
-        document.getElementById(
-            "ownerPhone"
-        );
-
-    const ownerWhatsapp =
-        document.getElementById(
-            "ownerWhatsapp"
-        );
-
-    const ownerEmail =
-        document.getElementById(
-            "ownerEmail"
-        );
-
-    const logoutButton =
-        document.getElementById(
-            "logoutButton"
-        );
-
-    const publicProfileCard =
-        document.getElementById(
-            "publicProfileCard"
-        );
-
-    const publicTheme =
-        document.getElementById(
-            "publicTheme"
-        );
-
-    const publicAvatar =
-        document.getElementById(
-            "publicAvatar"
-        );
-
-    const publicName =
-        document.getElementById(
-            "publicName"
-        );
-
-    const publicType =
-        document.getElementById(
-            "publicType"
-        );
-
-    const publicBio =
-        document.getElementById(
-            "publicBio"
-        );
-
-    const publicPhone =
-        document.getElementById(
-            "publicPhone"
-        );
-
-    const publicWhatsapp =
-        document.getElementById(
-            "publicWhatsapp"
-        );
-
-    const publicEmail =
-        document.getElementById(
-            "publicEmail"
-        );
-
-    const editProfileButtonPublic =
-        document.getElementById(
-            "editProfileButtonPublic"
         );
 
 
@@ -1269,6 +827,10 @@
 
     let authMode =
         "login";
+
+
+    let redirecting =
+        false;
 
 
     function getTagCodeFromUrl() {
@@ -1320,6 +882,133 @@
     }
 
 
+    function normalizeTemplate(
+        value
+    ) {
+
+        const template =
+            String(
+                value || ""
+            )
+                .trim()
+                .toLowerCase();
+
+
+        if (
+            template ===
+            "boy"
+        ) {
+
+            return "men";
+        }
+
+
+        if (
+            template ===
+            "girl"
+        ) {
+
+            return "women";
+        }
+
+
+        if (
+            [
+                "men",
+                "women",
+                "couple",
+                "business"
+            ].includes(
+                template
+            )
+        ) {
+
+            return template;
+        }
+
+
+        return "men";
+    }
+
+
+    function normalizeProfileType(
+        value
+    ) {
+
+        const type =
+            String(
+                value || ""
+            )
+                .trim()
+                .toLowerCase();
+
+
+        if (
+            [
+                "couple",
+                "business"
+            ].includes(
+                type
+            )
+        ) {
+
+            return type;
+        }
+
+
+        return "personal";
+    }
+
+
+    function getThemeFile(
+        profile
+    ) {
+
+        const profileType =
+            normalizeProfileType(
+                profile?.profile_type
+            );
+
+
+        if (
+            profileType ===
+            "couple"
+        ) {
+
+            return "couple";
+        }
+
+
+        if (
+            profileType ===
+            "business"
+        ) {
+
+            return "business";
+        }
+
+
+        return normalizeTemplate(
+            profile?.template
+        );
+    }
+
+
+    function getThemeUrl(
+        tagCode,
+        theme
+    ) {
+
+        return (
+            `/E-Tag/themes/` +
+            `${theme}.html?tag=` +
+            encodeURIComponent(
+                tagCode
+            )
+        );
+    }
+
+
     function hideAllCards() {
 
         activationCard.classList.add(
@@ -1339,14 +1028,6 @@
         );
 
         alreadyActivatedCard.classList.add(
-            "hidden"
-        );
-
-        ownerProfileCard.classList.add(
-            "hidden"
-        );
-
-        publicProfileCard.classList.add(
             "hidden"
         );
     }
@@ -1375,274 +1056,6 @@
 
         element.className =
             "message";
-    }
-
-
-    function normalizeTemplate(
-        value
-    ) {
-
-        const normalized =
-            String(
-                value || ""
-            )
-                .trim()
-                .toLowerCase();
-
-
-        if (
-            normalized ===
-            "boy"
-        ) {
-
-            return "men";
-        }
-
-
-        if (
-            normalized ===
-            "girl"
-        ) {
-
-            return "women";
-        }
-
-
-        if (
-            [
-                "men",
-                "women",
-                "couple",
-                "business"
-            ].includes(
-                normalized
-            )
-        ) {
-
-            return normalized;
-        }
-
-
-        return "men";
-    }
-
-
-    function getTheme(
-        profile
-    ) {
-
-        const type =
-            String(
-                profile?.profile_type ||
-                "personal"
-            )
-                .trim()
-                .toLowerCase();
-
-
-        const template =
-            normalizeTemplate(
-                profile?.template
-            );
-
-
-        if (
-            type ===
-            "business"
-        ) {
-
-            return "business";
-        }
-
-
-        if (
-            type ===
-            "couple"
-        ) {
-
-            return "couple";
-        }
-
-
-        if (
-            template ===
-            "women"
-        ) {
-
-            return "women";
-        }
-
-
-        return "men";
-    }
-
-
-    function getThemeLabel(
-        profile,
-        theme
-    ) {
-
-        if (
-            theme ===
-            "business"
-        ) {
-
-            return "Business";
-        }
-
-
-        if (
-            theme ===
-            "couple"
-        ) {
-
-            return "Couple";
-        }
-
-
-        if (
-            theme ===
-            "women"
-        ) {
-
-            return "Personal · Women";
-        }
-
-
-        return "Personal · Men";
-    }
-
-
-    function applyTheme(
-        element,
-        profile
-    ) {
-
-        const theme =
-            getTheme(
-                profile
-            );
-
-
-        element.classList.remove(
-            "theme-men",
-            "theme-women",
-            "theme-couple",
-            "theme-business"
-        );
-
-
-        element.classList.add(
-            `theme-${theme}`
-        );
-
-
-        return theme;
-    }
-
-
-    function getInitials(
-        name
-    ) {
-
-        const words =
-            String(
-                name || ""
-            )
-                .trim()
-                .split(
-                    /\s+/
-                )
-                .filter(
-                    Boolean
-                );
-
-
-        if (
-            words.length ===
-            0
-        ) {
-
-            return "?";
-        }
-
-
-        if (
-            words.length ===
-            1
-        ) {
-
-            return words[0]
-                .substring(
-                    0,
-                    2
-                )
-                .toUpperCase();
-        }
-
-
-        return (
-            words[0][0] +
-            words[
-                words.length - 1
-            ][0]
-        ).toUpperCase();
-    }
-
-
-    function escapeAttribute(
-        value
-    ) {
-
-        return String(value)
-            .replaceAll(
-                "&",
-                "&amp;"
-            )
-            .replaceAll(
-                '"',
-                "&quot;"
-            )
-            .replaceAll(
-                "<",
-                "&lt;"
-            )
-            .replaceAll(
-                ">",
-                "&gt;"
-            );
-    }
-
-
-    function renderAvatar(
-        element,
-        name,
-        avatarUrl
-    ) {
-
-        if (
-            avatarUrl
-        ) {
-
-            element.innerHTML =
-                `
-                    <img
-                        src="${escapeAttribute(
-                            avatarUrl
-                        )}"
-                        alt="${escapeAttribute(
-                            name
-                        )}"
-                    >
-                `;
-
-        } else {
-
-            element.textContent =
-                getInitials(
-                    name
-                );
-        }
     }
 
 
@@ -1764,22 +1177,100 @@
         }
 
 
+        const profile =
+            await getProfile(
+                currentTag.owner_id
+            );
+
+
         if (
-            user &&
-            user.id ===
-            currentTag.owner_id
+            profile
         ) {
 
-            await loadOwnerProfile(
-                user.id
-            );
+            const theme =
+                getThemeFile(
+                    profile
+                );
+
+
+            if (
+                user &&
+                user.id ===
+                    currentTag.owner_id
+            ) {
+
+                if (
+                    !redirecting
+                ) {
+
+                    redirecting =
+                        true;
+
+
+                    window.location.replace(
+                        "/E-Tag/dashboard.html"
+                    );
+                }
+
+
+                return;
+            }
+
+
+            if (
+                !redirecting
+            ) {
+
+                redirecting =
+                    true;
+
+
+                window.location.replace(
+                    getThemeUrl(
+                        currentTag.tag_code,
+                        theme
+                    )
+                );
+            }
+
 
             return;
         }
 
 
-        await loadPublicProfile(
-            currentTag.owner_id
+        if (
+            user &&
+            user.id ===
+                currentTag.owner_id
+        ) {
+
+            if (
+                !redirecting
+            ) {
+
+                redirecting =
+                    true;
+
+
+                window.location.replace(
+                    "/E-Tag/dashboard.html"
+                );
+            }
+
+
+            return;
+        }
+
+
+        alreadyActivatedCard.classList.remove(
+            "hidden"
+        );
+
+
+        showMessage(
+            alreadyActivatedMessage,
+            "This E-Tag is already activated, but the public profile has not been created yet.",
+            "info"
         );
     }
 
@@ -1810,267 +1301,16 @@
             error
         ) {
 
+            console.error(
+                "Profile lookup error:",
+                error
+            );
+
             return null;
         }
 
 
         return profile;
-    }
-
-
-    async function loadOwnerProfile(
-        ownerId
-    ) {
-
-        const profile =
-            await getProfile(
-                ownerId
-            );
-
-
-        if (
-            !profile
-        ) {
-
-            ownerProfileCard.classList.remove(
-                "hidden"
-            );
-
-            ownerName.textContent =
-                "Your E-Tag";
-
-            ownerBio.textContent =
-                "Your public identity profile has not been created yet.";
-
-            ownerAvatar.textContent =
-                "?";
-
-            return;
-        }
-
-
-        renderProfile(
-            profile,
-            {
-                theme:
-                    ownerTheme,
-
-                avatar:
-                    ownerAvatar,
-
-                name:
-                    ownerName,
-
-                type:
-                    ownerType,
-
-                bio:
-                    ownerBio,
-
-                phone:
-                    ownerPhone,
-
-                whatsapp:
-                    ownerWhatsapp,
-
-                email:
-                    ownerEmail
-            }
-        );
-
-
-        ownerProfileCard.classList.remove(
-            "hidden"
-        );
-    }
-
-
-    async function loadPublicProfile(
-        ownerId
-    ) {
-
-        const profile =
-            await getProfile(
-                ownerId
-            );
-
-
-        if (
-            !profile
-        ) {
-
-            alreadyActivatedCard.classList.remove(
-                "hidden"
-            );
-
-            showMessage(
-                alreadyActivatedMessage,
-                "This E-Tag is already activated, but the public profile has not been created yet.",
-                "info"
-            );
-
-            return;
-        }
-
-
-        renderProfile(
-            profile,
-            {
-                theme:
-                    publicTheme,
-
-                avatar:
-                    publicAvatar,
-
-                name:
-                    publicName,
-
-                type:
-                    publicType,
-
-                bio:
-                    publicBio,
-
-                phone:
-                    publicPhone,
-
-                whatsapp:
-                    publicWhatsapp,
-
-                email:
-                    publicEmail
-            }
-        );
-
-
-        publicProfileCard.classList.remove(
-            "hidden"
-        );
-    }
-
-
-    function renderProfile(
-        profile,
-        elements
-    ) {
-
-        const name =
-            profile.display_name ||
-            (
-                profile.profile_type ===
-                "business"
-                    ? "Business"
-                    : "E-Tag User"
-            );
-
-
-        const theme =
-            applyTheme(
-                elements.theme,
-                profile
-            );
-
-
-        elements.name.textContent =
-            name;
-
-
-        elements.type.textContent =
-            getThemeLabel(
-                profile,
-                theme
-            );
-
-
-        elements.bio.textContent =
-            profile.bio ||
-            "";
-
-
-        renderAvatar(
-            elements.avatar,
-            name,
-            profile.avatar_url
-        );
-
-
-        if (
-            profile.phone
-        ) {
-
-            elements.phone.href =
-                `tel:${encodeURIComponent(
-                    profile.phone
-                )}`;
-
-            elements.phone.classList.remove(
-                "hidden"
-            );
-
-        } else {
-
-            elements.phone.classList.add(
-                "hidden"
-            );
-        }
-
-
-        if (
-            profile.whatsapp
-        ) {
-
-            const number =
-                profile.whatsapp.replace(
-                    /\D/g,
-                    ""
-                );
-
-
-            if (
-                number
-            ) {
-
-                elements.whatsapp.href =
-                    `https://wa.me/${number}`;
-
-                elements.whatsapp.classList.remove(
-                    "hidden"
-                );
-
-            } else {
-
-                elements.whatsapp.classList.add(
-                    "hidden"
-                );
-            }
-
-        } else {
-
-            elements.whatsapp.classList.add(
-                "hidden"
-            );
-        }
-
-
-        if (
-            profile.email
-        ) {
-
-            elements.email.href =
-                `mailto:${encodeURIComponent(
-                    profile.email
-                )}`;
-
-            elements.email.classList.remove(
-                "hidden"
-            );
-
-        } else {
-
-            elements.email.classList.add(
-                "hidden"
-            );
-        }
     }
 
 
@@ -2082,29 +1322,7 @@
             mode;
 
 
-        activationCard.classList.add(
-            "hidden"
-        );
-
-        editLoginCard.classList.add(
-            "hidden"
-        );
-
-        forgotPasswordCard.classList.add(
-            "hidden"
-        );
-
-        alreadyActivatedCard.classList.add(
-            "hidden"
-        );
-
-        ownerProfileCard.classList.add(
-            "hidden"
-        );
-
-        publicProfileCard.classList.add(
-            "hidden"
-        );
+        hideAllCards();
 
 
         authCard.classList.remove(
@@ -2225,6 +1443,7 @@
         const email =
             emailInput.value.trim();
 
+
         const password =
             passwordInput.value;
 
@@ -2342,6 +1561,7 @@
                     "info"
                 );
 
+
                 return;
             }
 
@@ -2397,6 +1617,7 @@
             authSubmitButton.disabled =
                 false;
 
+
             authSubmitButton.textContent =
                 authMode ===
                 "signup"
@@ -2410,6 +1631,7 @@
 
         const email =
             editEmail.value.trim();
+
 
         const password =
             editPassword.value;
@@ -2445,6 +1667,7 @@
 
         editLoginButton.disabled =
             true;
+
 
         editLoginButton.textContent =
             "Checking...";
@@ -2596,6 +1819,7 @@
             editLoginButton.disabled =
                 false;
 
+
             editLoginButton.textContent =
                 "Login to Edit";
         }
@@ -2624,6 +1848,7 @@
 
         sendResetButton.disabled =
             true;
+
 
         sendResetButton.textContent =
             "Sending...";
@@ -2682,6 +1907,7 @@
 
             sendResetButton.disabled =
                 false;
+
 
             sendResetButton.textContent =
                 "Send Reset Email";
@@ -2750,11 +1976,13 @@
                 userId
         ) {
 
-            hideAllCards();
-
-            await loadPublicProfile(
-                latestTag.owner_id
+            showMessage(
+                authMessage,
+                "This account does not own this E-Tag.",
+                "error"
             );
+
+            await supabase.auth.signOut();
 
             return;
         }
@@ -2829,11 +2057,13 @@
                 userId
         ) {
 
-            hideAllCards();
-
-            await loadPublicProfile(
-                latestTag.owner_id
+            showMessage(
+                authMessage,
+                "This account does not own this E-Tag.",
+                "error"
             );
+
+            await supabase.auth.signOut();
 
             return;
         }
@@ -2865,6 +2095,7 @@
                     {
                         owner_id:
                             userId,
+
                         active:
                             true
                     }
@@ -3049,34 +2280,6 @@
     }
 
 
-    async function logout() {
-
-        const tagCode =
-            currentTag?.tag_code;
-
-
-        await supabase.auth.signOut();
-
-
-        if (
-            tagCode
-        ) {
-
-            window.location.replace(
-                `/E-Tag/?tag=${encodeURIComponent(
-                    tagCode
-                )}`
-            );
-
-        } else {
-
-            window.location.replace(
-                "/E-Tag/"
-            );
-        }
-    }
-
-
     loginButton.addEventListener(
         "click",
         () => {
@@ -3127,9 +2330,21 @@
     );
 
 
+    editLoginButton.addEventListener(
+        "click",
+        submitEditLogin
+    );
+
+
     sendResetButton.addEventListener(
         "click",
         sendPasswordReset
+    );
+
+
+    editProfileButtonPublic.addEventListener(
+        "click",
+        showEditLogin
     );
 
 
@@ -3146,12 +2361,6 @@
     );
 
 
-    editProfileButtonPublic.addEventListener(
-        "click",
-        showEditLogin
-    );
-
-
     editBackButton.addEventListener(
         "click",
         async () => {
@@ -3165,12 +2374,6 @@
     );
 
 
-    editLoginButton.addEventListener(
-        "click",
-        submitEditLogin
-    );
-
-
     resetBackButton.addEventListener(
         "click",
         async () => {
@@ -3180,79 +2383,6 @@
             );
 
             await renderTagState();
-        }
-    );
-
-
-    logoutButton.addEventListener(
-        "click",
-        logout
-    );
-
-
-    supabase.auth.onAuthStateChange(
-        async (
-            event,
-            session
-        ) => {
-
-            if (
-                event ===
-                    "SIGNED_IN" &&
-                session?.user &&
-                currentTag
-            ) {
-
-                const {
-                    data: latestTag
-                } =
-                    await supabase
-                        .from(
-                            "nfc_tags"
-                        )
-                        .select(
-                            "id,tag_code,owner_id,active"
-                        )
-                        .eq(
-                            "tag_code",
-                            currentTag.tag_code
-                        )
-                        .maybeSingle();
-
-
-                if (
-                    latestTag
-                ) {
-
-                    currentTag =
-                        latestTag;
-
-
-                    if (
-                        latestTag.active &&
-                        latestTag.owner_id ===
-                            session.user.id
-                    ) {
-
-                        window.location.href =
-                            "/E-Tag/dashboard.html";
-                    }
-                }
-            }
-
-
-            if (
-                event ===
-                "SIGNED_OUT"
-            ) {
-
-                if (
-                    currentTag
-                ) {
-
-                    await renderTagState();
-                }
-            }
         }
     );
 
