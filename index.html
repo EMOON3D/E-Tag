@@ -32,17 +32,20 @@
 
             background: #f5f7fb;
             color: #111827;
+
+            padding:
+                20px 12px;
         }
 
         .app {
             width:
                 min(
-                    calc(100% - 24px),
+                    100%,
                     520px
                 );
 
-            margin: 0 auto;
-            padding: 24px 0 40px;
+            margin:
+                0 auto;
         }
 
         .card {
@@ -51,9 +54,11 @@
             border:
                 1px solid #e5e7eb;
 
-            border-radius: 22px;
+            border-radius:
+                22px;
 
-            padding: 24px;
+            padding:
+                24px;
 
             box-shadow:
                 0 12px 40px
@@ -69,180 +74,172 @@
             text-align: center;
         }
 
-        .title {
+        h1 {
             margin:
                 0 0 8px;
 
-            font-size: 28px;
-            line-height: 1.2;
+            font-size:
+                28px;
         }
 
-        .subtitle {
+        p {
             margin: 0;
 
-            color: #6b7280;
+            color:
+                #6b7280;
 
-            line-height: 1.6;
+            line-height:
+                1.6;
         }
 
-        .tag-code {
-            display: inline-block;
+        .tag {
+            display:
+                inline-block;
 
-            margin-top: 14px;
+            margin-top:
+                14px;
 
             padding:
                 7px 11px;
 
-            border-radius: 999px;
+            border-radius:
+                999px;
 
-            background: #eef2f7;
-            color: #374151;
+            background:
+                #eef2f7;
 
-            font-size: 13px;
-            font-weight: 700;
+            color:
+                #374151;
+
+            font-size:
+                13px;
+
+            font-weight:
+                700;
         }
 
         .section {
-            margin-top: 24px;
+            margin-top:
+                22px;
         }
 
         .button {
-            width: 100%;
+            width:
+                100%;
 
             border: 0;
 
-            border-radius: 12px;
+            border-radius:
+                12px;
 
             padding:
                 14px 16px;
 
-            font-size: 15px;
-            font-weight: 700;
+            margin-top:
+                10px;
 
-            cursor: pointer;
+            font-family:
+                inherit;
 
-            margin-top: 10px;
+            font-size:
+                15px;
 
-            font-family: inherit;
+            font-weight:
+                700;
+
+            cursor:
+                pointer;
         }
 
         .primary {
-            background: #111827;
-            color: #ffffff;
+            background:
+                #111827;
+
+            color:
+                #ffffff;
         }
 
         .secondary {
-            background: #eef2f7;
-            color: #111827;
+            background:
+                #eef2f7;
+
+            color:
+                #111827;
         }
 
         .link-button {
-            width: 100%;
+            width:
+                100%;
+
+            margin-top:
+                12px;
 
             border: 0;
 
-            background: transparent;
+            background:
+                transparent;
 
-            color: #2563eb;
+            color:
+                #2563eb;
 
-            padding:
-                10px 5px 0;
+            font-family:
+                inherit;
 
-            font-size: 14px;
-            font-weight: 700;
+            font-size:
+                14px;
 
-            cursor: pointer;
+            font-weight:
+                700;
+
+            cursor:
+                pointer;
         }
 
-        .message {
-            display: none;
+        .field {
+            margin-top:
+                14px;
+        }
 
-            margin-top: 16px;
+        label {
+            display:
+                block;
+
+            margin-bottom:
+                7px;
+
+            font-size:
+                13px;
+
+            font-weight:
+                700;
+        }
+
+        input {
+            width:
+                100%;
 
             padding:
                 13px 14px;
-
-            border-radius: 12px;
-
-            line-height: 1.5;
-
-            font-size: 14px;
-
-            word-break: break-word;
-        }
-
-        .message.show {
-            display: block;
-        }
-
-        .message.error {
-            display: block;
-
-            background: #fef2f2;
-
-            color: #991b1b;
-
-            border:
-                1px solid #fecaca;
-        }
-
-        .message.info {
-            display: block;
-
-            background: #eff6ff;
-
-            color: #1e40af;
-
-            border:
-                1px solid #bfdbfe;
-        }
-
-        .loading {
-            text-align: center;
-
-            padding:
-                30px 10px;
-
-            color: #6b7280;
-        }
-
-        .hidden {
-            display: none !important;
-        }
-
-        .input-group {
-            margin-top: 14px;
-        }
-
-        .input-group label {
-            display: block;
-
-            margin-bottom: 7px;
-
-            font-size: 13px;
-            font-weight: 700;
-        }
-
-        .input {
-            width: 100%;
 
             border:
                 1px solid #d1d5db;
 
-            border-radius: 11px;
+            border-radius:
+                11px;
 
-            padding:
-                13px 14px;
+            outline:
+                none;
 
-            font-size: 15px;
+            font-family:
+                inherit;
 
-            outline: none;
-
-            font-family: inherit;
+            font-size:
+                15px;
         }
 
-        .input:focus {
-            border-color: #111827;
+        input:focus {
+            border-color:
+                #111827;
 
             box-shadow:
                 0 0 0 3px
@@ -254,23 +251,67 @@
                 );
         }
 
-        @media (max-width: 480px) {
+        .message {
+            display:
+                none;
 
-            .app {
-                width:
-                    calc(100% - 16px);
+            margin-top:
+                16px;
 
-                padding-top: 16px;
-            }
+            padding:
+                13px 14px;
 
-            .card {
-                padding: 20px;
-            }
+            border-radius:
+                12px;
 
-            .title {
-                font-size: 25px;
-            }
+            font-size:
+                14px;
 
+            line-height:
+                1.5;
+
+            word-break:
+                break-word;
+        }
+
+        .message.show {
+            display:
+                block;
+        }
+
+        .message.error {
+            background:
+                #fef2f2;
+
+            color:
+                #991b1b;
+
+            border:
+                1px solid #fecaca;
+        }
+
+        .message.success {
+            background:
+                #ecfdf5;
+
+            color:
+                #065f46;
+
+            border:
+                1px solid #a7f3d0;
+        }
+
+        .loading {
+            text-align:
+                center;
+
+            color:
+                #6b7280;
+        }
+
+        .hidden {
+            display:
+                none !important;
         }
 
     </style>
@@ -286,7 +327,7 @@
     <!-- LOADING -->
 
     <div
-        id="loadingView"
+        id="loadingCard"
         class="card loading"
     >
         Loading E-Tag...
@@ -296,22 +337,17 @@
     <!-- ERROR -->
 
     <div
-        id="errorView"
+        id="errorCard"
         class="card hidden"
     >
 
         <div class="center">
 
-            <h1 class="title">
+            <h1>
                 E-Tag Error
             </h1>
 
-
-            <p
-                id="errorText"
-                class="subtitle"
-            ></p>
-
+            <p id="errorText"></p>
 
             <button
                 id="retryButton"
@@ -335,19 +371,18 @@
 
         <div class="center">
 
-            <h1 class="title">
+            <h1>
                 Activate your E-Tag
             </h1>
 
-
-            <p class="subtitle">
-                This physical E-Tag is ready to be connected to your account.
+            <p>
+                This E-Tag is ready to be connected
+                to your account.
             </p>
 
-
             <div
-                id="activationTagCode"
-                class="tag-code"
+                id="activationTag"
+                class="tag"
             ></div>
 
         </div>
@@ -356,7 +391,7 @@
         <div class="section">
 
             <button
-                id="loginButton"
+                id="activationLoginButton"
                 class="button secondary"
                 type="button"
             >
@@ -365,7 +400,7 @@
 
 
             <button
-                id="signupButton"
+                id="activationSignupButton"
                 class="button primary"
                 type="button"
             >
@@ -377,7 +412,7 @@
     </div>
 
 
-    <!-- NORMAL AUTH -->
+    <!-- LOGIN / SIGNUP -->
 
     <div
         id="authCard"
@@ -386,19 +421,12 @@
 
         <div class="center">
 
-            <h1
-                id="authTitle"
-                class="title"
-            >
+            <h1 id="authTitle">
                 Login
             </h1>
 
-
-            <p
-                id="authSubtitle"
-                class="subtitle"
-            >
-                Login to activate this E-Tag.
+            <p id="authSubtitle">
+                Login to activate your E-Tag.
             </p>
 
         </div>
@@ -406,16 +434,14 @@
 
         <div class="section">
 
-            <div class="input-group">
+            <div class="field">
 
-                <label for="email">
+                <label for="authEmail">
                     Email
                 </label>
 
-
                 <input
-                    id="email"
-                    class="input"
+                    id="authEmail"
                     type="email"
                     autocomplete="email"
                 >
@@ -423,16 +449,14 @@
             </div>
 
 
-            <div class="input-group">
+            <div class="field">
 
-                <label for="password">
+                <label for="authPassword">
                     Password
                 </label>
 
-
                 <input
-                    id="password"
-                    class="input"
+                    id="authPassword"
                     type="password"
                     autocomplete="current-password"
                 >
@@ -441,18 +465,16 @@
 
 
             <div
-                id="confirmPasswordGroup"
-                class="input-group hidden"
+                id="confirmGroup"
+                class="field hidden"
             >
 
-                <label for="confirmPassword">
+                <label for="authConfirmPassword">
                     Confirm Password
                 </label>
 
-
                 <input
-                    id="confirmPassword"
-                    class="input"
+                    id="authConfirmPassword"
                     type="password"
                     autocomplete="new-password"
                 >
@@ -461,7 +483,7 @@
 
 
             <button
-                id="authSubmitButton"
+                id="authButton"
                 class="button primary"
                 type="button"
             >
@@ -470,7 +492,7 @@
 
 
             <button
-                id="forgotPasswordButton"
+                id="authForgotButton"
                 class="link-button"
                 type="button"
             >
@@ -500,25 +522,24 @@
     <!-- EDIT LOGIN -->
 
     <div
-        id="editLoginCard"
+        id="editCard"
         class="card hidden"
     >
 
         <div class="center">
 
-            <h1 class="title">
+            <h1>
                 Edit Your Profile
             </h1>
 
-
-            <p class="subtitle">
-                Login to confirm that this E-Tag belongs to you.
+            <p>
+                Login to edit the owner profile
+                of this E-Tag.
             </p>
 
-
             <div
-                id="editLoginTagCode"
-                class="tag-code"
+                id="editTag"
+                class="tag"
             ></div>
 
         </div>
@@ -526,16 +547,14 @@
 
         <div class="section">
 
-            <div class="input-group">
+            <div class="field">
 
                 <label for="editEmail">
                     Email
                 </label>
 
-
                 <input
                     id="editEmail"
-                    class="input"
                     type="email"
                     autocomplete="email"
                 >
@@ -543,16 +562,14 @@
             </div>
 
 
-            <div class="input-group">
+            <div class="field">
 
                 <label for="editPassword">
                     Password
                 </label>
 
-
                 <input
                     id="editPassword"
-                    class="input"
                     type="password"
                     autocomplete="current-password"
                 >
@@ -570,7 +587,7 @@
 
 
             <button
-                id="editForgotPasswordButton"
+                id="editForgotButton"
                 class="link-button"
                 type="button"
             >
@@ -588,7 +605,7 @@
 
 
             <div
-                id="editLoginMessage"
+                id="editMessage"
                 class="message"
             ></div>
 
@@ -597,22 +614,21 @@
     </div>
 
 
-    <!-- PASSWORD RESET -->
+    <!-- RESET -->
 
     <div
-        id="forgotPasswordCard"
+        id="resetCard"
         class="card hidden"
     >
 
         <div class="center">
 
-            <h1 class="title">
+            <h1>
                 Reset Password
             </h1>
 
-
-            <p class="subtitle">
-                Enter your email and we will send a password reset link.
+            <p>
+                Enter your account email.
             </p>
 
         </div>
@@ -620,16 +636,14 @@
 
         <div class="section">
 
-            <div class="input-group">
+            <div class="field">
 
                 <label for="resetEmail">
                     Email
                 </label>
 
-
                 <input
                     id="resetEmail"
-                    class="input"
                     type="email"
                     autocomplete="email"
                 >
@@ -638,7 +652,7 @@
 
 
             <button
-                id="sendResetButton"
+                id="resetButton"
                 class="button primary"
                 type="button"
             >
@@ -668,36 +682,30 @@
     <!-- ALREADY ACTIVATED -->
 
     <div
-        id="alreadyActivatedCard"
+        id="alreadyCard"
         class="card hidden"
     >
 
         <div class="center">
 
-            <h1 class="title">
-                E-Tag Already Activated
+            <h1>
+                E-Tag Activated
             </h1>
 
-
-            <p class="subtitle">
-                This E-Tag has already been connected to an account.
+            <p>
+                This E-Tag is already connected
+                to an account.
             </p>
 
-
             <div
-                id="alreadyActivatedTagCode"
-                class="tag-code"
+                id="alreadyTag"
+                class="tag"
             ></div>
 
         </div>
 
-
-        <div
-            id="alreadyActivatedMessage"
-            class="message info"
-        ></div>
-
     </div>
+
 
 </div>
 
@@ -737,15 +745,15 @@
         );
 
 
-    const loadingView =
+    const loadingCard =
         document.getElementById(
-            "loadingView"
+            "loadingCard"
         );
 
 
-    const errorView =
+    const errorCard =
         document.getElementById(
-            "errorView"
+            "errorCard"
         );
 
 
@@ -767,21 +775,21 @@
         );
 
 
-    const activationTagCode =
+    const activationTag =
         document.getElementById(
-            "activationTagCode"
+            "activationTag"
         );
 
 
-    const loginButton =
+    const activationLoginButton =
         document.getElementById(
-            "loginButton"
+            "activationLoginButton"
         );
 
 
-    const signupButton =
+    const activationSignupButton =
         document.getElementById(
-            "signupButton"
+            "activationSignupButton"
         );
 
 
@@ -803,39 +811,39 @@
         );
 
 
-    const emailInput =
+    const authEmail =
         document.getElementById(
-            "email"
+            "authEmail"
         );
 
 
-    const passwordInput =
+    const authPassword =
         document.getElementById(
-            "password"
+            "authPassword"
         );
 
 
-    const confirmPasswordInput =
+    const authConfirmPassword =
         document.getElementById(
-            "confirmPassword"
+            "authConfirmPassword"
         );
 
 
-    const confirmPasswordGroup =
+    const confirmGroup =
         document.getElementById(
-            "confirmPasswordGroup"
+            "confirmGroup"
         );
 
 
-    const authSubmitButton =
+    const authButton =
         document.getElementById(
-            "authSubmitButton"
+            "authButton"
         );
 
 
-    const forgotPasswordButton =
+    const authForgotButton =
         document.getElementById(
-            "forgotPasswordButton"
+            "authForgotButton"
         );
 
 
@@ -851,15 +859,15 @@
         );
 
 
-    const editLoginCard =
+    const editCard =
         document.getElementById(
-            "editLoginCard"
+            "editCard"
         );
 
 
-    const editLoginTagCode =
+    const editTag =
         document.getElementById(
-            "editLoginTagCode"
+            "editTag"
         );
 
 
@@ -881,9 +889,9 @@
         );
 
 
-    const editForgotPasswordButton =
+    const editForgotButton =
         document.getElementById(
-            "editForgotPasswordButton"
+            "editForgotButton"
         );
 
 
@@ -893,15 +901,15 @@
         );
 
 
-    const editLoginMessage =
+    const editMessage =
         document.getElementById(
-            "editLoginMessage"
+            "editMessage"
         );
 
 
-    const forgotPasswordCard =
+    const resetCard =
         document.getElementById(
-            "forgotPasswordCard"
+            "resetCard"
         );
 
 
@@ -911,9 +919,9 @@
         );
 
 
-    const sendResetButton =
+    const resetButton =
         document.getElementById(
-            "sendResetButton"
+            "resetButton"
         );
 
 
@@ -929,21 +937,15 @@
         );
 
 
-    const alreadyActivatedCard =
+    const alreadyCard =
         document.getElementById(
-            "alreadyActivatedCard"
+            "alreadyCard"
         );
 
 
-    const alreadyActivatedTagCode =
+    const alreadyTag =
         document.getElementById(
-            "alreadyActivatedTagCode"
-        );
-
-
-    const alreadyActivatedMessage =
-        document.getElementById(
-            "alreadyActivatedMessage"
+            "alreadyTag"
         );
 
 
@@ -963,171 +965,97 @@
             );
 
 
-        const queryTag =
+        const tag =
             url.searchParams.get(
                 "tag"
             );
 
 
         if (
-            queryTag
+            !tag
         ) {
 
-            return queryTag
-                .trim()
-                .toUpperCase();
-
+            return null;
         }
 
 
-        return null;
+        return tag
+            .trim()
+            .toUpperCase();
     }
 
 
     function isEditMode() {
 
-        return new URL(
-            window.location.href
-        )
-            .searchParams
-            .get(
+        const url =
+            new URL(
+                window.location.href
+            );
+
+
+        return (
+            url.searchParams.get(
                 "edit"
-            ) === "1";
-
+            ) === "1"
+        );
     }
 
 
-    function showOnly(
-        element
-    ) {
+    function hideEverything() {
 
-        [
-            activationCard,
-            authCard,
-            editLoginCard,
-            forgotPasswordCard,
-            alreadyActivatedCard
-        ].forEach(
-            item => {
-
-                item.classList.add(
-                    "hidden"
-                );
-
-            }
-        );
-
-
-        errorView.classList.add(
+        loadingCard.classList.add(
             "hidden"
         );
 
-
-        loadingView.classList.add(
+        errorCard.classList.add(
             "hidden"
         );
-
-
-        element.classList.remove(
-            "hidden"
-        );
-
-    }
-
-
-    function showError(
-        message
-    ) {
-
-        loadingView.classList.add(
-            "hidden"
-        );
-
 
         activationCard.classList.add(
             "hidden"
         );
 
-
         authCard.classList.add(
             "hidden"
         );
 
-
-        editLoginCard.classList.add(
+        editCard.classList.add(
             "hidden"
         );
 
-
-        forgotPasswordCard.classList.add(
+        resetCard.classList.add(
             "hidden"
         );
 
-
-        alreadyActivatedCard.classList.add(
+        alreadyCard.classList.add(
             "hidden"
         );
-
-
-        errorText.textContent =
-            message;
-
-
-        errorView.classList.remove(
-            "hidden"
-        );
-
     }
 
 
-    function normalizeTemplate(
-        value
+    function show(
+        element
     ) {
 
-        const template =
-            String(
-                value || ""
-            )
-                .trim()
-                .toLowerCase();
+        hideEverything();
+
+        element.classList.remove(
+            "hidden"
+        );
+    }
 
 
-        if (
-            template === "boy"
-        ) {
+    function message(
+        element,
+        text,
+        type
+    ) {
 
-            return "men";
+        element.textContent =
+            text;
 
-        }
-
-
-        if (
-            template === "girl"
-        ) {
-
-            return "women";
-
-        }
-
-
-        if (
-            [
-                "men",
-                "women",
-                "couple",
-                "business"
-            ].includes(
-                template
-            )
-        ) {
-
-            return template;
-
-        }
-
-
-        return "men";
-
+        element.className =
+            `message show ${type}`;
     }
 
 
@@ -1145,207 +1073,171 @@
 
 
         if (
-            type === "couple"
+            type ===
+            "couple"
         ) {
 
             return "couple";
-
         }
 
 
         if (
-            type === "business"
+            type ===
+            "business"
         ) {
 
             return "business";
-
         }
 
 
-        return normalizeTemplate(
-            profile?.template
-        );
+        const template =
+            String(
+                profile?.template ||
+                "men"
+            )
+                .trim()
+                .toLowerCase();
 
+
+        if (
+            template ===
+            "women" ||
+            template ===
+            "girl"
+        ) {
+
+            return "women";
+        }
+
+
+        return "men";
     }
 
 
-    function goToTheme(
-        tagCode,
-        profile
-    ) {
+    async function getTag() {
 
-        const theme =
-            getTheme(
-                profile
+        const code =
+            getTagCode();
+
+
+        if (
+            !code
+        ) {
+
+            throw new Error(
+                "Invalid E-Tag URL. A tag code is required."
             );
+        }
 
 
-        window.location.replace(
-            `/E-Tag/themes/${theme}.html?tag=${encodeURIComponent(
-                tagCode
-            )}`
-        );
-
-    }
-
-
-    async function getProfile(
-        ownerId
-    ) {
-
-        const result =
+        const {
+            data,
+            error
+        } =
             await supabase
                 .from(
-                    "profiles"
+                    "nfc_tags"
                 )
                 .select(
-                    "*"
+                    "id,tag_code,owner_id,active"
                 )
                 .eq(
-                    "id",
-                    ownerId
+                    "tag_code",
+                    code
                 )
                 .maybeSingle();
 
 
         if (
-            result.error
+            error
         ) {
 
             throw new Error(
-                `Profile lookup failed: ${
-                    result.error.message
-                }`
+                `E-Tag lookup failed: ${error.message}`
             );
-
         }
-
-
-        return result.data;
-
-    }
-
-
-    async function loadTag() {
-
-        const tagCode =
-            getTagCode();
 
 
         if (
-            !tagCode
+            !data
         ) {
 
-            showError(
-                "Invalid E-Tag URL. A tag code is required."
+            throw new Error(
+                `E-Tag "${code}" was not found.`
             );
-
-            return;
-
         }
 
 
-        loadingView.textContent =
-            "Loading E-Tag...";
+        currentTag =
+            data;
 
 
-        loadingView.classList.remove(
-            "hidden"
+        activationTag.textContent =
+            data.tag_code;
+
+
+        editTag.textContent =
+            data.tag_code;
+
+
+        alreadyTag.textContent =
+            data.tag_code;
+
+
+        return data;
+    }
+
+
+    async function getSessionUser() {
+
+        const {
+            data,
+            error
+        } =
+            await supabase.auth.getSession();
+
+
+        if (
+            error
+        ) {
+
+            throw new Error(
+                `Session error: ${error.message}`
+            );
+        }
+
+
+        return (
+            data?.session?.user ||
+            null
         );
+    }
 
+
+    async function loadPage() {
 
         try {
 
-            const result =
-                await supabase
-                    .from(
-                        "nfc_tags"
-                    )
-                    .select(
-                        "id,tag_code,owner_id,active"
-                    )
-                    .eq(
-                        "tag_code",
-                        tagCode
-                    )
-                    .maybeSingle();
-
-
-            if (
-                result.error
-            ) {
-
-                throw new Error(
-                    `E-Tag lookup failed: ${
-                        result.error.message
-                    }`
-                );
-
-            }
+            loadingCard.classList.remove(
+                "hidden"
+            );
 
 
             const tag =
-                result.data;
-
-
-            if (
-                !tag
-            ) {
-
-                showError(
-                    `E-Tag "${tagCode}" was not found.`
-                );
-
-                return;
-
-            }
-
-
-            currentTag =
-                tag;
-
-
-            activationTagCode.textContent =
-                tag.tag_code;
-
-
-            alreadyActivatedTagCode.textContent =
-                tag.tag_code;
-
-
-            editLoginTagCode.textContent =
-                tag.tag_code;
-
-
-            const {
-                data:
-                    sessionData,
-                error:
-                    sessionError
-            } =
-                await supabase.auth.getSession();
-
-
-            if (
-                sessionError
-            ) {
-
-                throw new Error(
-                    `Session lookup failed: ${
-                        sessionError.message
-                    }`
-                );
-
-            }
-
-
-            const user =
-                sessionData?.session?.user ||
-                null;
+                await getTag();
 
 
             /*
-             * Not activated yet
+             * Always check the current auth session
+             * BEFORE deciding what page to show.
+             */
+
+            const user =
+                await getSessionUser();
+
+
+            /*
+             * E-Tag not activated
              */
 
             if (
@@ -1353,20 +1245,16 @@
                 !tag.owner_id
             ) {
 
-                showOnly(
+                show(
                     activationCard
                 );
 
                 return;
-
             }
 
 
             /*
-             * OWNER
-             *
-             * If the owner is already logged in,
-             * go directly to the dashboard.
+             * Owner already logged in
              */
 
             if (
@@ -1380,38 +1268,25 @@
                 );
 
                 return;
-
             }
 
 
             /*
              * EDIT MODE
              *
-             * This is the important fix.
-             *
-             * When the user clicks:
-             *
-             * Edit My Profile
-             *
-             * the theme sends:
-             *
-             * ?tag=ASD&edit=1
-             *
-             * A logged-out visitor is therefore
-             * shown the edit-login screen instead
-             * of being redirected back to the theme.
+             * This check MUST happen before the
+             * public-theme redirect.
              */
 
             if (
                 isEditMode()
             ) {
 
-                showOnly(
-                    editLoginCard
+                show(
+                    editCard
                 );
 
                 return;
-
             }
 
 
@@ -1419,37 +1294,57 @@
              * NORMAL PUBLIC PROFILE
              */
 
-            const profile =
-                await getProfile(
-                    tag.owner_id
+            const {
+                data: profile,
+                error:
+                    profileError
+            } =
+                await supabase
+                    .from(
+                        "profiles"
+                    )
+                    .select(
+                        "profile_type,template,avatar_type,character_id,avatar_url"
+                    )
+                    .eq(
+                        "id",
+                        tag.owner_id
+                    )
+                    .maybeSingle();
+
+
+            if (
+                profileError
+            ) {
+
+                throw new Error(
+                    `Profile lookup failed: ${profileError.message}`
                 );
+            }
 
 
             if (
                 !profile
             ) {
 
-                showOnly(
-                    alreadyActivatedCard
+                show(
+                    alreadyCard
                 );
 
-
-                alreadyActivatedMessage.textContent =
-                    "This E-Tag is activated, but its public profile has not been created yet.";
-
-
-                alreadyActivatedMessage.className =
-                    "message info show";
-
-
                 return;
-
             }
 
 
-            goToTheme(
-                tag.tag_code,
-                profile
+            const theme =
+                getTheme(
+                    profile
+                );
+
+
+            window.location.replace(
+                `/E-Tag/themes/${theme}.html?tag=${encodeURIComponent(
+                    tag.tag_code
+                )}`
             );
 
         } catch (
@@ -1457,18 +1352,20 @@
         ) {
 
             console.error(
-                "E-Tag loading error:",
+                "E-Tag error:",
                 error
             );
 
 
-            showError(
+            errorText.textContent =
                 error.message ||
-                "Unable to load this E-Tag."
+                "Unable to load this E-Tag.";
+
+
+            show(
+                errorCard
             );
-
         }
-
     }
 
 
@@ -1480,13 +1377,13 @@
             mode;
 
 
-        showOnly(
-            authCard
-        );
+        authMessage.className =
+            "message";
 
 
         if (
-            mode === "signup"
+            mode ===
+            "signup"
         ) {
 
             authTitle.textContent =
@@ -1494,19 +1391,19 @@
 
 
             authSubtitle.textContent =
-                "Create your account to activate this E-Tag.";
+                "Create an account to activate this E-Tag.";
 
 
-            authSubmitButton.textContent =
+            authButton.textContent =
                 "Create Account";
 
 
-            confirmPasswordGroup.classList.remove(
+            confirmGroup.classList.remove(
                 "hidden"
             );
 
 
-            forgotPasswordButton.classList.add(
+            authForgotButton.classList.add(
                 "hidden"
             );
 
@@ -1520,47 +1417,35 @@
                 "Login to activate this E-Tag.";
 
 
-            authSubmitButton.textContent =
+            authButton.textContent =
                 "Login";
 
 
-            confirmPasswordGroup.classList.add(
+            confirmGroup.classList.add(
                 "hidden"
             );
 
 
-            forgotPasswordButton.classList.remove(
+            authForgotButton.classList.remove(
                 "hidden"
             );
-
         }
 
-    }
 
-
-    function showForgotPassword(
-        email = ""
-    ) {
-
-        showOnly(
-            forgotPasswordCard
+        show(
+            authCard
         );
-
-
-        resetEmail.value =
-            email;
-
     }
 
 
-    async function submitEditLogin() {
+    async function submitAuth() {
 
         const email =
-            editEmail.value.trim();
+            authEmail.value.trim();
 
 
         const password =
-            editPassword.value;
+            authPassword.value;
 
 
         if (
@@ -1568,28 +1453,95 @@
             !password
         ) {
 
-            editLoginMessage.textContent =
-                "Please enter your email and password.";
-
-
-            editLoginMessage.className =
-                "message error";
-
+            message(
+                authMessage,
+                "Please enter your email and password.",
+                "error"
+            );
 
             return;
-
         }
 
 
-        editLoginButton.disabled =
+        authButton.disabled =
             true;
 
 
-        editLoginButton.textContent =
-            "Checking...";
-
-
         try {
+
+            if (
+                authMode ===
+                "signup"
+            ) {
+
+                const confirm =
+                    authConfirmPassword.value;
+
+
+                if (
+                    password !==
+                    confirm
+                ) {
+
+                    throw new Error(
+                        "Passwords do not match."
+                    );
+                }
+
+
+                const redirectUrl =
+                    `${window.location.origin}/E-Tag/auth-callback.html?tag=${encodeURIComponent(
+                        currentTag.tag_code
+                    )}`;
+
+
+                const {
+                    data,
+                    error
+                } =
+                    await supabase.auth.signUp(
+                        {
+                            email,
+                            password,
+
+                            options: {
+                                emailRedirectTo:
+                                    redirectUrl
+                            }
+                        }
+                    );
+
+
+                if (
+                    error
+                ) {
+
+                    throw error;
+                }
+
+
+                if (
+                    data?.session
+                ) {
+
+                    window.location.replace(
+                        "/E-Tag/dashboard.html"
+                    );
+
+                    return;
+                }
+
+
+                message(
+                    authMessage,
+                    "Account created. Check your email to confirm your account.",
+                    "success"
+                );
+
+
+                return;
+            }
+
 
             const {
                 data,
@@ -1609,7 +1561,96 @@
             ) {
 
                 throw error;
+            }
 
+
+            if (
+                data?.user
+            ) {
+
+                window.location.replace(
+                    "/E-Tag/dashboard.html"
+                );
+
+                return;
+            }
+
+        } catch (
+            error
+        ) {
+
+            message(
+                authMessage,
+                error.message ||
+                "Login failed.",
+                "error"
+            );
+
+        } finally {
+
+            authButton.disabled =
+                false;
+        }
+    }
+
+
+    async function submitEditLogin() {
+
+        const email =
+            editEmail.value.trim();
+
+
+        const password =
+            editPassword.value;
+
+
+        if (
+            !email ||
+            !password
+        ) {
+
+            message(
+                editMessage,
+                "Please enter your email and password.",
+                "error"
+            );
+
+            return;
+        }
+
+
+        editLoginButton.disabled =
+            true;
+
+
+        editLoginButton.textContent =
+            "Checking...";
+
+
+        try {
+
+            /*
+             * Login first.
+             */
+
+            const {
+                data,
+                error
+            } =
+                await supabase.auth
+                    .signInWithPassword(
+                        {
+                            email,
+                            password
+                        }
+                    );
+
+
+            if (
+                error
+            ) {
+
+                throw error;
             }
 
 
@@ -1620,9 +1661,12 @@
                 throw new Error(
                     "Login succeeded but no user session was returned."
                 );
-
             }
 
+
+            /*
+             * Re-read the E-Tag AFTER login.
+             */
 
             const {
                 data: tag,
@@ -1647,29 +1691,34 @@
                 tagError
             ) {
 
-                throw tagError;
-
+                throw new Error(
+                    `Unable to verify E-Tag ownership: ${tagError.message}`
+                );
             }
 
 
             if (
-                !tag ||
-                !tag.active ||
-                !tag.owner_id
+                !tag
+            ) {
+
+                throw new Error(
+                    "E-Tag no longer exists."
+                );
+            }
+
+
+            if (
+                !tag.active
             ) {
 
                 throw new Error(
                     "This E-Tag is not active."
                 );
-
             }
 
 
             /*
-             * SECURITY CHECK
-             *
-             * The logged-in account must actually
-             * own this E-Tag.
+             * SECURITY CHECK.
              */
 
             if (
@@ -1683,9 +1732,12 @@
                 throw new Error(
                     "This account does not own this E-Tag."
                 );
-
             }
 
+
+            /*
+             * Correct owner.
+             */
 
             window.location.replace(
                 "/E-Tag/dashboard.html"
@@ -1695,13 +1747,12 @@
             error
         ) {
 
-            editLoginMessage.textContent =
+            message(
+                editMessage,
                 error.message ||
-                "Unable to login.";
-
-
-            editLoginMessage.className =
-                "message error";
+                "Unable to login.",
+                "error"
+            );
 
         } finally {
 
@@ -1711,183 +1762,11 @@
 
             editLoginButton.textContent =
                 "Login to Edit";
-
         }
-
     }
 
 
-    async function submitAuth() {
-
-        const email =
-            emailInput.value.trim();
-
-
-        const password =
-            passwordInput.value;
-
-
-        if (
-            !email ||
-            !password
-        ) {
-
-            authMessage.textContent =
-                "Please enter your email and password.";
-
-
-            authMessage.className =
-                "message error";
-
-
-            return;
-
-        }
-
-
-        authSubmitButton.disabled =
-            true;
-
-
-        try {
-
-            if (
-                authMode ===
-                "signup"
-            ) {
-
-                const confirmPassword =
-                    confirmPasswordInput.value;
-
-
-                if (
-                    password !==
-                    confirmPassword
-                ) {
-
-                    throw new Error(
-                        "Passwords do not match."
-                    );
-
-                }
-
-
-                const callback =
-                    `${window.location.origin}/E-Tag/auth-callback.html?tag=${encodeURIComponent(
-                        currentTag.tag_code
-                    )}`;
-
-
-                const {
-                    data,
-                    error
-                } =
-                    await supabase.auth.signUp(
-                        {
-                            email,
-                            password,
-
-                            options: {
-                                emailRedirectTo:
-                                    callback
-                            }
-                        }
-                    );
-
-
-                if (
-                    error
-                ) {
-
-                    throw error;
-
-                }
-
-
-                if (
-                    data?.session &&
-                    data?.user
-                ) {
-
-                    window.location.replace(
-                        "/E-Tag/dashboard.html"
-                    );
-
-                    return;
-
-                }
-
-
-                authMessage.textContent =
-                    "Account created. Check your email to confirm your account.";
-
-
-                authMessage.className =
-                    "message info show";
-
-
-                return;
-
-            }
-
-
-            const {
-                data,
-                error
-            } =
-                await supabase.auth
-                    .signInWithPassword(
-                        {
-                            email,
-                            password
-                        }
-                    );
-
-
-            if (
-                error
-            ) {
-
-                throw error;
-
-            }
-
-
-            if (
-                data?.user
-            ) {
-
-                window.location.replace(
-                    "/E-Tag/dashboard.html"
-                );
-
-                return;
-
-            }
-
-        } catch (
-            error
-        ) {
-
-            authMessage.textContent =
-                error.message ||
-                "Authentication failed.";
-
-
-            authMessage.className =
-                "message error";
-
-        } finally {
-
-            authSubmitButton.disabled =
-                false;
-
-        }
-
-    }
-
-
-    async function sendPasswordReset() {
+    async function sendReset() {
 
         const email =
             resetEmail.value.trim();
@@ -1897,20 +1776,17 @@
             !email
         ) {
 
-            resetMessage.textContent =
-                "Please enter your email.";
-
-
-            resetMessage.className =
-                "message error";
-
+            message(
+                resetMessage,
+                "Please enter your email.",
+                "error"
+            );
 
             return;
-
         }
 
 
-        sendResetButton.disabled =
+        resetButton.disabled =
             true;
 
 
@@ -1934,64 +1810,57 @@
             ) {
 
                 throw error;
-
             }
 
 
-            resetMessage.textContent =
-                "Password reset email sent.";
-
-
-            resetMessage.className =
-                "message info show";
+            message(
+                resetMessage,
+                "Password reset email sent.",
+                "success"
+            );
 
         } catch (
             error
         ) {
 
-            resetMessage.textContent =
+            message(
+                resetMessage,
                 error.message ||
-                "Unable to send reset email.";
-
-
-            resetMessage.className =
-                "message error";
+                "Unable to send password reset email.",
+                "error"
+            );
 
         } finally {
 
-            sendResetButton.disabled =
+            resetButton.disabled =
                 false;
-
         }
-
     }
 
 
-    loginButton.addEventListener(
+    activationLoginButton.addEventListener(
         "click",
         () => {
 
             showAuth(
                 "login"
             );
-
         }
     );
 
 
-    signupButton.addEventListener(
+    activationSignupButton.addEventListener(
         "click",
         () => {
 
             showAuth(
                 "signup"
             );
-
         }
     );
 
 
-    authSubmitButton.addEventListener(
+    authButton.addEventListener(
         "click",
         submitAuth
     );
@@ -2003,50 +1872,43 @@
     );
 
 
-    forgotPasswordButton.addEventListener(
+    authForgotButton.addEventListener(
         "click",
         () => {
 
-            showForgotPassword(
-                emailInput.value.trim()
-            );
+            resetEmail.value =
+                authEmail.value.trim();
 
+            show(
+                resetCard
+            );
         }
     );
 
 
-    editForgotPasswordButton.addEventListener(
+    editForgotButton.addEventListener(
         "click",
         () => {
 
-            showForgotPassword(
-                editEmail.value.trim()
-            );
+            resetEmail.value =
+                editEmail.value.trim();
 
+            show(
+                resetCard
+            );
         }
     );
 
 
-    sendResetButton.addEventListener(
+    resetButton.addEventListener(
         "click",
-        sendPasswordReset
-    );
-
-
-    authBackButton.addEventListener(
-        "click",
-        loadTag
+        sendReset
     );
 
 
     editBackButton.addEventListener(
         "click",
         () => {
-
-            /*
-             * Remove edit=1 when returning to
-             * the public profile.
-             */
 
             if (
                 currentTag?.tag_code
@@ -2060,43 +1922,33 @@
 
             } else {
 
-                loadTag();
-
+                window.location.replace(
+                    "/E-Tag/"
+                );
             }
-
         }
+    );
+
+
+    authBackButton.addEventListener(
+        "click",
+        loadPage
     );
 
 
     resetBackButton.addEventListener(
         "click",
-        loadTag
+        loadPage
     );
 
 
     retryButton.addEventListener(
         "click",
-        loadTag
+        loadPage
     );
 
 
-    loadTag()
-        .catch(
-            error => {
-
-                console.error(
-                    "Fatal E-Tag error:",
-                    error
-                );
-
-
-                showError(
-                    error.message ||
-                    "Unable to load this E-Tag."
-                );
-
-            }
-        );
+    loadPage();
 
 </script>
 
