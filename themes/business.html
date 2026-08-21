@@ -12,7 +12,6 @@
     <title>E-Tag · Business</title>
 
     <style>
-
         * {
             box-sizing: border-box;
         }
@@ -27,12 +26,15 @@
             font-family:
                 Inter,
                 system-ui,
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
                 sans-serif;
 
             background:
                 linear-gradient(
                     180deg,
-                    #dbeafe,
+                    #dbeafe 0%,
                     #eff6ff 45%,
                     #f5f7fb 45%
                 );
@@ -55,8 +57,7 @@
             background: #ffffff;
 
             box-shadow:
-                0 20px 60px
-                rgba(
+                0 20px 60px rgba(
                     15,
                     23,
                     42,
@@ -113,6 +114,11 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
+        }
+
+        .avatar.character img {
+            object-fit: contain;
+            padding: 8px;
         }
 
         h1 {
@@ -228,10 +234,8 @@
         .hidden {
             display: none !important;
         }
-
     </style>
 </head>
-
 
 <body>
 
@@ -279,10 +283,7 @@
         </div>
 
 
-        <div
-            id="contactSection"
-            class="section"
-        >
+        <div class="section">
 
             <h2 class="title">
                 Contact
@@ -401,84 +402,70 @@
             "loading"
         );
 
-
     const profile =
         document.getElementById(
             "profile"
         );
-
 
     const avatar =
         document.getElementById(
             "avatar"
         );
 
-
     const name =
         document.getElementById(
             "name"
         );
-
 
     const category =
         document.getElementById(
             "category"
         );
 
-
     const description =
         document.getElementById(
             "description"
         );
-
 
     const contacts =
         document.getElementById(
             "contacts"
         );
 
-
     const locationBox =
         document.getElementById(
             "location"
         );
-
 
     const hoursSection =
         document.getElementById(
             "hoursSection"
         );
 
-
     const hours =
         document.getElementById(
             "hours"
         );
-
 
     const socialSection =
         document.getElementById(
             "socialSection"
         );
 
-
     const socials =
         document.getElementById(
             "socials"
         );
-
 
     const linksSection =
         document.getElementById(
             "linksSection"
         );
 
-
     const businessLinks =
         document.getElementById(
             "businessLinks"
         );
-
 
     const edit =
         document.getElementById(
@@ -486,15 +473,17 @@
         );
 
 
-    function tag() {
+    const CHARACTER_BASE =
+        "/E-Tag/assets/characters/business/";
+
+
+    function getTagCode() {
 
         return new URL(
-            location.href
+            window.location.href
         )
             .searchParams
-            .get(
-                "tag"
-            );
+            .get("tag");
     }
 
 
@@ -508,75 +497,203 @@
     }
 
 
-    function user(
+    function username(
         value
     ) {
 
         return clean(
             value
-        )
-            .replace(
-                /^@/,
-                ""
+        ).replace(
+            /^@/,
+            ""
+        );
+    }
+
+
+    function normalizeUrl(
+        value
+    ) {
+
+        const url =
+            clean(
+                value
             );
+
+
+        if (
+            !url
+        ) {
+
+            return "";
+        }
+
+
+        if (
+            /^https?:\/\//i.test(
+                url
+            )
+        ) {
+
+            return url;
+        }
+
+
+        return `https://${url}`;
+    }
+
+
+    function renderAvatar(
+        element,
+        profile
+    ) {
+
+        element.innerHTML =
+            "";
+
+        element.classList.remove(
+            "character"
+        );
+
+
+        if (
+            profile.avatar_type ===
+                "character" &&
+            profile.character_id
+        ) {
+
+            const image =
+                document.createElement(
+                    "img"
+                );
+
+
+            image.src =
+                `${CHARACTER_BASE}${encodeURIComponent(
+                    profile.character_id
+                )}.svg`;
+
+
+            image.alt =
+                "Business character";
+
+
+            image.onerror =
+                () => {
+
+                    element.textContent =
+                        "🏢";
+                };
+
+
+            element.classList.add(
+                "character"
+            );
+
+
+            element.appendChild(
+                image
+            );
+
+
+            return;
+        }
+
+
+        if (
+            profile.avatar_url
+        ) {
+
+            const image =
+                document.createElement(
+                    "img"
+                );
+
+
+            image.src =
+                profile.avatar_url;
+
+
+            image.alt =
+                "Business logo";
+
+
+            image.onerror =
+                () => {
+
+                    element.textContent =
+                        "🏢";
+                };
+
+
+            element.appendChild(
+                image
+            );
+
+
+            return;
+        }
+
+
+        element.textContent =
+            "🏢";
     }
 
 
     function add(
         parent,
         label,
-        url,
+        href,
         soft = false
     ) {
 
-        const a =
+        const link =
             document.createElement(
                 "a"
             );
 
 
-        a.className =
+        link.className =
             soft
                 ? "button soft"
                 : "button";
 
 
-        a.textContent =
+        link.textContent =
             label;
 
 
-        a.href =
-            url;
+        link.href =
+            href;
 
 
         if (
-            url.startsWith(
+            href.startsWith(
                 "http"
             )
         ) {
 
-            a.target =
+            link.target =
                 "_blank";
 
-            a.rel =
+            link.rel =
                 "noopener";
         }
 
 
         parent.appendChild(
-            a
+            link
         );
     }
 
 
     async function load() {
 
-        const code =
-            tag();
+        const tagCode =
+            getTagCode();
 
 
         if (
-            !code
+            !tagCode
         ) {
 
             loading.textContent =
@@ -587,7 +704,7 @@
 
 
         const {
-            data: t
+            data: tag
         } =
             await supabase
                 .from(
@@ -598,15 +715,15 @@
                 )
                 .eq(
                     "tag_code",
-                    code
+                    tagCode
                 )
                 .maybeSingle();
 
 
         if (
-            !t ||
-            !t.active ||
-            !t.owner_id
+            !tag ||
+            !tag.active ||
+            !tag.owner_id
         ) {
 
             loading.textContent =
@@ -628,7 +745,7 @@
                 )
                 .eq(
                     "id",
-                    t.owner_id
+                    tag.owner_id
                 )
                 .maybeSingle();
 
@@ -673,23 +790,10 @@
             );
 
 
-        if (
-            p.avatar_url
-        ) {
-
-            avatar.innerHTML =
-                `
-                    <img
-                        src="${p.avatar_url}"
-                        alt="Business logo"
-                    >
-                `;
-
-        } else {
-
-            avatar.textContent =
-                "🏢";
-        }
+        renderAvatar(
+            avatar,
+            p
+        );
 
 
         if (
@@ -713,11 +817,10 @@
             const number =
                 clean(
                     p.whatsapp
-                )
-                    .replace(
-                        /\D/g,
-                        ""
-                    );
+                ).replace(
+                    /\D/g,
+                    ""
+                );
 
 
             if (
@@ -754,11 +857,9 @@
             add(
                 contacts,
                 "Website",
-                /^https?:\/\//i.test(
+                normalizeUrl(
                     p.website
                 )
-                    ? p.website
-                    : `https://${p.website}`
             );
         }
 
@@ -792,7 +893,7 @@
             add(
                 socials,
                 "Facebook",
-                `https://facebook.com/${user(
+                `https://facebook.com/${username(
                     p.facebook
                 )}`,
                 true
@@ -811,7 +912,7 @@
             add(
                 socials,
                 "Instagram",
-                `https://instagram.com/${user(
+                `https://instagram.com/${username(
                     p.instagram
                 )}`,
                 true
@@ -830,7 +931,7 @@
             add(
                 socials,
                 "TikTok",
-                `https://www.tiktok.com/@${user(
+                `https://www.tiktok.com/@${username(
                     p.tiktok
                 )}`,
                 true
@@ -849,7 +950,7 @@
             add(
                 socials,
                 "YouTube",
-                `https://youtube.com/@${user(
+                `https://youtube.com/@${username(
                     p.youtube
                 )}`,
                 true
@@ -868,7 +969,7 @@
             add(
                 socials,
                 "Telegram",
-                `https://t.me/${user(
+                `https://t.me/${username(
                     p.telegram
                 )}`,
                 true
@@ -887,11 +988,9 @@
             add(
                 socials,
                 "LinkedIn",
-                /^https?:\/\//i.test(
+                normalizeUrl(
                     p.linkedin
-                )
-                    ? p.linkedin
-                    : `https://${p.linkedin}`,
+                ),
                 true
             );
 
@@ -908,7 +1007,9 @@
             add(
                 businessLinks,
                 "Google Maps",
-                p.google_maps,
+                normalizeUrl(
+                    p.google_maps
+                ),
                 true
             );
 
@@ -925,7 +1026,9 @@
             add(
                 businessLinks,
                 "Online Store",
-                p.online_store,
+                normalizeUrl(
+                    p.online_store
+                ),
                 true
             );
 
@@ -942,7 +1045,9 @@
             add(
                 businessLinks,
                 "Book Now",
-                p.booking_url,
+                normalizeUrl(
+                    p.booking_url
+                ),
                 true
             );
 
@@ -959,7 +1064,9 @@
             add(
                 businessLinks,
                 "Menu / Catalogue",
-                p.menu_url,
+                normalizeUrl(
+                    p.menu_url
+                ),
                 true
             );
 
@@ -971,14 +1078,13 @@
 
         edit.href =
             `/E-Tag/?tag=${encodeURIComponent(
-                t.tag_code
+                tag.tag_code
             )}`;
 
 
         loading.classList.add(
             "hidden"
         );
-
 
         profile.classList.remove(
             "hidden"
