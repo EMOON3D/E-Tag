@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
 
@@ -11,6 +12,7 @@
     <title>E-Tag · Women</title>
 
     <style>
+
         * {
             box-sizing: border-box;
         }
@@ -18,23 +20,19 @@
         body {
             margin: 0;
             min-height: 100vh;
-            padding: 24px 12px 40px;
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
+
+            padding:
+                24px 12px 40px;
 
             font-family:
                 Inter,
                 system-ui,
-                -apple-system,
-                BlinkMacSystemFont,
-                "Segoe UI",
                 sans-serif;
 
             background:
                 linear-gradient(
                     180deg,
-                    #fce7f3 0%,
+                    #fce7f3,
                     #fff1f2 45%,
                     #f5f7fb 45%
                 );
@@ -43,25 +41,35 @@
         }
 
         .page {
-            width: min(100%, 520px);
+            width:
+                min(100%, 560px);
+
+            margin: 0 auto;
         }
 
         .profile {
             overflow: hidden;
+
             border-radius: 28px;
+
             background: #ffffff;
+
             box-shadow:
-                0 20px 60px rgba(
+                0 20px 60px
+                rgba(
                     131,
                     24,
                     67,
-                    0.12
+                    .12
                 );
         }
 
         .hero {
-            padding: 34px 24px 30px;
+            padding:
+                34px 24px 28px;
+
             text-align: center;
+
             background:
                 linear-gradient(
                     145deg,
@@ -72,24 +80,32 @@
         }
 
         .avatar {
-            width: 112px;
-            height: 112px;
-            margin: 0 auto 18px;
+            width: 120px;
+            height: 120px;
+
+            margin:
+                0 auto 18px;
+
             border-radius: 50%;
+
             overflow: hidden;
+
+            background: #fbcfe8;
+
+            border:
+                4px solid
+                rgba(
+                    190,
+                    24,
+                    93,
+                    .12
+                );
+
             display: flex;
             align-items: center;
             justify-content: center;
 
-            background: #fbcfe8;
-            border: 4px solid rgba(
-                190,
-                24,
-                93,
-                0.12
-            );
-
-            font-size: 34px;
+            font-size: 35px;
             font-weight: 800;
         }
 
@@ -101,67 +117,111 @@
 
         h1 {
             margin: 0;
+
             font-size: 30px;
             line-height: 1.2;
         }
 
-        .type {
-            display: inline-flex;
-            margin-top: 12px;
-            padding: 7px 11px;
-            border-radius: 999px;
-            background: #fbcfe8;
-            color: #9d174d;
-            font-size: 11px;
-            font-weight: 800;
+        .age {
+            margin-top: 8px;
+
+            color: #be185d;
+
+            font-size: 14px;
         }
 
         .bio {
-            margin: 14px auto 0;
-            max-width: 420px;
+            max-width: 440px;
+
+            margin:
+                14px auto 0;
+
             color: #9d174d;
+
             line-height: 1.65;
+
             white-space: pre-wrap;
         }
 
-        .actions {
-            padding: 22px;
+        .section {
+            padding: 20px;
+        }
+
+        .section-title {
+            margin:
+                0 0 12px;
+
+            font-size: 16px;
+        }
+
+        .actions,
+        .socials {
             display: grid;
-            gap: 10px;
-            background: #ffffff;
+            gap: 9px;
         }
 
         .action {
             display: block;
-            text-decoration: none;
-            text-align: center;
-            padding: 14px 15px;
-            border-radius: 13px;
+
+            padding:
+                13px 14px;
+
+            border-radius: 12px;
+
             background: #9d174d;
             color: #ffffff;
-            font-size: 15px;
+
+            text-decoration: none;
+
+            text-align: center;
+
+            font-size: 14px;
             font-weight: 800;
         }
 
-        .edit {
+        .social {
+            display: block;
+
+            padding:
+                11px 13px;
+
+            border-radius: 10px;
+
             background: #fce7f3;
+
+            color: #9d174d;
+
+            text-decoration: none;
+
+            text-align: center;
+
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .edit {
+            background: #fbcfe8;
             color: #9d174d;
         }
 
         .loading,
         .error {
             padding: 24px;
+
             border-radius: 20px;
+
             background: #ffffff;
-            color: #831843;
+
             text-align: center;
         }
 
         .hidden {
-            display: none;
+            display: none !important;
         }
+
     </style>
 </head>
+
 
 <body>
 
@@ -176,12 +236,6 @@
 
 
     <div
-        id="error"
-        class="error hidden"
-    ></div>
-
-
-    <div
         id="profile"
         class="profile hidden"
     >
@@ -193,15 +247,19 @@
                 class="avatar"
             ></div>
 
+
             <h1
                 id="name"
             >
                 E-Tag User
             </h1>
 
-            <div class="type">
-                Personal · Women
-            </div>
+
+            <div
+                id="age"
+                class="age"
+            ></div>
+
 
             <p
                 id="bio"
@@ -211,30 +269,40 @@
         </div>
 
 
-        <div class="actions">
+        <div class="section">
 
-            <a
-                id="phone"
-                class="action hidden"
-            >
-                Call
-            </a>
+            <h2 class="section-title">
+                Contact
+            </h2>
 
-            <a
-                id="whatsapp"
-                class="action hidden"
-                target="_blank"
-                rel="noopener"
-            >
-                WhatsApp
-            </a>
 
-            <a
-                id="email"
-                class="action hidden"
-            >
-                Email
-            </a>
+            <div
+                id="contacts"
+                class="actions"
+            ></div>
+
+        </div>
+
+
+        <div
+            id="socialSection"
+            class="section hidden"
+        >
+
+            <h2 class="section-title">
+                Social
+            </h2>
+
+
+            <div
+                id="socials"
+                class="socials"
+            ></div>
+
+        </div>
+
+
+        <div class="section">
 
             <a
                 id="edit"
@@ -278,11 +346,6 @@
             "loading"
         );
 
-    const errorBox =
-        document.getElementById(
-            "error"
-        );
-
     const profile =
         document.getElementById(
             "profile"
@@ -298,24 +361,29 @@
             "name"
         );
 
+    const age =
+        document.getElementById(
+            "age"
+        );
+
     const bio =
         document.getElementById(
             "bio"
         );
 
-    const phone =
+    const contacts =
         document.getElementById(
-            "phone"
+            "contacts"
         );
 
-    const whatsapp =
+    const socials =
         document.getElementById(
-            "whatsapp"
+            "socials"
         );
 
-    const email =
+    const socialSection =
         document.getElementById(
-            "email"
+            "socialSection"
         );
 
     const edit =
@@ -324,13 +392,39 @@
         );
 
 
-    function getTagCode() {
+    function tag() {
 
         return new URL(
-            window.location.href
+            location.href
         )
             .searchParams
-            .get("tag");
+            .get(
+                "tag"
+            );
+    }
+
+
+    function clean(
+        value
+    ) {
+
+        return String(
+            value || ""
+        ).trim();
+    }
+
+
+    function userName(
+        value
+    ) {
+
+        return clean(
+            value
+        )
+            .replace(
+                /^@/,
+                ""
+            );
     }
 
 
@@ -338,85 +432,75 @@
         value
     ) {
 
-        const parts =
-            String(
-                value || ""
-            )
-                .trim()
-                .split(
-                    /\s+/
-                )
-                .filter(
-                    Boolean
-                );
-
-
-        if (
-            parts.length === 0
-        ) {
-
-            return "?";
-        }
-
-
-        if (
-            parts.length === 1
-        ) {
-
-            return parts[0]
-                .substring(
-                    0,
-                    2
-                )
-                .toUpperCase();
-        }
+        const p =
+            clean(
+                value
+            ).split(
+                /\s+/
+            );
 
 
         return (
-            parts[0][0] +
-            parts[
-                parts.length - 1
-            ][0]
-        ).toUpperCase();
+            p[0]?.[0] ||
+            "E"
+        ) +
+        (
+            p[1]?.[0] ||
+            "T"
+        );
     }
 
 
-    function renderAvatar(
-        element,
-        displayName,
-        avatarUrl
+    function link(
+        parent,
+        label,
+        url,
+        className = "action"
     ) {
 
+        const a =
+            document.createElement(
+                "a"
+            );
+
+
+        a.className =
+            className;
+
+        a.textContent =
+            label;
+
+        a.href =
+            url;
+
         if (
-            avatarUrl
+            url.startsWith(
+                "http"
+            )
         ) {
 
-            element.innerHTML =
-                `
-                    <img
-                        src="${avatarUrl}"
-                        alt="Profile"
-                    >
-                `;
+            a.target =
+                "_blank";
 
-        } else {
-
-            element.textContent =
-                initials(
-                    displayName
-                );
+            a.rel =
+                "noopener";
         }
+
+
+        parent.appendChild(
+            a
+        );
     }
 
 
     async function load() {
 
-        const tagCode =
-            getTagCode();
+        const code =
+            tag();
 
 
         if (
-            !tagCode
+            !code
         ) {
 
             loading.textContent =
@@ -427,26 +511,26 @@
 
 
         const {
-            data: tag
+            data: t
         } =
             await supabase
                 .from(
                     "nfc_tags"
                 )
                 .select(
-                    "owner_id,tag_code,active"
+                    "owner_id,active,tag_code"
                 )
                 .eq(
                     "tag_code",
-                    tagCode
+                    code
                 )
                 .maybeSingle();
 
 
         if (
-            !tag ||
-            !tag.active ||
-            !tag.owner_id
+            !t ||
+            !t.active ||
+            !t.owner_id
         ) {
 
             loading.textContent =
@@ -457,24 +541,24 @@
 
 
         const {
-            data: publicProfile
+            data: p
         } =
             await supabase
                 .from(
                     "profiles"
                 )
                 .select(
-                    "display_name,bio,phone,whatsapp,email,avatar_url"
+                    "*"
                 )
                 .eq(
                     "id",
-                    tag.owner_id
+                    t.owner_id
                 )
                 .maybeSingle();
 
 
         if (
-            !publicProfile
+            !p
         ) {
 
             loading.textContent =
@@ -485,7 +569,9 @@
 
 
         const displayName =
-            publicProfile.display_name ||
+            clean(
+                p.display_name
+            ) ||
             "E-Tag User";
 
 
@@ -493,68 +579,183 @@
             displayName;
 
 
+        age.textContent =
+            p.age
+                ? `${p.age} years old`
+                : "";
+
+
         bio.textContent =
-            publicProfile.bio ||
-            "";
-
-
-        renderAvatar(
-            avatar,
-            displayName,
-            publicProfile.avatar_url
-        );
+            clean(
+                p.bio
+            );
 
 
         if (
-            publicProfile.phone
+            p.avatar_url
         ) {
 
-            phone.href =
-                `tel:${encodeURIComponent(
-                    publicProfile.phone
-                )}`;
+            avatar.innerHTML =
+                `
+                    <img
+                        src="${p.avatar_url}"
+                        alt="Profile"
+                    >
+                `;
 
-            phone.classList.remove(
-                "hidden"
+        } else {
+
+            avatar.textContent =
+                initials(
+                    displayName
+                );
+        }
+
+
+        if (
+            p.phone
+        ) {
+
+            link(
+                contacts,
+                "Call",
+                `tel:${encodeURIComponent(
+                    p.phone
+                )}`
             );
         }
 
 
         if (
-            publicProfile.whatsapp
+            p.whatsapp
         ) {
 
-            const number =
-                publicProfile.whatsapp.replace(
+            const n =
+                clean(
+                    p.whatsapp
+                ).replace(
                     /\D/g,
                     ""
                 );
 
 
             if (
-                number
+                n
             ) {
 
-                whatsapp.href =
-                    `https://wa.me/${number}`;
-
-                whatsapp.classList.remove(
-                    "hidden"
+                link(
+                    contacts,
+                    "WhatsApp",
+                    `https://wa.me/${n}`
                 );
             }
         }
 
 
         if (
-            publicProfile.email
+            p.email
         ) {
 
-            email.href =
+            link(
+                contacts,
+                "Email",
                 `mailto:${encodeURIComponent(
-                    publicProfile.email
-                )}`;
+                    p.email
+                )}`
+            );
+        }
 
-            email.classList.remove(
+
+        if (
+            p.facebook
+        ) {
+
+            link(
+                socials,
+                "Facebook",
+                `https://facebook.com/${userName(
+                    p.facebook
+                )}`,
+                "social"
+            );
+
+            socialSection.classList.remove(
+                "hidden"
+            );
+        }
+
+
+        if (
+            p.instagram
+        ) {
+
+            link(
+                socials,
+                "Instagram",
+                `https://instagram.com/${userName(
+                    p.instagram
+                )}`,
+                "social"
+            );
+
+            socialSection.classList.remove(
+                "hidden"
+            );
+        }
+
+
+        if (
+            p.tiktok
+        ) {
+
+            link(
+                socials,
+                "TikTok",
+                `https://www.tiktok.com/@${userName(
+                    p.tiktok
+                )}`,
+                "social"
+            );
+
+            socialSection.classList.remove(
+                "hidden"
+            );
+        }
+
+
+        if (
+            p.youtube
+        ) {
+
+            link(
+                socials,
+                "YouTube",
+                `https://youtube.com/@${userName(
+                    p.youtube
+                )}`,
+                "social"
+            );
+
+            socialSection.classList.remove(
+                "hidden"
+            );
+        }
+
+
+        if (
+            p.telegram
+        ) {
+
+            link(
+                socials,
+                "Telegram",
+                `https://t.me/${userName(
+                    p.telegram
+                )}`,
+                "social"
+            );
+
+            socialSection.classList.remove(
                 "hidden"
             );
         }
@@ -562,13 +763,14 @@
 
         edit.href =
             `/E-Tag/?tag=${encodeURIComponent(
-                tag.tag_code
+                t.tag_code
             )}`;
 
 
         loading.classList.add(
             "hidden"
         );
+
 
         profile.classList.remove(
             "hidden"
