@@ -191,6 +191,67 @@
             font-weight: 700;
         }
 
+        .theme-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .theme-option {
+            position: relative;
+        }
+
+        .theme-option input {
+            position: absolute;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .theme-card {
+            display: block;
+            border: 2px solid #e5e7eb;
+            border-radius: 16px;
+            padding: 14px;
+            cursor: pointer;
+            transition:
+                transform 0.15s ease,
+                border-color 0.15s ease,
+                box-shadow 0.15s ease;
+        }
+
+        .theme-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .theme-option input:checked + .theme-card {
+            border-color: #111827;
+            box-shadow:
+                0 8px 24px rgba(
+                    0,
+                    0,
+                    0,
+                    0.08
+                );
+        }
+
+        .theme-icon {
+            font-size: 26px;
+            margin-bottom: 8px;
+        }
+
+        .theme-name {
+            font-weight: 800;
+            font-size: 15px;
+        }
+
+        .theme-description {
+            margin-top: 4px;
+            font-size: 12px;
+            color: #6b7280;
+            line-height: 1.4;
+        }
+
         .avatar-section {
             display: flex;
             align-items: flex-start;
@@ -258,23 +319,17 @@
             background: #f5f7fb;
             border-radius: 18px;
             padding: 14px;
-            min-height: 500px;
+            min-height: 520px;
         }
 
-        .preview-card {
+        .preview-theme {
             max-width: 430px;
             margin: 0 auto;
-            background: #ffffff;
-            border-radius: 22px;
+            border-radius: 26px;
             padding: 28px 22px;
             text-align: center;
-            box-shadow:
-                0 10px 35px rgba(
-                    0,
-                    0,
-                    0,
-                    0.06
-                );
+            overflow: hidden;
+            position: relative;
         }
 
         .preview-avatar {
@@ -300,15 +355,23 @@
 
         .preview-name {
             margin: 0;
-            font-size: 27px;
+            font-size: 28px;
             line-height: 1.2;
         }
 
         .preview-bio {
             margin: 10px 0 0;
-            color: #6b7280;
             line-height: 1.6;
             white-space: pre-wrap;
+        }
+
+        .preview-type {
+            display: inline-flex;
+            margin-top: 12px;
+            padding: 6px 10px;
+            border-radius: 999px;
+            font-size: 11px;
+            font-weight: 800;
         }
 
         .preview-actions {
@@ -322,14 +385,154 @@
             text-decoration: none;
             padding: 12px 14px;
             border-radius: 11px;
-            background: #111827;
-            color: #ffffff;
             font-size: 14px;
             font-weight: 700;
         }
 
         .preview-button.hidden {
             display: none;
+        }
+
+        .theme-men {
+            background:
+                linear-gradient(
+                    160deg,
+                    #111827 0%,
+                    #1f2937 55%,
+                    #374151 100%
+                );
+            color: #ffffff;
+        }
+
+        .theme-men .preview-avatar {
+            border: 4px solid rgba(
+                255,
+                255,
+                255,
+                0.18
+            );
+        }
+
+        .theme-men .preview-bio {
+            color: #d1d5db;
+        }
+
+        .theme-men .preview-type {
+            background: rgba(
+                255,
+                255,
+                255,
+                0.12
+            );
+            color: #f9fafb;
+        }
+
+        .theme-men .preview-button {
+            background: #ffffff;
+            color: #111827;
+        }
+
+        .theme-women {
+            background:
+                linear-gradient(
+                    160deg,
+                    #fff1f2 0%,
+                    #fce7f3 55%,
+                    #fdf2f8 100%
+                );
+            color: #831843;
+        }
+
+        .theme-women .preview-avatar {
+            border: 4px solid rgba(
+                190,
+                24,
+                93,
+                0.12
+            );
+        }
+
+        .theme-women .preview-bio {
+            color: #9d174d;
+        }
+
+        .theme-women .preview-type {
+            background: #fbcfe8;
+            color: #9d174d;
+        }
+
+        .theme-women .preview-button {
+            background: #9d174d;
+            color: #ffffff;
+        }
+
+        .theme-couple {
+            background:
+                linear-gradient(
+                    160deg,
+                    #fff7ed 0%,
+                    #ffe4e6 50%,
+                    #fef2f2 100%
+                );
+            color: #7f1d1d;
+        }
+
+        .theme-couple .preview-avatar {
+            border: 4px solid rgba(
+                190,
+                24,
+                93,
+                0.12
+            );
+        }
+
+        .theme-couple .preview-bio {
+            color: #991b1b;
+        }
+
+        .theme-couple .preview-type {
+            background: #fecdd3;
+            color: #9f1239;
+        }
+
+        .theme-couple .preview-button {
+            background: #9f1239;
+            color: #ffffff;
+        }
+
+        .theme-business {
+            background:
+                linear-gradient(
+                    160deg,
+                    #eff6ff 0%,
+                    #e0f2fe 55%,
+                    #f8fafc 100%
+                );
+            color: #0f172a;
+        }
+
+        .theme-business .preview-avatar {
+            border-radius: 20px;
+            border: 4px solid rgba(
+                15,
+                23,
+                42,
+                0.08
+            );
+        }
+
+        .theme-business .preview-bio {
+            color: #334155;
+        }
+
+        .theme-business .preview-type {
+            background: #dbeafe;
+            color: #1d4ed8;
+        }
+
+        .theme-business .preview-button {
+            background: #1d4ed8;
+            color: #ffffff;
         }
 
         .loading {
@@ -355,14 +558,12 @@
         }
 
         @media (max-width: 800px) {
-
             .layout {
                 grid-template-columns: 1fr;
             }
         }
 
         @media (max-width: 480px) {
-
             .app {
                 width: min(100% - 16px, 1100px);
                 padding-top: 16px;
@@ -384,6 +585,10 @@
                 width: 100%;
             }
 
+            .theme-grid {
+                grid-template-columns: 1fr;
+            }
+
             .header h1 {
                 font-size: 26px;
             }
@@ -402,7 +607,6 @@
         Loading your E-Tag dashboard...
     </div>
 
-
     <div
         id="dashboard"
         class="hidden"
@@ -415,7 +619,7 @@
             </h1>
 
             <p>
-                Manage your public E-Tag profile.
+                Customize your public E-Tag profile.
             </p>
 
         </header>
@@ -452,46 +656,93 @@
             <section class="card">
 
                 <h2>
-                    Your Public Profile
+                    Profile Theme
                 </h2>
 
 
-                <div class="avatar-section">
+                <div class="field">
 
-                    <div
-                        id="avatarPreview"
-                        class="avatar"
-                    ></div>
+                    <label for="profileType">
+                        Profile Type
+                    </label>
+
+                    <select
+                        id="profileType"
+                        class="select"
+                    >
+
+                        <option value="personal">
+                            Personal
+                        </option>
+
+                        <option value="couple">
+                            Couple
+                        </option>
+
+                        <option value="business">
+                            Business
+                        </option>
+
+                    </select>
+
+                </div>
 
 
-                    <div class="avatar-tools">
-
-                        <label
-                            for="avatarFile"
-                            class="upload-label"
-                        >
-                            Upload Photo
-                        </label>
+                <div
+                    id="themeGrid"
+                    class="theme-grid"
+                ></div>
 
 
-                        <input
-                            id="avatarFile"
-                            class="file-input"
-                            type="file"
-                            accept="image/jpeg,image/png,image/webp"
-                        >
+                <div
+                    id="avatarEditor"
+                    class="field"
+                    style="margin-top: 22px;"
+                >
+
+                    <label>
+                        Profile Photo
+                    </label>
 
 
-                        <div class="upload-help">
-                            JPG, PNG or WEBP.
-                            Maximum file size: 1 MB.
-                        </div>
-
+                    <div class="avatar-section">
 
                         <div
-                            id="uploadStatus"
-                            class="upload-status"
+                            id="avatarPreview"
+                            class="avatar"
                         ></div>
+
+
+                        <div class="avatar-tools">
+
+                            <label
+                                for="avatarFile"
+                                class="upload-label"
+                            >
+                                Upload Photo
+                            </label>
+
+
+                            <input
+                                id="avatarFile"
+                                class="file-input"
+                                type="file"
+                                accept="image/jpeg,image/png,image/webp"
+                            >
+
+
+                            <div class="upload-help">
+                                JPG, PNG or WEBP.
+                                Maximum file size: 1 MB.
+                            </div>
+
+
+                            <div
+                                id="uploadStatus"
+                                class="upload-status"
+                            ></div>
+
+                        </div>
 
                     </div>
 
@@ -518,7 +769,7 @@
                 <div class="field">
 
                     <label for="bio">
-                        Bio
+                        Short Bio
                     </label>
 
                     <textarea
@@ -582,66 +833,6 @@
                 </div>
 
 
-                <div class="field">
-
-                    <label for="profileType">
-                        Profile Type
-                    </label>
-
-                    <select
-                        id="profileType"
-                        class="select"
-                    >
-
-                        <option value="personal">
-                            Personal
-                        </option>
-
-                        <option value="business">
-                            Business
-                        </option>
-
-                        <option value="couple">
-                            Couple
-                        </option>
-
-                    </select>
-
-                </div>
-
-
-                <div class="field">
-
-                    <label for="template">
-                        Template
-                    </label>
-
-                    <select
-                        id="template"
-                        class="select"
-                    >
-
-                        <option value="boy">
-                            Boy
-                        </option>
-
-                        <option value="girl">
-                            Girl
-                        </option>
-
-                        <option value="business">
-                            Business
-                        </option>
-
-                        <option value="couple">
-                            Couple
-                        </option>
-
-                    </select>
-
-                </div>
-
-
                 <div class="button-row">
 
                     <button
@@ -670,7 +861,7 @@
                 <div class="top-actions">
 
                     <h2>
-                        Public Preview
+                        Live Preview
                     </h2>
 
                     <button
@@ -686,7 +877,10 @@
 
                 <div class="preview-shell">
 
-                    <div class="preview-card">
+                    <div
+                        id="previewTheme"
+                        class="preview-theme theme-men"
+                    >
 
                         <div
                             id="previewAvatar"
@@ -700,6 +894,14 @@
                         >
                             E-Tag User
                         </h1>
+
+
+                        <div
+                            id="previewType"
+                            class="preview-type"
+                        >
+                            Personal
+                        </div>
 
 
                         <p
@@ -825,6 +1027,16 @@
             "statusBadge"
         );
 
+    const profileType =
+        document.getElementById(
+            "profileType"
+        );
+
+    const themeGrid =
+        document.getElementById(
+            "themeGrid"
+        );
+
     const avatarFile =
         document.getElementById(
             "avatarFile"
@@ -865,16 +1077,6 @@
             "publicEmail"
         );
 
-    const profileType =
-        document.getElementById(
-            "profileType"
-        );
-
-    const template =
-        document.getElementById(
-            "template"
-        );
-
     const saveButton =
         document.getElementById(
             "saveButton"
@@ -890,6 +1092,11 @@
             "openPublicButton"
         );
 
+    const previewTheme =
+        document.getElementById(
+            "previewTheme"
+        );
+
     const previewAvatar =
         document.getElementById(
             "previewAvatar"
@@ -898,6 +1105,11 @@
     const previewName =
         document.getElementById(
             "previewName"
+        );
+
+    const previewType =
+        document.getElementById(
+            "previewType"
         );
 
     const previewBio =
@@ -932,6 +1144,75 @@
 
     let currentAvatarUrl =
         "";
+
+    let selectedTemplate =
+        "men";
+
+
+    const THEME_OPTIONS = {
+
+        personal: [
+            {
+                id:
+                    "men",
+
+                name:
+                    "Men",
+
+                icon:
+                    "👤",
+
+                description:
+                    "Clean modern personal style."
+            },
+
+            {
+                id:
+                    "women",
+
+                name:
+                    "Women",
+
+                icon:
+                    "✨",
+
+                description:
+                    "Elegant personal style."
+            }
+        ],
+
+        couple: [
+            {
+                id:
+                    "couple",
+
+                name:
+                    "Couple",
+
+                icon:
+                    "❤️",
+
+                description:
+                    "Shared romantic profile."
+            }
+        ],
+
+        business: [
+            {
+                id:
+                    "business",
+
+                name:
+                    "Business",
+
+                icon:
+                    "🏢",
+
+                description:
+                    "Professional business style."
+            }
+        ]
+    };
 
 
     function showMessage(
@@ -1076,7 +1357,192 @@
     }
 
 
+    function normalizeTemplate(
+        value
+    ) {
+
+        const normalized =
+            String(
+                value || ""
+            )
+                .trim()
+                .toLowerCase();
+
+
+        if (
+            normalized === "boy"
+        ) {
+
+            return "men";
+        }
+
+
+        if (
+            normalized === "girl"
+        ) {
+
+            return "women";
+        }
+
+
+        if (
+            [
+                "men",
+                "women",
+                "couple",
+                "business"
+            ].includes(
+                normalized
+            )
+        ) {
+
+            return normalized;
+        }
+
+
+        return "men";
+    }
+
+
+    function renderThemeOptions() {
+
+        const type =
+            profileType.value;
+
+
+        const options =
+            THEME_OPTIONS[
+                type
+            ] ||
+            THEME_OPTIONS.personal;
+
+
+        themeGrid.innerHTML =
+            "";
+
+
+        options.forEach(
+            (
+                option
+            ) => {
+
+                const wrapper =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                wrapper.className =
+                    "theme-option";
+
+
+                const input =
+                    document.createElement(
+                        "input"
+                    );
+
+
+                input.type =
+                    "radio";
+
+                input.name =
+                    "theme";
+
+                input.value =
+                    option.id;
+
+                input.id =
+                    `theme-${option.id}`;
+
+
+                const current =
+                    normalizeTemplate(
+                        selectedTemplate
+                    );
+
+
+                input.checked =
+                    current ===
+                    option.id;
+
+
+                input.addEventListener(
+                    "change",
+                    () => {
+
+                        selectedTemplate =
+                            input.value;
+
+                        updatePreview();
+                    }
+                );
+
+
+                const label =
+                    document.createElement(
+                        "label"
+                    );
+
+
+                label.className =
+                    "theme-card";
+
+                label.htmlFor =
+                    input.id;
+
+
+                label.innerHTML =
+                    `
+                        <div class="theme-icon">
+                            ${option.icon}
+                        </div>
+
+                        <div class="theme-name">
+                            ${option.name}
+                        </div>
+
+                        <div class="theme-description">
+                            ${option.description}
+                        </div>
+                    `;
+
+
+                wrapper.appendChild(
+                    input
+                );
+
+                wrapper.appendChild(
+                    label
+                );
+
+                themeGrid.appendChild(
+                    wrapper
+                );
+            }
+        );
+    }
+
+
     function updatePreview() {
+
+        const theme =
+            normalizeTemplate(
+                selectedTemplate
+            );
+
+
+        previewTheme.classList.remove(
+            "theme-men",
+            "theme-women",
+            "theme-couple",
+            "theme-business"
+        );
+
+
+        previewTheme.classList.add(
+            `theme-${theme}`
+        );
+
 
         const name =
             displayName.value.trim() ||
@@ -1089,6 +1555,23 @@
 
         previewBio.textContent =
             bio.value.trim();
+
+
+        const typeLabel =
+            profileType.value ===
+            "business"
+                ? "Business"
+                : profileType.value ===
+                    "couple"
+                    ? "Couple"
+                    : theme ===
+                        "women"
+                        ? "Personal · Women"
+                        : "Personal · Men";
+
+
+        previewType.textContent =
+            typeLabel;
 
 
         updateAvatar(
@@ -1218,16 +1701,19 @@
             profile.profile_type ||
             "personal";
 
-        template.value =
-            (
-                profile.template ||
-                "boy"
-            ).toLowerCase();
+
+        selectedTemplate =
+            normalizeTemplate(
+                profile.template
+            );
 
 
         currentAvatarUrl =
             profile.avatar_url ||
             "";
+
+
+        renderThemeOptions();
 
 
         updateAvatar(
@@ -1238,57 +1724,6 @@
 
 
         updatePreview();
-    }
-
-
-    async function reloadStoredProfile() {
-
-        const {
-            data,
-            error
-        } =
-            await supabase
-                .from(
-                    "profiles"
-                )
-                .select(
-                    "id,display_name,bio,phone,whatsapp,email,profile_type,avatar_url,created_at,updated_at,template"
-                )
-                .eq(
-                    "id",
-                    currentUser.id
-                )
-                .maybeSingle();
-
-
-        if (
-            error
-        ) {
-
-            throw error;
-        }
-
-
-        if (
-            !data
-        ) {
-
-            throw new Error(
-                "Profile was not found after saving."
-            );
-        }
-
-
-        profileExists =
-            true;
-
-
-        fillForm(
-            data
-        );
-
-
-        return data;
     }
 
 
@@ -1438,20 +1873,27 @@
                 {
                     display_name:
                         "",
+
                     bio:
                         "",
+
                     phone:
                         "",
+
                     whatsapp:
                         "",
+
                     email:
                         "",
+
                     profile_type:
                         "personal",
+
                     avatar_url:
                         "",
+
                     template:
-                        "boy"
+                        "men"
                 }
             );
         }
@@ -1650,12 +2092,8 @@
         }
 
 
-        const publicUrl =
-            `${R2_PUBLIC_URL}/${objectKey}`;
-
-
         currentAvatarUrl =
-            publicUrl;
+            `${R2_PUBLIC_URL}/${objectKey}`;
 
 
         updateAvatar(
@@ -1675,7 +2113,58 @@
         );
 
 
-        return publicUrl;
+        return currentAvatarUrl;
+    }
+
+
+    async function reloadStoredProfile() {
+
+        const {
+            data,
+            error
+        } =
+            await supabase
+                .from(
+                    "profiles"
+                )
+                .select(
+                    "id,display_name,bio,phone,whatsapp,email,profile_type,avatar_url,created_at,updated_at,template"
+                )
+                .eq(
+                    "id",
+                    currentUser.id
+                )
+                .maybeSingle();
+
+
+        if (
+            error
+        ) {
+
+            throw error;
+        }
+
+
+        if (
+            !data
+        ) {
+
+            throw new Error(
+                "Profile was not found after saving."
+            );
+        }
+
+
+        profileExists =
+            true;
+
+
+        fillForm(
+            data
+        );
+
+
+        return data;
     }
 
 
@@ -1730,7 +2219,9 @@
                     null,
 
                 template:
-                    template.value,
+                    normalizeTemplate(
+                        selectedTemplate
+                    ),
 
                 updated_at:
                     now
@@ -1797,26 +2288,27 @@
             }
 
 
-            const storedProfile =
+            const stored =
                 await reloadStoredProfile();
 
 
             if (
-                storedProfile.avatar_url !==
-                (
-                    currentAvatarUrl ||
-                    null
+                normalizeTemplate(
+                    stored.template
+                ) !==
+                normalizeTemplate(
+                    selectedTemplate
                 )
             ) {
 
                 throw new Error(
-                    "The profile was saved, but the avatar URL was not stored correctly."
+                    "Theme was not stored correctly."
                 );
             }
 
 
             showMessage(
-                "Profile saved successfully.",
+                "Profile and theme saved successfully.",
                 "success"
             );
 
@@ -1852,6 +2344,45 @@
                 "Save Profile";
         }
     }
+
+
+    profileType.addEventListener(
+        "change",
+        () => {
+
+            const available =
+                THEME_OPTIONS[
+                    profileType.value
+                ] ||
+                THEME_OPTIONS.personal;
+
+
+            const exists =
+                available.some(
+                    (
+                        option
+                    ) =>
+                        option.id ===
+                        normalizeTemplate(
+                            selectedTemplate
+                        )
+                );
+
+
+            if (
+                !exists
+            ) {
+
+                selectedTemplate =
+                    available[0].id;
+            }
+
+
+            renderThemeOptions();
+
+            updatePreview();
+        }
+    );
 
 
     avatarFile.addEventListener(
@@ -1894,7 +2425,6 @@
                 avatarFile.value =
                     "";
 
-
                 await reloadStoredProfile();
             }
         }
@@ -1906,19 +2436,14 @@
         bio,
         phone,
         whatsapp,
-        publicEmail,
-        profileType,
-        template
+        publicEmail
     ].forEach(
-        (element) => {
+        (
+            element
+        ) => {
 
             element.addEventListener(
                 "input",
-                updatePreview
-            );
-
-            element.addEventListener(
-                "change",
                 updatePreview
             );
         }
@@ -1992,7 +2517,7 @@
 
             if (
                 event ===
-                    "SIGNED_OUT"
+                "SIGNED_OUT"
             ) {
 
                 const tagCode =
@@ -2013,29 +2538,6 @@
 
                     window.location.replace(
                         "/E-Tag/"
-                    );
-                }
-            }
-
-
-            if (
-                !session &&
-                event !==
-                    "INITIAL_SESSION"
-            ) {
-
-                const tagCode =
-                    currentTag?.tag_code;
-
-
-                if (
-                    tagCode
-                ) {
-
-                    window.location.replace(
-                        `/E-Tag/?tag=${encodeURIComponent(
-                            tagCode
-                        )}`
                     );
                 }
             }
