@@ -405,6 +405,15 @@
             font-size: 17px;
         }
 
+        .field-help {
+            margin-top: 6px;
+
+            color: #6b7280;
+
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
         .button-row {
             display: flex;
 
@@ -702,7 +711,6 @@
         }
 
     </style>
-
 </head>
 
 
@@ -990,7 +998,7 @@
                 </div>
 
 
-                <!-- CHARACTER SELECTOR -->
+                <!-- CHARACTERS -->
 
                 <div
                     id="characterSection"
@@ -1091,24 +1099,31 @@
                     </div>
 
 
+                    <!-- PERSONAL SOCIAL -->
+
                     <div class="subsection">
 
                         <h3>
-                            Social
+                            Social Links
                         </h3>
 
 
                         <div class="field">
 
                             <label>
-                                Facebook Username
+                                Facebook Profile URL
                             </label>
 
                             <input
                                 id="facebook"
                                 class="input"
-                                type="text"
+                                type="url"
+                                placeholder="https://www.facebook.com/your-profile"
                             >
+
+                            <div class="field-help">
+                                Paste your Facebook profile link.
+                            </div>
 
                         </div>
 
@@ -1116,14 +1131,19 @@
                         <div class="field">
 
                             <label>
-                                Instagram Username
+                                Instagram Profile URL
                             </label>
 
                             <input
                                 id="instagram"
                                 class="input"
-                                type="text"
+                                type="url"
+                                placeholder="https://www.instagram.com/yourname"
                             >
+
+                            <div class="field-help">
+                                Paste your Instagram profile link.
+                            </div>
 
                         </div>
 
@@ -1131,13 +1151,14 @@
                         <div class="field">
 
                             <label>
-                                TikTok Username
+                                TikTok Profile URL
                             </label>
 
                             <input
                                 id="tiktok"
                                 class="input"
-                                type="text"
+                                type="url"
+                                placeholder="https://www.tiktok.com/@yourname"
                             >
 
                         </div>
@@ -1146,13 +1167,14 @@
                         <div class="field">
 
                             <label>
-                                YouTube Username
+                                YouTube Channel URL
                             </label>
 
                             <input
                                 id="youtube"
                                 class="input"
-                                type="text"
+                                type="url"
+                                placeholder="https://www.youtube.com/@yourchannel"
                             >
 
                         </div>
@@ -1168,6 +1190,7 @@
                                 id="personalWhatsapp"
                                 class="input"
                                 type="tel"
+                                placeholder="+947XXXXXXXX"
                             >
 
                         </div>
@@ -1176,13 +1199,14 @@
                         <div class="field">
 
                             <label>
-                                Discord Username
+                                Discord Profile URL
                             </label>
 
                             <input
                                 id="discord"
                                 class="input"
-                                type="text"
+                                type="url"
+                                placeholder="https://discord.com/users/..."
                             >
 
                         </div>
@@ -1191,13 +1215,14 @@
                         <div class="field">
 
                             <label>
-                                Telegram Username
+                                Telegram Profile URL
                             </label>
 
                             <input
                                 id="telegram"
                                 class="input"
-                                type="text"
+                                type="url"
+                                placeholder="https://t.me/yourname"
                             >
 
                         </div>
@@ -1313,23 +1338,26 @@
                     </div>
 
 
+                    <!-- COUPLE SOCIAL -->
+
                     <div class="subsection">
 
                         <h3>
-                            Social
+                            Social Links
                         </h3>
 
 
                         <div class="field">
 
                             <label>
-                                Person 1 Instagram
+                                Person 1 Instagram URL
                             </label>
 
                             <input
                                 id="person1Instagram"
                                 class="input"
-                                type="text"
+                                type="url"
+                                placeholder="https://www.instagram.com/..."
                             >
 
                         </div>
@@ -1338,13 +1366,14 @@
                         <div class="field">
 
                             <label>
-                                Person 2 Instagram
+                                Person 2 Instagram URL
                             </label>
 
                             <input
                                 id="person2Instagram"
                                 class="input"
-                                type="text"
+                                type="url"
+                                placeholder="https://www.instagram.com/..."
                             >
 
                         </div>
@@ -1353,13 +1382,14 @@
                         <div class="field">
 
                             <label>
-                                Person 1 TikTok
+                                Person 1 TikTok URL
                             </label>
 
                             <input
                                 id="person1Tiktok"
                                 class="input"
-                                type="text"
+                                type="url"
+                                placeholder="https://www.tiktok.com/@..."
                             >
 
                         </div>
@@ -1368,13 +1398,14 @@
                         <div class="field">
 
                             <label>
-                                Person 2 TikTok
+                                Person 2 TikTok URL
                             </label>
 
                             <input
                                 id="person2Tiktok"
                                 class="input"
-                                type="text"
+                                type="url"
+                                placeholder="https://www.tiktok.com/@..."
                             >
 
                         </div>
@@ -1383,13 +1414,14 @@
                         <div class="field">
 
                             <label>
-                                Shared YouTube
+                                Shared YouTube URL
                             </label>
 
                             <input
                                 id="sharedYoutube"
                                 class="input"
-                                type="text"
+                                type="url"
+                                placeholder="https://www.youtube.com/@..."
                             >
 
                         </div>
@@ -1398,13 +1430,14 @@
                         <div class="field">
 
                             <label>
-                                WhatsApp
+                                WhatsApp Number
                             </label>
 
                             <input
                                 id="coupleWhatsapp"
                                 class="input"
                                 type="tel"
+                                placeholder="+947XXXXXXXX"
                             >
 
                         </div>
@@ -1419,7 +1452,7 @@
                             <textarea
                                 id="otherSocialLinks"
                                 class="textarea"
-                                placeholder="One URL per line"
+                                placeholder="One full URL per line"
                             ></textarea>
 
                         </div>
@@ -1580,23 +1613,26 @@
                     </div>
 
 
+                    <!-- BUSINESS SOCIAL -->
+
                     <div class="subsection">
 
                         <h3>
-                            Social
+                            Social Links
                         </h3>
 
 
                         <div class="field">
 
                             <label>
-                                Facebook
+                                Facebook Profile URL
                             </label>
 
                             <input
                                 id="businessFacebook"
                                 class="input"
-                                type="text"
+                                type="url"
+                                placeholder="https://www.facebook.com/..."
                             >
 
                         </div>
@@ -1605,13 +1641,14 @@
                         <div class="field">
 
                             <label>
-                                Instagram
+                                Instagram Profile URL
                             </label>
 
                             <input
                                 id="businessInstagram"
                                 class="input"
-                                type="text"
+                                type="url"
+                                placeholder="https://www.instagram.com/..."
                             >
 
                         </div>
@@ -1620,13 +1657,14 @@
                         <div class="field">
 
                             <label>
-                                TikTok
+                                TikTok Profile URL
                             </label>
 
                             <input
                                 id="businessTiktok"
                                 class="input"
-                                type="text"
+                                type="url"
+                                placeholder="https://www.tiktok.com/@..."
                             >
 
                         </div>
@@ -1635,13 +1673,14 @@
                         <div class="field">
 
                             <label>
-                                YouTube
+                                YouTube Channel URL
                             </label>
 
                             <input
                                 id="businessYoutube"
                                 class="input"
-                                type="text"
+                                type="url"
+                                placeholder="https://www.youtube.com/@..."
                             >
 
                         </div>
@@ -1650,13 +1689,14 @@
                         <div class="field">
 
                             <label>
-                                Telegram
+                                Telegram Profile URL
                             </label>
 
                             <input
                                 id="businessTelegram"
                                 class="input"
-                                type="text"
+                                type="url"
+                                placeholder="https://t.me/..."
                             >
 
                         </div>
@@ -1665,19 +1705,22 @@
                         <div class="field">
 
                             <label>
-                                LinkedIn
+                                LinkedIn Profile URL
                             </label>
 
                             <input
                                 id="linkedin"
                                 class="input"
-                                type="text"
+                                type="url"
+                                placeholder="https://www.linkedin.com/in/..."
                             >
 
                         </div>
 
                     </div>
 
+
+                    <!-- BUSINESS LINKS -->
 
                     <div class="subsection">
 
@@ -1696,6 +1739,7 @@
                                 id="googleMaps"
                                 class="input"
                                 type="url"
+                                placeholder="https://maps.google.com/..."
                             >
 
                         </div>
@@ -1711,6 +1755,7 @@
                                 id="onlineStore"
                                 class="input"
                                 type="url"
+                                placeholder="https://..."
                             >
 
                         </div>
@@ -1726,6 +1771,7 @@
                                 id="bookingUrl"
                                 class="input"
                                 type="url"
+                                placeholder="https://..."
                             >
 
                         </div>
@@ -1741,6 +1787,7 @@
                                 id="menuUrl"
                                 class="input"
                                 type="url"
+                                placeholder="https://..."
                             >
 
                         </div>
@@ -2115,6 +2162,15 @@
         );
 
 
+    /*
+     * Database field mapping.
+     *
+     * Existing database columns are kept.
+     *
+     * Social fields now contain FULL URLs
+     * rather than usernames.
+     */
+
     const fieldIds = [
 
         "personalName",
@@ -2182,26 +2238,37 @@
     );
 
 
+    /*
+     * Application state
+     */
+
     let currentUser =
         null;
+
 
     let currentTag =
         null;
 
+
     let profileExists =
         false;
+
 
     let currentProfileType =
         "personal";
 
+
     let currentTemplate =
         "men";
+
 
     let avatarType =
         "upload";
 
+
     let characterId =
         "";
+
 
     let currentAvatarUrl =
         "";
@@ -2580,6 +2647,7 @@
             image.src =
                 url;
 
+
             image.alt =
                 "Profile";
 
@@ -2869,44 +2937,193 @@
     }
 
 
-    function stripAt(
+    function isValidHttpUrl(
         value
     ) {
 
-        return String(
-            value || ""
-        )
-            .trim()
-            .replace(
-                /^@/,
-                ""
-            );
-
-    }
-
-
-    function normalizeUrl(
-        value
-    ) {
-
-        const v =
+        const url =
             String(
                 value || ""
             ).trim();
 
 
         if (
-            /^https?:\/\//i.test(
-                v
-            )
+            !url
         ) {
 
-            return v;
-
+            return true;
         }
 
 
-        return `https://${v}`;
+        try {
+
+            const parsed =
+                new URL(
+                    url
+                );
+
+
+            return (
+                parsed.protocol ===
+                    "http:" ||
+                parsed.protocol ===
+                    "https:"
+            );
+
+        } catch {
+
+            return false;
+
+        }
+
+    }
+
+
+    function validateSocialUrls() {
+
+        const urlFields = [
+
+            [
+                "Facebook",
+                "facebook"
+            ],
+
+            [
+                "Instagram",
+                "instagram"
+            ],
+
+            [
+                "TikTok",
+                "tiktok"
+            ],
+
+            [
+                "YouTube",
+                "youtube"
+            ],
+
+            [
+                "Discord",
+                "discord"
+            ],
+
+            [
+                "Telegram",
+                "telegram"
+            ],
+
+            [
+                "Person 1 Instagram",
+                "person1Instagram"
+            ],
+
+            [
+                "Person 2 Instagram",
+                "person2Instagram"
+            ],
+
+            [
+                "Person 1 TikTok",
+                "person1Tiktok"
+            ],
+
+            [
+                "Person 2 TikTok",
+                "person2Tiktok"
+            ],
+
+            [
+                "Shared YouTube",
+                "sharedYoutube"
+            ],
+
+            [
+                "Business Facebook",
+                "businessFacebook"
+            ],
+
+            [
+                "Business Instagram",
+                "businessInstagram"
+            ],
+
+            [
+                "Business TikTok",
+                "businessTiktok"
+            ],
+
+            [
+                "Business YouTube",
+                "businessYoutube"
+            ],
+
+            [
+                "Business Telegram",
+                "businessTelegram"
+            ],
+
+            [
+                "LinkedIn",
+                "linkedin"
+            ],
+
+            [
+                "Website",
+                "website"
+            ],
+
+            [
+                "Google Maps",
+                "googleMaps"
+            ],
+
+            [
+                "Online Store",
+                "onlineStore"
+            ],
+
+            [
+                "Booking Link",
+                "bookingUrl"
+            ],
+
+            [
+                "Menu / Catalogue",
+                "menuUrl"
+            ]
+
+        ];
+
+
+        for (
+            const [
+                label,
+                id
+            ]
+            of urlFields
+        ) {
+
+            const value =
+                getValue(
+                    id
+                );
+
+
+            if (
+                value &&
+                !isValidHttpUrl(
+                    value
+                )
+            ) {
+
+                throw new Error(
+                    `${label} must be a complete URL beginning with http:// or https://`
+                );
+
+            }
+
+        }
 
     }
 
@@ -3064,9 +3281,7 @@
 
                 addButton(
                     "Instagram",
-                    `https://instagram.com/${stripAt(
-                        instagram
-                    )}`
+                    instagram
                 );
 
             }
@@ -3158,9 +3373,7 @@
 
                 addButton(
                     "Website",
-                    normalizeUrl(
-                        website
-                    )
+                    website
                 );
 
             }
@@ -3184,6 +3397,11 @@
 
 
     function buildProfileData() {
+
+        /*
+         * Social fields intentionally store the
+         * exact URL typed by the user.
+         */
 
         const base = {
 
@@ -3240,6 +3458,7 @@
                         "personalName"
                     ),
 
+
                 age:
                     getValue(
                         "age"
@@ -3251,45 +3470,54 @@
                         )
                         : null,
 
+
                 phone:
                     getValue(
                         "personalPhone"
                     ),
+
 
                 bio:
                     getValue(
                         "personalBio"
                     ),
 
+
                 facebook:
                     getValue(
                         "facebook"
                     ),
+
 
                 instagram:
                     getValue(
                         "instagram"
                     ),
 
+
                 tiktok:
                     getValue(
                         "tiktok"
                     ),
+
 
                 youtube:
                     getValue(
                         "youtube"
                     ),
 
+
                 whatsapp:
                     getValue(
                         "personalWhatsapp"
                     ),
 
+
                 discord:
                     getValue(
                         "discord"
                     ),
+
 
                 telegram:
                     getValue(
@@ -3315,25 +3543,30 @@
                         "coupleName"
                     ),
 
+
                 bio:
                     getValue(
                         "coupleBio"
                     ),
+
 
                 couple_name:
                     getValue(
                         "coupleName"
                     ),
 
+
                 person1_name:
                     getValue(
                         "person1Name"
                     ),
 
+
                 person2_name:
                     getValue(
                         "person2Name"
                     ),
+
 
                 anniversary_date:
                     getValue(
@@ -3341,40 +3574,48 @@
                     ) ||
                     null,
 
+
                 our_story:
                     getValue(
                         "ourStory"
                     ),
+
 
                 person1_instagram:
                     getValue(
                         "person1Instagram"
                     ),
 
+
                 person2_instagram:
                     getValue(
                         "person2Instagram"
                     ),
+
 
                 person1_tiktok:
                     getValue(
                         "person1Tiktok"
                     ),
 
+
                 person2_tiktok:
                     getValue(
                         "person2Tiktok"
                     ),
+
 
                 shared_youtube:
                     getValue(
                         "sharedYoutube"
                     ),
 
+
                 whatsapp:
                     getValue(
                         "coupleWhatsapp"
                     ),
+
 
                 other_social_links:
                     getValue(
@@ -3395,100 +3636,120 @@
                     "businessName"
                 ),
 
+
             bio:
                 getValue(
                     "businessDescription"
                 ),
+
 
             business_name:
                 getValue(
                     "businessName"
                 ),
 
+
             business_category:
                 getValue(
                     "businessCategory"
                 ),
+
 
             business_description:
                 getValue(
                     "businessDescription"
                 ),
 
+
             phone:
                 getValue(
                     "businessPhone"
                 ),
+
 
             whatsapp:
                 getValue(
                     "businessWhatsapp"
                 ),
 
+
             email:
                 getValue(
                     "businessEmail"
                 ),
+
 
             business_location:
                 getValue(
                     "businessLocation"
                 ),
 
+
             opening_hours:
                 getValue(
                     "openingHours"
                 ),
+
 
             website:
                 getValue(
                     "website"
                 ),
 
+
             facebook:
                 getValue(
                     "businessFacebook"
                 ),
+
 
             instagram:
                 getValue(
                     "businessInstagram"
                 ),
 
+
             tiktok:
                 getValue(
                     "businessTiktok"
                 ),
+
 
             youtube:
                 getValue(
                     "businessYoutube"
                 ),
 
+
             telegram:
                 getValue(
                     "businessTelegram"
                 ),
+
 
             linkedin:
                 getValue(
                     "linkedin"
                 ),
 
+
             google_maps:
                 getValue(
                     "googleMaps"
                 ),
+
 
             online_store:
                 getValue(
                     "onlineStore"
                 ),
 
+
             booking_url:
                 getValue(
                     "bookingUrl"
                 ),
+
 
             menu_url:
                 getValue(
@@ -3557,6 +3818,10 @@
         );
 
 
+        /*
+         * PERSONAL SOCIAL URLS
+         */
+
         setValue(
             "facebook",
             profile.facebook
@@ -3598,6 +3863,10 @@
             profile.telegram
         );
 
+
+        /*
+         * COUPLE
+         */
 
         setValue(
             "coupleName",
@@ -3676,6 +3945,10 @@
             profile.other_social_links
         );
 
+
+        /*
+         * BUSINESS
+         */
 
         setValue(
             "businessName",
@@ -4200,13 +4473,9 @@
 
 
             /*
-             * IMPORTANT:
+             * Permanent public E-Tag URL.
              *
-             * The permanent public URL is always:
-             *
-             * /E-Tag/?tag=ASD
-             *
-             * We do NOT include the theme here.
+             * Theme selection is handled by index.html.
              */
 
             openPublicButton.onclick =
@@ -4295,6 +4564,14 @@
 
 
         try {
+
+            /*
+             * Validate all URL fields before
+             * sending anything to Supabase.
+             */
+
+            validateSocialUrls();
+
 
             const data =
                 buildProfileData();
@@ -4413,6 +4690,10 @@
     }
 
 
+    /*
+     * PROFILE TYPE
+     */
+
     profileTypeChoices.forEach(
         choice => {
 
@@ -4470,6 +4751,10 @@
     );
 
 
+    /*
+     * PERSONAL THEME
+     */
+
     personalThemeChoices.forEach(
         choice => {
 
@@ -4502,6 +4787,10 @@
         }
     );
 
+
+    /*
+     * AVATAR MODE
+     */
 
     avatarModeChoices.forEach(
         choice => {
@@ -4547,6 +4836,10 @@
     );
 
 
+    /*
+     * AVATAR UPLOAD
+     */
+
     avatarFile.addEventListener(
         "change",
         async () => {
@@ -4560,7 +4853,6 @@
             ) {
 
                 return;
-
             }
 
 
@@ -4602,6 +4894,10 @@
     );
 
 
+    /*
+     * LIVE PREVIEW
+     */
+
     fieldIds.forEach(
         id => {
 
@@ -4626,11 +4922,19 @@
     );
 
 
+    /*
+     * SAVE
+     */
+
     saveButton.addEventListener(
         "click",
         saveProfile
     );
 
+
+    /*
+     * LOGOUT
+     */
 
     logoutButton.addEventListener(
         "click",
@@ -4645,11 +4949,6 @@
                 await supabase.auth.signOut();
 
             } finally {
-
-                /*
-                 * Logout returns to the
-                 * permanent E-Tag URL.
-                 */
 
                 if (
                     tagCode
@@ -4674,6 +4973,10 @@
         }
     );
 
+
+    /*
+     * AUTH STATE
+     */
 
     supabase.auth.onAuthStateChange(
         event => {
@@ -4710,6 +5013,10 @@
         }
     );
 
+
+    /*
+     * START
+     */
 
     loadDashboard()
         .catch(
