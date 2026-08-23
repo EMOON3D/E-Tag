@@ -2,6 +2,7 @@
 <html lang="en">
 
 <head>
+
     <meta charset="UTF-8">
 
     <meta
@@ -17,12 +18,17 @@
             box-sizing: border-box;
         }
 
+        html,
         body {
             margin: 0;
+            min-height: 100%;
+        }
+
+        body {
             min-height: 100vh;
 
             padding:
-                24px 12px 40px;
+                20px 12px 44px;
 
             font-family:
                 Inter,
@@ -35,197 +41,808 @@
             background:
                 linear-gradient(
                     180deg,
-                    #111827 0%,
-                    #1f2937 45%,
-                    #f5f7fb 45%
+                    #f7f9fc 0%,
+                    #eef2f7 48%,
+                    #f8fafc 100%
                 );
 
-            color: #111827;
+            color:
+                #172033;
+
+            -webkit-font-smoothing:
+                antialiased;
+        }
+
+        a {
+            -webkit-tap-highlight-color:
+                transparent;
         }
 
         .page {
             width:
-                min(100%, 560px);
+                min(
+                    100%,
+                    560px
+                );
 
-            margin: 0 auto;
+            margin:
+                0 auto;
         }
 
+        /* =====================================================
+           PROFILE CARD
+           ===================================================== */
+
         .profile {
-            overflow: hidden;
+            overflow:
+                hidden;
 
-            border-radius: 28px;
+            border-radius:
+                30px;
 
-            background: #ffffff;
+            background:
+                rgba(
+                    255,
+                    255,
+                    255,
+                    0.97
+                );
+
+            border:
+                1px solid #e4e9f0;
 
             box-shadow:
-                0 20px 60px
+                0 22px 65px
                 rgba(
-                    0,
-                    0,
-                    0,
-                    0.18
+                    34,
+                    48,
+                    70,
+                    0.10
                 );
         }
 
-        .hero {
-            padding:
-                34px 24px 28px;
+        /* =====================================================
+           HERO
+           ===================================================== */
 
-            text-align: center;
+        .hero {
+            position:
+                relative;
+
+            overflow:
+                hidden;
+
+            padding:
+                34px 24px 32px;
+
+            text-align:
+                center;
 
             background:
                 linear-gradient(
                     145deg,
-                    #111827,
-                    #1f2937,
-                    #374151
+                    #ffffff 0%,
+                    #f4f7fa 55%,
+                    #e9eef4 100%
                 );
 
-            color: #ffffff;
+            border-bottom:
+                1px solid #e6ebf1;
         }
 
-        .avatar {
-            width: 120px;
-            height: 120px;
+        .hero::before {
+            content:
+                "";
 
-            margin:
-                0 auto 18px;
+            position:
+                absolute;
 
-            border-radius: 50%;
+            width:
+                230px;
 
-            overflow: hidden;
+            height:
+                230px;
 
-            background: #374151;
+            top:
+                -135px;
 
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            left:
+                -80px;
 
-            border:
-                4px solid
+            border-radius:
+                50%;
+
+            background:
                 rgba(
                     255,
                     255,
                     255,
-                    .16
+                    0.8
                 );
 
-            font-size: 35px;
-            font-weight: 800;
+            filter:
+                blur(2px);
+
+            pointer-events:
+                none;
+        }
+
+        .hero::after {
+            content:
+                "";
+
+            position:
+                absolute;
+
+            width:
+                260px;
+
+            height:
+                260px;
+
+            right:
+                -125px;
+
+            bottom:
+                -175px;
+
+            border-radius:
+                50%;
+
+            background:
+                rgba(
+                    215,
+                    223,
+                    233,
+                    0.55
+                );
+
+            pointer-events:
+                none;
+        }
+
+        .avatar-wrap {
+            position:
+                relative;
+
+            width:
+                126px;
+
+            height:
+                126px;
+
+            margin:
+                0 auto 18px;
+
+            z-index:
+                1;
+        }
+
+        .avatar {
+            width:
+                126px;
+
+            height:
+                126px;
+
+            border-radius:
+                50%;
+
+            overflow:
+                hidden;
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            justify-content:
+                center;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    #e7ecf2,
+                    #cfd7e2
+                );
+
+            border:
+                5px solid #ffffff;
+
+            box-shadow:
+                0 12px 32px
+                rgba(
+                    45,
+                    59,
+                    80,
+                    0.15
+                );
+
+            color:
+                #354157;
+
+            font-size:
+                34px;
+
+            font-weight:
+                850;
         }
 
         .avatar img {
-            width: 100%;
-            height: 100%;
+            width:
+                100%;
 
-            object-fit: cover;
+            height:
+                100%;
+
+            object-fit:
+                cover;
         }
 
         .avatar.character img {
-            object-fit: contain;
-            padding: 8px;
+            object-fit:
+                contain;
+
+            padding:
+                8px;
+        }
+
+        .online-dot {
+            position:
+                absolute;
+
+            right:
+                6px;
+
+            bottom:
+                7px;
+
+            width:
+                18px;
+
+            height:
+                18px;
+
+            border-radius:
+                50%;
+
+            background:
+                #ffffff;
+
+            border:
+                4px solid #7c8797;
+
+            z-index:
+                2;
         }
 
         h1 {
-            margin: 0;
+            position:
+                relative;
 
-            font-size: 30px;
-            line-height: 1.2;
+            z-index:
+                1;
+
+            margin:
+                0;
+
+            color:
+                #172033;
+
+            font-size:
+                30px;
+
+            line-height:
+                1.2;
+
+            letter-spacing:
+                -0.04em;
         }
 
         .age {
-            margin-top: 8px;
+            position:
+                relative;
 
-            color: #9ca3af;
+            z-index:
+                1;
 
-            font-size: 14px;
+            margin-top:
+                8px;
+
+            color:
+                #8a94a5;
+
+            font-size:
+                13px;
+
+            font-weight:
+                650;
         }
 
         .bio {
-            max-width: 440px;
+            position:
+                relative;
+
+            z-index:
+                1;
+
+            max-width:
+                440px;
 
             margin:
                 14px auto 0;
 
-            color: #d1d5db;
+            color:
+                #667186;
 
-            line-height: 1.65;
+            line-height:
+                1.7;
 
-            white-space: pre-wrap;
+            font-size:
+                14px;
+
+            white-space:
+                pre-wrap;
         }
 
+        /* =====================================================
+           SECTIONS
+           ===================================================== */
+
         .section {
-            padding: 20px;
+            padding:
+                22px 20px 0;
+        }
+
+        .section:last-child {
+            padding-bottom:
+                20px;
+        }
+
+        .section-title-row {
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            justify-content:
+                space-between;
+
+            margin-bottom:
+                13px;
         }
 
         .section-title {
             margin:
-                0 0 12px;
+                0;
 
-            font-size: 16px;
+            color:
+                #273249;
+
+            font-size:
+                15px;
+
+            font-weight:
+                850;
+
+            letter-spacing:
+                -0.01em;
         }
 
-        .actions,
-        .socials {
-            display: grid;
-            gap: 10px;
+        .section-subtitle {
+            color:
+                #a0a8b6;
+
+            font-size:
+                11px;
+
+            font-weight:
+                700;
+        }
+
+        /* =====================================================
+           CONTACT BUTTONS
+           ===================================================== */
+
+        .actions {
+            display:
+                grid;
+
+            gap:
+                10px;
         }
 
         .action {
-            display: block;
+            position:
+                relative;
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            justify-content:
+                center;
+
+            min-height:
+                49px;
 
             padding:
-                13px 14px;
+                13px 15px;
 
-            border-radius: 12px;
+            border-radius:
+                14px;
 
-            background: #111827;
-            color: #ffffff;
+            background:
+                #f4f6f9;
 
-            text-decoration: none;
-            text-align: center;
+            border:
+                1px solid #e5e9ef;
 
-            font-size: 14px;
-            font-weight: 800;
+            color:
+                #202b40;
+
+            text-decoration:
+                none;
+
+            text-align:
+                center;
+
+            font-size:
+                13px;
+
+            font-weight:
+                800;
+
+            transition:
+                transform 0.18s ease,
+                background 0.18s ease,
+                box-shadow 0.18s ease,
+                border-color 0.18s ease;
+        }
+
+        .action:hover {
+            transform:
+                translateY(-1px);
+
+            background:
+                #edf1f5;
+
+            border-color:
+                #dce2ea;
+
+            box-shadow:
+                0 7px 18px
+                rgba(
+                    42,
+                    56,
+                    77,
+                    0.07
+                );
+        }
+
+        .action:active {
+            transform:
+                translateY(0);
+        }
+
+        /* =====================================================
+           SOCIAL LINKS
+           ===================================================== */
+
+        .socials {
+            display:
+                grid;
+
+            grid-template-columns:
+                repeat(
+                    2,
+                    minmax(
+                        0,
+                        1fr
+                    )
+                );
+
+            gap:
+                10px;
         }
 
         .social {
-            display: block;
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            justify-content:
+                center;
+
+            min-height:
+                45px;
 
             padding:
-                11px 13px;
+                11px 12px;
 
-            border-radius: 10px;
+            border-radius:
+                13px;
 
-            background: #f3f4f6;
-            color: #111827;
+            background:
+                #fafbfc;
 
-            text-decoration: none;
-            text-align: center;
+            border:
+                1px solid #e6eaf0;
 
-            font-size: 13px;
-            font-weight: 700;
+            color:
+                #344056;
+
+            text-decoration:
+                none;
+
+            text-align:
+                center;
+
+            font-size:
+                12px;
+
+            font-weight:
+                750;
+
+            transition:
+                transform 0.18s ease,
+                background 0.18s ease,
+                border-color 0.18s ease;
+        }
+
+        .social:hover {
+            transform:
+                translateY(-1px);
+
+            background:
+                #f2f5f8;
+
+            border-color:
+                #dce2e9;
+        }
+
+        .social:active {
+            transform:
+                translateY(0);
+        }
+
+        /* =====================================================
+           EDIT BUTTON
+           ===================================================== */
+
+        .edit-section {
+            padding-top:
+                18px;
         }
 
         .edit {
-            background: #e5e7eb;
-            color: #111827;
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            justify-content:
+                center;
+
+            min-height:
+                48px;
+
+            border-radius:
+                14px;
+
+            background:
+                #202a3d;
+
+            color:
+                #ffffff;
+
+            text-decoration:
+                none;
+
+            text-align:
+                center;
+
+            font-size:
+                13px;
+
+            font-weight:
+                800;
+
+            box-shadow:
+                0 9px 22px
+                rgba(
+                    32,
+                    42,
+                    61,
+                    0.14
+                );
+
+            transition:
+                transform 0.18s ease,
+                background 0.18s ease,
+                box-shadow 0.18s ease;
         }
+
+        .edit:hover {
+            background:
+                #172033;
+
+            transform:
+                translateY(-1px);
+
+            box-shadow:
+                0 11px 25px
+                rgba(
+                    32,
+                    42,
+                    61,
+                    0.19
+                );
+        }
+
+        .edit:active {
+            transform:
+                translateY(0);
+        }
+
+        /* =====================================================
+           LOADING / ERROR
+           ===================================================== */
 
         .loading,
         .error {
-            padding: 24px;
+            padding:
+                30px 22px;
 
-            border-radius: 20px;
+            border-radius:
+                24px;
 
-            background: #ffffff;
-            color: #111827;
+            background:
+                rgba(
+                    255,
+                    255,
+                    255,
+                    0.97
+                );
 
-            text-align: center;
+            border:
+                1px solid #e5e9ef;
+
+            color:
+                #59657a;
+
+            text-align:
+                center;
+
+            box-shadow:
+                0 18px 50px
+                rgba(
+                    35,
+                    50,
+                    72,
+                    0.08
+                );
+        }
+
+        .loading::before {
+            content:
+                "";
+
+            display:
+                block;
+
+            width:
+                30px;
+
+            height:
+                30px;
+
+            margin:
+                0 auto 14px;
+
+            border:
+                3px solid #e7ebf0;
+
+            border-top-color:
+                #647187;
+
+            border-radius:
+                50%;
+
+            animation:
+                spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+
+            to {
+                transform:
+                    rotate(360deg);
+            }
+
+        }
+
+        .error {
+            color:
+                #9b4040;
         }
 
         .hidden {
-            display: none !important;
+            display:
+                none !important;
+        }
+
+        /* =====================================================
+           MOBILE
+           ===================================================== */
+
+        @media (max-width: 480px) {
+
+            body {
+                padding:
+                    10px 8px 30px;
+            }
+
+            .profile {
+                border-radius:
+                    25px;
+            }
+
+            .hero {
+                padding:
+                    28px 18px 27px;
+            }
+
+            .avatar-wrap,
+            .avatar {
+                width:
+                    112px;
+
+                height:
+                    112px;
+            }
+
+            .avatar-wrap {
+                margin-bottom:
+                    16px;
+            }
+
+            h1 {
+                font-size:
+                    27px;
+            }
+
+            .bio {
+                font-size:
+                    13px;
+
+                line-height:
+                    1.65;
+            }
+
+            .section {
+                padding:
+                    19px 15px 0;
+            }
+
+            .socials {
+                grid-template-columns:
+                    repeat(
+                        2,
+                        minmax(
+                            0,
+                            1fr
+                        )
+                    );
+            }
+
         }
 
     </style>
@@ -237,6 +854,10 @@
 
 <div class="page">
 
+    <!-- =====================================================
+         LOADING
+         ===================================================== -->
+
     <div
         id="loading"
         class="loading"
@@ -245,23 +866,39 @@
     </div>
 
 
+    <!-- =====================================================
+         ERROR
+         ===================================================== -->
+
     <div
         id="error"
         class="error hidden"
     ></div>
 
 
+    <!-- =====================================================
+         PROFILE
+         ===================================================== -->
+
     <div
         id="profile"
         class="profile hidden"
     >
 
+        <!-- HERO -->
+
         <div class="hero">
 
-            <div
-                id="avatar"
-                class="avatar"
-            ></div>
+            <div class="avatar-wrap">
+
+                <div
+                    id="avatar"
+                    class="avatar"
+                ></div>
+
+                <div class="online-dot"></div>
+
+            </div>
 
 
             <h1
@@ -285,14 +922,24 @@
         </div>
 
 
+        <!-- CONTACT -->
+
         <div
             id="contactSection"
             class="section"
         >
 
-            <h2 class="section-title">
-                Contact
-            </h2>
+            <div class="section-title-row">
+
+                <h2 class="section-title">
+                    Contact
+                </h2>
+
+                <span class="section-subtitle">
+                    Get in touch
+                </span>
+
+            </div>
 
 
             <div
@@ -303,14 +950,24 @@
         </div>
 
 
+        <!-- SOCIAL -->
+
         <div
             id="socialSection"
             class="section hidden"
         >
 
-            <h2 class="section-title">
-                Social
-            </h2>
+            <div class="section-title-row">
+
+                <h2 class="section-title">
+                    Social
+                </h2>
+
+                <span class="section-subtitle">
+                    Connect
+                </span>
+
+            </div>
 
 
             <div
@@ -321,11 +978,15 @@
         </div>
 
 
-        <div class="section">
+        <!-- EDIT -->
+
+        <div
+            class="section edit-section"
+        >
 
             <a
                 id="edit"
-                class="action edit"
+                class="edit"
                 href="#"
             >
                 Edit My Profile
@@ -438,6 +1099,7 @@
         )
             .searchParams
             .get("tag");
+
     }
 
 
@@ -448,6 +1110,7 @@
         return String(
             value || ""
         ).trim();
+
     }
 
 
@@ -472,6 +1135,7 @@
         ) {
 
             return "?";
+
         }
 
 
@@ -485,6 +1149,7 @@
                     2
                 )
                 .toUpperCase();
+
         }
 
 
@@ -494,6 +1159,7 @@
                 parts.length - 1
             ][0]
         ).toUpperCase();
+
     }
 
 
@@ -553,6 +1219,7 @@
                         initials(
                             displayName
                         );
+
                 };
 
 
@@ -567,6 +1234,7 @@
 
 
             return;
+
         }
 
 
@@ -598,6 +1266,7 @@
                         initials(
                             displayName
                         );
+
                 };
 
 
@@ -607,6 +1276,7 @@
 
 
             return;
+
         }
 
 
@@ -614,6 +1284,7 @@
             initials(
                 displayName
             );
+
     }
 
 
@@ -651,12 +1322,14 @@
 
             link.rel =
                 "noopener";
+
         }
 
 
         contacts.appendChild(
             link
         );
+
     }
 
 
@@ -698,6 +1371,7 @@
         socialSection.classList.remove(
             "hidden"
         );
+
     }
 
 
@@ -711,6 +1385,7 @@
             /^@/,
             ""
         );
+
     }
 
 
@@ -728,6 +1403,7 @@
                 "Invalid E-Tag URL.";
 
             return;
+
         }
 
 
@@ -757,16 +1433,20 @@
                 "hidden"
             );
 
+
             errorBox.textContent =
                 `Unable to load this E-Tag: ${
                     tagError.message
                 }`;
 
+
             errorBox.classList.remove(
                 "hidden"
             );
 
+
             return;
+
         }
 
 
@@ -778,6 +1458,7 @@
                 "E-Tag not found.";
 
             return;
+
         }
 
 
@@ -790,6 +1471,7 @@
                 "This E-Tag has not been activated.";
 
             return;
+
         }
 
 
@@ -819,16 +1501,20 @@
                 "hidden"
             );
 
+
             errorBox.textContent =
                 `Unable to load profile: ${
                     profileError.message
                 }`;
 
+
             errorBox.classList.remove(
                 "hidden"
             );
 
+
             return;
+
         }
 
 
@@ -840,6 +1526,7 @@
                 "Public profile not found.";
 
             return;
+
         }
 
 
@@ -882,6 +1569,7 @@
                     p.phone
                 )}`
             );
+
         }
 
 
@@ -907,7 +1595,9 @@
                     "WhatsApp",
                     `https://wa.me/${number}`
                 );
+
             }
+
         }
 
 
@@ -921,6 +1611,7 @@
                     p.email
                 )}`
             );
+
         }
 
 
@@ -934,6 +1625,7 @@
                     p.facebook
                 )}`
             );
+
         }
 
 
@@ -947,6 +1639,7 @@
                     p.instagram
                 )}`
             );
+
         }
 
 
@@ -960,6 +1653,7 @@
                     p.tiktok
                 )}`
             );
+
         }
 
 
@@ -973,6 +1667,7 @@
                     p.youtube
                 )}`
             );
+
         }
 
 
@@ -986,6 +1681,7 @@
                     p.telegram
                 )}`
             );
+
         }
 
 
@@ -997,15 +1693,14 @@
                 "Discord",
                 "https://discord.com/"
             );
+
         }
 
 
         /*
-         * IMPORTANT FIX
+         * IMPORTANT
          *
-         * The edit=1 parameter tells index.html
-         * to show the edit-login screen instead
-         * of routing back to the public theme.
+         * Keep edit routing exactly as before.
          */
 
         edit.href =
@@ -1022,6 +1717,7 @@
         profile.classList.remove(
             "hidden"
         );
+
     }
 
 
