@@ -462,6 +462,8 @@
             flex-direction: column;
 
             overflow: hidden;
+
+            padding-bottom: 38px;
         }
 
 
@@ -735,8 +737,6 @@
 
         /* =====================================================
            SOCIAL
-           
-           ONLY 3 LOGOS VISIBLE
         ===================================================== */
 
         .social-section {
@@ -1130,7 +1130,23 @@
 
         .bottom {
 
-            flex: 0 0 auto;
+            position:
+                absolute;
+
+            left: 0;
+            right: 0;
+            bottom: 0;
+
+            z-index: 20;
+
+            height:
+                38px;
+
+            display: flex;
+
+            align-items: flex-start;
+
+            justify-content: center;
 
             padding:
                 5px
@@ -1142,13 +1158,15 @@
                     )
                 );
 
-            display: flex;
-
-            justify-content: center;
+            pointer-events:
+                none;
         }
 
 
         .edit-button {
+
+            pointer-events:
+                auto;
 
             display: inline-flex;
 
@@ -1373,6 +1391,8 @@
 
                 background:
                     transparent;
+
+                padding-bottom: 0;
             }
 
 
@@ -1400,6 +1420,13 @@
             }
 
 
+            .content {
+
+                padding-bottom:
+                    38px;
+            }
+
+
             .social-window {
 
                 width:
@@ -1413,9 +1440,20 @@
 
             .bottom {
 
+                height:
+                    38px;
+
                 padding-left: 16px;
 
                 padding-right: 16px;
+
+                padding-bottom:
+                    max(
+                        6px,
+                        env(
+                            safe-area-inset-bottom
+                        )
+                    );
             }
 
         }
@@ -1621,6 +1659,20 @@
                 font-size: 8px;
             }
 
+
+            .content {
+
+                padding-bottom:
+                    36px;
+            }
+
+
+            .bottom {
+
+                height:
+                    36px;
+            }
+
         }
 
 
@@ -1781,7 +1833,17 @@
             }
 
 
+            .content {
+
+                padding-bottom:
+                    34px;
+            }
+
+
             .bottom {
+
+                height:
+                    34px;
 
                 padding-top: 2px;
 
@@ -1811,11 +1873,6 @@
         class="profile hidden"
     >
 
-
-        <!-- =================================================
-             HERO
-        ================================================== -->
-
         <section class="hero">
 
             <div
@@ -1823,16 +1880,19 @@
                 class="avatar"
             ></div>
 
+
             <h1
                 id="name"
             >
                 E-Tag User
             </h1>
 
+
             <div
                 id="age"
                 class="age"
             ></div>
+
 
             <p
                 id="bio"
@@ -1844,10 +1904,6 @@
 
         <div class="content">
 
-
-            <!-- =================================================
-                 CONTACT
-            ================================================== -->
 
             <section
                 id="contactSection"
@@ -1874,10 +1930,6 @@
 
             </section>
 
-
-            <!-- =================================================
-                 SOCIAL
-            ================================================== -->
 
             <section
                 id="socialSection"
@@ -1920,6 +1972,7 @@
                         id="socialName"
                     ></p>
 
+
                     <p
                         class="social-username"
                         id="socialUsername"
@@ -1940,9 +1993,7 @@
 
                 </div>
 
-
             </section>
-
 
         </div>
 
@@ -1987,10 +2038,6 @@
         "https://esm.sh/@supabase/supabase-js@2";
 
 
-    /* =========================================================
-       SUPABASE
-    ========================================================= */
-
     const SUPABASE_URL =
         "https://zuptxhcjzhqynrquyray.supabase.co";
 
@@ -2005,10 +2052,6 @@
             SUPABASE_PUBLISHABLE_KEY
         );
 
-
-    /* =========================================================
-       ELEMENTS
-    ========================================================= */
 
     const profile =
         document.getElementById(
@@ -2106,10 +2149,6 @@
         );
 
 
-    /* =========================================================
-       PATHS
-    ========================================================= */
-
     const CHARACTER_BASE =
         "/E-Tag/assets/characters/men/";
 
@@ -2151,10 +2190,6 @@
             `${ICON_BASE}linkedin%20.png?raw=true`
     };
 
-
-    /* =========================================================
-       HELPERS
-    ========================================================= */
 
     function getTagCode() {
 
@@ -2253,42 +2288,6 @@
     }
 
 
-    function normalizeSocialUrl(
-        value
-    ) {
-
-        const cleaned =
-            clean(
-                value
-            );
-
-
-        if (
-            !cleaned
-        ) {
-
-            return "";
-        }
-
-
-        if (
-            /^https?:\/\//i.test(
-                cleaned
-            )
-        ) {
-
-            return cleaned;
-        }
-
-
-        return cleaned;
-    }
-
-
-    /* =========================================================
-       AVATAR
-    ========================================================= */
-
     function renderAvatar(
         element,
         profileData
@@ -2337,11 +2336,9 @@
                     element.innerHTML =
                         "";
 
-
                     element.classList.remove(
                         "character"
                     );
-
 
                     element.textContent =
                         initials(
@@ -2388,7 +2385,6 @@
                     element.innerHTML =
                         "";
 
-
                     element.textContent =
                         initials(
                             displayName
@@ -2411,10 +2407,6 @@
             );
     }
 
-
-    /* =========================================================
-       CONTACT
-    ========================================================= */
 
     function addContact(
         label,
@@ -2448,7 +2440,6 @@
 
             link.target =
                 "_blank";
-
 
             link.rel =
                 "noopener noreferrer";
@@ -2563,10 +2554,6 @@
     }
 
 
-    /* =========================================================
-       SOCIAL DATA
-    ========================================================= */
-
     const socialData = [];
 
 
@@ -2602,39 +2589,25 @@
     }
 
 
-    /* =========================================================
-       SOCIAL CAROUSEL
-    ========================================================= */
-
     let items = [];
-
 
     let count = 0;
 
-
     let activeIndex = 0;
-
 
     let currentOffset = 0;
 
-
     let dragging = false;
-
 
     let moved = false;
 
-
     let startX = 0;
-
 
     let startOffset = 0;
 
-
     let suppressClick = false;
 
-
     let infoTimer = null;
-
 
     const copies = 7;
 
@@ -2732,7 +2705,6 @@
                     socialTrack.appendChild(
                         button
                     );
-
                 }
             );
         }
@@ -2860,7 +2832,6 @@
                     );
 
                 }
-
                 else if (
                     distance === 1
                 ) {
@@ -2870,7 +2841,6 @@
                     );
 
                 }
-
                 else {
 
                     item.classList.add(
@@ -3126,10 +3096,6 @@
     }
 
 
-    /* =========================================================
-       SOCIAL CLICK
-    ========================================================= */
-
     socialTrack.addEventListener(
         "click",
         event => {
@@ -3227,10 +3193,6 @@
     );
 
 
-    /* =========================================================
-       POINTER DOWN
-    ========================================================= */
-
     socialWindow.addEventListener(
         "pointerdown",
         event => {
@@ -3285,10 +3247,6 @@
         }
     );
 
-
-    /* =========================================================
-       POINTER MOVE
-    ========================================================= */
 
     socialWindow.addEventListener(
         "pointermove",
@@ -3438,10 +3396,6 @@
     );
 
 
-    /* =========================================================
-       POINTER UP
-    ========================================================= */
-
     function finishDrag(
         event
     ) {
@@ -3512,10 +3466,6 @@
     );
 
 
-    /* =========================================================
-       WHEEL
-    ========================================================= */
-
     socialWindow.addEventListener(
         "wheel",
         event => {
@@ -3564,10 +3514,6 @@
     );
 
 
-    /* =========================================================
-       KEYBOARD
-    ========================================================= */
-
     window.addEventListener(
         "keydown",
         event => {
@@ -3603,10 +3549,6 @@
         }
     );
 
-
-    /* =========================================================
-       RESIZE
-    ========================================================= */
 
     let resizeFrame =
         null;
@@ -3646,10 +3588,6 @@
         }
     );
 
-
-    /* =========================================================
-       LOAD TAG
-    ========================================================= */
 
     async function getTag(
         tagCode
@@ -3696,10 +3634,6 @@
         return data;
     }
 
-
-    /* =========================================================
-       LOAD PROFILE
-    ========================================================= */
 
     async function load() {
 
@@ -3774,10 +3708,6 @@
             }
 
 
-            /* =================================================
-               BASIC PROFILE
-            ================================================= */
-
             const displayName =
                 clean(
                     profileData.display_name
@@ -3808,9 +3738,8 @@
 
 
             /* =================================================
-               CONTACT
-               
-               LOCATION IS INTENTIONALLY NOT INCLUDED.
+               CONTACTS
+               LOCATION INTENTIONALLY OMITTED
             ================================================= */
 
             contacts.innerHTML =
@@ -3893,7 +3822,7 @@
 
 
             /* =================================================
-               SOCIAL
+               SOCIALS
             ================================================= */
 
             socialData.length =
@@ -3910,22 +3839,20 @@
                     );
 
 
-                const url =
-                    normalizeSocialUrl(
+                const user =
+                    username(
                         value
                     );
 
 
                 addSocial(
                     "Facebook",
-                    value.startsWith("@")
-                        ? value
-                        : `@${username(value)}`,
-                    url.startsWith(
+                    `@${user}`,
+                    value.startsWith(
                         "http"
                     )
-                        ? url
-                        : `https://facebook.com/${username(value)}`,
+                        ? value
+                        : `https://facebook.com/${user}`,
                     ICONS.facebook
                 );
             }
@@ -4059,13 +3986,9 @@
 
                 addSocial(
                     "Discord",
-                    value.startsWith("@")
-                        ? value
-                        : (
-                            value
-                                ? `@${value}`
-                                : "@discord"
-                        ),
+                    value
+                        ? `@${username(value)}`
+                        : "@discord",
                     value.startsWith(
                         "http"
                     )
@@ -4109,10 +4032,10 @@
 
 
             /* =================================================
-               EDIT ROUTING
+               EDIT PROFILE
                
-               IMPORTANT:
-               This remains connected to index.html.
+               This keeps the existing index.html
+               edit authentication flow.
             ================================================= */
 
             editButton.href =
@@ -4120,10 +4043,6 @@
                     tag.tag_code
                 )}&edit=1`;
 
-
-            /* =================================================
-               SHOW PROFILE
-            ================================================= */
 
             loading.classList.add(
                 "hidden"
@@ -4167,10 +4086,6 @@
         }
     }
 
-
-    /* =========================================================
-       START
-    ========================================================= */
 
     load();
 
