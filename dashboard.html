@@ -711,6 +711,7 @@
         }
 
     </style>
+
 </head>
 
 
@@ -1122,7 +1123,7 @@
                             >
 
                             <div class="field-help">
-                                Paste your Facebook profile link.
+                                Paste your complete Facebook profile URL.
                             </div>
 
                         </div>
@@ -1140,10 +1141,6 @@
                                 type="url"
                                 placeholder="https://www.instagram.com/yourname"
                             >
-
-                            <div class="field-help">
-                                Paste your Instagram profile link.
-                            </div>
 
                         </div>
 
@@ -1452,7 +1449,7 @@
                             <textarea
                                 id="otherSocialLinks"
                                 class="textarea"
-                                placeholder="One full URL per line"
+                                placeholder="One complete URL per line"
                             ></textarea>
 
                         </div>
@@ -2162,15 +2159,6 @@
         );
 
 
-    /*
-     * Database field mapping.
-     *
-     * Existing database columns are kept.
-     *
-     * Social fields now contain FULL URLs
-     * rather than usernames.
-     */
-
     const fieldIds = [
 
         "personalName",
@@ -2238,37 +2226,26 @@
     );
 
 
-    /*
-     * Application state
-     */
-
     let currentUser =
         null;
-
 
     let currentTag =
         null;
 
-
     let profileExists =
         false;
-
 
     let currentProfileType =
         "personal";
 
-
     let currentTemplate =
         "men";
-
 
     let avatarType =
         "upload";
 
-
     let characterId =
         "";
-
 
     let currentAvatarUrl =
         "";
@@ -2647,7 +2624,6 @@
             image.src =
                 url;
 
-
             image.alt =
                 "Profile";
 
@@ -2937,6 +2913,17 @@
     }
 
 
+    /*
+     * IMPORTANT:
+     *
+     * Accepts ANY non-empty URL that starts
+     * with http:// or https://.
+     *
+     * This accepts Facebook URLs containing
+     * query strings, redirects, tracking
+     * parameters, etc.
+     */
+
     function isValidHttpUrl(
         value
     ) {
@@ -2955,26 +2942,9 @@
         }
 
 
-        try {
-
-            const parsed =
-                new URL(
-                    url
-                );
-
-
-            return (
-                parsed.protocol ===
-                    "http:" ||
-                parsed.protocol ===
-                    "https:"
-            );
-
-        } catch {
-
-            return false;
-
-        }
+        return /^https?:\/\/.+/i.test(
+            url
+        );
 
     }
 
@@ -3398,11 +3368,6 @@
 
     function buildProfileData() {
 
-        /*
-         * Social fields intentionally store the
-         * exact URL typed by the user.
-         */
-
         const base = {
 
             profile_type:
@@ -3818,10 +3783,6 @@
         );
 
 
-        /*
-         * PERSONAL SOCIAL URLS
-         */
-
         setValue(
             "facebook",
             profile.facebook
@@ -3863,10 +3824,6 @@
             profile.telegram
         );
 
-
-        /*
-         * COUPLE
-         */
 
         setValue(
             "coupleName",
@@ -3945,10 +3902,6 @@
             profile.other_social_links
         );
 
-
-        /*
-         * BUSINESS
-         */
 
         setValue(
             "businessName",
@@ -4080,7 +4033,6 @@
         ) {
 
             return;
-
         }
 
 
@@ -4093,7 +4045,6 @@
             throw new Error(
                 "Only JPG, PNG and WEBP images are allowed."
             );
-
         }
 
 
@@ -4105,7 +4056,6 @@
             throw new Error(
                 "Image must be 1 MB or smaller."
             );
-
         }
 
 
@@ -4123,11 +4073,8 @@
         ) {
 
             throw new Error(
-                `Session error: ${
-                    sessionError.message
-                }`
+                `Session error: ${sessionError.message}`
             );
-
         }
 
 
@@ -4138,7 +4085,6 @@
             throw new Error(
                 "Your login session has expired."
             );
-
         }
 
 
@@ -4201,7 +4147,6 @@
 
             result =
                 null;
-
         }
 
 
@@ -4212,11 +4157,8 @@
 
             throw new Error(
                 result?.message ||
-                `Upload URL request failed: ${
-                    response.status
-                }`
+                `Upload URL request failed: ${response.status}`
             );
-
         }
 
 
@@ -4251,11 +4193,8 @@
         ) {
 
             throw new Error(
-                `R2 upload failed: ${
-                    uploadResponse.status
-                }`
+                `R2 upload failed: ${uploadResponse.status}`
             );
-
         }
 
 
@@ -4302,11 +4241,8 @@
             ) {
 
                 throw new Error(
-                    `Session error: ${
-                        sessionError.message
-                    }`
+                    `Session error: ${sessionError.message}`
                 );
-
             }
 
 
@@ -4323,7 +4259,6 @@
                 );
 
                 return;
-
             }
 
 
@@ -4365,11 +4300,8 @@
             ) {
 
                 throw new Error(
-                    `E-Tag lookup failed: ${
-                        tagError.message
-                    }`
+                    `E-Tag lookup failed: ${tagError.message}`
                 );
-
             }
 
 
@@ -4380,7 +4312,6 @@
                 throw new Error(
                     "No active E-Tag was found for this account."
                 );
-
             }
 
 
@@ -4421,11 +4352,8 @@
             ) {
 
                 throw new Error(
-                    `Profile lookup failed: ${
-                        profileError.message
-                    }`
+                    `Profile lookup failed: ${profileError.message}`
                 );
-
             }
 
 
@@ -4468,14 +4396,11 @@
 
 
                 renderAll();
-
             }
 
 
             /*
              * Permanent public E-Tag URL.
-             *
-             * Theme selection is handled by index.html.
              */
 
             openPublicButton.onclick =
@@ -4551,7 +4476,6 @@
             );
 
             return;
-
         }
 
 
@@ -4564,11 +4488,6 @@
 
 
         try {
-
-            /*
-             * Validate all URL fields before
-             * sending anything to Supabase.
-             */
 
             validateSocialUrls();
 
@@ -4602,11 +4521,8 @@
                 ) {
 
                     throw new Error(
-                        `Profile update failed: ${
-                            error.message
-                        }`
+                        `Profile update failed: ${error.message}`
                     );
-
                 }
 
             } else {
@@ -4639,17 +4555,13 @@
                 ) {
 
                     throw new Error(
-                        `Profile creation failed: ${
-                            error.message
-                        }`
+                        `Profile creation failed: ${error.message}`
                     );
-
                 }
 
 
                 profileExists =
                     true;
-
             }
 
 
@@ -4684,7 +4596,6 @@
 
             saveButton.textContent =
                 "Save Profile";
-
         }
 
     }
@@ -4734,7 +4645,6 @@
 
                         currentTemplate =
                             "men";
-
                     }
 
 
@@ -4775,7 +4685,6 @@
 
                         characterId =
                             "";
-
                     }
 
 
@@ -4823,7 +4732,6 @@
                             getDisplayName(),
                             currentAvatarUrl
                         );
-
                     }
 
 
@@ -4887,7 +4795,6 @@
 
                 avatarFile.value =
                     "";
-
             }
 
         }
@@ -4915,7 +4822,6 @@
                     "change",
                     updatePreview
                 );
-
             }
 
         }
@@ -4965,7 +4871,6 @@
                     window.location.replace(
                         "/E-Tag/"
                     );
-
                 }
 
             }
@@ -5005,7 +4910,6 @@
                     window.location.replace(
                         "/E-Tag/"
                     );
-
                 }
 
             }
@@ -5015,7 +4919,7 @@
 
 
     /*
-     * START
+     * START DASHBOARD
      */
 
     loadDashboard()
