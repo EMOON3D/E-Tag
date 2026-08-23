@@ -10,7 +10,7 @@
         content="width=device-width, initial-scale=1.0, viewport-fit=cover"
     >
 
-    <title>Gayana Tharindumal</title>
+    <title>E-Tag · Men</title>
 
     <style>
 
@@ -315,6 +315,8 @@
             align-items: center;
             justify-content: center;
 
+            overflow: hidden;
+
             border-radius: 50%;
 
             background:
@@ -355,6 +357,25 @@
 
             color:
                 var(--text);
+        }
+
+
+        .avatar img {
+
+            width: 100%;
+            height: 100%;
+
+            display: block;
+
+            object-fit: cover;
+        }
+
+
+        .avatar.character img {
+
+            object-fit: contain;
+
+            padding: 7px;
         }
 
 
@@ -773,10 +794,6 @@
         }
 
 
-        /*
-         * Only three social items fit inside
-         * the visible window.
-         */
         .social-track {
 
             display: flex;
@@ -1199,6 +1216,106 @@
 
             transform:
                 scale(.96);
+        }
+
+
+        /* =====================================================
+           LOADING / ERROR
+        ===================================================== */
+
+        .loading {
+
+            position: fixed;
+
+            inset: 0;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            padding: 20px;
+
+            color:
+                var(--text);
+
+            font-size: 13px;
+        }
+
+
+        .loading::before {
+
+            content: "";
+
+            width: 28px;
+
+            height: 28px;
+
+            margin-right: 10px;
+
+            border:
+                3px solid
+                rgba(
+                    37,
+                    48,
+                    39,
+                    .12
+                );
+
+            border-top-color:
+                rgba(
+                    37,
+                    48,
+                    39,
+                    .55
+                );
+
+            border-radius: 50%;
+
+            animation:
+                spin .8s linear infinite;
+        }
+
+
+        @keyframes spin {
+
+            to {
+                transform:
+                    rotate(360deg);
+            }
+
+        }
+
+
+        .error {
+
+            position: fixed;
+
+            inset: 0;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            padding: 24px;
+
+            text-align: center;
+
+            color:
+                var(--text);
+
+            font-size: 13px;
+
+            line-height: 1.5;
+        }
+
+
+        .hidden {
+
+            display: none !important;
         }
 
 
@@ -1689,7 +1806,10 @@
 
 <div class="app">
 
-    <main class="profile">
+    <main
+        id="profile"
+        class="profile hidden"
+    >
 
 
         <!-- =================================================
@@ -1698,23 +1818,26 @@
 
         <section class="hero">
 
-            <div class="avatar">
-                GT
-            </div>
+            <div
+                id="avatar"
+                class="avatar"
+            ></div>
 
-            <h1>
-                Gayana Tharindumal
+            <h1
+                id="name"
+            >
+                E-Tag User
             </h1>
 
-            <div class="age">
-                21 years old
-            </div>
+            <div
+                id="age"
+                class="age"
+            ></div>
 
-            <p class="bio">
-Digital creator and technology enthusiast.
-Building things, learning new technology
-and exploring creative ideas.
-            </p>
+            <p
+                id="bio"
+                class="bio"
+            ></p>
 
         </section>
 
@@ -1726,7 +1849,10 @@ and exploring creative ideas.
                  CONTACT
             ================================================== -->
 
-            <section class="section">
+            <section
+                id="contactSection"
+                class="section"
+            >
 
                 <div class="section-header">
 
@@ -1741,154 +1867,10 @@ and exploring creative ideas.
                 </div>
 
 
-                <div class="contacts">
-
-
-                    <!-- CALL -->
-
-                    <a
-                        class="contact-item"
-                        href="tel:+94770000000"
-                    >
-
-                        <div class="contact-inner">
-
-                            <div class="contact-icon">
-
-                                <img
-                                    src="https://github.com/EMOON3D/E-Tag/blob/main/assets/icons/call.png?raw=true"
-                                    alt="Call"
-                                >
-
-                            </div>
-
-                            <div class="contact-info">
-
-                                <div class="contact-label">
-                                    Call
-                                </div>
-
-                                <div class="contact-value">
-                                    Call Me
-                                </div>
-
-                            </div>
-
-                        </div>
-
-                    </a>
-
-
-                    <!-- WHATSAPP -->
-
-                    <a
-                        class="contact-item"
-                        href="https://wa.me/94770000000"
-                        target="_blank"
-                        rel="noopener"
-                    >
-
-                        <div class="contact-inner">
-
-                            <div class="contact-icon">
-
-                                <img
-                                    src="https://github.com/EMOON3D/E-Tag/blob/main/assets/icons/whatsapp.png?raw=true"
-                                    alt="WhatsApp"
-                                >
-
-                            </div>
-
-                            <div class="contact-info">
-
-                                <div class="contact-label">
-                                    WhatsApp
-                                </div>
-
-                                <div class="contact-value">
-                                    WhatsApp Me
-                                </div>
-
-                            </div>
-
-                        </div>
-
-                    </a>
-
-
-                    <!-- EMAIL -->
-
-                    <a
-                        class="contact-item"
-                        href="mailto:hello@example.com"
-                    >
-
-                        <div class="contact-inner">
-
-                            <div class="contact-icon">
-
-                                <img
-                                    src="https://github.com/EMOON3D/E-Tag/blob/main/assets/icons/email.png?raw=true"
-                                    alt="Email"
-                                >
-
-                            </div>
-
-                            <div class="contact-info">
-
-                                <div class="contact-label">
-                                    Email
-                                </div>
-
-                                <div class="contact-value">
-                                    Email Me
-                                </div>
-
-                            </div>
-
-                        </div>
-
-                    </a>
-
-
-                    <!-- LOCATION -->
-
-                    <a
-                        class="contact-item"
-                        href="https://www.google.com/maps/search/?api=1&query=Colombo%2C%20Sri%20Lanka"
-                        target="_blank"
-                        rel="noopener"
-                    >
-
-                        <div class="contact-inner">
-
-                            <div class="contact-icon">
-
-                                <img
-                                    src="https://github.com/EMOON3D/E-Tag/blob/main/assets/icons/map.png?raw=true"
-                                    alt="Location"
-                                >
-
-                            </div>
-
-                            <div class="contact-info">
-
-                                <div class="contact-label">
-                                    Location
-                                </div>
-
-                                <div class="contact-value">
-                                    Colombo
-                                </div>
-
-                            </div>
-
-                        </div>
-
-                    </a>
-
-
-                </div>
+                <div
+                    id="contacts"
+                    class="contacts"
+                ></div>
 
             </section>
 
@@ -1898,7 +1880,8 @@ and exploring creative ideas.
             ================================================== -->
 
             <section
-                class="section social-section"
+                id="socialSection"
+                class="section social-section hidden"
             >
 
                 <div class="section-header">
@@ -1922,143 +1905,7 @@ and exploring creative ideas.
                     <div
                         class="social-track"
                         id="socialTrack"
-                    >
-
-
-                        <!-- FACEBOOK -->
-
-                        <button
-                            class="social-item"
-                            data-name="Facebook"
-                            data-username="@username"
-                            data-url="https://facebook.com/"
-                            type="button"
-                        >
-
-                            <img
-                                src="https://github.com/EMOON3D/E-Tag/blob/main/assets/icons/Facebook_Logo_2023.png?raw=true"
-                                alt="Facebook"
-                                draggable="false"
-                            >
-
-                        </button>
-
-
-                        <!-- INSTAGRAM -->
-
-                        <button
-                            class="social-item"
-                            data-name="Instagram"
-                            data-username="@username"
-                            data-url="https://instagram.com/"
-                            type="button"
-                        >
-
-                            <img
-                                src="https://github.com/EMOON3D/E-Tag/blob/main/assets/icons/Instagram_icon.png?raw=true"
-                                alt="Instagram"
-                                draggable="false"
-                            >
-
-                        </button>
-
-
-                        <!-- TIKTOK -->
-
-                        <button
-                            class="social-item"
-                            data-name="TikTok"
-                            data-username="@username"
-                            data-url="https://tiktok.com/"
-                            type="button"
-                        >
-
-                            <img
-                                src="https://github.com/EMOON3D/E-Tag/blob/main/assets/icons/tiktok.png?raw=true"
-                                alt="TikTok"
-                                draggable="false"
-                            >
-
-                        </button>
-
-
-                        <!-- YOUTUBE -->
-
-                        <button
-                            class="social-item"
-                            data-name="YouTube"
-                            data-username="@channel"
-                            data-url="https://youtube.com/"
-                            type="button"
-                        >
-
-                            <img
-                                src="https://github.com/EMOON3D/E-Tag/blob/main/assets/icons/youtube.png?raw=true"
-                                alt="YouTube"
-                                draggable="false"
-                            >
-
-                        </button>
-
-
-                        <!-- TELEGRAM -->
-
-                        <button
-                            class="social-item"
-                            data-name="Telegram"
-                            data-username="@username"
-                            data-url="https://telegram.org/"
-                            type="button"
-                        >
-
-                            <img
-                                src="https://github.com/EMOON3D/E-Tag/blob/main/assets/icons/teligram.png?raw=true"
-                                alt="Telegram"
-                                draggable="false"
-                            >
-
-                        </button>
-
-
-                        <!-- DISCORD -->
-
-                        <button
-                            class="social-item"
-                            data-name="Discord"
-                            data-username="@username"
-                            data-url="https://discord.com/"
-                            type="button"
-                        >
-
-                            <img
-                                src="https://github.com/EMOON3D/E-Tag/blob/main/assets/icons/discoard.png?raw=true"
-                                alt="Discord"
-                                draggable="false"
-                            >
-
-                        </button>
-
-
-                        <!-- LINKEDIN -->
-
-                        <button
-                            class="social-item"
-                            data-name="LinkedIn"
-                            data-username="@username"
-                            data-url="https://linkedin.com/"
-                            type="button"
-                        >
-
-                            <img
-                                src="https://github.com/EMOON3D/E-Tag/blob/main/assets/icons/linkedin%20.png?raw=true"
-                                alt="LinkedIn"
-                                draggable="false"
-                            >
-
-                        </button>
-
-
-                    </div>
+                    ></div>
 
                 </div>
 
@@ -2071,16 +1918,12 @@ and exploring creative ideas.
                     <p
                         class="social-name"
                         id="socialName"
-                    >
-                        Facebook
-                    </p>
+                    ></p>
 
                     <p
                         class="social-username"
                         id="socialUsername"
-                    >
-                        @username
-                    </p>
+                    ></p>
 
                 </div>
 
@@ -2107,6 +1950,7 @@ and exploring creative ideas.
         <div class="bottom">
 
             <a
+                id="editButton"
                 class="edit-button"
                 href="#"
             >
@@ -2121,27 +1965,134 @@ and exploring creative ideas.
 </div>
 
 
-<script>
+<div
+    id="loading"
+    class="loading"
+>
+    Loading profile...
+</div>
 
-    const track =
+
+<div
+    id="error"
+    class="error hidden"
+></div>
+
+
+<script type="module">
+
+    import {
+        createClient
+    } from
+        "https://esm.sh/@supabase/supabase-js@2";
+
+
+    /* =========================================================
+       SUPABASE
+    ========================================================= */
+
+    const SUPABASE_URL =
+        "https://zuptxhcjzhqynrquyray.supabase.co";
+
+
+    const SUPABASE_PUBLISHABLE_KEY =
+        "sb_publishable_1sa0MtE83MZXETR5JLakJA_fRVrjDJI";
+
+
+    const supabase =
+        createClient(
+            SUPABASE_URL,
+            SUPABASE_PUBLISHABLE_KEY
+        );
+
+
+    /* =========================================================
+       ELEMENTS
+    ========================================================= */
+
+    const profile =
+        document.getElementById(
+            "profile"
+        );
+
+
+    const loading =
+        document.getElementById(
+            "loading"
+        );
+
+
+    const errorBox =
+        document.getElementById(
+            "error"
+        );
+
+
+    const avatar =
+        document.getElementById(
+            "avatar"
+        );
+
+
+    const name =
+        document.getElementById(
+            "name"
+        );
+
+
+    const age =
+        document.getElementById(
+            "age"
+        );
+
+
+    const bio =
+        document.getElementById(
+            "bio"
+        );
+
+
+    const contactSection =
+        document.getElementById(
+            "contactSection"
+        );
+
+
+    const contacts =
+        document.getElementById(
+            "contacts"
+        );
+
+
+    const socialSection =
+        document.getElementById(
+            "socialSection"
+        );
+
+
+    const socialWindow =
+        document.getElementById(
+            "socialWindow"
+        );
+
+
+    const socialTrack =
         document.getElementById(
             "socialTrack"
         );
 
-    const windowArea =
-        document.getElementById(
-            "socialWindow"
-        );
 
     const socialInfo =
         document.getElementById(
             "socialInfo"
         );
 
+
     const socialName =
         document.getElementById(
             "socialName"
         );
+
 
     const socialUsername =
         document.getElementById(
@@ -2149,150 +2100,682 @@ and exploring creative ideas.
         );
 
 
+    const editButton =
+        document.getElementById(
+            "editButton"
+        );
+
+
     /* =========================================================
-       ORIGINAL SOCIAL DATA
+       PATHS
     ========================================================= */
 
-    const originalItems =
-        Array.from(
-            track.querySelectorAll(
-                ".social-item"
+    const CHARACTER_BASE =
+        "/E-Tag/assets/characters/men/";
+
+
+    const ICON_BASE =
+        "https://github.com/EMOON3D/E-Tag/blob/main/assets/icons/";
+
+
+    const ICONS = {
+
+        call:
+            `${ICON_BASE}call.png?raw=true`,
+
+        whatsapp:
+            `${ICON_BASE}whatsapp.png?raw=true`,
+
+        email:
+            `${ICON_BASE}email.png?raw=true`,
+
+        facebook:
+            `${ICON_BASE}Facebook_Logo_2023.png?raw=true`,
+
+        instagram:
+            `${ICON_BASE}Instagram_icon.png?raw=true`,
+
+        tiktok:
+            `${ICON_BASE}tiktok.png?raw=true`,
+
+        youtube:
+            `${ICON_BASE}youtube.png?raw=true`,
+
+        telegram:
+            `${ICON_BASE}teligram.png?raw=true`,
+
+        discord:
+            `${ICON_BASE}discoard.png?raw=true`,
+
+        linkedin:
+            `${ICON_BASE}linkedin%20.png?raw=true`
+    };
+
+
+    /* =========================================================
+       HELPERS
+    ========================================================= */
+
+    function getTagCode() {
+
+        const url =
+            new URL(
+                window.location.href
+            );
+
+
+        const tag =
+            url.searchParams.get(
+                "tag"
+            );
+
+
+        if (
+            !tag
+        ) {
+
+            return null;
+        }
+
+
+        return tag
+            .trim()
+            .toUpperCase();
+    }
+
+
+    function clean(
+        value
+    ) {
+
+        return String(
+            value || ""
+        ).trim();
+    }
+
+
+    function initials(
+        value
+    ) {
+
+        const parts =
+            clean(
+                value
             )
+                .split(
+                    /\s+/
+                )
+                .filter(
+                    Boolean
+                );
+
+
+        if (
+            parts.length === 0
+        ) {
+
+            return "?";
+        }
+
+
+        if (
+            parts.length === 1
+        ) {
+
+            return parts[0]
+                .substring(
+                    0,
+                    2
+                )
+                .toUpperCase();
+        }
+
+
+        return (
+            parts[0][0] +
+            parts[
+                parts.length - 1
+            ][0]
+        ).toUpperCase();
+    }
+
+
+    function username(
+        value
+    ) {
+
+        return clean(
+            value
+        ).replace(
+            /^@/,
+            ""
+        );
+    }
+
+
+    function normalizeSocialUrl(
+        value
+    ) {
+
+        const cleaned =
+            clean(
+                value
+            );
+
+
+        if (
+            !cleaned
+        ) {
+
+            return "";
+        }
+
+
+        if (
+            /^https?:\/\//i.test(
+                cleaned
+            )
+        ) {
+
+            return cleaned;
+        }
+
+
+        return cleaned;
+    }
+
+
+    /* =========================================================
+       AVATAR
+    ========================================================= */
+
+    function renderAvatar(
+        element,
+        profileData
+    ) {
+
+        element.innerHTML =
+            "";
+
+        element.classList.remove(
+            "character"
         );
 
 
-    const originalData =
-        originalItems.map(
-            item => ({
+        const displayName =
+            clean(
+                profileData.display_name
+            ) ||
+            "E-Tag User";
 
-                name:
-                    item.dataset.name,
 
-                username:
-                    item.dataset.username,
+        if (
+            profileData.avatar_type ===
+                "character" &&
+            profileData.character_id
+        ) {
 
-                url:
-                    item.dataset.url,
+            const image =
+                document.createElement(
+                    "img"
+                );
 
-                html:
-                    item.innerHTML
 
-            })
+            image.src =
+                `${CHARACTER_BASE}${encodeURIComponent(
+                    profileData.character_id
+                )}.svg`;
+
+
+            image.alt =
+                "Character";
+
+
+            image.onerror =
+                () => {
+
+                    element.innerHTML =
+                        "";
+
+
+                    element.classList.remove(
+                        "character"
+                    );
+
+
+                    element.textContent =
+                        initials(
+                            displayName
+                        );
+                };
+
+
+            element.classList.add(
+                "character"
+            );
+
+
+            element.appendChild(
+                image
+            );
+
+
+            return;
+        }
+
+
+        if (
+            profileData.avatar_url
+        ) {
+
+            const image =
+                document.createElement(
+                    "img"
+                );
+
+
+            image.src =
+                profileData.avatar_url;
+
+
+            image.alt =
+                "Profile photo";
+
+
+            image.onerror =
+                () => {
+
+                    element.innerHTML =
+                        "";
+
+
+                    element.textContent =
+                        initials(
+                            displayName
+                        );
+                };
+
+
+            element.appendChild(
+                image
+            );
+
+
+            return;
+        }
+
+
+        element.textContent =
+            initials(
+                displayName
+            );
+    }
+
+
+    /* =========================================================
+       CONTACT
+    ========================================================= */
+
+    function addContact(
+        label,
+        value,
+        href,
+        iconUrl
+    ) {
+
+        const link =
+            document.createElement(
+                "a"
+            );
+
+
+        link.className =
+            "contact-item";
+
+
+        link.href =
+            href;
+
+
+        if (
+            href.startsWith(
+                "http://"
+            ) ||
+            href.startsWith(
+                "https://"
+            )
+        ) {
+
+            link.target =
+                "_blank";
+
+
+            link.rel =
+                "noopener noreferrer";
+        }
+
+
+        const inner =
+            document.createElement(
+                "div"
+            );
+
+
+        inner.className =
+            "contact-inner";
+
+
+        const icon =
+            document.createElement(
+                "div"
+            );
+
+
+        icon.className =
+            "contact-icon";
+
+
+        const image =
+            document.createElement(
+                "img"
+            );
+
+
+        image.src =
+            iconUrl;
+
+
+        image.alt =
+            label;
+
+
+        icon.appendChild(
+            image
         );
 
 
-    track.innerHTML = "";
+        const info =
+            document.createElement(
+                "div"
+            );
 
 
-    /*
-     * Create several copies so the carousel
-     * can continue infinitely.
-     */
+        info.className =
+            "contact-info";
+
+
+        const labelElement =
+            document.createElement(
+                "div"
+            );
+
+
+        labelElement.className =
+            "contact-label";
+
+
+        labelElement.textContent =
+            label;
+
+
+        const valueElement =
+            document.createElement(
+                "div"
+            );
+
+
+        valueElement.className =
+            "contact-value";
+
+
+        valueElement.textContent =
+            value;
+
+
+        info.appendChild(
+            labelElement
+        );
+
+
+        info.appendChild(
+            valueElement
+        );
+
+
+        inner.appendChild(
+            icon
+        );
+
+
+        inner.appendChild(
+            info
+        );
+
+
+        link.appendChild(
+            inner
+        );
+
+
+        contacts.appendChild(
+            link
+        );
+    }
+
+
+    /* =========================================================
+       SOCIAL DATA
+    ========================================================= */
+
+    const socialData = [];
+
+
+    function addSocial(
+        platformName,
+        platformUsername,
+        href,
+        iconUrl
+    ) {
+
+        if (
+            !href
+        ) {
+
+            return;
+        }
+
+
+        socialData.push({
+
+            name:
+                platformName,
+
+            username:
+                platformUsername,
+
+            url:
+                href,
+
+            icon:
+                iconUrl
+        });
+    }
+
+
+    /* =========================================================
+       SOCIAL CAROUSEL
+    ========================================================= */
+
+    let items = [];
+
+
+    let count = 0;
+
+
+    let activeIndex = 0;
+
+
+    let currentOffset = 0;
+
+
+    let dragging = false;
+
+
+    let moved = false;
+
+
+    let startX = 0;
+
+
+    let startOffset = 0;
+
+
+    let suppressClick = false;
+
+
+    let infoTimer = null;
+
 
     const copies = 7;
 
 
-    for (
-        let copy = 0;
-        copy < copies;
-        copy++
-    ) {
+    function buildSocialCarousel() {
 
-        originalData.forEach(
-            (
-                data,
-                originalIndex
-            ) => {
+        socialTrack.innerHTML =
+            "";
 
-                const button =
-                    document.createElement(
-                        "button"
+
+        if (
+            socialData.length === 0
+        ) {
+
+            socialSection.classList.add(
+                "hidden"
+            );
+
+            return;
+        }
+
+
+        socialSection.classList.remove(
+            "hidden"
+        );
+
+
+        for (
+            let copy = 0;
+            copy < copies;
+            copy++
+        ) {
+
+            socialData.forEach(
+                (
+                    data,
+                    originalIndex
+                ) => {
+
+                    const button =
+                        document.createElement(
+                            "button"
+                        );
+
+
+                    button.className =
+                        "social-item";
+
+
+                    button.type =
+                        "button";
+
+
+                    button.dataset.name =
+                        data.name;
+
+
+                    button.dataset.username =
+                        data.username;
+
+
+                    button.dataset.url =
+                        data.url;
+
+
+                    button.dataset.originalIndex =
+                        String(
+                            originalIndex
+                        );
+
+
+                    const image =
+                        document.createElement(
+                            "img"
+                        );
+
+
+                    image.src =
+                        data.icon;
+
+
+                    image.alt =
+                        data.name;
+
+
+                    image.draggable =
+                        false;
+
+
+                    button.appendChild(
+                        image
                     );
 
-                button.className =
-                    "social-item";
 
-                button.type =
-                    "button";
-
-                button.dataset.name =
-                    data.name;
-
-                button.dataset.username =
-                    data.username;
-
-                button.dataset.url =
-                    data.url;
-
-                button.dataset.originalIndex =
-                    String(
-                        originalIndex
+                    socialTrack.appendChild(
+                        button
                     );
 
-                button.innerHTML =
-                    data.html;
+                }
+            );
+        }
 
-                track.appendChild(
-                    button
+
+        items =
+            Array.from(
+                socialTrack.querySelectorAll(
+                    ".social-item"
+                )
+            );
+
+
+        count =
+            socialData.length;
+
+
+        activeIndex =
+            count * 3;
+
+
+        requestAnimationFrame(
+            () => {
+
+                updateVisuals();
+
+
+                setOffset(
+                    getTargetOffset(
+                        activeIndex
+                    ),
+                    false
                 );
 
+
+                updateInformation(
+                    items[activeIndex],
+                    false
+                );
             }
         );
-
     }
 
-
-    const items =
-        Array.from(
-            track.querySelectorAll(
-                ".social-item"
-            )
-        );
-
-
-    const count =
-        originalData.length;
-
-
-    /*
-     * Start in the middle copy.
-     */
-
-    let activeIndex =
-        count * 3;
-
-
-    let currentOffset =
-        0;
-
-
-    let dragging =
-        false;
-
-
-    let moved =
-        false;
-
-
-    let startX =
-        0;
-
-
-    let startOffset =
-        0;
-
-
-    let suppressClick =
-        false;
-
-
-    let infoTimer =
-        null;
-
-
-    /* =========================================================
-       TARGET POSITION
-    ========================================================= */
 
     function getTargetOffset(
         index
@@ -2301,14 +2784,17 @@ and exploring creative ideas.
         const item =
             items[index];
 
-        if (!item) {
+
+        if (
+            !item
+        ) {
 
             return 0;
         }
 
 
         const windowWidth =
-            windowArea.clientWidth;
+            socialWindow.clientWidth;
 
 
         const itemCenter =
@@ -2323,22 +2809,18 @@ and exploring creative ideas.
     }
 
 
-    /* =========================================================
-       SET POSITION
-    ========================================================= */
-
     function setOffset(
         offset,
         animate = true
     ) {
 
-        track.style.transition =
+        socialTrack.style.transition =
             animate
                 ? "transform .42s cubic-bezier(.22,.8,.25,1)"
                 : "none";
 
 
-        track.style.transform =
+        socialTrack.style.transform =
             `translate3d(${offset}px,0,0)`;
 
 
@@ -2346,13 +2828,6 @@ and exploring creative ideas.
             offset;
     }
 
-
-    /* =========================================================
-       VISUALS
-       
-       IMPORTANT:
-       ONLY 3 LOGOS ARE VISIBLE.
-    ========================================================= */
 
     function updateVisuals() {
 
@@ -2376,10 +2851,6 @@ and exploring creative ideas.
                 );
 
 
-                /*
-                 * Center item
-                 */
-
                 if (
                     distance === 0
                 ) {
@@ -2389,10 +2860,6 @@ and exploring creative ideas.
                     );
 
                 }
-
-                /*
-                 * One item on each side
-                 */
 
                 else if (
                     distance === 1
@@ -2404,33 +2871,29 @@ and exploring creative ideas.
 
                 }
 
-                /*
-                 * Everything else is
-                 * completely hidden.
-                 */
-
                 else {
 
                     item.classList.add(
                         "hidden-social"
                     );
-
                 }
-
             }
         );
-
     }
 
-
-    /* =========================================================
-       INFORMATION
-    ========================================================= */
 
     function updateInformation(
         item,
         animate = true
     ) {
+
+        if (
+            !item
+        ) {
+
+            return;
+        }
+
 
         if (
             infoTimer
@@ -2439,7 +2902,6 @@ and exploring creative ideas.
             clearTimeout(
                 infoTimer
             );
-
         }
 
 
@@ -2450,7 +2912,6 @@ and exploring creative ideas.
             socialInfo.classList.add(
                 "changing"
             );
-
         }
 
 
@@ -2461,8 +2922,10 @@ and exploring creative ideas.
                     socialName.textContent =
                         item.dataset.name;
 
+
                     socialUsername.textContent =
                         item.dataset.username;
+
 
                     socialInfo.classList.remove(
                         "changing"
@@ -2473,15 +2936,18 @@ and exploring creative ideas.
                     ? 100
                     : 0
             );
-
     }
 
 
-    /* =========================================================
-       INFINITE LOOP NORMALIZATION
-    ========================================================= */
-
     function normalizeInfinitePosition() {
+
+        if (
+            count === 0
+        ) {
+
+            return;
+        }
+
 
         const lower =
             count * 2;
@@ -2506,12 +2972,15 @@ and exploring creative ideas.
                 false
             );
 
+
             updateVisuals();
+
 
             updateInformation(
                 items[activeIndex],
                 false
             );
+
 
             return;
         }
@@ -2532,26 +3001,30 @@ and exploring creative ideas.
                 false
             );
 
+
             updateVisuals();
+
 
             updateInformation(
                 items[activeIndex],
                 false
             );
-
         }
-
     }
 
-
-    /* =========================================================
-       SELECT SOCIAL
-    ========================================================= */
 
     function selectIndex(
         index,
         animate = true
     ) {
+
+        if (
+            count === 0
+        ) {
+
+            return;
+        }
+
 
         activeIndex =
             index;
@@ -2583,23 +3056,26 @@ and exploring creative ideas.
                 460
             );
 
-        } else {
+        }
+        else {
 
             normalizeInfinitePosition();
-
         }
-
     }
 
 
-    /* =========================================================
-       FIND CLOSEST ITEM
-    ========================================================= */
-
     function getClosestIndex() {
 
+        if (
+            count === 0
+        ) {
+
+            return 0;
+        }
+
+
         const center =
-            windowArea.clientWidth /
+            socialWindow.clientWidth /
             2;
 
 
@@ -2638,112 +3114,115 @@ and exploring creative ideas.
                     closestDistance =
                         distance;
 
+
                     closest =
                         index;
                 }
-
             }
         );
 
 
         return closest;
-
     }
 
 
     /* =========================================================
-       CLICK
+       SOCIAL CLICK
     ========================================================= */
 
-    items.forEach(
-        item => {
+    socialTrack.addEventListener(
+        "click",
+        event => {
 
-            item.addEventListener(
-                "click",
-                event => {
+            const item =
+                event.target.closest(
+                    ".social-item"
+                );
 
-                    if (
-                        suppressClick ||
-                        moved
-                    ) {
 
-                        event.preventDefault();
+            if (
+                !item
+            ) {
 
-                        return;
+                return;
+            }
+
+
+            if (
+                suppressClick ||
+                moved
+            ) {
+
+                event.preventDefault();
+
+                return;
+            }
+
+
+            const index =
+                items.indexOf(
+                    item
+                );
+
+
+            if (
+                index !==
+                activeIndex
+            ) {
+
+                event.preventDefault();
+
+
+                selectIndex(
+                    index
+                );
+
+
+                return;
+            }
+
+
+            event.preventDefault();
+
+
+            item.animate(
+                [
+                    {
+                        transform:
+                            "translateY(-3px) scale(1)"
+                    },
+
+                    {
+                        transform:
+                            "translateY(-3px) scale(.92)"
+                    },
+
+                    {
+                        transform:
+                            "translateY(-3px) scale(1)"
                     }
+                ],
+                {
+                    duration: 170,
 
-
-                    const index =
-                        items.indexOf(
-                            item
-                        );
-
-
-                    /*
-                     * Clicking a side logo
-                     * makes it the center logo.
-                     */
-
-                    if (
-                        index !==
-                        activeIndex
-                    ) {
-
-                        event.preventDefault();
-
-                        selectIndex(
-                            index
-                        );
-
-                        return;
-                    }
-
-
-                    event.preventDefault();
-
-
-                    item.animate(
-                        [
-                            {
-                                transform:
-                                    "translateY(-3px) scale(1)"
-                            },
-
-                            {
-                                transform:
-                                    "translateY(-3px) scale(.92)"
-                            },
-
-                            {
-                                transform:
-                                    "translateY(-3px) scale(1)"
-                            }
-                        ],
-                        {
-                            duration: 170,
-
-                            easing:
-                                "cubic-bezier(.22,.8,.25,1)"
-                        }
-                    );
-
-
-                    setTimeout(
-                        () => {
-
-                            window.open(
-                                item.dataset.url,
-                                "_blank",
-                                "noopener,noreferrer"
-                            );
-
-                        },
-                        150
-                    );
-
+                    easing:
+                        "cubic-bezier(.22,.8,.25,1)"
                 }
             );
 
+
+            setTimeout(
+                () => {
+
+                    window.open(
+                        item.dataset.url,
+                        "_blank",
+                        "noopener,noreferrer"
+                    );
+
+                },
+                150
+            );
         }
     );
 
@@ -2752,45 +3231,57 @@ and exploring creative ideas.
        POINTER DOWN
     ========================================================= */
 
-    windowArea.addEventListener(
+    socialWindow.addEventListener(
         "pointerdown",
         event => {
+
+            if (
+                count === 0
+            ) {
+
+                return;
+            }
+
 
             dragging =
                 true;
 
+
             moved =
                 false;
+
 
             suppressClick =
                 false;
 
+
             startX =
                 event.clientX;
+
 
             startOffset =
                 currentOffset;
 
 
-            track.classList.add(
+            socialTrack.classList.add(
                 "dragging"
             );
 
 
-            track.style.transition =
+            socialTrack.style.transition =
                 "none";
 
 
             try {
 
-                windowArea.setPointerCapture(
+                socialWindow.setPointerCapture(
                     event.pointerId
                 );
 
-            } catch (
+            }
+            catch (
                 error
             ) {}
-
         }
     );
 
@@ -2799,12 +3290,13 @@ and exploring creative ideas.
        POINTER MOVE
     ========================================================= */
 
-    windowArea.addEventListener(
+    socialWindow.addEventListener(
         "pointermove",
         event => {
 
             if (
-                !dragging
+                !dragging ||
+                count === 0
             ) {
 
                 return;
@@ -2824,6 +3316,7 @@ and exploring creative ideas.
                 moved =
                     true;
 
+
                 suppressClick =
                     true;
             }
@@ -2834,7 +3327,7 @@ and exploring creative ideas.
                 delta;
 
 
-            track.style.transform =
+            socialTrack.style.transform =
                 `translate3d(${newOffset}px,0,0)`;
 
 
@@ -2862,14 +3355,8 @@ and exploring creative ideas.
                     items[activeIndex],
                     true
                 );
-
             }
 
-
-            /*
-             * Keep infinite scrolling alive
-             * while dragging.
-             */
 
             if (
                 activeIndex <
@@ -2895,17 +3382,18 @@ and exploring creative ideas.
                 startOffset =
                     normalizedOffset;
 
+
                 startX =
                     event.clientX;
 
 
                 updateVisuals();
 
+
                 updateInformation(
                     items[activeIndex],
                     false
                 );
-
             }
 
 
@@ -2933,19 +3421,19 @@ and exploring creative ideas.
                 startOffset =
                     normalizedOffset;
 
+
                 startX =
                     event.clientX;
 
 
                 updateVisuals();
 
+
                 updateInformation(
                     items[activeIndex],
                     false
                 );
-
             }
-
         }
     );
 
@@ -2970,18 +3458,19 @@ and exploring creative ideas.
             false;
 
 
-        track.classList.remove(
+        socialTrack.classList.remove(
             "dragging"
         );
 
 
         try {
 
-            windowArea.releasePointerCapture(
+            socialWindow.releasePointerCapture(
                 event.pointerId
             );
 
-        } catch (
+        }
+        catch (
             error
         ) {}
 
@@ -3001,23 +3490,23 @@ and exploring creative ideas.
                 moved =
                     false;
 
+
                 suppressClick =
                     false;
 
             },
             100
         );
-
     }
 
 
-    windowArea.addEventListener(
+    socialWindow.addEventListener(
         "pointerup",
         finishDrag
     );
 
 
-    windowArea.addEventListener(
+    socialWindow.addEventListener(
         "pointercancel",
         finishDrag
     );
@@ -3027,16 +3516,28 @@ and exploring creative ideas.
        WHEEL
     ========================================================= */
 
-    windowArea.addEventListener(
+    socialWindow.addEventListener(
         "wheel",
         event => {
+
+            if (
+                count === 0
+            ) {
+
+                return;
+            }
+
 
             event.preventDefault();
 
 
             const direction =
-                Math.abs(event.deltaX) >
-                Math.abs(event.deltaY)
+                Math.abs(
+                    event.deltaX
+                ) >
+                Math.abs(
+                    event.deltaY
+                )
 
                     ? (
                         event.deltaX > 0
@@ -3072,6 +3573,14 @@ and exploring creative ideas.
         event => {
 
             if (
+                count === 0
+            ) {
+
+                return;
+            }
+
+
+            if (
                 event.key ===
                 "ArrowRight"
             ) {
@@ -3079,7 +3588,6 @@ and exploring creative ideas.
                 selectIndex(
                     activeIndex + 1
                 );
-
             }
 
 
@@ -3091,9 +3599,7 @@ and exploring creative ideas.
                 selectIndex(
                     activeIndex - 1
                 );
-
             }
-
         }
     );
 
@@ -3117,7 +3623,6 @@ and exploring creative ideas.
                 cancelAnimationFrame(
                     resizeFrame
                 );
-
             }
 
 
@@ -3125,49 +3630,549 @@ and exploring creative ideas.
                 requestAnimationFrame(
                     () => {
 
-                        setOffset(
-                            getTargetOffset(
-                                activeIndex
-                            ),
-                            false
-                        );
+                        if (
+                            count > 0
+                        ) {
 
+                            setOffset(
+                                getTargetOffset(
+                                    activeIndex
+                                ),
+                                false
+                            );
+                        }
                     }
                 );
-
         }
     );
 
 
     /* =========================================================
-       INITIALIZE
+       LOAD TAG
     ========================================================= */
 
-    requestAnimationFrame(
-        () => {
+    async function getTag(
+        tagCode
+    ) {
 
-            activeIndex =
-                count * 3;
+        const {
+            data,
+            error
+        } =
+            await supabase
+                .from(
+                    "nfc_tags"
+                )
+                .select(
+                    "owner_id,active,tag_code"
+                )
+                .eq(
+                    "tag_code",
+                    tagCode
+                )
+                .maybeSingle();
 
 
-            updateVisuals();
+        if (
+            error
+        ) {
+
+            throw new Error(
+                `Unable to load this E-Tag: ${error.message}`
+            );
+        }
 
 
-            setOffset(
-                getTargetOffset(
-                    activeIndex
-                ),
-                false
+        if (
+            !data
+        ) {
+
+            throw new Error(
+                `E-Tag "${tagCode}" was not found.`
+            );
+        }
+
+
+        return data;
+    }
+
+
+    /* =========================================================
+       LOAD PROFILE
+    ========================================================= */
+
+    async function load() {
+
+        try {
+
+            const tagCode =
+                getTagCode();
+
+
+            if (
+                !tagCode
+            ) {
+
+                throw new Error(
+                    "Invalid E-Tag URL."
+                );
+            }
+
+
+            const tag =
+                await getTag(
+                    tagCode
+                );
+
+
+            if (
+                !tag.active ||
+                !tag.owner_id
+            ) {
+
+                throw new Error(
+                    "This E-Tag has not been activated."
+                );
+            }
+
+
+            const {
+                data: profileData,
+                error: profileError
+            } =
+                await supabase
+                    .from(
+                        "profiles"
+                    )
+                    .select(
+                        "*"
+                    )
+                    .eq(
+                        "id",
+                        tag.owner_id
+                    )
+                    .maybeSingle();
+
+
+            if (
+                profileError
+            ) {
+
+                throw new Error(
+                    `Unable to load profile: ${profileError.message}`
+                );
+            }
+
+
+            if (
+                !profileData
+            ) {
+
+                throw new Error(
+                    "Public profile not found."
+                );
+            }
+
+
+            /* =================================================
+               BASIC PROFILE
+            ================================================= */
+
+            const displayName =
+                clean(
+                    profileData.display_name
+                ) ||
+                "E-Tag User";
+
+
+            name.textContent =
+                displayName;
+
+
+            age.textContent =
+                profileData.age
+                    ? `${profileData.age} years old`
+                    : "";
+
+
+            bio.textContent =
+                clean(
+                    profileData.bio
+                );
+
+
+            renderAvatar(
+                avatar,
+                profileData
             );
 
 
-            updateInformation(
-                items[activeIndex],
-                false
+            /* =================================================
+               CONTACT
+               
+               LOCATION IS INTENTIONALLY NOT INCLUDED.
+            ================================================= */
+
+            contacts.innerHTML =
+                "";
+
+
+            if (
+                profileData.phone
+            ) {
+
+                addContact(
+                    "Call",
+                    "Call Me",
+                    `tel:${encodeURIComponent(
+                        profileData.phone
+                    )}`,
+                    ICONS.call
+                );
+            }
+
+
+            if (
+                profileData.whatsapp
+            ) {
+
+                const number =
+                    clean(
+                        profileData.whatsapp
+                    )
+                        .replace(
+                            /\D/g,
+                            ""
+                        );
+
+
+                if (
+                    number
+                ) {
+
+                    addContact(
+                        "WhatsApp",
+                        "WhatsApp Me",
+                        `https://wa.me/${number}`,
+                        ICONS.whatsapp
+                    );
+                }
+            }
+
+
+            if (
+                profileData.email
+            ) {
+
+                addContact(
+                    "Email",
+                    "Email Me",
+                    `mailto:${encodeURIComponent(
+                        profileData.email
+                    )}`,
+                    ICONS.email
+                );
+            }
+
+
+            if (
+                contacts.children.length === 0
+            ) {
+
+                contactSection.classList.add(
+                    "hidden"
+                );
+
+            }
+            else {
+
+                contactSection.classList.remove(
+                    "hidden"
+                );
+            }
+
+
+            /* =================================================
+               SOCIAL
+            ================================================= */
+
+            socialData.length =
+                0;
+
+
+            if (
+                profileData.facebook
+            ) {
+
+                const value =
+                    clean(
+                        profileData.facebook
+                    );
+
+
+                const url =
+                    normalizeSocialUrl(
+                        value
+                    );
+
+
+                addSocial(
+                    "Facebook",
+                    value.startsWith("@")
+                        ? value
+                        : `@${username(value)}`,
+                    url.startsWith(
+                        "http"
+                    )
+                        ? url
+                        : `https://facebook.com/${username(value)}`,
+                    ICONS.facebook
+                );
+            }
+
+
+            if (
+                profileData.instagram
+            ) {
+
+                const value =
+                    clean(
+                        profileData.instagram
+                    );
+
+
+                const user =
+                    username(
+                        value
+                    );
+
+
+                addSocial(
+                    "Instagram",
+                    `@${user}`,
+                    value.startsWith(
+                        "http"
+                    )
+                        ? value
+                        : `https://instagram.com/${user}`,
+                    ICONS.instagram
+                );
+            }
+
+
+            if (
+                profileData.tiktok
+            ) {
+
+                const value =
+                    clean(
+                        profileData.tiktok
+                    );
+
+
+                const user =
+                    username(
+                        value
+                    );
+
+
+                addSocial(
+                    "TikTok",
+                    `@${user}`,
+                    value.startsWith(
+                        "http"
+                    )
+                        ? value
+                        : `https://www.tiktok.com/@${user}`,
+                    ICONS.tiktok
+                );
+            }
+
+
+            if (
+                profileData.youtube
+            ) {
+
+                const value =
+                    clean(
+                        profileData.youtube
+                    );
+
+
+                const user =
+                    username(
+                        value
+                    );
+
+
+                addSocial(
+                    "YouTube",
+                    `@${user}`,
+                    value.startsWith(
+                        "http"
+                    )
+                        ? value
+                        : `https://youtube.com/@${user}`,
+                    ICONS.youtube
+                );
+            }
+
+
+            if (
+                profileData.telegram
+            ) {
+
+                const value =
+                    clean(
+                        profileData.telegram
+                    );
+
+
+                const user =
+                    username(
+                        value
+                    );
+
+
+                addSocial(
+                    "Telegram",
+                    `@${user}`,
+                    value.startsWith(
+                        "http"
+                    )
+                        ? value
+                        : `https://t.me/${user}`,
+                    ICONS.telegram
+                );
+            }
+
+
+            if (
+                profileData.discord
+            ) {
+
+                const value =
+                    clean(
+                        profileData.discord
+                    );
+
+
+                addSocial(
+                    "Discord",
+                    value.startsWith("@")
+                        ? value
+                        : (
+                            value
+                                ? `@${value}`
+                                : "@discord"
+                        ),
+                    value.startsWith(
+                        "http"
+                    )
+                        ? value
+                        : "https://discord.com/",
+                    ICONS.discord
+                );
+            }
+
+
+            if (
+                profileData.linkedin
+            ) {
+
+                const value =
+                    clean(
+                        profileData.linkedin
+                    );
+
+
+                const user =
+                    username(
+                        value
+                    );
+
+
+                addSocial(
+                    "LinkedIn",
+                    `@${user}`,
+                    value.startsWith(
+                        "http"
+                    )
+                        ? value
+                        : `https://linkedin.com/in/${user}`,
+                    ICONS.linkedin
+                );
+            }
+
+
+            buildSocialCarousel();
+
+
+            /* =================================================
+               EDIT ROUTING
+               
+               IMPORTANT:
+               This remains connected to index.html.
+            ================================================= */
+
+            editButton.href =
+                `/E-Tag/?tag=${encodeURIComponent(
+                    tag.tag_code
+                )}&edit=1`;
+
+
+            /* =================================================
+               SHOW PROFILE
+            ================================================= */
+
+            loading.classList.add(
+                "hidden"
             );
+
+
+            errorBox.classList.add(
+                "hidden"
+            );
+
+
+            profile.classList.remove(
+                "hidden"
+            );
+
 
         }
-    );
+        catch (
+            error
+        ) {
+
+            console.error(
+                "Men theme load error:",
+                error
+            );
+
+
+            loading.classList.add(
+                "hidden"
+            );
+
+
+            errorBox.textContent =
+                error.message ||
+                "Unable to load profile.";
+
+
+            errorBox.classList.remove(
+                "hidden"
+            );
+        }
+    }
+
+
+    /* =========================================================
+       START
+    ========================================================= */
+
+    load();
 
 </script>
 
