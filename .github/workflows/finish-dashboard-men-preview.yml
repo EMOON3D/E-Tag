@@ -1,0 +1,275 @@
+name: Finish Dashboard Men Preview
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  finish-dashboard:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository history
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Restore original dashboard UI and patch preview only
+        shell: python
+        run: |
+          import subprocess
+          from pathlib import Path
+
+          path = Path('dashboard.html')
+
+          dashboard = subprocess.check_output(
+              ['git', 'show', '110f6965:dashboard.html'],
+              text=True
+          )
+
+          old_preview = '''                <div class="preview-shell">
+
+                    <div class="preview">
+
+                        <div class="preview-top">
+
+                            <div
+                                id="previewAvatar"
+                                class="preview-avatar"
+                            ></div>
+
+
+                            <h1
+                                id="previewName"
+                                class="preview-name"
+                            >
+                                E-Tag User
+                            </h1>
+
+
+                            <div
+                                id="previewType"
+                                class="preview-type"
+                            >
+                                Personal · Men
+                            </div>
+
+
+                            <p
+                                id="previewBio"
+                                class="preview-bio"
+                            ></p>
+
+                        </div>
+
+
+                        <div
+                            id="previewContent"
+                            class="preview-content"
+                        ></div>
+
+                    </div>
+
+                </div>'''
+
+          new_preview = '''                <div class="preview-shell">
+
+                    <div class="theme-preview-frame">
+
+                        <iframe
+                            id="themePreviewFrame"
+                            title="E-Tag Men Profile Preview"
+                            scrolling="no"
+                            frameborder="0"
+                        ></iframe>
+
+                    </div>
+
+                </div>'''
+
+          if old_preview not in dashboard:
+              raise SystemExit('Original preview block not found.')
+
+          dashboard = dashboard.replace(old_preview, new_preview, 1)
+
+          old_css = '''        .preview-shell {
+            padding: 14px;
+
+            min-height: 520px;
+
+            border-radius: 18px;
+
+            background: #f5f7fb;
+        }
+'''
+
+          new_css = old_css + '''
+        .theme-preview-frame {
+            width: 100%;
+            height: 680px;
+            overflow: hidden;
+            border-radius: 26px;
+            background: transparent;
+        }
+
+        #themePreviewFrame {
+            width: 100%;
+            height: 100%;
+            display: block;
+            border: 0;
+            background: transparent;
+        }
+'''
+
+          if old_css not in dashboard:
+              raise SystemExit('Preview CSS block not found.')
+
+          dashboard = dashboard.replace(old_css, new_css, 1)
+
+          old_update_start = '    function updatePreview() {\n'
+          update_start = dashboard.find(old_update_start)
+          update_end_marker = '    function buildProfileData() {\n'
+          update_end = dashboard.find(update_end_marker, update_start)
+
+          if update_start == -1 or update_end == -1:
+              raise SystemExit('updatePreview function markers not found.')
+
+          new_update = '''    function updatePreview() {
+
+        /*
+         * The preview is the real public Men theme.
+         * Because the public theme reads saved Supabase
+         * profile data, it is refreshed after Save Profile.
+         */
+
+        return;
+
+    }
+
+
+'''
+
+          dashboard = dashboard[:update_start] + new_update + dashboard[update_end:]
+
+          load_marker = '''            openPublicButton.onclick =
+                () => {
+
+                    const publicUrl =
+                        `${window.location.origin}/E-Tag/?tag=${encodeURIComponent(
+                            currentTag.tag_code
+                        )}`;
+
+
+                    window.open(
+                        publicUrl,
+                        "_blank",
+                        "noopener,noreferrer"
+                    );
+
+                };
+'''
+
+          load_replacement = '''            const publicUrl =
+                `${window.location.origin}/E-Tag/?tag=${encodeURIComponent(
+                    currentTag.tag_code
+                )}`;
+
+
+            openPublicButton.onclick =
+                () => {
+
+                    window.open(
+                        publicUrl,
+                        "_blank",
+                        "noopener,noreferrer"
+                    );
+
+                };
+
+
+            const themePreviewFrame =
+                document.getElementById(
+                    "themePreviewFrame"
+                );
+
+
+            if (themePreviewFrame) {
+
+                themePreviewFrame.src =
+                    `/E-Tag/themes/men.html?tag=${encodeURIComponent(
+                        currentTag.tag_code
+                    )}`;
+
+            }
+'''
+
+          if load_marker not in dashboard:
+              raise SystemExit('Public-profile routing block not found.')
+
+          dashboard = dashboard.replace(load_marker, load_replacement, 1)
+
+          save_marker = '''            showMessage(
+                "Profile saved successfully.",
+                "success"
+            );
+'''
+
+          save_replacement = '''            const themePreviewFrame =
+                document.getElementById(
+                    "themePreviewFrame"
+                );
+
+
+            if (themePreviewFrame) {
+
+                themePreviewFrame.src =
+                    "about:blank";
+
+
+                setTimeout(
+                    () => {
+
+                        themePreviewFrame.src =
+                            `/E-Tag/themes/men.html?tag=${encodeURIComponent(
+                                currentTag.tag_code
+                            )}&previewRefresh=${Date.now()}`;
+
+                    },
+                    40
+                );
+
+            }
+
+
+            showMessage(
+                "Profile saved successfully.",
+                "success"
+            );
+'''
+
+          if save_marker not in dashboard:
+              raise SystemExit('Save success block not found.')
+
+          dashboard = dashboard.replace(save_marker, save_replacement, 1)
+
+          path.write_text(dashboard, encoding='utf-8')
+
+      - name: Remove temporary workflow and trigger file
+        shell: bash
+        run: |
+          rm -f .github/workflows/finish-dashboard-men-preview.yml
+          rm -f dashboard-preview-trigger.txt
+
+      - name: Commit final dashboard
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add dashboard.html .github/workflows/finish-dashboard-men-preview.yml dashboard-preview-trigger.txt
+          git commit -m "Restore dashboard UI and use real Men profile preview"
+          git push
