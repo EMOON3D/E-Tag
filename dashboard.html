@@ -527,6 +527,22 @@
             background: #f5f7fb;
         }
 
+        .theme-preview-frame {
+            width: 100%;
+            height: 680px;
+            overflow: hidden;
+            border-radius: 26px;
+            background: transparent;
+        }
+
+        #themePreviewFrame {
+            width: 100%;
+            height: 100%;
+            display: block;
+            border: 0;
+            background: transparent;
+        }
+
         .preview {
             overflow: hidden;
 
@@ -1829,44 +1845,14 @@
 
                 <div class="preview-shell">
 
-                    <div class="preview">
+                    <div class="theme-preview-frame">
 
-                        <div class="preview-top">
-
-                            <div
-                                id="previewAvatar"
-                                class="preview-avatar"
-                            ></div>
-
-
-                            <h1
-                                id="previewName"
-                                class="preview-name"
-                            >
-                                E-Tag User
-                            </h1>
-
-
-                            <div
-                                id="previewType"
-                                class="preview-type"
-                            >
-                                Personal · Men
-                            </div>
-
-
-                            <p
-                                id="previewBio"
-                                class="preview-bio"
-                            ></p>
-
-                        </div>
-
-
-                        <div
-                            id="previewContent"
-                            class="preview-content"
-                        ></div>
+                        <iframe
+                            id="themePreviewFrame"
+                            title="E-Tag Men Profile Preview"
+                            src="/E-Tag/themes/men.html?preview=1"
+                            scrolling="no"
+                        ></iframe>
 
                     </div>
 
@@ -3100,268 +3086,19 @@
 
     function updatePreview() {
 
-        const name =
-            getDisplayName();
+        const frame = document.getElementById("themePreviewFrame");
 
-
-        previewName.textContent =
-            name;
-
-
-        previewBio.textContent =
-            getBio();
-
-
-        if (
-            currentProfileType ===
-            "couple"
-        ) {
-
-            previewType.textContent =
-                "Couple";
-
-        } else if (
-            currentProfileType ===
-            "business"
-        ) {
-
-            previewType.textContent =
-                "Business";
-
-        } else {
-
-            previewType.textContent =
-                currentTemplate ===
-                    "women"
-                        ? "Personal · Women"
-                        : "Personal · Men";
-
+        if (!frame?.contentWindow) {
+            return;
         }
 
-
-        renderAvatar(
-            previewAvatar,
-            name,
-            getPreviewImage()
+        frame.contentWindow.postMessage(
+            {
+                type: "etag-dashboard-preview",
+                profile: buildProfileData()
+            },
+            window.location.origin
         );
-
-
-        previewContent.innerHTML =
-            "";
-
-
-        const addButton =
-            (
-                label,
-                href
-            ) => {
-
-                const a =
-                    document.createElement(
-                        "a"
-                    );
-
-
-                a.className =
-                    "preview-button";
-
-
-                a.textContent =
-                    label;
-
-
-                a.href =
-                    href;
-
-
-                if (
-                    href !== "#"
-                ) {
-
-                    a.target =
-                        "_blank";
-
-                    a.rel =
-                        "noopener";
-
-                }
-
-
-                previewContent.appendChild(
-                    a
-                );
-
-            };
-
-
-        if (
-            currentProfileType ===
-            "personal"
-        ) {
-
-            const phone =
-                getValue(
-                    "personalPhone"
-                );
-
-
-            const whatsapp =
-                getValue(
-                    "personalWhatsapp"
-                );
-
-
-            const instagram =
-                getValue(
-                    "instagram"
-                );
-
-
-            if (
-                phone
-            ) {
-
-                addButton(
-                    "Call",
-                    `tel:${encodeURIComponent(
-                        phone
-                    )}`
-                );
-
-            }
-
-
-            if (
-                whatsapp
-            ) {
-
-                addButton(
-                    "WhatsApp",
-                    `https://wa.me/${cleanNumber(
-                        whatsapp
-                    )}`
-                );
-
-            }
-
-
-            if (
-                instagram
-            ) {
-
-                addButton(
-                    "Instagram",
-                    instagram
-                );
-
-            }
-
-        }
-
-
-        if (
-            currentProfileType ===
-            "couple"
-        ) {
-
-            const whatsapp =
-                getValue(
-                    "coupleWhatsapp"
-                );
-
-
-            if (
-                whatsapp
-            ) {
-
-                addButton(
-                    "WhatsApp",
-                    `https://wa.me/${cleanNumber(
-                        whatsapp
-                    )}`
-                );
-
-            }
-
-        }
-
-
-        if (
-            currentProfileType ===
-            "business"
-        ) {
-
-            const phone =
-                getValue(
-                    "businessPhone"
-                );
-
-
-            const whatsapp =
-                getValue(
-                    "businessWhatsapp"
-                );
-
-
-            const website =
-                getValue(
-                    "website"
-                );
-
-
-            if (
-                phone
-            ) {
-
-                addButton(
-                    "Call Business",
-                    `tel:${encodeURIComponent(
-                        phone
-                    )}`
-                );
-
-            }
-
-
-            if (
-                whatsapp
-            ) {
-
-                addButton(
-                    "WhatsApp",
-                    `https://wa.me/${cleanNumber(
-                        whatsapp
-                    )}`
-                );
-
-            }
-
-
-            if (
-                website
-            ) {
-
-                addButton(
-                    "Website",
-                    website
-                );
-
-            }
-
-        }
-
-
-        if (
-            previewContent.children.length ===
-            0
-        ) {
-
-            addButton(
-                "Public Profile",
-                "#"
-            );
-
-        }
 
     }
 
@@ -4823,6 +4560,18 @@
 
         }
     );
+
+
+    window.addEventListener("message", event => {
+
+        if (
+            event.origin === window.location.origin &&
+            event.data?.type === "etag-men-preview-ready"
+        ) {
+            updatePreview();
+        }
+
+    });
 
 
     /*
