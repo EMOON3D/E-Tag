@@ -3268,10 +3268,7 @@
                 );
 
 
-            if (
-                !item
-            ) {
-
+            if (!item) {
                 return;
             }
 
@@ -3280,63 +3277,23 @@
                 suppressClick ||
                 moved
             ) {
-
                 event.preventDefault();
-
                 return;
             }
 
 
             const index =
-                items.indexOf(
-                    item
-                );
+                items.indexOf(item);
 
 
             if (
-                index !==
-                activeIndex
+                index !== activeIndex
             ) {
-
                 event.preventDefault();
 
-
-                selectIndex(
-                    index
-                );
-
-
+                selectIndex(index);
                 return;
             }
-
-
-            event.preventDefault();
-
-
-            item.animate(
-                [
-                    {
-                        transform:
-                            "translateY(-3px) scale(1)"
-                    },
-
-                    {
-                        transform:
-                            "translateY(-3px) scale(.92)"
-                    },
-
-                    {
-                        transform:
-                            "translateY(-3px) scale(1)"
-                    }
-                ],
-                {
-                    duration: 170,
-
-                    easing:
-                        "cubic-bezier(.22,.8,.25,1)"
-                }
-            );
 
 
             const url =
@@ -3346,21 +3303,14 @@
 
 
             if (!url) {
+                event.preventDefault();
                 return;
             }
 
 
-            const opened =
-                window.open(
-                    url,
-                    "_blank",
-                    "noopener,noreferrer"
-                );
-
-
-            if (!opened) {
-                window.location.href = url;
-            }
+            /* Let the anchor perform the normal browser navigation.
+               This fixes normal mouse/tap clicks while preserving
+               Ctrl/Cmd-click, middle-click and right-click behavior. */
         }
     );
 
