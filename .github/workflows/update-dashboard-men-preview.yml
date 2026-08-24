@@ -1,0 +1,308 @@
+name: Update Dashboard Men Preview
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  update-dashboard:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout full history
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Restore old dashboard and patch preview only
+        shell: python
+        run: |
+          import subprocess
+          from pathlib import Path
+
+          path = Path('dashboard.html')
+
+          dashboard = subprocess.check_output(
+              [
+                  'git',
+                  'show',
+                  '110f6965:dashboard.html'
+              ],
+              text=True
+          )
+
+          preview_old = '''                <div class="preview-shell">
+
+                    <div class="preview">
+
+                        <div class="preview-top">
+
+                            <div
+                                id="previewAvatar"
+                                class="preview-avatar"
+                            ></div>
+
+
+                            <h1
+                                id="previewName"
+                                class="preview-name"
+                            >
+                                E-Tag User
+                            </h1>
+
+
+                            <div
+                                id="previewType"
+                                class="preview-type"
+                            >
+                                Personal · Men
+                            </div>
+
+
+                            <p
+                                id="previewBio"
+                                class="preview-bio"
+                            ></p>
+
+                        </div>
+
+
+                        <div
+                            id="previewContent"
+                            class="preview-content"
+                        ></div>
+
+                    </div>
+
+                </div>'''
+
+          preview_new = '''                <div class="preview-shell">
+
+                    <div class="theme-preview-frame">
+
+                        <iframe
+                            id="themePreviewFrame"
+                            title="E-Tag Men Profile Preview"
+                            src="/E-Tag/themes/men.html?preview=1"
+                            loading="eager"
+                            scrolling="no"
+                        ></iframe>
+
+                    </div>
+
+                </div>'''
+
+          if preview_old not in dashboard:
+              raise SystemExit('Original dashboard preview block was not found.')
+
+          dashboard = dashboard.replace(
+              preview_old,
+              preview_new,
+              1
+          )
+
+          css_marker = '''        .preview-shell {
+            padding: 14px;
+
+            min-height: 520px;
+
+            border-radius: 18px;
+
+            background: #f5f7fb;
+        }
+'''
+
+          css_add = css_marker + '''
+        .theme-preview-frame {
+            width: 100%;
+            height: 680px;
+            overflow: hidden;
+            border-radius: 26px;
+            background: transparent;
+        }
+
+        #themePreviewFrame {
+            width: 100%;
+            height: 100%;
+            display: block;
+            border: 0;
+            background: transparent;
+        }
+'''
+
+          if css_marker not in dashboard:
+              raise SystemExit('Dashboard preview CSS marker was not found.')
+
+          dashboard = dashboard.replace(
+              css_marker,
+              css_add,
+              1
+          )
+
+          desktop_marker = '''        @media (max-width: 900px) {
+'''
+          desktop_add = '''        @media (max-width: 900px) {
+
+            .theme-preview-frame {
+                height: 720px;
+            }
+
+'''
+
+          dashboard = dashboard.replace(
+              desktop_marker,
+              desktop_add,
+              1
+          )
+
+          mobile_marker = '''            .button-row {
+                flex-direction: column;
+            }
+
+        }
+'''
+          mobile_add = '''            .button-row {
+                flex-direction: column;
+            }
+
+            .theme-preview-frame {
+                height: 720px;
+            }
+
+        }
+'''
+
+          dashboard = dashboard.replace(
+              mobile_marker,
+              mobile_add,
+              1
+          )
+
+          marker = '''    function updatePreview() {
+'''
+          start = dashboard.find(marker)
+          if start == -1:
+              raise SystemExit('updatePreview function was not found.')
+
+          end_marker = '''    function buildProfileData() {
+'''
+          end = dashboard.find(end_marker, start)
+          if end == -1:
+              raise SystemExit('buildProfileData marker was not found.')
+
+          new_update_preview = '''    function updatePreview() {
+
+        const profileData = buildPreviewData();
+
+        const frame =
+            document.getElementById(
+                "themePreviewFrame"
+            );
+
+        if (
+            frame &&
+            frame.contentWindow
+        ) {
+
+            frame.contentWindow.postMessage(
+                {
+                    type: "etag-dashboard-preview",
+                    profile: profileData
+                },
+                window.location.origin
+            );
+        }
+
+    }
+
+
+    function buildPreviewData() {
+
+        const data = buildProfileData();
+
+        return {
+            ...data,
+            avatar_type: avatarType,
+            character_id:
+                avatarType === "character"
+                    ? characterId
+                    : null,
+            avatar_url:
+                avatarType === "upload"
+                    ? currentAvatarUrl
+                    : null
+        };
+
+    }
+
+
+'''
+
+          dashboard = (
+              dashboard[:start]
+              + new_update_preview
+              + dashboard[end:]
+          )
+
+          ready_handler = '''    window.addEventListener(
+        "message",
+        event => {
+
+            if (
+                event.origin !==
+                window.location.origin
+            ) {
+                return;
+            }
+
+            if (
+                event.data?.type ===
+                "etag-men-preview-ready"
+            ) {
+
+                updatePreview();
+            }
+
+        }
+    );
+
+
+'''
+
+          listener_marker = '''    /*
+     * SAVE
+     */
+'''
+
+          if listener_marker not in dashboard:
+              raise SystemExit('SAVE section marker was not found.')
+
+          dashboard = dashboard.replace(
+              listener_marker,
+              ready_handler + listener_marker,
+              1
+          )
+
+          path.write_text(
+              dashboard,
+              encoding='utf-8'
+          )
+
+      - name: Remove temporary workflow
+        shell: bash
+        run: |
+          rm -f .github/workflows/update-dashboard-men-preview.yml
+
+      - name: Commit dashboard only
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add dashboard.html .github/workflows/update-dashboard-men-preview.yml
+          git commit -m "Use exact Men theme in dashboard preview"
+          git push
