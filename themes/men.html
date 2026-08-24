@@ -3308,9 +3308,22 @@
             }
 
 
-            /* Let the anchor perform the normal browser navigation.
-               This fixes normal mouse/tap clicks while preserving
-               Ctrl/Cmd-click, middle-click and right-click behavior. */
+            event.preventDefault();
+
+            if (
+                event.ctrlKey ||
+                event.metaKey
+            ) {
+                window.open(
+                    url,
+                    "_blank",
+                    "noopener"
+                );
+                return;
+            }
+
+            window.location.href =
+                url;
         }
     );
 
