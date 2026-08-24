@@ -3310,6 +3310,9 @@
             }
 
 
+            event.preventDefault();
+
+
             item.animate(
                 [
                     {
@@ -3334,6 +3337,30 @@
                         "cubic-bezier(.22,.8,.25,1)"
                 }
             );
+
+
+            const url =
+                item.dataset.url ||
+                item.href ||
+                "";
+
+
+            if (!url) {
+                return;
+            }
+
+
+            const opened =
+                window.open(
+                    url,
+                    "_blank",
+                    "noopener,noreferrer"
+                );
+
+
+            if (!opened) {
+                window.location.href = url;
+            }
         }
     );
 
