@@ -25,14 +25,10 @@ jobs:
           import subprocess
           from pathlib import Path
 
-          path = Path('dashboard.html')
+          path = Path("dashboard.html")
 
           dashboard = subprocess.check_output(
-              [
-                  'git',
-                  'show',
-                  '110f6965:dashboard.html'
-              ],
+              ["git", "show", "110f6965:dashboard.html"],
               text=True
           )
 
@@ -87,10 +83,9 @@ jobs:
 
                         <iframe
                             id="themePreviewFrame"
-                            title="E-Tag Men Profile Preview"
-                            src="/E-Tag/themes/men.html?preview=1"
-                            loading="eager"
+                            title="E-Tag Men Public Profile Preview"
                             scrolling="no"
+                            frameborder="0"
                         ></iframe>
 
                     </div>
@@ -98,13 +93,9 @@ jobs:
                 </div>'''
 
           if preview_old not in dashboard:
-              raise SystemExit('Original dashboard preview block was not found.')
+              raise SystemExit("Original dashboard preview block was not found.")
 
-          dashboard = dashboard.replace(
-              preview_old,
-              preview_new,
-              1
-          )
+          dashboard = dashboard.replace(preview_old, preview_new, 1)
 
           css_marker = '''        .preview-shell {
             padding: 14px;
@@ -136,29 +127,9 @@ jobs:
 '''
 
           if css_marker not in dashboard:
-              raise SystemExit('Dashboard preview CSS marker was not found.')
+              raise SystemExit("Dashboard preview CSS marker was not found.")
 
-          dashboard = dashboard.replace(
-              css_marker,
-              css_add,
-              1
-          )
-
-          desktop_marker = '''        @media (max-width: 900px) {
-'''
-          desktop_add = '''        @media (max-width: 900px) {
-
-            .theme-preview-frame {
-                height: 720px;
-            }
-
-'''
-
-          dashboard = dashboard.replace(
-              desktop_marker,
-              desktop_add,
-              1
-          )
+          dashboard = dashboard.replace(css_marker, css_add, 1)
 
           mobile_marker = '''            .button-row {
                 flex-direction: column;
@@ -166,6 +137,7 @@ jobs:
 
         }
 '''
+
           mobile_add = '''            .button-row {
                 flex-direction: column;
             }
@@ -177,121 +149,113 @@ jobs:
         }
 '''
 
-          dashboard = dashboard.replace(
-              mobile_marker,
-              mobile_add,
-              1
-          )
+          if mobile_marker not in dashboard:
+              raise SystemExit("Dashboard mobile marker was not found.")
 
-          marker = '''    function updatePreview() {
+          dashboard = dashboard.replace(mobile_marker, mobile_add, 1)
+
+          old_open = '''            openPublicButton.onclick =
+                () => {
+
+                    const publicUrl =
+                        `${window.location.origin}/E-Tag/?tag=${encodeURIComponent(
+                            currentTag.tag_code
+                        )}`;
+
+
+                    window.open(
+                        publicUrl,
+                        "_blank",
+                        "noopener,noreferrer"
+                    );
+
+                };
 '''
-          start = dashboard.find(marker)
-          if start == -1:
-              raise SystemExit('updatePreview function was not found.')
 
-          end_marker = '''    function buildProfileData() {
+          new_open = '''            const publicUrl =
+                `${window.location.origin}/E-Tag/?tag=${encodeURIComponent(
+                    currentTag.tag_code
+                )}`;
+
+
+            openPublicButton.onclick =
+                () => {
+
+                    window.open(
+                        publicUrl,
+                        "_blank",
+                        "noopener,noreferrer"
+                    );
+
+                };
+
+
+            const themePreviewFrame =
+                document.getElementById(
+                    "themePreviewFrame"
+                );
+
+
+            if (themePreviewFrame) {
+
+                themePreviewFrame.src =
+                    `/E-Tag/themes/men.html?tag=${encodeURIComponent(
+                        currentTag.tag_code
+                    )}`;
+
+            }
 '''
-          end = dashboard.find(end_marker, start)
-          if end == -1:
-              raise SystemExit('buildProfileData marker was not found.')
 
-          new_update_preview = '''    function updatePreview() {
+          if old_open not in dashboard:
+              raise SystemExit("Open Public Profile block was not found.")
 
-        const profileData = buildPreviewData();
+          dashboard = dashboard.replace(old_open, new_open, 1)
 
-        const frame =
-            document.getElementById(
-                "themePreviewFrame"
+          old_save_success = '''            showMessage(
+                "Profile saved successfully.",
+                "success"
             );
-
-        if (
-            frame &&
-            frame.contentWindow
-        ) {
-
-            frame.contentWindow.postMessage(
-                {
-                    type: "etag-dashboard-preview",
-                    profile: profileData
-                },
-                window.location.origin
-            );
-        }
-
-    }
-
-
-    function buildPreviewData() {
-
-        const data = buildProfileData();
-
-        return {
-            ...data,
-            avatar_type: avatarType,
-            character_id:
-                avatarType === "character"
-                    ? characterId
-                    : null,
-            avatar_url:
-                avatarType === "upload"
-                    ? currentAvatarUrl
-                    : null
-        };
-
-    }
-
-
 '''
 
-          dashboard = (
-              dashboard[:start]
-              + new_update_preview
-              + dashboard[end:]
-          )
+          new_save_success = '''            const themePreviewFrame =
+                document.getElementById(
+                    "themePreviewFrame"
+                );
 
-          ready_handler = '''    window.addEventListener(
-        "message",
-        event => {
 
-            if (
-                event.origin !==
-                window.location.origin
-            ) {
-                return;
+            if (themePreviewFrame) {
+
+                themePreviewFrame.src =
+                    "about:blank";
+
+
+                setTimeout(
+                    () => {
+
+                        themePreviewFrame.src =
+                            `/E-Tag/themes/men.html?tag=${encodeURIComponent(
+                                currentTag.tag_code
+                            )}&previewRefresh=${Date.now()}`;
+
+                    },
+                    30
+                );
+
             }
 
-            if (
-                event.data?.type ===
-                "etag-men-preview-ready"
-            ) {
 
-                updatePreview();
-            }
-
-        }
-    );
-
-
+            showMessage(
+                "Profile saved successfully.",
+                "success"
+            );
 '''
 
-          listener_marker = '''    /*
-     * SAVE
-     */
-'''
+          if old_save_success not in dashboard:
+              raise SystemExit("Save success marker was not found.")
 
-          if listener_marker not in dashboard:
-              raise SystemExit('SAVE section marker was not found.')
+          dashboard = dashboard.replace(old_save_success, new_save_success, 1)
 
-          dashboard = dashboard.replace(
-              listener_marker,
-              ready_handler + listener_marker,
-              1
-          )
-
-          path.write_text(
-              dashboard,
-              encoding='utf-8'
-          )
+          path.write_text(dashboard, encoding="utf-8")
 
       - name: Remove temporary workflow
         shell: bash
@@ -304,5 +268,9 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add dashboard.html .github/workflows/update-dashboard-men-preview.yml
-          git commit -m "Use exact Men theme in dashboard preview"
+          if git diff --cached --quiet; then
+            echo "No dashboard changes found."
+            exit 0
+          fi
+          git commit -m "Restore dashboard UI and use exact Men public preview"
           git push
