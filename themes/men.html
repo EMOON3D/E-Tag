@@ -3268,7 +3268,10 @@
                 );
 
 
-            if (!item) {
+            if (
+                !item
+            ) {
+
                 return;
             }
 
@@ -3277,23 +3280,63 @@
                 suppressClick ||
                 moved
             ) {
+
                 event.preventDefault();
+
                 return;
             }
 
 
             const index =
-                items.indexOf(item);
+                items.indexOf(
+                    item
+                );
 
 
             if (
-                index !== activeIndex
+                index !==
+                activeIndex
             ) {
+
                 event.preventDefault();
 
-                selectIndex(index);
+
+                selectIndex(
+                    index
+                );
+
+
                 return;
             }
+
+
+            event.preventDefault();
+
+
+            item.animate(
+                [
+                    {
+                        transform:
+                            "translateY(-3px) scale(1)"
+                    },
+
+                    {
+                        transform:
+                            "translateY(-3px) scale(.92)"
+                    },
+
+                    {
+                        transform:
+                            "translateY(-3px) scale(1)"
+                    }
+                ],
+                {
+                    duration: 170,
+
+                    easing:
+                        "cubic-bezier(.22,.8,.25,1)"
+                }
+            );
 
 
             const url =
@@ -3303,27 +3346,21 @@
 
 
             if (!url) {
-                event.preventDefault();
                 return;
             }
 
 
-            event.preventDefault();
-
-            if (
-                event.ctrlKey ||
-                event.metaKey
-            ) {
+            const opened =
                 window.open(
                     url,
                     "_blank",
-                    "noopener"
+                    "noopener,noreferrer"
                 );
-                return;
-            }
 
-            window.location.href =
-                url;
+
+            if (!opened) {
+                window.location.href = url;
+            }
         }
     );
 
