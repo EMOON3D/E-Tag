@@ -2801,33 +2801,41 @@
                     originalIndex
                 ) => {
 
-                    const button =
+                    const link =
                         document.createElement(
-                            "button"
+                            "a"
                         );
 
 
-                    button.className =
+                    link.className =
                         "social-item";
 
 
-                    button.type =
-                        "button";
-
-
-                    button.dataset.name =
-                        data.name;
-
-
-                    button.dataset.username =
-                        data.username;
-
-
-                    button.dataset.url =
+                    link.href =
                         data.url;
 
 
-                    button.dataset.originalIndex =
+                    link.target =
+                        "_blank";
+
+
+                    link.rel =
+                        "noopener noreferrer";
+
+
+                    link.dataset.name =
+                        data.name;
+
+
+                    link.dataset.username =
+                        data.username;
+
+
+                    link.dataset.url =
+                        data.url;
+
+
+                    link.dataset.originalIndex =
                         String(
                             originalIndex
                         );
@@ -2851,13 +2859,13 @@
                         false;
 
 
-                    button.appendChild(
+                    link.appendChild(
                         image
                     );
 
 
                     socialTrack.appendChild(
-                        button
+                        link
                     );
                 }
             );
@@ -3302,9 +3310,6 @@
             }
 
 
-            event.preventDefault();
-
-
             item.animate(
                 [
                     {
@@ -3328,20 +3333,6 @@
                     easing:
                         "cubic-bezier(.22,.8,.25,1)"
                 }
-            );
-
-
-            setTimeout(
-                () => {
-
-                    window.open(
-                        item.dataset.url,
-                        "_blank",
-                        "noopener,noreferrer"
-                    );
-
-                },
-                150
             );
         }
     );
@@ -4002,11 +3993,7 @@
                 addSocial(
                     "Facebook",
                     `@${user}`,
-                    value.startsWith(
-                        "http"
-                    )
-                        ? value
-                        : `https://facebook.com/${user}`,
+                    value,
                     ICONS.facebook
                 );
             }
@@ -4031,11 +4018,7 @@
                 addSocial(
                     "Instagram",
                     `@${user}`,
-                    value.startsWith(
-                        "http"
-                    )
-                        ? value
-                        : `https://instagram.com/${user}`,
+                    value,
                     ICONS.instagram
                 );
             }
@@ -4060,11 +4043,7 @@
                 addSocial(
                     "TikTok",
                     `@${user}`,
-                    value.startsWith(
-                        "http"
-                    )
-                        ? value
-                        : `https://www.tiktok.com/@${user}`,
+                    value,
                     ICONS.tiktok
                 );
             }
@@ -4089,11 +4068,7 @@
                 addSocial(
                     "YouTube",
                     `@${user}`,
-                    value.startsWith(
-                        "http"
-                    )
-                        ? value
-                        : `https://youtube.com/@${user}`,
+                    value,
                     ICONS.youtube
                 );
             }
@@ -4118,11 +4093,7 @@
                 addSocial(
                     "Telegram",
                     `@${user}`,
-                    value.startsWith(
-                        "http"
-                    )
-                        ? value
-                        : `https://t.me/${user}`,
+                    value,
                     ICONS.telegram
                 );
             }
@@ -4143,11 +4114,7 @@
                     value
                         ? `@${username(value)}`
                         : "@discord",
-                    value.startsWith(
-                        "http"
-                    )
-                        ? value
-                        : "https://discord.com/",
+                    value,
                     ICONS.discord
                 );
             }
@@ -4172,11 +4139,7 @@
                 addSocial(
                     "LinkedIn",
                     `@${user}`,
-                    value.startsWith(
-                        "http"
-                    )
-                        ? value
-                        : `https://linkedin.com/in/${user}`,
+                    value,
                     ICONS.linkedin
                 );
             }
