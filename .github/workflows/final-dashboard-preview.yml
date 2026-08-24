@@ -1,0 +1,51 @@
+name: Final Dashboard Men Preview
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Patch dashboard only
+        shell: python
+        run: |
+          import subprocess
+          from pathlib import Path
+          p=Path('dashboard.html')
+          d=subprocess.check_output(['git','show','110f6965:dashboard.html'],text=True)
+          old='''                <div class="preview-shell">\n\n                    <div class="preview">\n\n                        <div class="preview-top">'''
+          if old not in d: raise SystemExit('old preview not found')
+          start=d.index('                <div class="preview-shell">', d.index('<!-- LIVE PREVIEW -->'))
+          end=d.index('                <button', start)
+          new='''                <div class="preview-shell">\n\n                    <div class="theme-preview-frame">\n\n                        <iframe\n                            id="themePreviewFrame"\n                            title="E-Tag Men Profile Preview"\n                            src="/E-Tag/themes/men.html?preview=1"\n                            scrolling="no"\n                        ></iframe>\n\n                    </div>\n\n                </div>\n\n\n'''
+          d=d[:start]+new+d[end:]
+          marker='''        .preview-shell {\n            padding: 14px;\n\n            min-height: 520px;\n\n            border-radius: 18px;\n\n            background: #f5f7fb;\n        }\n'''
+          add=marker+'''\n        .theme-preview-frame {\n            width: 100%;\n            height: 680px;\n            overflow: hidden;\n            border-radius: 26px;\n            background: transparent;\n        }\n\n        #themePreviewFrame {\n            width: 100%;\n            height: 100%;\n            display: block;\n            border: 0;\n            background: transparent;\n        }\n'''
+          if marker not in d: raise SystemExit('css marker not found')
+          d=d.replace(marker,add,1)
+          fp='''    function updatePreview() {'''
+          s=d.index(fp)
+          e=d.index('    function buildProfileData() {',s)
+          fn='''    function updatePreview() {\n\n        const frame = document.getElementById("themePreviewFrame");\n\n        if (!frame?.contentWindow) {\n            return;\n        }\n\n        frame.contentWindow.postMessage(\n            {\n                type: "etag-dashboard-preview",\n                profile: buildProfileData()\n            },\n            window.location.origin\n        );\n\n    }\n\n\n'''
+          d=d[:s]+fn+d[e:]
+          d=d.replace('''    /*\n     * SAVE\n     */\n''','''    window.addEventListener("message", event => {\n\n        if (\n            event.origin === window.location.origin &&\n            event.data?.type === "etag-men-preview-ready"\n        ) {\n            updatePreview();\n        }\n\n    });\n\n\n    /*\n     * SAVE\n     */\n''',1)
+          p.write_text(d,encoding='utf-8')
+      - name: Commit dashboard
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add dashboard.html
+          git commit -m "Use exact Men theme in dashboard live preview"
+          git push
+      - name: Remove workflow
+        if: always()
+        run: rm -f .github/workflows/final-dashboard-preview.yml
