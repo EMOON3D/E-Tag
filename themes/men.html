@@ -924,6 +924,210 @@
 
 </script>
 
+
+<style>
+/* ETAG SOCIAL THRESHOLD V2 */
+.social-track.etag-static-social {
+    width: 100% !important;
+    justify-content: center !important;
+    transform: none !important;
+    cursor: default !important;
+    gap: 16px !important;
+}
+
+.social-track.etag-static-social .social-item {
+    opacity: 1 !important;
+    pointer-events: auto !important;
+    transform: none !important;
+    width: 66px !important;
+    height: 66px !important;
+    flex: 0 0 66px !important;
+}
+
+.social-track.etag-static-social .social-item.active {
+    width: 66px !important;
+    height: 66px !important;
+    flex-basis: 66px !important;
+    transform: none !important;
+    z-index: 1 !important;
+}
+
+.social-track.etag-static-social .social-item.active img {
+    width: 35px !important;
+    height: 35px !important;
+}
+
+.social-track.etag-static-social .social-item.near,
+.social-track.etag-static-social .social-item.hidden-social {
+    opacity: 1 !important;
+    pointer-events: auto !important;
+}
+
+.social-window.etag-static-social-window {
+    touch-action: auto !important;
+    user-select: auto !important;
+    -webkit-user-select: auto !important;
+}
+</style>
+<script>
+/* ETAG SOCIAL THRESHOLD V2 */
+(() => {
+    const applyStaticSocial = () => {
+        const track = document.getElementById("socialTrack");
+        const windowElement = document.getElementById("socialWindow");
+        const section = document.getElementById("socialSection");
+
+        if (!track || !windowElement || !section) {
+            return;
+        }
+
+        const icons = Array.from(
+            track.querySelectorAll(".social-item")
+        );
+
+        const originalCount =
+            new Set(
+                icons.map(
+                    item => item.dataset.originalIndex
+                )
+            ).size;
+
+        if (originalCount === 0) {
+            return;
+        }
+
+        if (originalCount >= 4) {
+            track.classList.remove("etag-static-social");
+            windowElement.classList.remove(
+                "etag-static-social-window"
+            );
+            return;
+        }
+
+        /* Keep exactly the real 1-3 links and discard carousel copies. */
+        const kept = [];
+        const seen = new Set();
+
+        icons.forEach(item => {
+            const key = item.dataset.originalIndex || "";
+
+            if (!seen.has(key)) {
+                seen.add(key);
+                kept.push(item);
+            } else {
+                item.remove();
+            }
+        });
+
+        track.classList.add("etag-static-social");
+        windowElement.classList.add(
+            "etag-static-social-window"
+        );
+
+        track.style.transition = "none";
+        track.style.transform = "none";
+
+        kept.forEach(item => {
+            item.classList.remove(
+                "active",
+                "near",
+                "hidden-social"
+            );
+        });
+
+        /* No horizontal scroll/drag for 1-3 links. */
+        const stopPointer = event => {
+            event.stopImmediatePropagation();
+        };
+
+        if (!windowElement.dataset.etagStaticBound) {
+            windowElement.addEventListener(
+                "pointerdown",
+                stopPointer,
+                true
+            );
+
+            windowElement.addEventListener(
+                "pointermove",
+                stopPointer,
+                true
+            );
+
+            windowElement.addEventListener(
+                "wheel",
+                stopPointer,
+                true
+            );
+
+            windowElement.dataset.etagStaticBound = "1";
+        }
+
+        /* Normal click opens the exact stored social URL. */
+        if (!track.dataset.etagStaticClickBound) {
+            track.addEventListener(
+                "click",
+                event => {
+                    const item =
+                        event.target.closest(
+                            ".social-item"
+                        );
+
+                    if (!item) {
+                        return;
+                    }
+
+                    event.preventDefault();
+                    event.stopImmediatePropagation();
+
+                    const url =
+                        item.dataset.url ||
+                        item.href ||
+                        "";
+
+                    if (!url) {
+                        return;
+                    }
+
+                    const opened = window.open(
+                        url,
+                        "_blank",
+                        "noopener,noreferrer"
+                    );
+
+                    if (!opened) {
+                        window.location.href = url;
+                    }
+                },
+                true
+            );
+
+            track.dataset.etagStaticClickBound = "1";
+        }
+    };
+
+    const run = () => {
+        applyStaticSocial();
+    };
+
+    if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", run, {
+            once: true
+        });
+    } else {
+        run();
+    }
+
+    let attempts = 0;
+    const timer = setInterval(() => {
+        applyStaticSocial();
+        attempts += 1;
+
+        if (attempts >= 20) {
+            clearInterval(timer);
+        }
+    }, 250);
+})();
+</script>
 </body>
 
 </html>
