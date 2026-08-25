@@ -9,6 +9,7 @@ permissions:
 
 jobs:
   restore-men:
+    if: github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
 
     steps:
@@ -187,7 +188,7 @@ jobs:
 
                 if (
                     event.data?.type !==
-                    "etag-men-preview"
+                    "etag-dashboard-preview"
                 ) {
                     return;
                 }
@@ -241,5 +242,5 @@ jobs:
             echo "No Men theme changes."
             exit 0
           fi
-          git commit -m "Restore exact Men theme and fix live preview mode"
+          git commit -m "Fix Men live preview message channel"
           git push
