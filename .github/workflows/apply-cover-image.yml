@@ -120,6 +120,439 @@ jobs:
           men.write_text(m, encoding='utf-8')
           print('Patched dashboard.html and themes/men.html')
 
+      - name: Add two-color theme customization
+        shell: python
+        run: |
+          from pathlib import Path
+
+          dashboard = Path('dashboard.html')
+          men = Path('themes/men.html')
+
+          d = dashboard.read_text(encoding='utf-8')
+          m = men.read_text(encoding='utf-8')
+
+          if 'id="themeColorSection"' not in d:
+              marker = '''                <div class="button-row">'''
+              panel = '''                <div\n                    id="themeColorSection"\n                    class="subsection"\n                >\n\n                    <h3>\n                        Theme Appearance\n                    </h3>\n\n                    <p\n                        class="field-help"\n                        style="margin-bottom:16px;"\n                    >\n                        Customize only your profile background and background glow.\n                    </p>\n\n                    <div\n                        class="field"\n                    >\n\n                        <label>\n                            Background Color\n                        </label>\n\n                        <div\n                            style="display:grid;grid-template-columns:1fr 92px;gap:10px;align-items:center;"\n                        >\n\n                            <input\n                                id="themeBackgroundHex"\n                                class="input"\n                                type="text"\n                                value="#D3DBC8"\n                                maxlength="7"\n                                spellcheck="false"\n                            >\n\n                            <input\n                                id="themeBackgroundPicker"\n                                type="color"\n                                value="#D3DBC8"\n                                style="width:100%;height:48px;padding:4px;border:1px solid #d1d5db;border-radius:11px;background:#fff;cursor:pointer;"\n                            >\n\n                        </div>\n\n                    </div>\n\n\n                    <div\n                        class="field"\n                    >\n\n                        <label>\n                            Background Glow\n                        </label>\n\n                        <div\n                            style="display:grid;grid-template-columns:1fr 92px;gap:10px;align-items:center;"\n                        >\n\n                            <input\n                                id="themeGlowHex"\n                                class="input"\n                                type="text"\n                                value="#FFFFFF"\n                                maxlength="7"\n                                spellcheck="false"\n                            >\n\n                            <input\n                                id="themeGlowPicker"\n                                type="color"\n                                value="#FFFFFF"\n                                style="width:100%;height:48px;padding:4px;border:1px solid #d1d5db;border-radius:11px;background:#fff;cursor:pointer;"\n                            >\n\n                        </div>\n\n                    </div>\n\n                    <div\n                        style="display:flex;gap:10px;flex-wrap:wrap;"\n                    >\n\n                        <button\n                            id="themeColorSave"\n                            class="button primary"\n                            type="button"\n                        >\n                            Save Theme Colors\n                        </button>\n\n                        <button\n                            id="themeColorReset"\n                            class="button secondary"\n                            type="button"\n                        >\n                            Reset Colors\n                        </button>\n\n                    </div>\n\n                </div>\n\n\n'''
+              if marker not in d:
+                  raise SystemExit('Dashboard button row marker not found')
+              d = d.replace(marker, panel + marker, 1)
+
+              script_marker = '''    /*\n     * SAVE\n     */'''
+              script = r'''    /*
+     * THEME COLORS
+     * Only background + glow are customizable.
+     */
+
+    const themeBackgroundHex =
+        document.getElementById("themeBackgroundHex");
+
+    const themeBackgroundPicker =
+        document.getElementById("themeBackgroundPicker");
+
+    const themeGlowHex =
+        document.getElementById("themeGlowHex");
+
+    const themeGlowPicker =
+        document.getElementById("themeGlowPicker");
+
+    const themeColorSave =
+        document.getElementById("themeColorSave");
+
+    const themeColorReset =
+        document.getElementById("themeColorReset");
+
+
+    const DEFAULT_THEME_COLORS = {
+        background: "#D3DBC8",
+        glow: "#FFFFFF"
+    };
+
+
+    let themeColors = {
+        ...DEFAULT_THEME_COLORS
+    };
+
+
+    function normalizeThemeHex(value, fallback) {
+
+        const text =
+            String(value || "")
+                .trim()
+                .toUpperCase();
+
+        if (
+            /^#[0-9A-F]{6}$/.test(text)
+        ) {
+            return text;
+        }
+
+        return fallback;
+    }
+
+
+    function refreshThemeInputs() {
+
+        if (themeBackgroundHex) {
+            themeBackgroundHex.value =
+                themeColors.background;
+        }
+
+        if (themeBackgroundPicker) {
+            themeBackgroundPicker.value =
+                themeColors.background;
+        }
+
+        if (themeGlowHex) {
+            themeGlowHex.value =
+                themeColors.glow;
+        }
+
+        if (themeGlowPicker) {
+            themeGlowPicker.value =
+                themeColors.glow;
+        }
+
+    }
+
+
+    function sendThemeColorsToPreview() {
+
+        const frame =
+            document.getElementById(
+                "themePreviewFrame"
+            );
+
+        if (!frame?.contentWindow) {
+            return;
+        }
+
+        frame.contentWindow.postMessage(
+            {
+                type:
+                    "etag-theme-colors",
+                colors:
+                    {
+                        ...themeColors
+                    }
+            },
+            window.location.origin
+        );
+
+    }
+
+
+    function updateThemeColor(
+        key,
+        value
+    ) {
+
+        themeColors[key] =
+            normalizeThemeHex(
+                value,
+                themeColors[key]
+            );
+
+        refreshThemeInputs();
+        sendThemeColorsToPreview();
+
+    }
+
+
+    themeBackgroundPicker?.addEventListener(
+        "input",
+        () => {
+            updateThemeColor(
+                "background",
+                themeBackgroundPicker.value
+            );
+        }
+    );
+
+
+    themeGlowPicker?.addEventListener(
+        "input",
+        () => {
+            updateThemeColor(
+                "glow",
+                themeGlowPicker.value
+            );
+        }
+    );
+
+
+    themeBackgroundHex?.addEventListener(
+        "change",
+        () => {
+            updateThemeColor(
+                "background",
+                themeBackgroundHex.value
+            );
+        }
+    );
+
+
+    themeGlowHex?.addEventListener(
+        "change",
+        () => {
+            updateThemeColor(
+                "glow",
+                themeGlowHex.value
+            );
+        }
+    );
+
+
+    async function loadThemeColors() {
+
+        try {
+
+            const {
+                data:
+                    sessionData,
+                error:
+                    sessionError
+            } =
+                await supabase.auth.getSession();
+
+            if (sessionError || !sessionData?.session?.user) {
+                return;
+            }
+
+            const {
+                data,
+                error
+            } =
+                await supabase
+                    .from("profiles")
+                    .select("theme_colors")
+                    .eq(
+                        "id",
+                        sessionData.session.user.id
+                    )
+                    .maybeSingle();
+
+            if (error) {
+                console.error(
+                    "Theme color load error:",
+                    error
+                );
+                return;
+            }
+
+            if (
+                data?.theme_colors &&
+                typeof data.theme_colors === "object"
+            ) {
+
+                themeColors = {
+                    ...DEFAULT_THEME_COLORS,
+                    ...data.theme_colors
+                };
+
+            }
+
+            refreshThemeInputs();
+            sendThemeColorsToPreview();
+
+        } catch (error) {
+
+            console.error(
+                "Theme color loading failed:",
+                error
+            );
+
+        }
+
+    }
+
+
+    async function saveThemeColors() {
+
+        if (!currentUser) {
+            showMessage(
+                "No logged-in user found.",
+                "error"
+            );
+            return;
+        }
+
+        themeColorSave.disabled = true;
+        themeColorSave.textContent =
+            "Saving...";
+
+        try {
+
+            const {
+                data:
+                    savedProfile,
+                error
+            } =
+                await supabase
+                    .from("profiles")
+                    .update({
+                        theme_colors: {
+                            ...themeColors
+                        },
+                        updated_at:
+                            new Date()
+                                .toISOString()
+                    })
+                    .eq(
+                        "id",
+                        currentUser.id
+                    )
+                    .select("theme_colors")
+                    .maybeSingle();
+
+            if (error) {
+                throw error;
+            }
+
+            if (savedProfile?.theme_colors) {
+                themeColors = {
+                    ...DEFAULT_THEME_COLORS,
+                    ...savedProfile.theme_colors
+                };
+            }
+
+            refreshThemeInputs();
+            sendThemeColorsToPreview();
+
+            showMessage(
+                "Theme colors saved successfully.",
+                "success"
+            );
+
+        } catch (error) {
+
+            console.error(
+                "Theme color save error:",
+                error
+            );
+
+            showMessage(
+                error.message ||
+                "Failed to save theme colors.",
+                "error"
+            );
+
+        } finally {
+
+            themeColorSave.disabled = false;
+            themeColorSave.textContent =
+                "Save Theme Colors";
+
+        }
+
+    }
+
+
+    themeColorSave?.addEventListener(
+        "click",
+        saveThemeColors
+    );
+
+
+    themeColorReset?.addEventListener(
+        "click",
+        () => {
+
+            themeColors = {
+                ...DEFAULT_THEME_COLORS
+            };
+
+            refreshThemeInputs();
+            sendThemeColorsToPreview();
+
+        }
+    );
+
+
+    window.addEventListener(
+        "message",
+        event => {
+
+            if (
+                event.origin !==
+                window.location.origin
+            ) {
+                return;
+            }
+
+            if (
+                event.data?.type ===
+                "etag-men-preview-ready"
+            ) {
+                sendThemeColorsToPreview();
+            }
+
+        }
+    );
+
+'''
+              if script_marker not in d:
+                  raise SystemExit('Dashboard SAVE marker not found')
+              d = d.replace(script_marker, script + script_marker, 1)
+
+              save_hook = '''        saveButton.textContent =
+            "Save Profile";'''
+              if save_hook in d and 'themeColorSave' in d:
+                  pass
+
+              d = d.replace(
+                  '            showMessage(\n                "Profile saved successfully.",\n                "success"\n            );',
+                  '            showMessage(\n                "Profile saved successfully.",\n                "success"\n            );\n\n            loadThemeColors();',
+                  1
+              )
+
+          if 'type === "etag-theme-colors"' not in m:
+              style_marker = '        :root {\n'
+              style = '''        :root {\n            --theme-profile-background: #D3DBC8;\n            --theme-profile-glow: #FFFFFF;\n'''
+              if style_marker in m:
+                  m = m.replace(style_marker, style, 1)
+              else:
+                  raise SystemExit('Men root CSS marker not found')
+
+              background_marker = '        body {\n'
+              background_css = '''        body {\n            background:\n                radial-gradient(\n                    ellipse at 70% 18%,\n                    var(--theme-profile-glow) 0%,\n                    color-mix(in srgb, var(--theme-profile-glow) 55%, transparent) 27%,\n                    transparent 57%\n                ),\n                radial-gradient(\n                    ellipse at 15% 75%,\n                    color-mix(in srgb, var(--theme-profile-background) 55%, transparent) 0%,\n                    transparent 70%\n                ),\n                linear-gradient(\n                    135deg,\n                    color-mix(in srgb, var(--theme-profile-background) 72%, #ffffff) 0%,\n                    color-mix(in srgb, var(--theme-profile-background) 88%, #ffffff) 38%,\n                    color-mix(in srgb, var(--theme-profile-background) 62%, #ffffff) 68%,\n                    color-mix(in srgb, var(--theme-profile-background) 78%, #ffffff) 100%\n                );\n'''
+              if background_marker in m:
+                  m = m.replace(background_marker, background_css, 1)
+              else:
+                  raise SystemExit('Men body marker not found')
+
+              message_marker = '''    import {\n        createClient\n    } from\n        "https://esm.sh/@supabase/supabase-js@2";'''
+              message_add = message_marker + '''\n\n\n    const DEFAULT_THEME_COLORS = {\n        background: "#D3DBC8",\n        glow: "#FFFFFF"\n    };\n\n\n    function applyThemeColors(colors) {\n\n        const next = {\n            ...DEFAULT_THEME_COLORS,\n            ...(colors && typeof colors === "object" ? colors : {})\n        };\n\n        const background =\n            /^#[0-9A-F]{6}$/i.test(String(next.background || ""))\n                ? String(next.background).toUpperCase()\n                : DEFAULT_THEME_COLORS.background;\n\n        const glow =\n            /^#[0-9A-F]{6}$/i.test(String(next.glow || ""))\n                ? String(next.glow).toUpperCase()\n                : DEFAULT_THEME_COLORS.glow;\n\n        document.documentElement.style.setProperty(\n            "--theme-profile-background",\n            background\n        );\n\n        document.documentElement.style.setProperty(\n            "--theme-profile-glow",\n            glow\n        );\n\n    }\n'''
+              if message_marker in m:
+                  m = m.replace(message_marker, message_add, 1)
+              else:
+                  raise SystemExit('Men supabase import marker not found')
+
+              listener_marker = '''    const supabase =\n        createClient(\n            SUPABASE_URL,\n            SUPABASE_PUBLISHABLE_KEY\n        );'''
+              listener_add = listener_marker + '''\n\n\n    window.addEventListener(\n        "message",\n        event => {\n\n            if (event.origin !== window.location.origin) {\n                return;\n            }\n\n            if (event.data?.type === "etag-theme-colors") {\n                applyThemeColors(event.data.colors);\n            }\n\n        }\n    );\n'''
+              if listener_marker in m:
+                  m = m.replace(listener_marker, listener_add, 1)
+              else:
+                  raise SystemExit('Men supabase client marker not found')
+
+              load_marker = '''    async function load() {'''
+              theme_load = '''    async function loadSavedThemeColors(ownerId) {\n\n        try {\n\n            const {\n                data,\n                error\n            } =\n                await supabase\n                    .from("profiles")\n                    .select("theme_colors")\n                    .eq("id", ownerId)\n                    .maybeSingle();\n\n            if (!error && data?.theme_colors) {\n                applyThemeColors(data.theme_colors);\n            }\n\n        } catch (error) {\n            console.error(\n                "Theme color load error:",\n                error\n            );\n        }\n\n    }\n\n\n'''
+              if load_marker in m:
+                  m = m.replace(load_marker, theme_load + load_marker, 1)
+              else:
+                  raise SystemExit('Men load marker not found')
+
+              owner_marker = '''            const displayName ='''
+              owner_add = '''            await loadSavedThemeColors(\n                tag.owner_id\n            );\n\n\n'''
+              if owner_marker in m:
+                  m = m.replace(owner_marker, owner_add + owner_marker, 1)
+              else:
+                  raise SystemExit('Men displayName marker not found')
+
+          dashboard.write_text(d, encoding='utf-8')
+          men.write_text(m, encoding='utf-8')
+          print('Two-color theme customization patched.')
+
       - name: Commit changes
         shell: bash
         run: |
@@ -130,5 +563,5 @@ jobs:
             echo "No changes to commit."
             exit 0
           fi
-          git commit -m "Add cover image profile support"
+          git commit -m "Add background and glow theme customization"
           git push
