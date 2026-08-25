@@ -239,6 +239,54 @@
 
     </style>
 
+
+
+    <style id="etagThemeRuntime">
+
+        :root {
+            --etag-theme-background: #D3DBC8;
+            --etag-theme-glow: #FFFFFF;
+        }
+
+        body {
+            background:
+                radial-gradient(
+                    ellipse at 70% 18%,
+                    color-mix(in srgb, var(--etag-theme-glow) 92%, transparent) 0%,
+                    color-mix(in srgb, var(--etag-theme-glow) 45%, transparent) 27%,
+                    transparent 57%
+                ),
+                radial-gradient(
+                    ellipse at 15% 75%,
+                    color-mix(in srgb, var(--etag-theme-background) 56%, transparent) 0%,
+                    color-mix(in srgb, var(--etag-theme-background) 34%, transparent) 35%,
+                    transparent 70%
+                ),
+                linear-gradient(
+                    135deg,
+                    color-mix(in srgb, var(--etag-theme-background) 72%, #ffffff) 0%,
+                    color-mix(in srgb, var(--etag-theme-background) 88%, #ffffff) 38%,
+                    color-mix(in srgb, var(--etag-theme-background) 64%, #ffffff) 68%,
+                    color-mix(in srgb, var(--etag-theme-background) 78%, #ffffff) 100%
+                );
+        }
+
+        body::before {
+            background:
+                radial-gradient(
+                    ellipse at 72% 24%,
+                    color-mix(in srgb, var(--etag-theme-glow) 42%, transparent),
+                    transparent 32%
+                ),
+                radial-gradient(
+                    ellipse at 20% 15%,
+                    rgba(255,255,255,.26),
+                    transparent 22%
+                );
+        }
+
+    </style>
+
 </head>
 
 <body>
@@ -797,6 +845,81 @@
         window.parent.postMessage({ type: "etag-men-preview-ready" }, window.location.origin);
     } else {
         load();
+    }
+
+</script>
+
+
+
+<script type="module" id="etagThemeRuntimeScript">
+
+    import { createClient }
+    from "https://esm.sh/@supabase/supabase-js@2";
+
+    const themeSupabase = createClient(
+        "https://zuptxhcjzhqynrquyray.supabase.co",
+        "sb_publishable_1sa0MtE83MZXETR5JLakJA_fRVrjDJI"
+    );
+
+    const defaults = {
+        background: "#D3DBC8",
+        glow: "#FFFFFF"
+    };
+
+    function applyTheme(colors) {
+        const next = {
+            ...defaults,
+            ...(colors && typeof colors === "object" ? colors : {})
+        };
+        const background = /^#[0-9A-F]{6}$/i.test(String(next.background || ""))
+            ? String(next.background).toUpperCase()
+            : defaults.background;
+        const glow = /^#[0-9A-F]{6}$/i.test(String(next.glow || ""))
+            ? String(next.glow).toUpperCase()
+            : defaults.glow;
+        document.documentElement.style.setProperty("--etag-theme-background",background);
+        document.documentElement.style.setProperty("--etag-theme-glow",glow);
+    }
+
+    window.addEventListener("message", event => {
+        if (event.origin !== window.location.origin) return;
+        if (event.data?.type === "etag-theme-colors") {
+            applyTheme(event.data.colors);
+        }
+    });
+
+    const params = new URLSearchParams(window.location.search);
+    const preview = params.get("preview") === "1";
+
+    if (preview) {
+        window.parent.postMessage(
+            { type: "etag-men-preview-ready" },
+            window.location.origin
+        );
+    } else {
+        (async () => {
+            try {
+                const tagCode = params.get("tag")?.trim().toUpperCase();
+                if (!tagCode) return;
+                const tagResult = await themeSupabase
+                    .from("nfc_tags")
+                    .select("owner_id,active")
+                    .eq("tag_code",tagCode)
+                    .maybeSingle();
+                const tag = tagResult.data;
+                if (!tag?.active || !tag.owner_id) return;
+                const profileResult = await themeSupabase
+                    .from("profiles")
+                    .select("theme_colors")
+                    .eq("id",tag.owner_id)
+                    .maybeSingle();
+                if (profileResult.data?.theme_colors) {
+                    applyTheme(profileResult.data.theme_colors);
+                }
+            } catch (error) {
+                console.error("Theme color load error:",error);
+            }
+        })();
     }
 
 </script>
