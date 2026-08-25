@@ -1,1 +1,0 @@
-Trigger live theme color customization deployment.
