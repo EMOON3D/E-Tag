@@ -11,41 +11,291 @@ jobs:
   patch:
     if: github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - name: Patch dashboard only
+
+      - name: Patch dashboard and Men theme
         shell: python
         run: |
           import subprocess
           from pathlib import Path
-          p=Path('dashboard.html')
-          d=subprocess.check_output(['git','show','110f6965:dashboard.html'],text=True)
-          old='''                <div class="preview-shell">\n\n                    <div class="preview">\n\n                        <div class="preview-top">'''
-          if old not in d: raise SystemExit('old preview not found')
-          start=d.index('                <div class="preview-shell">', d.index('<!-- LIVE PREVIEW -->'))
-          end=d.index('                <button', start)
-          new='''                <div class="preview-shell">\n\n                    <div class="theme-preview-frame">\n\n                        <iframe\n                            id="themePreviewFrame"\n                            title="E-Tag Men Profile Preview"\n                            src="/E-Tag/themes/men.html?preview=1"\n                            scrolling="no"\n                        ></iframe>\n\n                    </div>\n\n                </div>\n\n\n'''
-          d=d[:start]+new+d[end:]
-          marker='''        .preview-shell {\n            padding: 14px;\n\n            min-height: 520px;\n\n            border-radius: 18px;\n\n            background: #f5f7fb;\n        }\n'''
-          add=marker+'''\n        .theme-preview-frame {\n            width: 100%;\n            height: 680px;\n            overflow: hidden;\n            border-radius: 26px;\n            background: transparent;\n        }\n\n        #themePreviewFrame {\n            width: 100%;\n            height: 100%;\n            display: block;\n            border: 0;\n            background: transparent;\n        }\n'''
-          if marker not in d: raise SystemExit('css marker not found')
-          d=d.replace(marker,add,1)
-          fp='''    function updatePreview() {'''
-          s=d.index(fp)
-          e=d.index('    function buildProfileData() {',s)
-          fn='''    function updatePreview() {\n\n        const frame = document.getElementById("themePreviewFrame");\n\n        if (!frame?.contentWindow) {\n            return;\n        }\n\n        frame.contentWindow.postMessage(\n            {\n                type: "etag-dashboard-preview",\n                profile: buildProfileData()\n            },\n            window.location.origin\n        );\n\n    }\n\n\n'''
-          d=d[:s]+fn+d[e:]
-          d=d.replace('''    /*\n     * SAVE\n     */\n''','''    window.addEventListener("message", event => {\n\n        if (\n            event.origin === window.location.origin &&\n            event.data?.type === "etag-men-preview-ready"\n        ) {\n            updatePreview();\n        }\n\n    });\n\n\n    /*\n     * SAVE\n     */\n''',1)
-          p.write_text(d,encoding='utf-8')
-      - name: Commit dashboard
+
+          # ---------------------------------------------------------
+          # DASHBOARD
+          # ---------------------------------------------------------
+          dashboard = Path("dashboard.html")
+          d = subprocess.check_output(
+              ["git", "show", "110f6965:dashboard.html"],
+              text=True
+          )
+
+          old_preview = '''                <div class="preview-shell">\n\n                    <div class="preview">\n\n                        <div class="preview-top">'''
+
+          if old_preview in d:
+              start = d.index(
+                  '                <div class="preview-shell">',
+                  d.index('<!-- LIVE PREVIEW -->')
+              )
+              end = d.index(
+                  '                <button',
+                  start
+              )
+
+              new_preview = '''                <div class="preview-shell">\n\n                    <div class="theme-preview-frame">\n\n                        <iframe\n                            id="themePreviewFrame"\n                            title="E-Tag Men Profile Preview"\n                            src="/E-Tag/themes/men.html?preview=1"\n                            scrolling="no"\n                        ></iframe>\n\n                    </div>\n\n                </div>\n\n\n'''
+
+              d = d[:start] + new_preview + d[end:]
+
+          css_marker = '''        .preview-shell {\n            padding: 14px;\n\n            min-height: 520px;\n\n            border-radius: 18px;\n\n            background: #f5f7fb;\n        }\n'''
+
+          if css_marker in d and ".theme-preview-frame" not in d:
+              d = d.replace(
+                  css_marker,
+                  css_marker + '''\n        .theme-preview-frame {\n            width: 100%;\n            height: 680px;\n            overflow: hidden;\n            border-radius: 26px;\n            background: transparent;\n        }\n\n        #themePreviewFrame {\n            width: 100%;\n            height: 100%;\n            display: block;\n            border: 0;\n            background: transparent;\n        }\n''',
+                  1
+              )
+
+          old_update_start = '    function updatePreview() {'
+          build_marker = '    function buildProfileData() {'
+
+          if old_update_start in d and 'frame.contentWindow.postMessage' not in d:
+              s = d.index(old_update_start)
+              e = d.index(build_marker, s)
+
+              d = d[:s] + '''    function updatePreview() {\n\n        const frame =\n            document.getElementById(\n                "themePreviewFrame"\n            );\n\n        if (\n            !frame?.contentWindow\n        ) {\n            return;\n        }\n\n        frame.contentWindow.postMessage(\n            {\n                type: "etag-dashboard-preview",\n                profile: buildProfileData()\n            },\n            window.location.origin\n        );\n\n    }\n\n\n''' + d[e:]
+
+          ready_marker = '''    /*\n     * SAVE\n     */\n'''
+
+          if ready_marker in d and 'etag-men-preview-ready' not in d:
+              d = d.replace(
+                  ready_marker,
+                  '''    window.addEventListener(\n        "message",\n        event => {\n\n            if (\n                event.origin ===\n                window.location.origin &&\n                event.data?.type ===\n                "etag-men-preview-ready"\n            ) {\n                updatePreview();\n            }\n        }\n    );\n\n\n''' + ready_marker,
+                  1
+              )
+
+          dashboard.write_text(d, encoding="utf-8")
+
+          # ---------------------------------------------------------
+          # MEN THEME
+          # ---------------------------------------------------------
+          men = Path("themes/men.html")
+
+          exact = subprocess.check_output(
+              [
+                  "git",
+                  "show",
+                  "94139cf01127c39620b60c2eb2e3c6255bc54972:themes/men.html"
+              ],
+              text=True
+          )
+
+          men_marker = "/* E-TAG MEN PREVIEW MODE */"
+
+          if men_marker not in exact:
+              bridge = r'''
+
+    /* =====================================================
+       E-TAG MEN PREVIEW MODE
+       The public Men visual design is unchanged.
+    ===================================================== */
+
+    const isPreviewMode =
+        new URLSearchParams(
+            window.location.search
+        ).get("preview") === "1";
+
+
+    function renderPreviewProfile(
+        profileData
+    ) {
+
+        const data =
+            profileData || {};
+
+        name.textContent =
+            clean(data.display_name) ||
+            "E-Tag User";
+
+        age.textContent =
+            data.age
+                ? `${data.age} years old`
+                : "";
+
+        bio.textContent =
+            clean(data.bio);
+
+        renderAvatar(
+            avatar,
+            data
+        );
+
+        contacts.innerHTML =
+            "";
+
+        if (data.phone) {
+            addContact(
+                "Call",
+                "Call Me",
+                `tel:${encodeURIComponent(data.phone)}`,
+                ICONS.call
+            );
+        }
+
+        if (data.whatsapp) {
+            const number =
+                clean(data.whatsapp)
+                    .replace(/\D/g, "");
+
+            if (number) {
+                addContact(
+                    "WhatsApp",
+                    "WhatsApp Me",
+                    `https://wa.me/${number}`,
+                    ICONS.whatsapp
+                );
+            }
+        }
+
+        if (data.email) {
+            addContact(
+                "Email",
+                "Email Me",
+                `mailto:${encodeURIComponent(data.email)}`,
+                ICONS.email
+            );
+        }
+
+        if (
+            contacts.children.length === 0
+        ) {
+            contactSection.classList.add(
+                "hidden"
+            );
+        } else {
+            contactSection.classList.remove(
+                "hidden"
+            );
+        }
+
+        socialData.length =
+            0;
+
+        const socialFields = [
+            ["Facebook", "facebook", ICONS.facebook],
+            ["Instagram", "instagram", ICONS.instagram],
+            ["TikTok", "tiktok", ICONS.tiktok],
+            ["YouTube", "youtube", ICONS.youtube],
+            ["Telegram", "telegram", ICONS.telegram],
+            ["Discord", "discord", ICONS.discord],
+            ["LinkedIn", "linkedin", ICONS.linkedin]
+        ];
+
+        socialFields.forEach(
+            ([platformName, fieldName, iconUrl]) => {
+
+                const value =
+                    clean(data[fieldName]);
+
+                if (!value) {
+                    return;
+                }
+
+                addSocial(
+                    platformName,
+                    `@${username(value)}`,
+                    value,
+                    iconUrl
+                );
+            }
+        );
+
+        buildSocialCarousel();
+
+        editButton.classList.add(
+            "hidden"
+        );
+
+        loading.classList.add(
+            "hidden"
+        );
+
+        errorBox.classList.add(
+            "hidden"
+        );
+
+        profile.classList.remove(
+            "hidden"
+        );
+    }
+
+
+    if (isPreviewMode) {
+
+        window.addEventListener(
+            "message",
+            event => {
+
+                if (
+                    event.origin !==
+                    window.location.origin
+                ) {
+                    return;
+                }
+
+                if (
+                    event.data?.type !==
+                    "etag-dashboard-preview"
+                ) {
+                    return;
+                }
+
+                renderPreviewProfile(
+                    event.data.profile || {}
+                );
+            }
+        );
+
+        loading.textContent =
+            "Loading preview...";
+
+        window.parent.postMessage(
+            {
+                type:
+                    "etag-men-preview-ready"
+            },
+            window.location.origin
+        );
+    }
+
+'''
+
+              load_marker = "    load();\n\n</script>"
+
+              if load_marker not in exact:
+                  raise SystemExit(
+                      "Men theme load marker not found."
+                  )
+
+              exact = exact.replace(
+                  load_marker,
+                  bridge +
+                  "    if (!isPreviewMode) {\n\n        load();\n\n    }\n\n</script>",
+                  1
+              )
+
+          men.write_text(exact, encoding="utf-8")
+
+      - name: Commit all live preview changes
+        shell: bash
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add dashboard.html
-          git commit -m "Use exact Men theme in dashboard live preview"
+          git add dashboard.html themes/men.html .github/workflows/final-dashboard-preview.yml
+          if git diff --cached --quiet; then
+            echo "Live preview files are already correct."
+            exit 0
+          fi
+          git commit -m "Fix Men live profile preview"
           git push
-      - name: Remove workflow
-        if: always()
-        run: rm -f .github/workflows/final-dashboard-preview.yml
