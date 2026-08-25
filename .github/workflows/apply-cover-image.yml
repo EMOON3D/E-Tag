@@ -3,6 +3,7 @@ name: Apply Cover Image Support
 on:
   push:
     branches: [main]
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -26,9 +27,6 @@ jobs:
           d = dashboard.read_text(encoding='utf-8')
           m = men.read_text(encoding='utf-8')
 
-          # ------------------------------
-          # Dashboard: cover-image editor
-          # ------------------------------
           if 'id="coverFile"' not in d:
               needle = '''                <div\n                    id="uploadSection"\n                    class="field"\n                >'''
 
@@ -73,7 +71,6 @@ jobs:
                   1
               )
 
-              # Make the existing secure upload endpoint usable for cover images too.
               cover_function = '''\n\n    async function uploadCoverImage(file) {\n\n        if (!file) {\n            return;\n        }\n\n        if (!ALLOWED_TYPES.has(file.type)) {\n            throw new Error("Only JPG, PNG and WEBP images are allowed.");\n        }\n\n        if (file.size > MAX_FILE_SIZE) {\n            throw new Error("Image must be 1 MB or smaller.");\n        }\n\n        const { data: sessionData, error: sessionError } =\n            await supabase.auth.getSession();\n\n        if (sessionError) {\n            throw new Error(`Session error: ${sessionError.message}`);\n        }\n\n        if (!sessionData?.session) {\n            throw new Error("Your login session has expired.");\n        }\n\n        coverUploadStatus.textContent = "Preparing cover upload...";\n\n        const response = await fetch(\n            AVATAR_UPLOAD_FUNCTION,\n            {\n                method: "POST",\n                headers: {\n                    "Authorization": `Bearer ${sessionData.session.access_token}`,\n                    "apikey": SUPABASE_PUBLISHABLE_KEY,\n                    "Content-Type": "application/json"\n                },\n                body: JSON.stringify({\n                    fileName: `cover-${file.name}`,\n                    contentType: file.type,\n                    fileSize: file.size\n                })\n            }\n        );\n\n        let result;\n        try {\n            result = await response.json();\n        } catch {\n            result = null;\n        }\n\n        if (!response.ok || !result?.success) {\n            throw new Error(\n                result?.message ||\n                `Upload URL request failed: ${response.status}`\n            );\n        }\n\n        coverUploadStatus.textContent = "Uploading cover image...";\n\n        const uploadResponse = await fetch(\n            result.uploadUrl,\n            {\n                method: "PUT",\n                headers: {\n                    "Content-Type": file.type\n                },\n                body: file\n            }\n        );\n\n        if (!uploadResponse.ok) {\n            throw new Error(`R2 upload failed: ${uploadResponse.status}`);\n        }\n\n        currentCoverImageUrl =\n            `${R2_PUBLIC_URL}/${result.objectKey}`;\n\n        renderCoverPreview();\n        updatePreview();\n\n        coverUploadStatus.textContent =\n            "Cover image uploaded. Click Save Profile.";\n\n        coverUploadStatus.style.color = "#065f46";\n    }\n'''
               marker = '\n\n    async function loadDashboard() {'
               if marker not in d:
@@ -86,9 +83,6 @@ jobs:
                   raise SystemExit('live preview marker not found')
               d = d.replace(marker2, upload_listener + marker2, 1)
 
-          # ------------------------------
-          # Men theme: cover image
-          # ------------------------------
           if 'id="coverImage"' not in m:
               hero_marker = '''        <section class="hero">'''
               cover_html = '''        <section class="hero">\n\n            <div\n                id="coverImage"\n                class="cover-image hidden"\n            ></div>'''
