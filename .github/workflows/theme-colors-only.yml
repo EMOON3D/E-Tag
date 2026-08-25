@@ -1,69 +1,23 @@
-name: Enforce Theme Colors Only
+name: Apply Background and Glow Theme
 
 on:
   push:
     branches: [main]
+  workflow_dispatch:
 
 permissions:
   contents: write
-  actions: read
 
 jobs:
-  theme-colors-only:
-    if: >-
-      !contains(github.event.head_commit.message, 'Enforce theme colors only') &&
-      !contains(github.event.head_commit.message, 'Fix theme colors only automation')
+  apply-theme:
+    if: github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
 
     steps:
-      - name: Wait for existing profile-color workflow
-        shell: bash
-        env:
-          GH_TOKEN: ${{ github.token }}
-          REPO: ${{ github.repository }}
-          COMMIT_SHA: ${{ github.sha }}
-        run: |
-          for i in {1..60}; do
-            RUN_ID=$(curl -fsSL \
-              -H "Authorization: Bearer ${GH_TOKEN}" \
-              -H "Accept: application/vnd.github+json" \
-              "https://api.github.com/repos/${REPO}/actions/workflows/apply-profile-colors.yml/runs?head_sha=${COMMIT_SHA}&per_page=10" \
-              | python -c 'import json,sys; d=json.load(sys.stdin); r=d.get("workflow_runs",[]); print(r[0]["id"] if r else "")')
-
-            if [ -z "$RUN_ID" ]; then
-              echo "Waiting for Apply Profile Color Customization to start..."
-              sleep 2
-              continue
-            fi
-
-            STATUS=$(curl -fsSL \
-              -H "Authorization: Bearer ${GH_TOKEN}" \
-              -H "Accept: application/vnd.github+json" \
-              "https://api.github.com/repos/${REPO}/actions/runs/${RUN_ID}" \
-              | python -c 'import json,sys; print(json.load(sys.stdin).get("status", ""))')
-
-            CONCLUSION=$(curl -fsSL \
-              -H "Authorization: Bearer ${GH_TOKEN}" \
-              -H "Accept: application/vnd.github+json" \
-              "https://api.github.com/repos/${REPO}/actions/runs/${RUN_ID}" \
-              | python -c 'import json,sys; print(json.load(sys.stdin).get("conclusion", ""))')
-
-            if [ "$STATUS" = "completed" ]; then
-              echo "Apply Profile Color Customization finished with: $CONCLUSION"
-              break
-            fi
-
-            echo "Existing customization workflow is still running..."
-            sleep 2
-          done
-
-      - name: Checkout main
+      - name: Checkout
         uses: actions/checkout@v4
-        with:
-          ref: main
-          fetch-depth: 1
 
-      - name: Keep only theme palette customization
+      - name: Patch dashboard and Men theme
         shell: python
         run: |
           from pathlib import Path
@@ -74,133 +28,856 @@ jobs:
           d = dashboard.read_text(encoding="utf-8")
           m = men.read_text(encoding="utf-8")
 
-          # Dashboard: rename the existing color editor to Theme Colors.
-          d = d.replace(
-              "                        Profile Colors\n",
-              "                        Theme Colors\n"
-          )
-
-          # Hide ONLY Text Color. Main/Secondary/Accent/Surface stay visible.
-          if "#etag-theme-colors-only-css" not in d:
+          if 'id="etagThemeBoard"' not in d:
               css = r'''
 
-        /* #etag-theme-colors-only-css */
-        .profile-color-row:has(#colorText),
-        .profile-color-control:has(#colorText) {
-            display: none !important;
+    <style>
+
+        /* E-Tag: two-color theme editor only */
+        #etagThemeBoard {
+            margin-top: 26px;
+            margin-bottom: 18px;
+            padding-top: 20px;
+            border-top: 1px solid #e5e7eb;
         }
+
+        #etagThemeBoard h3 {
+            margin: 0 0 6px;
+            font-size: 17px;
+        }
+
+        #etagThemeBoard .theme-board-help {
+            margin: 0 0 15px;
+            color: #6b7280;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+        #etagThemeBoard .theme-tabs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        #etagThemeBoard .theme-tab {
+            border: 2px solid #e5e7eb;
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 10px 12px;
+            font: inherit;
+            font-size: 13px;
+            font-weight: 700;
+            color: #111827;
+            cursor: pointer;
+        }
+
+        #etagThemeBoard .theme-tab.active {
+            border-color: #111827;
+            background: #f9fafb;
+        }
+
+        #etagThemeBoard .theme-color-board {
+            position: relative;
+            width: 100%;
+            height: 210px;
+            border-radius: 16px;
+            overflow: hidden;
+            cursor: crosshair;
+            touch-action: none;
+            background: hsl(140 100% 50%);
+            box-shadow: inset 0 0 0 1px rgba(17,24,39,.08);
+        }
+
+        #etagThemeBoard .theme-color-white,
+        #etagThemeBoard .theme-color-black {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+        }
+
+        #etagThemeBoard .theme-color-white {
+            background: linear-gradient(to right, #fff 0%, rgba(255,255,255,0) 55%);
+        }
+
+        #etagThemeBoard .theme-color-black {
+            background: linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 100%);
+        }
+
+        #etagThemeBoard .theme-color-pointer {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            margin: -10px 0 0 -10px;
+            border-radius: 50%;
+            border: 3px solid #ffffff;
+            box-shadow: 0 0 0 2px rgba(17,24,39,.45), 0 4px 12px rgba(0,0,0,.22);
+            pointer-events: none;
+        }
+
+        #etagThemeBoard .theme-hue {
+            width: 100%;
+            height: 20px;
+            margin-top: 10px;
+            border-radius: 999px;
+            background: linear-gradient(
+                90deg,
+                #ff0000 0%,
+                #ffff00 16.66%,
+                #00ff00 33.33%,
+                #00ffff 50%,
+                #0000ff 66.66%,
+                #ff00ff 83.33%,
+                #ff0000 100%
+            );
+            cursor: pointer;
+            touch-action: none;
+            position: relative;
+        }
+
+        #etagThemeBoard .theme-hue-pointer {
+            position: absolute;
+            top: 50%;
+            width: 24px;
+            height: 24px;
+            margin: -12px 0 0 -12px;
+            border-radius: 50%;
+            border: 3px solid #fff;
+            box-shadow: 0 0 0 2px rgba(17,24,39,.45), 0 3px 10px rgba(0,0,0,.18);
+            pointer-events: none;
+        }
+
+        #etagThemeBoard .theme-value-row {
+            display: grid;
+            grid-template-columns: 1fr 86px;
+            gap: 10px;
+            align-items: center;
+            margin-top: 12px;
+        }
+
+        #etagThemeBoard .theme-hex {
+            width: 100%;
+            padding: 12px 13px;
+            border: 1px solid #d1d5db;
+            border-radius: 11px;
+            font: inherit;
+            font-size: 14px;
+            outline: none;
+            text-transform: uppercase;
+        }
+
+        #etagThemeBoard .theme-preview-chip {
+            height: 46px;
+            border-radius: 11px;
+            border: 1px solid #d1d5db;
+            box-shadow: inset 0 0 0 1px rgba(255,255,255,.38);
+        }
+
+        #etagThemeBoard .theme-actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-top: 12px;
+        }
+
+        @media (max-width: 600px) {
+            #etagThemeBoard .theme-color-board {
+                height: 190px;
+            }
+        }
+
+    </style>
 '''
-              marker = "    </style>"
-              if marker in d:
-                  d = d.replace(marker, css + "\n" + marker, 1)
+              if '</head>' not in d:
+                  raise SystemExit('dashboard head marker not found')
+              d = d.replace('</head>', css + '\n</head>', 1)
 
-          d = d.replace(
-              "Customize your profile colors. The Men theme stays bright and light even when you choose darker colors.",
-              "Customize the Men theme palette. Text and icon colors stay unchanged, and the light/glass design remains."
-          )
+              panel = r'''
 
-          # Keep text color fixed to the original Men theme color.
-          if "#etag-theme-colors-only-js" not in d:
-              js = r'''
+                <div
+                    id="etagThemeBoard"
+                >
 
-    /* #etag-theme-colors-only-js */
-    if (typeof currentThemeColors === "object") {
-        currentThemeColors.text = "#253027";
+                    <h3>
+                        Theme Appearance
+                    </h3>
+
+                    <p class="theme-board-help">
+                        Choose your profile background and background glow.
+                        Nothing else in the theme is recolored.
+                    </p>
+
+                    <div class="theme-tabs">
+
+                        <button
+                            id="etagThemeBackgroundTab"
+                            class="theme-tab active"
+                            type="button"
+                        >
+                            Background
+                        </button>
+
+                        <button
+                            id="etagThemeGlowTab"
+                            class="theme-tab"
+                            type="button"
+                        >
+                            Background Glow
+                        </button>
+
+                    </div>
+
+                    <div
+                        id="etagThemeColorBoard"
+                        class="theme-color-board"
+                    >
+                        <div class="theme-color-white"></div>
+                        <div class="theme-color-black"></div>
+                        <div
+                            id="etagThemeColorPointer"
+                            class="theme-color-pointer"
+                        ></div>
+                    </div>
+
+                    <div
+                        id="etagThemeHue"
+                        class="theme-hue"
+                    >
+                        <div
+                            id="etagThemeHuePointer"
+                            class="theme-hue-pointer"
+                        ></div>
+                    </div>
+
+                    <div class="theme-value-row">
+
+                        <input
+                            id="etagThemeHex"
+                            class="theme-hex"
+                            type="text"
+                            maxlength="7"
+                            value="#D3DBC8"
+                            spellcheck="false"
+                        >
+
+                        <div
+                            id="etagThemeChip"
+                            class="theme-preview-chip"
+                        ></div>
+
+                    </div>
+
+                    <div class="theme-actions">
+
+                        <button
+                            id="etagThemeSave"
+                            class="button primary"
+                            type="button"
+                        >
+                            Save Theme Colors
+                        </button>
+
+                        <button
+                            id="etagThemeReset"
+                            class="button secondary"
+                            type="button"
+                        >
+                            Reset Colors
+                        </button>
+
+                    </div>
+
+                </div>
+'''
+              marker = '                <div class="button-row">'
+              if marker not in d:
+                  raise SystemExit('dashboard button-row marker not found')
+              d = d.replace(marker, panel + '\n\n' + marker, 1)
+
+              script = r'''
+
+<script type="module">
+
+    import {
+        createClient
+    } from
+        "https://esm.sh/@supabase/supabase-js@2";
+
+    const ETAG_SUPABASE_URL =
+        "https://zuptxhcjzhqynrquyray.supabase.co";
+
+    const ETAG_SUPABASE_KEY =
+        "sb_publishable_1sa0MtE83MZXETR5JLakJA_fRVrjDJI";
+
+    const etagThemeSupabase =
+        createClient(
+            ETAG_SUPABASE_URL,
+            ETAG_SUPABASE_KEY
+        );
+
+    const etagThemeDefaults = {
+        background: "#D3DBC8",
+        glow: "#FFFFFF"
+    };
+
+    let etagThemeColors = {
+        ...etagThemeDefaults
+    };
+
+    let etagThemeMode = "background";
+    let etagThemeHueValue = 140;
+    let etagThemeSatValue = 0.22;
+    let etagThemeLightValue = 0.83;
+
+    const etagThemeBoard =
+        document.getElementById("etagThemeColorBoard");
+
+    const etagThemeWhite =
+        document.querySelector("#etagThemeColorBoard .theme-color-white");
+
+    const etagThemeBlack =
+        document.querySelector("#etagThemeColorBoard .theme-color-black");
+
+    const etagThemePointer =
+        document.getElementById("etagThemeColorPointer");
+
+    const etagThemeHue =
+        document.getElementById("etagThemeHue");
+
+    const etagThemeHuePointer =
+        document.getElementById("etagThemeHuePointer");
+
+    const etagThemeHex =
+        document.getElementById("etagThemeHex");
+
+    const etagThemeChip =
+        document.getElementById("etagThemeChip");
+
+    const etagThemeSave =
+        document.getElementById("etagThemeSave");
+
+    const etagThemeReset =
+        document.getElementById("etagThemeReset");
+
+    const etagThemeBackgroundTab =
+        document.getElementById("etagThemeBackgroundTab");
+
+    const etagThemeGlowTab =
+        document.getElementById("etagThemeGlowTab");
+
+    function hexToRgb(hex) {
+        const value = String(hex || "").replace("#", "");
+        if (!/^[0-9a-fA-F]{6}$/.test(value)) return null;
+        return {
+            r: parseInt(value.slice(0,2), 16) / 255,
+            g: parseInt(value.slice(2,4), 16) / 255,
+            b: parseInt(value.slice(4,6), 16) / 255
+        };
     }
 
-    saveButton?.addEventListener(
+    function rgbToHsl(r, g, b) {
+        const max = Math.max(r, g, b);
+        const min = Math.min(r, g, b);
+        let h = 0;
+        let s = 0;
+        const l = (max + min) / 2;
+        const d = max - min;
+
+        if (d !== 0) {
+            s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+            switch (max) {
+                case r:
+                    h = ((g - b) / d + (g < b ? 6 : 0)) / 6;
+                    break;
+                case g:
+                    h = ((b - r) / d + 2) / 6;
+                    break;
+                default:
+                    h = ((r - g) / d + 4) / 6;
+                    break;
+            }
+        }
+
+        return {
+            h: h * 360,
+            s,
+            l
+        };
+    }
+
+    function hueToRgb(p, q, t) {
+        if (t < 0) t += 1;
+        if (t > 1) t -= 1;
+        if (t < 1/6) return p + (q-p) * 6 * t;
+        if (t < 1/2) return q;
+        if (t < 2/3) return p + (q-p) * (2/3-t) * 6;
+        return p;
+    }
+
+    function hslToHex(h, s, l) {
+        h /= 360;
+        let r, g, b;
+        if (s === 0) {
+            r = g = b = l;
+        } else {
+            const q = l < 0.5 ? l * (1+s) : l+s-l*s;
+            const p = 2*l-q;
+            r = hueToRgb(p,q,h+1/3);
+            g = hueToRgb(p,q,h);
+            b = hueToRgb(p,q,h-1/3);
+        }
+        const toHex = value =>
+            Math.round(value * 255).toString(16).padStart(2,"0");
+        return `#${toHex(r)}${toHex(g)}${toHex(b)}`.toUpperCase();
+    }
+
+    function setColorFromHex(hex) {
+        const normalized =
+            String(hex || "").trim().toUpperCase();
+        if (!/^#[0-9A-F]{6}$/.test(normalized)) return;
+        const rgb = hexToRgb(normalized);
+        const hsl = rgbToHsl(rgb.r, rgb.g, rgb.b);
+        etagThemeHueValue = hsl.h;
+        etagThemeSatValue = hsl.s;
+        etagThemeLightValue = hsl.l;
+    }
+
+    function currentModeColor() {
+        return etagThemeColors[etagThemeMode];
+    }
+
+    function setModeColor(hex) {
+        const normalized =
+            String(hex || "").trim().toUpperCase();
+        if (/^#[0-9A-F]{6}$/.test(normalized)) {
+            etagThemeColors[etagThemeMode] = normalized;
+        }
+    }
+
+    function updateThemeBoard() {
+        if (!etagThemeBoard) return;
+        etagThemeBoard.style.background =
+            `hsl(${etagThemeHueValue} 100% 50%)`;
+
+        const boardRect =
+            etagThemeBoard.getBoundingClientRect();
+        if (boardRect.width > 0 && boardRect.height > 0) {
+            etagThemePointer.style.left =
+                `${etagThemeSatValue * boardRect.width}px`;
+            etagThemePointer.style.top =
+                `${(1 - etagThemeLightValue) * boardRect.height}px`;
+        }
+
+        etagThemeHuePointer.style.left =
+            `${(etagThemeHueValue / 360) * etagThemeHue.clientWidth}px`;
+
+        etagThemeHex.value = currentModeColor();
+        etagThemeChip.style.background = currentModeColor();
+
+        etagThemeBackgroundTab.classList.toggle(
+            "active",
+            etagThemeMode === "background"
+        );
+
+        etagThemeGlowTab.classList.toggle(
+            "active",
+            etagThemeMode === "glow"
+        );
+
+        etagThemeHex.setAttribute(
+            "aria-label",
+            etagThemeMode === "background"
+                ? "Background color HEX"
+                : "Background glow color HEX"
+        );
+
+        etagThemeBoard.style.setProperty(
+            "--picker-hue",
+            `hsl(${etagThemeHueValue} 100% 50%)`
+        );
+
+        if (etagThemeWhite) {
+            etagThemeWhite.style.display = "block";
+        }
+        if (etagThemeBlack) {
+            etagThemeBlack.style.display = "block";
+        }
+    }
+
+    function sendThemeToPreview() {
+        const frame =
+            document.getElementById("themePreviewFrame");
+        if (!frame?.contentWindow) return;
+        frame.contentWindow.postMessage(
+            {
+                type: "etag-theme-colors",
+                colors: { ...etagThemeColors }
+            },
+            window.location.origin
+        );
+    }
+
+    function readBoardPosition(clientX, clientY) {
+        const rect = etagThemeBoard.getBoundingClientRect();
+        if (!rect.width || !rect.height) return;
+        const x = Math.max(0, Math.min(rect.width, clientX - rect.left));
+        const y = Math.max(0, Math.min(rect.height, clientY - rect.top));
+        etagThemeSatValue = x / rect.width;
+        etagThemeLightValue = 1 - (y / rect.height);
+        const hex = hslToHex(
+            etagThemeHueValue,
+            etagThemeSatValue,
+            etagThemeLightValue
+        );
+        setModeColor(hex);
+        updateThemeBoard();
+        sendThemeToPreview();
+    }
+
+    etagThemeBoard?.addEventListener("pointerdown", event => {
+        etagThemeBoard.setPointerCapture?.(event.pointerId);
+        readBoardPosition(event.clientX, event.clientY);
+    });
+
+    etagThemeBoard?.addEventListener("pointermove", event => {
+        if (event.buttons === 0) return;
+        readBoardPosition(event.clientX, event.clientY);
+    });
+
+    etagThemeHue?.addEventListener("pointerdown", event => {
+        etagThemeHue.setPointerCapture?.(event.pointerId);
+        const rect = etagThemeHue.getBoundingClientRect();
+        const x = Math.max(0, Math.min(rect.width, event.clientX - rect.left));
+        etagThemeHueValue = (x / rect.width) * 360;
+        const hex = hslToHex(
+            etagThemeHueValue,
+            etagThemeSatValue,
+            etagThemeLightValue
+        );
+        setModeColor(hex);
+        updateThemeBoard();
+        sendThemeToPreview();
+    });
+
+    etagThemeHue?.addEventListener("pointermove", event => {
+        if (event.buttons === 0) return;
+        const rect = etagThemeHue.getBoundingClientRect();
+        const x = Math.max(0, Math.min(rect.width, event.clientX - rect.left));
+        etagThemeHueValue = (x / rect.width) * 360;
+        const hex = hslToHex(
+            etagThemeHueValue,
+            etagThemeSatValue,
+            etagThemeLightValue
+        );
+        setModeColor(hex);
+        updateThemeBoard();
+        sendThemeToPreview();
+    });
+
+    function chooseMode(mode) {
+        etagThemeMode = mode;
+        setColorFromHex(currentModeColor());
+        updateThemeBoard();
+    }
+
+    etagThemeBackgroundTab?.addEventListener(
         "click",
-        () => {
-            if (typeof currentThemeColors === "object") {
-                currentThemeColors.text = "#253027";
-            }
-        },
-        true
+        () => chooseMode("background")
     );
 
-    colorText?.setAttribute("disabled", "disabled");
-    colorTextHex?.setAttribute("disabled", "disabled");
-    if (colorText?.closest(".profile-color-row")) {
-        colorText.closest(".profile-color-row").style.display = "none";
-    }
-'''
-              marker = "</script>"
-              if marker in d:
-                  d = d.replace(marker, js + "\n\n</script>", 1)
+    etagThemeGlowTab?.addEventListener(
+        "click",
+        () => chooseMode("glow")
+    );
 
-          # Men theme: preserve theme/background/surface palette customization.
-          # Text and icon colors remain the original design values.
-          if "#etag-theme-colors-only-men-css" not in m:
+    etagThemeHex?.addEventListener("change", () => {
+        const normalized =
+            String(etagThemeHex.value || "").trim().toUpperCase();
+        if (!/^#[0-9A-F]{6}$/.test(normalized)) {
+            updateThemeBoard();
+            return;
+        }
+        setModeColor(normalized);
+        setColorFromHex(normalized);
+        updateThemeBoard();
+        sendThemeToPreview();
+    });
+
+    async function loadThemeColors() {
+        try {
+            const { data: sessionData } =
+                await etagThemeSupabase.auth.getSession();
+            const user = sessionData?.session?.user;
+            if (!user) return;
+
+            const { data, error } =
+                await etagThemeSupabase
+                    .from("profiles")
+                    .select("theme_colors")
+                    .eq("id", user.id)
+                    .maybeSingle();
+
+            if (error) {
+                console.error("Theme color load error:", error);
+                return;
+            }
+
+            if (data?.theme_colors && typeof data.theme_colors === "object") {
+                etagThemeColors = {
+                    ...etagThemeDefaults,
+                    ...data.theme_colors
+                };
+            }
+
+            chooseMode("background");
+            sendThemeToPreview();
+        } catch (error) {
+            console.error("Theme color load failed:", error);
+        }
+    }
+
+    etagThemeSave?.addEventListener("click", async () => {
+        etagThemeSave.disabled = true;
+        etagThemeSave.textContent = "Saving...";
+        try {
+            const { data: sessionData } =
+                await etagThemeSupabase.auth.getSession();
+            const user = sessionData?.session?.user;
+            if (!user) throw new Error("Your login session has expired.");
+
+            const { error } =
+                await etagThemeSupabase
+                    .from("profiles")
+                    .update({
+                        theme_colors: {
+                            background: etagThemeColors.background,
+                            glow: etagThemeColors.glow
+                        },
+                        updated_at: new Date().toISOString()
+                    })
+                    .eq("id", user.id);
+
+            if (error) throw error;
+
+            const messageBox =
+                document.getElementById("message");
+            if (messageBox) {
+                messageBox.textContent =
+                    "Theme colors saved successfully.";
+                messageBox.className =
+                    "message show success";
+            }
+
+            etagThemeSave.textContent = "Saved";
+            setTimeout(() => {
+                etagThemeSave.textContent = "Save Theme Colors";
+            }, 1200);
+        } catch (error) {
+            console.error("Theme color save failed:", error);
+            const messageBox =
+                document.getElementById("message");
+            if (messageBox) {
+                messageBox.textContent =
+                    error.message || "Failed to save theme colors.";
+                messageBox.className =
+                    "message show error";
+            }
+            etagThemeSave.textContent = "Save Theme Colors";
+        } finally {
+            etagThemeSave.disabled = false;
+        }
+    });
+
+    etagThemeReset?.addEventListener("click", () => {
+        etagThemeColors = {
+            ...etagThemeDefaults
+        };
+        chooseMode(etagThemeMode);
+        sendThemeToPreview();
+    });
+
+    window.addEventListener("message", event => {
+        if (event.origin !== window.location.origin) return;
+        if (event.data?.type === "etag-men-preview-ready") {
+            sendThemeToPreview();
+        }
+    });
+
+    setTimeout(() => {
+        loadThemeColors();
+    }, 0);
+
+</script>
+'''
+              d = d.replace('</body>', script + '\n</body>', 1)
+
+          if 'id="etagThemeRuntime"' not in m:
               css = r'''
 
-        /* #etag-theme-colors-only-men-css */
-        .custom-theme-colors h1,
-        .custom-theme-colors .section-title,
-        .custom-theme-colors .contact-value,
-        .custom-theme-colors .social-name,
-        .custom-theme-colors .age,
-        .custom-theme-colors .bio,
-        .custom-theme-colors .section-subtitle,
-        .custom-theme-colors .contact-label,
-        .custom-theme-colors .social-username,
-        .custom-theme-colors .swipe-hint {
-            color: #253027 !important;
+    <style id="etagThemeRuntime">
+        :root {
+            --etag-theme-background: #D3DBC8;
+            --etag-theme-glow: #FFFFFF;
         }
+
+        body {
+            background:
+                radial-gradient(
+                    ellipse at 70% 18%,
+                    color-mix(in srgb, var(--etag-theme-glow) 92%, transparent) 0%,
+                    color-mix(in srgb, var(--etag-theme-glow) 45%, transparent) 27%,
+                    transparent 57%
+                ),
+                radial-gradient(
+                    ellipse at 15% 75%,
+                    color-mix(in srgb, var(--etag-theme-background) 56%, transparent) 0%,
+                    color-mix(in srgb, var(--etag-theme-background) 34%, transparent) 35%,
+                    transparent 70%
+                ),
+                linear-gradient(
+                    135deg,
+                    color-mix(in srgb, var(--etag-theme-background) 72%, #ffffff) 0%,
+                    color-mix(in srgb, var(--etag-theme-background) 88%, #ffffff) 38%,
+                    color-mix(in srgb, var(--etag-theme-background) 64%, #ffffff) 68%,
+                    color-mix(in srgb, var(--etag-theme-background) 78%, #ffffff) 100%
+                );
+        }
+
+        body::before {
+            background:
+                radial-gradient(
+                    ellipse at 72% 24%,
+                    color-mix(in srgb, var(--etag-theme-glow) 42%, transparent),
+                    transparent 32%
+                ),
+                radial-gradient(
+                    ellipse at 20% 15%,
+                    rgba(255,255,255,.26),
+                    transparent 22%
+                );
+        }
+    </style>
 '''
-              marker = "    </style>"
-              if marker in m:
-                  m = m.replace(marker, css + "\n" + marker, 1)
+              if '</head>' not in m:
+                  raise SystemExit('men head marker not found')
+              m = m.replace('</head>', css + '\n</head>', 1)
 
-          if "#etag-theme-colors-only-men-js" not in m:
-              js = r'''
+              script = r'''
 
-    /* #etag-theme-colors-only-men-js */
-    function keepOriginalTextColor() {
+<script type="module" id="etagThemeRuntimeScript">
+
+    import {
+        createClient
+    } from
+        "https://esm.sh/@supabase/supabase-js@2";
+
+    const etagThemeRuntimeSupabase =
+        createClient(
+            "https://zuptxhcjzhqynrquyray.supabase.co",
+            "sb_publishable_1sa0MtE83MZXETR5JLakJA_fRVrjDJI"
+        );
+
+    const etagThemeDefaults = {
+        background: "#D3DBC8",
+        glow: "#FFFFFF"
+    };
+
+    function applyEtagThemeColors(colors) {
+        const next = {
+            ...etagThemeDefaults,
+            ...(colors && typeof colors === "object" ? colors : {})
+        };
+
+        const background =
+            /^#[0-9A-F]{6}$/i.test(String(next.background || ""))
+                ? String(next.background).toUpperCase()
+                : etagThemeDefaults.background;
+
+        const glow =
+            /^#[0-9A-F]{6}$/i.test(String(next.glow || ""))
+                ? String(next.glow).toUpperCase()
+                : etagThemeDefaults.glow;
+
         document.documentElement.style.setProperty(
-            "--theme-text",
-            "#253027"
+            "--etag-theme-background",
+            background
         );
 
         document.documentElement.style.setProperty(
-            "--text",
-            "#253027"
+            "--etag-theme-glow",
+            glow
         );
     }
 
-    window.addEventListener(
-        "message",
-        event => {
-            if (
-                event.data?.type === "etag-dashboard-preview" ||
-                event.data?.type === "etag-dashboard-theme-colors"
-            ) {
-                keepOriginalTextColor();
-            }
-        }
-    );
+    window.addEventListener("message", event => {
+        if (event.origin !== window.location.origin) return;
+        if (event.data?.type !== "etag-theme-colors") return;
+        applyEtagThemeColors(event.data.colors);
+    });
 
-    window.setInterval(
-        keepOriginalTextColor,
-        250
-    );
+    const params =
+        new URLSearchParams(window.location.search);
+
+    const isPreview =
+        params.get("preview") === "1";
+
+    if (isPreview) {
+        window.parent.postMessage(
+            {
+                type: "etag-men-preview-ready"
+            },
+            window.location.origin
+        );
+    } else {
+        (async () => {
+            try {
+                const tagCode =
+                    params.get("tag")?.trim().toUpperCase();
+
+                if (!tagCode) return;
+
+                const { data: tag } =
+                    await etagThemeRuntimeSupabase
+                        .from("nfc_tags")
+                        .select("owner_id,active")
+                        .eq("tag_code", tagCode)
+                        .maybeSingle();
+
+                if (!tag?.active || !tag.owner_id) return;
+
+                const { data: profile } =
+                    await etagThemeRuntimeSupabase
+                        .from("profiles")
+                        .select("theme_colors")
+                        .eq("id", tag.owner_id)
+                        .maybeSingle();
+
+                if (profile?.theme_colors) {
+                    applyEtagThemeColors(profile.theme_colors);
+                }
+            } catch (error) {
+                console.error("E-Tag theme colors load error:", error);
+            }
+        })();
+    }
+
+</script>
 '''
-              marker = "</script>"
-              if marker in m:
-                  m = m.replace(marker, js + "\n\n</script>", 1)
+              m = m.replace('</body>', script + '\n</body>', 1)
 
           dashboard.write_text(d, encoding="utf-8")
           men.write_text(m, encoding="utf-8")
-          print("Theme-colors-only cleanup applied.")
+          print("Background + glow theme customization patched.")
 
-      - name: Commit theme-only result
+      - name: Commit patched files
         shell: bash
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add dashboard.html themes/men.html
           if git diff --cached --quiet; then
-            echo "No changes required."
+            echo "No theme changes needed."
             exit 0
           fi
-          git commit -m "Enforce theme colors only"
+          git commit -m "Add background and glow theme color board"
           git push origin main
