@@ -1,0 +1,40 @@
+name: Fix Mobile Edit Button
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Patch Men mobile edit button
+        shell: python
+        run: |
+          from pathlib import Path
+
+          path = Path("themes/men.html")
+          text = path.read_text(encoding="utf-8")
+          marker = "/* ETAG MOBILE EDIT BUTTON FIX */"
+
+          if marker in text:
+              print("Already installed.")
+              raise SystemExit(0)
+
+          css = '''\n<style>\n/* ETAG MOBILE EDIT BUTTON FIX */\n@media (max-width: 600px) {\n    .bottom {\n        position: fixed !important;\n        left: 0 !important;\n        right: 0 !important;\n        bottom: 0 !important;\n        z-index: 9999 !important;\n        width: 100% !important;\n        height: auto !important;\n        min-height: 42px !important;\n        display: flex !important;\n        align-items: flex-start !important;\n        justify-content: center !important;\n        padding: 6px 16px max(8px, env(safe-area-inset-bottom)) !important;\n        pointer-events: none !important;\n        overflow: visible !important;\n    }\n\n    .edit-button {\n        pointer-events: auto !important;\n        position: relative !important;\n        z-index: 10000 !important;\n        display: inline-flex !important;\n        visibility: visible !important;\n        opacity: .78 !important;\n        min-height: 28px !important;\n        padding: 5px 11px !important;\n        font-size: 9px !important;\n    }\n}\n</style>\n'''
+
+          text = text.replace("</head>", css + "</head>", 1)
+          path.write_text(text, encoding="utf-8")
+
+      - name: Commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add themes/men.html
+          git commit -m "fix: show edit button on mobile" || exit 0
+          git push
