@@ -2,6 +2,7 @@
 <html lang="en">
 
 <head>
+
     <meta charset="UTF-8">
 
     <meta
@@ -11,3201 +12,713 @@
 
     <title>E-Tag Dashboard</title>
 
-    <style>
+</head>
 
-        * {
-            box-sizing: border-box;
+<body>
+
+<script>
+
+const ORIGINAL_DASHBOARD =
+    "https://raw.githubusercontent.com/EMOON3D/E-Tag/ba3d4f1d06e91cf150402ab5ec32914d82bdaab9/dashboard.html";
+
+
+fetch(
+    ORIGINAL_DASHBOARD,
+    {
+        cache: "no-store"
+    }
+)
+.then(
+    response => {
+
+        if (
+            !response.ok
+        ) {
+
+            throw new Error(
+                "Unable to load the E-Tag dashboard."
+            );
+
         }
 
-        body {
-            margin: 0;
-            min-height: 100vh;
+        return response.text();
 
-            font-family:
-                Inter,
-                system-ui,
-                -apple-system,
-                BlinkMacSystemFont,
-                "Segoe UI",
-                sans-serif;
+    }
+)
+.then(
+    html => {
 
-            background: #f5f7fb;
-            color: #111827;
+        const extraScript = `
+
+<script type="module">
+
+import {
+    createClient
+}
+from
+    "https://esm.sh/@supabase/supabase-js@2";
+
+
+const SUPABASE_URL =
+    "https://zuptxhcjzhqynrquyray.supabase.co";
+
+
+const SUPABASE_PUBLISHABLE_KEY =
+    "sb_publishable_1sa0MtE83MZXETR5JLakJA_fRVrjDJI";
+
+
+const supabase =
+    createClient(
+        SUPABASE_URL,
+        SUPABASE_PUBLISHABLE_KEY,
+        {
+            auth: {
+                persistSession: true,
+                autoRefreshToken: true,
+                detectSessionInUrl: true
+            }
         }
+    );
 
-        .app {
-            width:
-                min(
-                    calc(100% - 24px),
-                    1100px
-                );
 
-            margin: 0 auto;
-            padding: 24px 0 50px;
-        }
+const DEFAULT_THEME =
+{
 
-        .header {
-            margin-bottom: 20px;
-        }
+    background1:
+        "#C3CDB8",
 
-        .header h1 {
-            margin: 0 0 6px;
-            font-size: 30px;
-        }
+    background2:
+        "#D3DBC8",
 
-        .header p {
-            margin: 0;
-            color: #6b7280;
-        }
+    background3:
+        "#E1E7DA",
 
-        .card {
-            background: #ffffff;
+    main:
+        "#D3DBC8",
 
-            border:
-                1px solid #e5e7eb;
+    secondary:
+        "#E5EADF",
 
-            border-radius: 20px;
+    glass:
+        "#D3DBC8",
 
-            padding: 22px;
+    surface:
+        "#FFFFFF",
 
-            box-shadow:
-                0 10px 35px
-                rgba(
-                    0,
-                    0,
-                    0,
-                    0.05
-                );
-        }
+    border:
+        "#FFFFFF",
 
-        .layout {
-            display: grid;
+    accent:
+        "#B8C9A8",
 
-            grid-template-columns:
-                1fr 1fr;
+    shadow:
+        "#374539"
 
-            gap: 20px;
-        }
+};
 
-        .section-title {
-            margin: 0 0 18px;
-            font-size: 21px;
-        }
 
-        .field {
-            margin-bottom: 16px;
-        }
+let themeColors =
+{
+    ...DEFAULT_THEME
+};
 
-        .field label {
-            display: block;
 
-            margin-bottom: 7px;
+const CONTROL_DEFINITIONS =
+[
 
-            font-size: 13px;
-            font-weight: 700;
-        }
+    [
+        "background1",
+        "Background 1"
+    ],
 
-        .input,
-        .textarea {
-            width: 100%;
+    [
+        "background2",
+        "Background 2"
+    ],
 
-            border:
-                1px solid #d1d5db;
+    [
+        "background3",
+        "Background 3"
+    ],
 
-            border-radius: 11px;
+    [
+        "main",
+        "Main Theme"
+    ],
 
-            padding:
-                12px 13px;
+    [
+        "secondary",
+        "Secondary Theme"
+    ],
 
-            font-size: 15px;
+    [
+        "glass",
+        "Glass Tint"
+    ],
 
-            font-family: inherit;
+    [
+        "surface",
+        "Surface"
+    ],
 
-            outline: none;
+    [
+        "border",
+        "Glass Border"
+    ],
 
-            background: #ffffff;
-        }
+    [
+        "accent",
+        "Accent"
+    ],
 
-        .textarea {
-            min-height: 110px;
-            resize: vertical;
-        }
+    [
+        "shadow",
+        "Shadow Tint"
+    ]
 
-        .input:focus,
-        .textarea:focus {
-            border-color: #111827;
+];
 
-            box-shadow:
-                0 0 0 3px
-                rgba(
-                    17,
-                    24,
-                    39,
-                    0.08
-                );
-        }
 
-        .choice-grid {
-            display: grid;
+function normalizeHex(
+    value,
+    fallback
+)
+{
 
-            grid-template-columns:
-                repeat(3, 1fr);
+    const text =
+        String(
+            value ||
+            ""
+        )
+        .trim()
+        .toUpperCase();
 
-            gap: 10px;
-        }
 
-        .choice {
-            border:
-                2px solid #e5e7eb;
+    if (
+        /^#[0-9A-F]{6}$/.test(
+            text
+        )
+    )
+    {
 
-            border-radius: 14px;
+        return text;
 
-            padding: 14px;
+    }
 
-            cursor: pointer;
 
-            text-align: center;
-        }
+    return fallback;
 
-        .choice.active {
-            border-color: #111827;
-            background: #f9fafb;
-        }
+}
 
-        .choice-icon {
-            font-size: 25px;
-            margin-bottom: 7px;
-        }
 
-        .choice-name {
-            font-size: 14px;
-            font-weight: 800;
-        }
+function createPanel()
+{
 
-        .theme-grid {
-            display: grid;
+    if (
+        document.getElementById(
+            "etagThemeCustomizer"
+        )
+    )
+    {
 
-            grid-template-columns:
-                repeat(2, 1fr);
+        return;
 
-            gap: 10px;
-        }
+    }
 
-        .theme-option {
-            border:
-                2px solid #e5e7eb;
 
-            border-radius: 14px;
+    const style =
+        document.createElement(
+            "style"
+        );
 
-            padding: 14px;
 
-            cursor: pointer;
+    style.textContent = `
 
-            text-align: center;
-        }
+        #etagThemeCustomizer
+        {
 
-        .theme-option.active {
-            border-color: #111827;
-            background: #f9fafb;
-        }
-
-        .theme-icon {
-            font-size: 25px;
-            margin-bottom: 6px;
-        }
-
-        .theme-name {
-            font-size: 14px;
-            font-weight: 800;
-        }
-
-        .avatar-mode-grid {
-            display: grid;
-
-            grid-template-columns:
-                repeat(2, 1fr);
-
-            gap: 10px;
-        }
-
-        .avatar-mode {
-            border:
-                2px solid #e5e7eb;
-
-            border-radius: 14px;
-
-            padding: 13px;
-
-            cursor: pointer;
-
-            text-align: center;
-        }
-
-        .avatar-mode.active {
-            border-color: #111827;
-            background: #f9fafb;
-        }
-
-        .avatar-mode-icon {
-            font-size: 25px;
-            margin-bottom: 6px;
-        }
-
-        .avatar-mode-name {
-            font-size: 13px;
-            font-weight: 800;
-        }
-
-        .character-grid {
-            display: grid;
-
-            grid-template-columns:
-                repeat(3, 1fr);
-
-            gap: 10px;
-
-            margin-top: 12px;
-        }
-
-        .character-option {
-            border:
-                2px solid #e5e7eb;
-
-            border-radius: 14px;
-
-            padding: 8px;
-
-            cursor: pointer;
-
-            text-align: center;
-
-            background: #ffffff;
-        }
-
-        .character-option.active {
-            border-color: #111827;
-            background: #f9fafb;
-        }
-
-        .character-option img {
-            width: 100%;
-            aspect-ratio: 1;
-
-            object-fit: contain;
-
-            border-radius: 10px;
-
-            background: #f3f4f6;
-        }
-
-        .character-option-name {
-            margin-top: 7px;
-
-            font-size: 11px;
-            font-weight: 800;
-        }
-
-        .avatar-section {
-            display: flex;
-
-            align-items: flex-start;
-
-            gap: 18px;
-
-            margin-bottom: 18px;
-        }
-
-        .avatar {
-            width: 96px;
-            height: 96px;
-
-            flex-shrink: 0;
-
-            border-radius: 50%;
-
-            overflow: hidden;
-
-            background: #e5e7eb;
-
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            color: #6b7280;
-
-            font-size: 28px;
-            font-weight: 800;
-        }
-
-        .avatar img {
-            width: 100%;
-            height: 100%;
-
-            object-fit: cover;
-        }
-
-        .avatar.character img {
-            object-fit: contain;
-            padding: 7px;
-        }
-
-        .avatar-tools {
-            flex: 1;
-        }
-
-        .file-input {
-            display: none;
-        }
-
-        .upload-label {
-            display: inline-flex;
-
-            padding:
-                11px 14px;
-
-            border-radius: 11px;
-
-            background: #eef2f7;
-            color: #111827;
-
-            font-size: 14px;
-            font-weight: 700;
-
-            cursor: pointer;
-        }
-
-        .upload-help {
-            margin-top: 8px;
-
-            color: #6b7280;
-
-            font-size: 12px;
-            line-height: 1.5;
-        }
-
-        .upload-status {
-            margin-top: 8px;
-
-            font-size: 12px;
-            line-height: 1.5;
-        }
-
-        .cover-upload-section {
-            margin-top: 18px;
-            padding-top: 18px;
-            border-top: 1px solid #e5e7eb;
-        }
-
-        .cover-preview {
-            width: 100%;
-            height: 120px;
-            margin-bottom: 12px;
-            border-radius: 14px;
-            overflow: hidden;
-            background: #eef2f7;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #6b7280;
-            font-size: 12px;
-            font-weight: 700;
-        }
-
-        .cover-preview img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-        }
-
-        .subsection {
             margin-top: 26px;
-            margin-bottom: 18px;
 
             padding-top: 20px;
 
             border-top:
                 1px solid #e5e7eb;
+
         }
 
-        .subsection h3 {
-            margin: 0 0 14px;
+
+        #etagThemeCustomizer h3
+        {
+
+            margin:
+                0 0 7px;
+
             font-size: 17px;
+
         }
 
-        .field-help {
-            margin-top: 6px;
+
+        #etagThemeCustomizer .theme-help
+        {
+
+            margin:
+                0 0 16px;
 
             color: #6b7280;
 
             font-size: 12px;
-            line-height: 1.5;
-        }
 
-        .button-row {
-            display: flex;
-
-            gap: 10px;
-
-            margin-top: 20px;
-        }
-
-        .button {
-            border: 0;
-
-            border-radius: 11px;
-
-            padding:
-                13px 16px;
-
-            font-size: 14px;
-            font-weight: 700;
-
-            cursor: pointer;
-
-            font-family: inherit;
-        }
-
-        .button:disabled {
-            opacity: .55;
-            cursor: not-allowed;
-        }
-
-        .primary {
-            background: #111827;
-            color: #ffffff;
-        }
-
-        .secondary {
-            background: #eef2f7;
-            color: #111827;
-        }
-
-        .message {
-            display: none;
-
-            margin-bottom: 16px;
-
-            padding:
-                13px 14px;
-
-            border-radius: 11px;
-
-            font-size: 14px;
             line-height: 1.5;
 
-            word-break: break-word;
         }
 
-        .message.show {
-            display: block;
+
+        #etagThemeGrid
+        {
+
+            display:
+                grid;
+
+            grid-template-columns:
+                1fr;
+
+            gap: 11px;
+
         }
 
-        .message.success {
-            background: #ecfdf5;
 
-            color: #065f46;
+        .etag-theme-row
+        {
 
-            border:
-                1px solid #a7f3d0;
+            display:
+                grid;
+
+            grid-template-columns:
+                1fr 70px 105px;
+
+            gap: 8px;
+
+            align-items:
+                center;
+
         }
 
-        .message.error {
-            background: #fef2f2;
 
-            color: #991b1b;
-
-            border:
-                1px solid #fecaca;
-        }
-
-        .tag-info {
-            display: flex;
-
-            gap: 10px;
-
-            flex-wrap: wrap;
-
-            margin-bottom: 20px;
-        }
-
-        .tag-badge {
-            display: inline-flex;
-
-            padding:
-                7px 10px;
-
-            border-radius: 999px;
-
-            background: #eef2f7;
-
-            color: #374151;
-
-            font-size: 12px;
-            font-weight: 700;
-        }
-
-        .preview-shell {
-            padding: 14px;
-
-            min-height: 520px;
-
-            border-radius: 18px;
-
-            background: #f5f7fb;
-        }
-
-        .theme-preview-frame {
-            width: 100%;
-            height: 680px;
-            overflow: hidden;
-            border-radius: 26px;
-            background: transparent;
-        }
-
-        #themePreviewFrame {
-            width: 100%;
-            height: 100%;
-            display: block;
-            border: 0;
-            background: transparent;
-        }
-
-        .preview {
-            overflow: hidden;
-
-            max-width: 430px;
-
-            margin: 0 auto;
-
-            border-radius: 26px;
-
-            background: #ffffff;
-
-            text-align: center;
-        }
-
-        .preview-top {
-            padding:
-                32px 22px;
-
-            background:
-                linear-gradient(
-                    145deg,
-                    #111827,
-                    #1f2937
-                );
-
-            color: #ffffff;
-        }
-
-        .preview-avatar {
-            width: 100px;
-            height: 100px;
-
-            margin:
-                0 auto 16px;
-
-            border-radius: 50%;
-
-            overflow: hidden;
-
-            background: #374151;
-
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            font-size: 30px;
-            font-weight: 800;
-        }
-
-        .preview-avatar img {
-            width: 100%;
-            height: 100%;
-
-            object-fit: cover;
-        }
-
-        .preview-avatar.character img {
-            object-fit: contain;
-            padding: 7px;
-        }
-
-        .preview-name {
-            margin: 0;
-
-            font-size: 27px;
-            line-height: 1.2;
-        }
-
-        .preview-type {
-            display: inline-flex;
-
-            margin-top: 10px;
-
-            padding:
-                6px 10px;
-
-            border-radius: 999px;
-
-            background:
-                rgba(
-                    255,
-                    255,
-                    255,
-                    .12
-                );
-
-            font-size: 11px;
-            font-weight: 800;
-        }
-
-        .preview-bio {
-            margin:
-                10px 0 0;
-
-            color: #d1d5db;
-
-            line-height: 1.6;
-
-            white-space: pre-wrap;
-        }
-
-        .preview-content {
-            padding: 18px;
-
-            display: grid;
-
-            gap: 9px;
-        }
-
-        .preview-button {
-            display: block;
-
-            padding:
-                12px 14px;
-
-            border-radius: 11px;
-
-            background: #111827;
-            color: #ffffff;
-
-            text-decoration: none;
+        .etag-theme-label
+        {
 
             font-size: 13px;
-            font-weight: 800;
+
+            font-weight: 700;
+
         }
 
-        .loading {
-            text-align: center;
+
+        .etag-theme-color
+        {
+
+            width:
+                70px;
+
+            height:
+                42px;
 
             padding:
-                40px 20px;
+                3px;
 
-            color: #6b7280;
+            border:
+                1px solid #d1d5db;
+
+            border-radius:
+                10px;
+
+            background:
+                #ffffff;
+
+            cursor:
+                pointer;
+
         }
 
-        .hidden {
-            display: none !important;
+
+        .etag-theme-hex
+        {
+
+            width:
+                100%;
+
+            min-width:
+                0;
+
+            padding:
+                10px;
+
+            border:
+                1px solid #d1d5db;
+
+            border-radius:
+                10px;
+
+            font:
+                inherit;
+
+            font-size:
+                12px;
+
+            outline:
+                none;
+
+            text-transform:
+                uppercase;
+
         }
 
-        @media (max-width: 900px) {
 
-            .layout {
-                grid-template-columns: 1fr;
-            }
+        .etag-theme-actions
+        {
+
+            display:
+                flex;
+
+            gap:
+                8px;
+
+            margin-top:
+                14px;
 
         }
 
-        @media (max-width: 600px) {
 
-            .app {
-                width:
-                    calc(100% - 16px);
+        .etag-theme-button
+        {
 
-                padding-top: 16px;
-            }
+            border:
+                0;
 
-            .card {
-                padding: 18px;
-            }
+            border-radius:
+                10px;
 
-            .choice-grid {
-                grid-template-columns: 1fr;
-            }
+            padding:
+                11px 14px;
 
-            .character-grid {
+            font:
+                inherit;
+
+            font-size:
+                13px;
+
+            font-weight:
+                700;
+
+            cursor:
+                pointer;
+
+        }
+
+
+        .etag-theme-save
+        {
+
+            background:
+                #111827;
+
+            color:
+                #ffffff;
+
+        }
+
+
+        .etag-theme-reset
+        {
+
+            background:
+                #eef2f7;
+
+            color:
+                #111827;
+
+        }
+
+
+        @media
+        (max-width: 600px)
+        {
+
+            .etag-theme-row
+            {
+
                 grid-template-columns:
-                    repeat(2, 1fr);
+                    1fr 58px;
+
             }
 
-            .avatar-section {
-                flex-direction: column;
+
+            .etag-theme-hex
+            {
+
+                grid-column:
+                    1 / -1;
+
             }
 
-            .avatar-tools {
-                width: 100%;
-            }
 
-            .button-row {
-                flex-direction: column;
+            .etag-theme-color
+            {
+
+                width:
+                    58px;
+
             }
 
         }
 
-    </style>
-
-</head>
+    `;
 
 
-<body>
-
-<div class="app">
-
-    <div
-        id="loading"
-        class="card loading"
-    >
-        Loading your E-Tag dashboard...
-    </div>
+    document.head.appendChild(
+        style
+    );
 
 
-    <div
-        id="dashboard"
-        class="hidden"
-    >
-
-        <header class="header">
-
-            <h1>
-                E-Tag Dashboard
-            </h1>
-
-            <p>
-                Customize your public E-Tag profile.
-            </p>
-
-        </header>
+    const panel =
+        document.createElement(
+            "div"
+        );
 
 
-        <div class="tag-info">
+    panel.id =
+        "etagThemeCustomizer";
 
-            <span
-                id="tagBadge"
-                class="tag-badge"
-            >
-                E-Tag
-            </span>
 
-            <span class="tag-badge">
-                Active
-            </span>
+    panel.innerHTML = `
 
-        </div>
+        <h3>
+            Theme Colors
+        </h3>
+
+
+        <p class="theme-help">
+            Customize the visual colors of your profile.
+            Text colors and social PNG icons are not changed.
+            The bright/light glass design stays intact.
+        </p>
 
 
         <div
-            id="message"
-            class="message"
+            id="etagThemeGrid"
         ></div>
 
 
-        <div class="layout">
-
-
-            <!-- PROFILE EDITOR -->
-
-            <section class="card">
-
-                <h2 class="section-title">
-                    Profile
-                </h2>
-
-
-                <!-- PROFILE TYPE -->
-
-                <div class="field">
-
-                    <label>
-                        Profile Type
-                    </label>
-
-
-                    <div
-                        id="profileTypeChoices"
-                        class="choice-grid"
-                    >
-
-                        <div
-                            class="choice"
-                            data-type="personal"
-                        >
-
-                            <div class="choice-icon">
-                                👤
-                            </div>
-
-                            <div class="choice-name">
-                                Personal
-                            </div>
-
-                        </div>
-
-
-                        <div
-                            class="choice"
-                            data-type="couple"
-                        >
-
-                            <div class="choice-icon">
-                                ❤️
-                            </div>
-
-                            <div class="choice-name">
-                                Couple
-                            </div>
-
-                        </div>
-
-
-                        <div
-                            class="choice"
-                            data-type="business"
-                        >
-
-                            <div class="choice-icon">
-                                🏢
-                            </div>
-
-                            <div class="choice-name">
-                                Business
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-
-                <!-- PERSONAL STYLE -->
-
-                <div
-                    id="personalThemeSection"
-                    class="field"
-                >
-
-                    <label>
-                        Personal Style
-                    </label>
-
-
-                    <div
-                        id="personalThemeGrid"
-                        class="theme-grid"
-                    >
-
-                        <div
-                            class="theme-option"
-                            data-template="men"
-                        >
-
-                            <div class="theme-icon">
-                                👤
-                            </div>
-
-                            <div class="theme-name">
-                                Men
-                            </div>
-
-                        </div>
-
-
-                        <div
-                            class="theme-option"
-                            data-template="women"
-                        >
-
-                            <div class="theme-icon">
-                                ✨
-                            </div>
-
-                            <div class="theme-name">
-                                Women
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-
-                <!-- IMAGE TYPE -->
-
-                <div class="field">
-
-                    <label>
-                        Profile Image
-                    </label>
-
-
-                    <div
-                        id="avatarModeGrid"
-                        class="avatar-mode-grid"
-                    >
-
-                        <div
-                            class="avatar-mode"
-                            data-avatar-type="upload"
-                        >
-
-                            <div class="avatar-mode-icon">
-                                📷
-                            </div>
-
-                            <div class="avatar-mode-name">
-                                Upload My Photo
-                            </div>
-
-                        </div>
-
-
-                        <div
-                            class="avatar-mode"
-                            data-avatar-type="character"
-                        >
-
-                            <div class="avatar-mode-icon">
-                                🎨
-                            </div>
-
-                            <div class="avatar-mode-name">
-                                Use Character
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-
-                <!-- PHOTO UPLOAD -->
-
-                <div
-                    id="uploadSection"
-                    class="field"
-                >
-
-                    <div class="avatar-section">
-
-                        <div
-                            id="avatar"
-                            class="avatar"
-                        ></div>
-
-
-                        <div class="avatar-tools">
-
-                            <label
-                                for="avatarFile"
-                                class="upload-label"
-                            >
-                                Upload Photo
-                            </label>
-
-
-                            <input
-                                id="avatarFile"
-                                class="file-input"
-                                type="file"
-                                accept="image/jpeg,image/png,image/webp"
-                            >
-
-
-                            <div class="upload-help">
-                                JPG, PNG or WEBP.
-                                Maximum 1 MB.
-                            </div>
-
-
-                            <div
-                                id="uploadStatus"
-                                class="upload-status"
-                            ></div>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-
-                <div class="cover-upload-section">
-
-                    <label>
-                        Cover Image
-                    </label>
-
-                    <div
-                        id="coverPreview"
-                        class="cover-preview"
-                    >
-                        No cover image selected
-                    </div>
-
-                    <label
-                        for="coverFile"
-                        class="upload-label"
-                    >
-                        Upload Cover Image
-                    </label>
-
-                    <input
-                        id="coverFile"
-                        class="file-input"
-                        type="file"
-                        accept="image/jpeg,image/png,image/webp"
-                    >
-
-                    <div class="upload-help">
-                        JPG, PNG or WEBP. Maximum 1 MB.
-                    </div>
-
-                    <div
-                        id="coverStatus"
-                        class="upload-status"
-                    ></div>
-
-                </div>
-
-
-                <!-- CHARACTERS -->
-
-                <div
-                    id="characterSection"
-                    class="field hidden"
-                >
-
-                    <label>
-                        Choose Character
-                    </label>
-
-
-                    <div
-                        id="characterGrid"
-                        class="character-grid"
-                    ></div>
-
-                </div>
-
-
-                <!-- PERSONAL -->
-
-                <div
-                    id="personalFields"
-                    class="hidden"
-                >
-
-                    <div class="subsection">
-
-                        <h3>
-                            Personal Information
-                        </h3>
-
-
-                        <div class="field">
-
-                            <label>
-                                Name
-                            </label>
-
-                            <input
-                                id="personalName"
-                                class="input"
-                                type="text"
-                                maxlength="100"
-                            >
-
-                        </div>
-
-
-                        <div class="field">
-
-                            <label>
-                                Age
-                            </label>
-
-                            <input
-                                id="age"
-                                class="input"
-                                type="number"
-                                min="1"
-                                max="120"
-                            >
-
-                        </div>
-
-
-                        <div class="field">
-
-                            <label>
-                                Phone Number
-                            </label>
-
-                            <input
-                                id="personalPhone"
-                                class="input"
-                                type="tel"
-                                maxlength="30"
-                                placeholder="+94..."
-                            >
-
-                        </div>
-
-
-                        <div class="field">
-
-                            <label>
-                                Short Bio
-                            </label>
-
-                            <textarea
-                                id="personalBio"
-                                class="textarea"
-                                maxlength="500"
-                            ></textarea>
-
-                        </div>
-
-                    </div>
-
-
-                    <!-- PERSONAL SOCIAL -->
-
-                    <div class="subsection">
-
-                        <h3>
-                            Social Links
-                        </h3>
-
-
-                        <div class="field">
-
-                            <label>
-                                Facebook Profile URL
-                            </label>
-
-                            <input
-                                id="facebook"
-                                class="input"
-                                type="url"
-                                placeholder="https://www.facebook.com/your-profile"
-                            >
-
-                            <div class="field-help">
-                                Paste your complete Facebook profile URL.
-                            </div>
-
-                        </div>
-
-
-                        <div class="field">
-
-                            <label>
-                                Instagram Profile URL
-                            </label>
-
-                            <input
-                                id="instagram"
-                                class="input"
-                                type="url"
-                                placeholder="https://www.instagram.com/yourname"
-                            >
-
-                        </div>
-
-
-                        <div class="field">
-
-                            <label>
-                                TikTok Profile URL
-                            </label>
-
-                            <input
-                                id="tiktok"
-                                class="input"
-                                type="url"
-                                placeholder="https://www.tiktok.com/@yourname"
-                            >
-
-                        </div>
-
-
-                        <div class="field">
-
-                            <label>
-                                YouTube Channel URL
-                            </label>
-
-                            <input
-                                id="youtube"
-                                class="input"
-                                type="url"
-                                placeholder="https://www.youtube.com/@yourchannel"
-                            >
-
-                        </div>
-
-
-                        <div class="field">
-
-                            <label>
-                                WhatsApp Number
-                            </label>
-
-                            <input
-                                id="personalWhatsapp"
-                                class="input"
-                                type="tel"
-                                placeholder="+947XXXXXXXX"
-                            >
-
-                        </div>
-
-
-                        <div class="field">
-
-                            <label>
-                                Discord Profile URL
-                            </label>
-
-                            <input
-                                id="discord"
-                                class="input"
-                                type="url"
-                                placeholder="https://discord.com/users/..."
-                            >
-
-                        </div>
-
-
-                        <div class="field">
-
-                            <label>
-                                Telegram Profile URL
-                            </label>
-
-                            <input
-                                id="telegram"
-                                class="input"
-                                type="url"
-                                placeholder="https://t.me/yourname"
-                            >
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-
-                <!-- COUPLE -->
-
-                <div
-                    id="coupleFields"
-                    class="hidden"
-                >
-
-                    <div class="subsection">
-
-                        <h3>
-                            Couple
-                        </h3>
-
-
-                        <div class="field">
-
-                            <label>
-                                Couple Name
-                            </label>
-
-                            <input
-                                id="coupleName"
-                                class="input"
-                                type="text"
-                                maxlength="120"
-                                placeholder="Gayana ❤️ Tharu"
-                            >
-
-                        </div>
-
-
-                        <div class="field">
-
-                            <label>
-                                Person 1 Name
-                            </label>
-
-                            <input
-                                id="person1Name"
-                                class="input"
-                                type="text"
-                            >
-
-                        </div>
-
-
-                        <div class="field">
-
-                            <label>
-                                Person 2 Name
-                            </label>
-
-                            <input
-                                id="person2Name"
-                                class="input"
-                                type="text"
-                            >
-
-                        </div>
-
-
-                        <div class="field">
-
-                            <label>
-                                Relationship Date
-                            </label>
-
-                            <input
-                                id="anniversaryDate"
-                                class="input"
-                                type="date"
-                            >
-
-                        </div>
-
-
-                        <div class="field">
-
-                            <label>
-                                Our Story
-                            </label>
-
-                            <textarea
-                                id="ourStory"
-                                class="textarea"
-                            ></textarea>
-
-                        </div>
-
-
-                        <div class="field">
-
-                            <label>
-                                Short Couple Bio
-                            </label>
-
-                            <textarea
-                                id="coupleBio"
-                                class="textarea"
-                            ></textarea>
-
-                        </div>
-
-                    </div>
-
-
-                    <!-- COUPLE SOCIAL -->
-
-                    <div class="subsection">
-
-                        <h3>
-                            Social Links
-                        </h3>
-
-
-                        <div class="field">
-
-                            <label>
-                                Person 1 Instagram URL
-                            </label>
-
-                            <input
-                                id="person1Instagram"
-                                class="input"
-                                type="url"
-                                placeholder="https://www.instagram.com/..."
-                            >
-
-                        </div>
-
-
-                        <div class="field">
-
-                            <label>
-                                Person 2 Instagram URL
-                            </label>
-
-                            <input
-                                id="person2Instagram"
-                                class="input"
-                                type="url"
-                                placeholder="https://www.instagram.com/..."
-                            >
-
-                        </div>
-
-
-                        <div class="field">
-
-                            <label>
-                                Person 1 TikTok URL
-                            </label>
-
-                            <input
-                                id="person1Tiktok"
-                                class="input"
-                                type="url"
-                                placeholder="https://www.tiktok.com/@..."
-                            >
-
-                        </div>
-
-
-                        <div class="field">
-
-                            <label>
-                                Person 2 TikTok URL
-                            </label>
-
-                            <input
-                                id="person2Tiktok"
-                                class="input"
-                                type="url"
-                                placeholder="https://www.tiktok.com/@..."
-                            >
-
-                        </div>
-
-
-                        <div class="field">
-
-                            <label>
-                                Shared YouTube URL
-                            </label>
-
-                            <input
-                                id="sharedYoutube"
-                                class="input"
-                                type="url"
-                                placeholder="https://www.youtube.com/@..."
-                            >
-
-                        </div>
-
-
-                        <div class="field">
-
-                            <label>
-                                WhatsApp Number
-                            </label>
-
-                            <input
-                                id="coupleWhatsapp"
-                                class="input"
-                                type="tel"
-                                placeholder="+947XXXXXXXX"
-                            >
-
-                        </div>
-
-
-                        <div class="field">
-
-                            <label>
-                                Other Social Links
-                            </label>
-
-                            <textarea
-                                id="otherSocialLinks"
-                                class="textarea"
-                                placeholder="One complete URL per line"
-                            ></textarea>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-
-                <!-- BUSINESS -->
-
-                <div
-                    id="businessFields"
-                    class="hidden"
-                >
-
-                    <div class="subsection">
-
-                        <h3>
-                            Business
-                        </h3>
-
-
-                        <div class="field">
-
-                            <label>
-                                Business Name
-                            </label>
-
-                            <input
-                                id="businessName"
-                                class="input"
-                                type="text"
-                            >
-
-                        </div>
-
-
-                        <div class="field">
-
-                            <label>
-                                Business Category
-                            </label>
-
-                            <input
-                                id="businessCategory"
-                                class="input"
-                                type="text"
-                            >
-
-                        </div>
-
-
-                        <div class="field">
-
-                            <label>
-                                Short Description
-                            </label>
-
-                            <textarea
-                                id="businessDescription"
-                                class="textarea"
-                            ></textarea>
-
-                        </div>
-
-
-                        <div class="field">
-
-                            <label>
-                                Phone
-                            </label>
-
-                            <input
-                                id="businessPhone"
-                                class="input"
-                                type="tel"
-                            >
-
-                        </div>
-
-
-                        <div class="field">
-
-                            <label>
-                                WhatsApp
-                            </label>
-
-                            <input
-                                id="businessWhatsapp"
-                                class="input"
-                                type="tel"
-                            >
-
-                        </div>
-
-
-                        <div class="field">
-
-                            <label>
-                                Email
-                            </label>
-
-                            <input
-                                id="businessEmail"
-                                class="input"
-                                type="email"
-                            >
-
-                        </div>
-
-
-                        <div class="field">
-
-                            <label>
-                                Business Location
-                            </label>
-
-                            <input
-                                id="businessLocation"
-                                class="input"
-                                type="text"
-                            >
-
-                        </div>
-
-
-                        <div class="field">
-
-                            <label>
-                                Opening Hours
-                            </label>
-
-                            <textarea
-                                id="openingHours"
-                                class="textarea"
-                                placeholder="Mon-Fri: 9 AM - 6 PM"
-                            ></textarea>
-
-                        </div>
-
-
-                        <div class="field">
-
-                            <label>
-                                Website
-                            </label>
-
-                            <input
-                                id="website"
-                                class="input"
-                                type="url"
-                                placeholder="https://..."
-                            >
-
-                        </div>
-
-                    </div>
-
-
-                    <!-- BUSINESS SOCIAL -->
-
-                    <div class="subsection">
-
-                        <h3>
-                            Social Links
-                        </h3>
-
-
-                        <div class="field">
-
-                            <label>
-                                Facebook Profile URL
-                            </label>
-
-                            <input
-                                id="businessFacebook"
-                                class="input"
-                                type="url"
-                                placeholder="https://www.facebook.com/..."
-                            >
-
-                        </div>
-
-
-                        <div class="field">
-
-                            <label>
-                                Instagram Profile URL
-                            </label>
-
-                            <input
-                                id="businessInstagram"
-                                class="input"
-                                type="url"
-                                placeholder="https://www.instagram.com/..."
-                            >
-
-                        </div>
-
-
-                        <div class="field">
-
-                            <label>
-                                TikTok Profile URL
-                            </label>
-
-                            <input
-                                id="businessTiktok"
-                                class="input"
-                                type="url"
-                                placeholder="https://www.tiktok.com/@..."
-                            >
-
-                        </div>
-
-
-                        <div class="field">
-
-                            <label>
-                                YouTube Channel URL
-                            </label>
-
-                            <input
-                                id="businessYoutube"
-                                class="input"
-                                type="url"
-                                placeholder="https://www.youtube.com/@..."
-                            >
-
-                        </div>
-
-
-                        <div class="field">
-
-                            <label>
-                                Telegram Profile URL
-                            </label>
-
-                            <input
-                                id="businessTelegram"
-                                class="input"
-                                type="url"
-                                placeholder="https://t.me/..."
-                            >
-
-                        </div>
-
-
-                        <div class="field">
-
-                            <label>
-                                LinkedIn Profile URL
-                            </label>
-
-                            <input
-                                id="linkedin"
-                                class="input"
-                                type="url"
-                                placeholder="https://www.linkedin.com/in/..."
-                            >
-
-                        </div>
-
-                    </div>
-
-
-                    <!-- BUSINESS LINKS -->
-
-                    <div class="subsection">
-
-                        <h3>
-                            Business Links
-                        </h3>
-
-
-                        <div class="field">
-
-                            <label>
-                                Google Maps
-                            </label>
-
-                            <input
-                                id="googleMaps"
-                                class="input"
-                                type="url"
-                                placeholder="https://maps.google.com/..."
-                            >
-
-                        </div>
-
-
-                        <div class="field">
-
-                            <label>
-                                Online Store
-                            </label>
-
-                            <input
-                                id="onlineStore"
-                                class="input"
-                                type="url"
-                                placeholder="https://..."
-                            >
-
-                        </div>
-
-
-                        <div class="field">
-
-                            <label>
-                                Booking Link
-                            </label>
-
-                            <input
-                                id="bookingUrl"
-                                class="input"
-                                type="url"
-                                placeholder="https://..."
-                            >
-
-                        </div>
-
-
-                        <div class="field">
-
-                            <label>
-                                Menu / Catalogue
-                            </label>
-
-                            <input
-                                id="menuUrl"
-                                class="input"
-                                type="url"
-                                placeholder="https://..."
-                            >
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-
-                <div class="button-row">
-
-                    <button
-                        id="saveButton"
-                        class="button primary"
-                        type="button"
-                    >
-                        Save Profile
-                    </button>
-
-
-                    <button
-                        id="logoutButton"
-                        class="button secondary"
-                        type="button"
-                    >
-                        Logout
-                    </button>
-
-                </div>
-
-            </section>
-
-
-            <!-- LIVE PREVIEW -->
-
-            <section class="card">
-
-                <h2 class="section-title">
-                    Live Preview
-                </h2>
-
-
-                <div class="preview-shell">
-
-                    <div class="theme-preview-frame">
-
-                        <iframe
-                            id="themePreviewFrame"
-                            title="E-Tag Men Profile Preview"
-                            src="/E-Tag/themes/men.html?preview=1"
-                            scrolling="no"
-                        ></iframe>
-
-                    </div>
-
-                </div>
-
-
-                <button
-                    id="openPublicButton"
-                    class="button secondary"
-                    type="button"
-                    style="
-                        width:100%;
-                        margin-top:14px;
-                    "
-                >
-                    Open Public Profile
-                </button>
-
-            </section>
+        <div
+            class="etag-theme-actions"
+        >
+
+            <button
+                id="etagThemeSave"
+                class="etag-theme-button etag-theme-save"
+                type="button"
+            >
+                Save Theme
+            </button>
+
+
+            <button
+                id="etagThemeReset"
+                class="etag-theme-button etag-theme-reset"
+                type="button"
+            >
+                Reset
+            </button>
 
         </div>
 
-    </div>
-
-</div>
+    `;
 
 
-<script type="module">
-
-    import {
-        createClient
-    } from
-        "https://esm.sh/@supabase/supabase-js@2";
-
-
-    const SUPABASE_URL =
-        "https://zuptxhcjzhqynrquyray.supabase.co";
-
-
-    const SUPABASE_PUBLISHABLE_KEY =
-        "sb_publishable_1sa0MtE83MZXETR5JLakJA_fRVrjDJI";
-
-
-    const AVATAR_UPLOAD_FUNCTION =
-        `${SUPABASE_URL}/functions/v1/create-avatar-upload-url`;
-
-
-    const R2_PUBLIC_URL =
-        "https://pub-ff2a280f86934b4b8ef6e7aaf243e6e3.r2.dev";
-
-
-    const MAX_FILE_SIZE =
-        1024 * 1024;
-
-
-    const ALLOWED_TYPES =
-        new Set([
-            "image/jpeg",
-            "image/png",
-            "image/webp"
-        ]);
-
-
-    const CHARACTER_LIBRARY = {
-
-        men: [
-
-            {
-                id: "men-01",
-                name: "Men 1",
-                src:
-                    "/E-Tag/assets/characters/men/men-01.svg"
-            },
-
-            {
-                id: "men-02",
-                name: "Men 2",
-                src:
-                    "/E-Tag/assets/characters/men/men-02.svg"
-            },
-
-            {
-                id: "men-03",
-                name: "Men 3",
-                src:
-                    "/E-Tag/assets/characters/men/men-03.svg"
-            }
-
-        ],
-
-        women: [
-
-            {
-                id: "women-01",
-                name: "Women 1",
-                src:
-                    "/E-Tag/assets/characters/women/women-01.svg"
-            },
-
-            {
-                id: "women-02",
-                name: "Women 2",
-                src:
-                    "/E-Tag/assets/characters/women/women-02.svg"
-            },
-
-            {
-                id: "women-03",
-                name: "Women 3",
-                src:
-                    "/E-Tag/assets/characters/women/women-03.svg"
-            }
-
-        ],
-
-        couple: [
-
-            {
-                id: "couple-01",
-                name: "Couple 1",
-                src:
-                    "/E-Tag/assets/characters/couple/couple-01.svg"
-            },
-
-            {
-                id: "couple-02",
-                name: "Couple 2",
-                src:
-                    "/E-Tag/assets/characters/couple/couple-02.svg"
-            }
-
-        ],
-
-        business: [
-
-            {
-                id: "business-01",
-                name: "Business 1",
-                src:
-                    "/E-Tag/assets/characters/business/business-01.svg"
-            }
-
-        ]
-
-    };
-
-
-    const supabase =
-        createClient(
-            SUPABASE_URL,
-            SUPABASE_PUBLISHABLE_KEY,
-            {
-                auth: {
-                    persistSession:
-                        true,
-
-                    autoRefreshToken:
-                        true,
-
-                    detectSessionInUrl:
-                        true
-                }
-            }
+    const editor =
+        document.querySelector(
+            ".layout > .card:first-child"
         );
 
 
-    const loading =
+    if (
+        editor
+    )
+    {
+
+        const buttonRow =
+            editor.querySelector(
+                ".button-row"
+            );
+
+
+        if (
+            buttonRow
+        )
+        {
+
+            editor.insertBefore(
+                panel,
+                buttonRow
+            );
+
+        }
+        else
+        {
+
+            editor.appendChild(
+                panel
+            );
+
+        }
+
+    }
+    else
+    {
+
+        document.body.appendChild(
+            panel
+        );
+
+    }
+
+
+    const grid =
         document.getElementById(
-            "loading"
-        );
-
-    const dashboard =
-        document.getElementById(
-            "dashboard"
-        );
-
-    const message =
-        document.getElementById(
-            "message"
-        );
-
-    const tagBadge =
-        document.getElementById(
-            "tagBadge"
-        );
-
-    const profileTypeChoices =
-        document.querySelectorAll(
-            "#profileTypeChoices .choice"
-        );
-
-    const personalThemeChoices =
-        document.querySelectorAll(
-            "#personalThemeGrid .theme-option"
-        );
-
-    const avatarModeChoices =
-        document.querySelectorAll(
-            "#avatarModeGrid .avatar-mode"
-        );
-
-    const personalThemeSection =
-        document.getElementById(
-            "personalThemeSection"
-        );
-
-    const personalFields =
-        document.getElementById(
-            "personalFields"
-        );
-
-    const coupleFields =
-        document.getElementById(
-            "coupleFields"
-        );
-
-    const businessFields =
-        document.getElementById(
-            "businessFields"
-        );
-
-    const uploadSection =
-        document.getElementById(
-            "uploadSection"
-        );
-
-    const characterSection =
-        document.getElementById(
-            "characterSection"
-        );
-
-    const characterGrid =
-        document.getElementById(
-            "characterGrid"
-        );
-
-    const avatar =
-        document.getElementById(
-            "avatar"
-        );
-
-    const previewAvatar =
-        document.getElementById(
-            "previewAvatar"
-        );
-
-    const avatarFile =
-        document.getElementById(
-            "avatarFile"
-        );
-
-    const uploadStatus =
-        document.getElementById(
-            "uploadStatus"
-        );
-
-    const coverFile =
-        document.getElementById(
-            "coverFile"
-        );
-
-    const coverPreview =
-        document.getElementById(
-            "coverPreview"
-        );
-
-    const coverStatus =
-        document.getElementById(
-            "coverStatus"
-        );
-
-    const saveButton =
-        document.getElementById(
-            "saveButton"
-        );
-
-    const logoutButton =
-        document.getElementById(
-            "logoutButton"
-        );
-
-    const openPublicButton =
-        document.getElementById(
-            "openPublicButton"
-        );
-
-    const previewName =
-        document.getElementById(
-            "previewName"
-        );
-
-    const previewType =
-        document.getElementById(
-            "previewType"
-        );
-
-    const previewBio =
-        document.getElementById(
-            "previewBio"
-        );
-
-    const previewContent =
-        document.getElementById(
-            "previewContent"
+            "etagThemeGrid"
         );
 
 
-    const fieldIds = [
+    CONTROL_DEFINITIONS.forEach(
+        (
+            [
+                key,
+                label
+            ]
+        ) => {
 
-        "personalName",
-        "age",
-        "personalPhone",
-        "personalBio",
-
-        "facebook",
-        "instagram",
-        "tiktok",
-        "youtube",
-        "personalWhatsapp",
-        "discord",
-        "telegram",
-
-        "coupleName",
-        "person1Name",
-        "person2Name",
-        "anniversaryDate",
-        "ourStory",
-        "coupleBio",
-        "person1Instagram",
-        "person2Instagram",
-        "person1Tiktok",
-        "person2Tiktok",
-        "sharedYoutube",
-        "coupleWhatsapp",
-        "otherSocialLinks",
-
-        "businessName",
-        "businessCategory",
-        "businessDescription",
-        "businessPhone",
-        "businessWhatsapp",
-        "businessEmail",
-        "businessLocation",
-        "openingHours",
-        "website",
-        "businessFacebook",
-        "businessInstagram",
-        "businessTiktok",
-        "businessYoutube",
-        "businessTelegram",
-        "linkedin",
-        "googleMaps",
-        "onlineStore",
-        "bookingUrl",
-        "menuUrl"
-
-    ];
-
-
-    const fields = {};
-
-
-    fieldIds.forEach(
-        id => {
-
-            fields[id] =
-                document.getElementById(
-                    id
+            const row =
+                document.createElement(
+                    "div"
                 );
+
+
+            row.className =
+                "etag-theme-row";
+
+
+            row.innerHTML = `
+
+                <div
+                    class="etag-theme-label"
+                >
+                    ${label}
+                </div>
+
+
+                <input
+                    class="etag-theme-color"
+                    type="color"
+                    data-theme-picker="${key}"
+                    value="${themeColors[key]}"
+                >
+
+
+                <input
+                    class="etag-theme-hex"
+                    type="text"
+                    maxlength="7"
+                    spellcheck="false"
+                    data-theme-hex="${key}"
+                    value="${themeColors[key]}"
+                >
+
+            `;
+
+
+            grid.appendChild(
+                row
+            );
 
         }
     );
 
 
-    let currentUser =
-        null;
-
-    let currentTag =
-        null;
-
-    let profileExists =
-        false;
-
-    let currentProfileType =
-        "personal";
-
-    let currentTemplate =
-        "men";
-
-    let avatarType =
-        "upload";
-
-    let characterId =
-        "";
-
-    let currentAvatarUrl =
-        "";
-
-    let currentCoverUrl =
-        "";
+    const pickers =
+        panel.querySelectorAll(
+            "[data-theme-picker]"
+        );
 
 
-    function getValue(
-        id
-    ) {
-
-        return (
-            fields[id]?.value ||
-            ""
-        ).trim();
-
-    }
+    const hexInputs =
+        panel.querySelectorAll(
+            "[data-theme-hex]"
+        );
 
 
-    function setValue(
-        id,
-        value
-    ) {
+    function refreshControls()
+    {
 
-        if (
-            fields[id]
-        ) {
+        pickers.forEach(
+            picker => {
 
-            fields[id].value =
-                value ?? "";
+                const key =
+                    picker.dataset.themePicker;
 
-        }
+
+                picker.value =
+                    themeColors[key];
+
+            }
+        );
+
+
+        hexInputs.forEach(
+            input => {
+
+                const key =
+                    input.dataset.themeHex;
+
+
+                input.value =
+                    themeColors[key];
+
+            }
+        );
 
     }
 
 
-    function showMessage(
-        text,
-        type
-    ) {
+    function sendThemeToPreview()
+    {
 
-        message.textContent =
-            text;
-
-        message.className =
-            `message show ${type}`;
-
-    }
-
-
-    function normalizeTemplate(
-        value
-    ) {
-
-        const v =
-            String(
-                value || ""
-            )
-                .trim()
-                .toLowerCase();
+        const frame =
+            document.getElementById(
+                "themePreviewFrame"
+            );
 
 
         if (
-            v === "boy"
-        ) {
-
-            return "men";
-        }
-
-
-        if (
-            v === "girl"
-        ) {
-
-            return "women";
-        }
-
-
-        if (
-            [
-                "men",
-                "women",
-                "couple",
-                "business"
-            ].includes(v)
-        ) {
-
-            return v;
-        }
-
-
-        return "men";
-
-    }
-
-
-    function normalizeProfileType(
-        value
-    ) {
-
-        const v =
-            String(
-                value || ""
-            )
-                .trim()
-                .toLowerCase();
-
-
-        if (
-            v === "couple"
-        ) {
-
-            return "couple";
-        }
-
-
-        if (
-            v === "business"
-        ) {
-
-            return "business";
-        }
-
-
-        return "personal";
-
-    }
-
-
-    function initials(
-        value
-    ) {
-
-        const parts =
-            String(
-                value || ""
-            )
-                .trim()
-                .split(
-                    /\s+/
-                )
-                .filter(
-                    Boolean
-                );
-
-
-        if (
-            parts.length === 0
-        ) {
-
-            return "?";
-        }
-
-
-        if (
-            parts.length === 1
-        ) {
-
-            return parts[0]
-                .slice(
-                    0,
-                    2
-                )
-                .toUpperCase();
-
-        }
-
-
-        return (
-            parts[0][0] +
-            parts[
-                parts.length - 1
-            ][0]
-        ).toUpperCase();
-
-    }
-
-
-    function escapeAttribute(
-        value
-    ) {
-
-        return String(
-            value
+            !frame?.contentWindow
         )
-            .replaceAll(
-                "&",
-                "&amp;"
-            )
-            .replaceAll(
-                '"',
-                "&quot;"
-            )
-            .replaceAll(
-                "<",
-                "&lt;"
-            )
-            .replaceAll(
-                ">",
-                "&gt;"
-            );
-
-    }
-
-
-    function getDisplayName() {
-
-        if (
-            currentProfileType ===
-            "couple"
-        ) {
-
-            return (
-                getValue(
-                    "coupleName"
-                ) ||
-                "Our Story"
-            );
-
-        }
-
-
-        if (
-            currentProfileType ===
-            "business"
-        ) {
-
-            return (
-                getValue(
-                    "businessName"
-                ) ||
-                "Business"
-            );
-
-        }
-
-
-        return (
-            getValue(
-                "personalName"
-            ) ||
-            "E-Tag User"
-        );
-
-    }
-
-
-    function getBio() {
-
-        if (
-            currentProfileType ===
-            "couple"
-        ) {
-
-            return getValue(
-                "coupleBio"
-            );
-
-        }
-
-
-        if (
-            currentProfileType ===
-            "business"
-        ) {
-
-            return getValue(
-                "businessDescription"
-            );
-
-        }
-
-
-        return getValue(
-            "personalBio"
-        );
-
-    }
-
-
-    function getCharacterGroup() {
-
-        if (
-            currentProfileType ===
-            "couple"
-        ) {
-
-            return "couple";
-        }
-
-
-        if (
-            currentProfileType ===
-            "business"
-        ) {
-
-            return "business";
-        }
-
-
-        return currentTemplate ===
-            "women"
-                ? "women"
-                : "men";
-
-    }
-
-
-    function getCharacterUrl() {
-
-        const group =
-            getCharacterGroup();
-
-
-        const list =
-            CHARACTER_LIBRARY[
-                group
-            ] || [];
-
-
-        const selected =
-            list.find(
-                character =>
-                    character.id ===
-                    characterId
-            );
-
-
-        return (
-            selected?.src ||
-            ""
-        );
-
-    }
-
-
-    function getPreviewImage() {
-
-        if (
-            avatarType ===
-            "character"
-        ) {
-
-            return getCharacterUrl();
-
-        }
-
-
-        return currentAvatarUrl;
-
-    }
-
-
-    function renderAvatar(
-        element,
-        name,
-        url
-    ) {
-
-        element.innerHTML =
-            "";
-
-        element.classList.remove(
-            "character"
-        );
-
-
-        if (
-            url
-        ) {
-
-            const image =
-                document.createElement(
-                    "img"
-                );
-
-
-            image.src =
-                url;
-
-            image.alt =
-                "Profile";
-
-
-            image.onerror =
-                () => {
-
-                    element.innerHTML =
-                        "";
-
-                    element.classList.remove(
-                        "character"
-                    );
-
-                    element.textContent =
-                        initials(
-                            name
-                        );
-
-                };
-
-
-            if (
-                avatarType ===
-                "character"
-            ) {
-
-                element.classList.add(
-                    "character"
-                );
-
-            }
-
-
-            element.appendChild(
-                image
-            );
+        {
 
             return;
 
         }
 
-
-        element.textContent =
-            initials(
-                name
-            );
-
-    }
-
-
-    function renderProfileType() {
-
-        profileTypeChoices.forEach(
-            choice => {
-
-                choice.classList.toggle(
-                    "active",
-                    choice.dataset.type ===
-                        currentProfileType
-                );
-
-            }
-        );
-
-
-        personalThemeSection.classList.toggle(
-            "hidden",
-            currentProfileType !==
-                "personal"
-        );
-
-
-        personalFields.classList.toggle(
-            "hidden",
-            currentProfileType !==
-                "personal"
-        );
-
-
-        coupleFields.classList.toggle(
-            "hidden",
-            currentProfileType !==
-                "couple"
-        );
-
-
-        businessFields.classList.toggle(
-            "hidden",
-            currentProfileType !==
-                "business"
-        );
-
-    }
-
-
-    function renderThemeOptions() {
-
-        personalThemeChoices.forEach(
-            choice => {
-
-                choice.classList.toggle(
-                    "active",
-                    choice.dataset.template ===
-                        currentTemplate
-                );
-
-            }
-        );
-
-    }
-
-
-    function renderAvatarMode() {
-
-        avatarModeChoices.forEach(
-            choice => {
-
-                choice.classList.toggle(
-                    "active",
-                    choice.dataset.avatarType ===
-                        avatarType
-                );
-
-            }
-        );
-
-
-        uploadSection.classList.toggle(
-            "hidden",
-            avatarType !==
-                "upload"
-        );
-
-
-        characterSection.classList.toggle(
-            "hidden",
-            avatarType !==
-                "character"
-        );
-
-    }
-
-
-    function renderCharacters() {
-
-        const group =
-            getCharacterGroup();
-
-
-        const characters =
-            CHARACTER_LIBRARY[
-                group
-            ] || [];
-
-
-        characterGrid.innerHTML =
-            "";
-
-
-        if (
-            characters.length ===
-            0
-        ) {
-
-            characterGrid.textContent =
-                "No characters available yet.";
-
-            return;
-
-        }
-
-
-        characters.forEach(
-            character => {
-
-                const option =
-                    document.createElement(
-                        "div"
-                    );
-
-
-                option.className =
-                    "character-option";
-
-
-                if (
-                    character.id ===
-                    characterId
-                ) {
-
-                    option.classList.add(
-                        "active"
-                    );
-
-                }
-
-
-                option.innerHTML =
-                    `
-                        <img
-                            src="${escapeAttribute(
-                                character.src
-                            )}"
-                            alt="${escapeAttribute(
-                                character.name
-                            )}"
-                        >
-
-                        <div
-                            class="character-option-name"
-                        >
-                            ${escapeAttribute(
-                                character.name
-                            )}
-                        </div>
-                    `;
-
-
-                option.addEventListener(
-                    "click",
-                    () => {
-
-                        avatarType =
-                            "character";
-
-
-                        characterId =
-                            character.id;
-
-
-                        renderAvatarMode();
-
-                        renderCharacters();
-
-                        updatePreview();
-
-                    }
-                );
-
-
-                characterGrid.appendChild(
-                    option
-                );
-
-            }
-        );
-
-    }
-
-
-    function renderCoverPreview() {
-
-        coverPreview.innerHTML = "";
-
-        if (currentCoverUrl) {
-
-            const image = document.createElement("img");
-
-            image.src = currentCoverUrl;
-            image.alt = "Cover image";
-
-            image.onerror = () => {
-                coverPreview.textContent = "Cover image unavailable";
-            };
-
-            coverPreview.appendChild(image);
-            return;
-        }
-
-        coverPreview.textContent = "No cover image selected";
-    }
-
-
-    function renderAll() {
-
-        renderProfileType();
-
-        renderThemeOptions();
-
-        renderAvatarMode();
-
-        renderCharacters();
-
-        renderCoverPreview();
-
-
-        renderAvatar(
-            avatar,
-            getDisplayName(),
-            getPreviewImage()
-        );
-
-
-        updatePreview();
-
-    }
-
-
-    function cleanNumber(
-        value
-    ) {
-
-        return String(
-            value || ""
-        )
-            .replace(
-                /\D/g,
-                ""
-            );
-
-    }
-
-
-    /*
-     * IMPORTANT:
-     *
-     * Accepts ANY non-empty URL that starts
-     * with http:// or https://.
-     *
-     * This accepts Facebook URLs containing
-     * query strings, redirects, tracking
-     * parameters, etc.
-     */
-
-    function isValidHttpUrl(
-        value
-    ) {
-
-        const url =
-            String(
-                value || ""
-            ).trim();
-
-
-        if (
-            !url
-        ) {
-
-            return true;
-        }
-
-
-        return /^https?:\/\/.+/i.test(
-            url
-        );
-
-    }
-
-
-    function validateSocialUrls() {
-
-        const urlFields = [
-
-            [
-                "Facebook",
-                "facebook"
-            ],
-
-            [
-                "Instagram",
-                "instagram"
-            ],
-
-            [
-                "TikTok",
-                "tiktok"
-            ],
-
-            [
-                "YouTube",
-                "youtube"
-            ],
-
-            [
-                "Discord",
-                "discord"
-            ],
-
-            [
-                "Telegram",
-                "telegram"
-            ],
-
-            [
-                "Person 1 Instagram",
-                "person1Instagram"
-            ],
-
-            [
-                "Person 2 Instagram",
-                "person2Instagram"
-            ],
-
-            [
-                "Person 1 TikTok",
-                "person1Tiktok"
-            ],
-
-            [
-                "Person 2 TikTok",
-                "person2Tiktok"
-            ],
-
-            [
-                "Shared YouTube",
-                "sharedYoutube"
-            ],
-
-            [
-                "Business Facebook",
-                "businessFacebook"
-            ],
-
-            [
-                "Business Instagram",
-                "businessInstagram"
-            ],
-
-            [
-                "Business TikTok",
-                "businessTiktok"
-            ],
-
-            [
-                "Business YouTube",
-                "businessYoutube"
-            ],
-
-            [
-                "Business Telegram",
-                "businessTelegram"
-            ],
-
-            [
-                "LinkedIn",
-                "linkedin"
-            ],
-
-            [
-                "Website",
-                "website"
-            ],
-
-            [
-                "Google Maps",
-                "googleMaps"
-            ],
-
-            [
-                "Online Store",
-                "onlineStore"
-            ],
-
-            [
-                "Booking Link",
-                "bookingUrl"
-            ],
-
-            [
-                "Menu / Catalogue",
-                "menuUrl"
-            ]
-
-        ];
-
-
-        for (
-            const [
-                label,
-                id
-            ]
-            of urlFields
-        ) {
-
-            const value =
-                getValue(
-                    id
-                );
-
-
-            if (
-                value &&
-                !isValidHttpUrl(
-                    value
-                )
-            ) {
-
-                throw new Error(
-                    `${label} must be a complete URL beginning with http:// or https://`
-                );
-
-            }
-
-        }
-
-    }
-
-
-    function updatePreview() {
-
-        const frame = document.getElementById("themePreviewFrame");
-
-        if (!frame?.contentWindow) {
-            return;
-        }
 
         frame.contentWindow.postMessage(
             {
-                type: "etag-dashboard-preview",
-                profile: buildProfileData()
+
+                type:
+                    "etag-theme-colors",
+
+                colors:
+                    {
+                        ...themeColors
+                    }
+
             },
             window.location.origin
         );
@@ -3213,1722 +726,522 @@
     }
 
 
-    function buildProfileData() {
+    pickers.forEach(
+        picker => {
 
-        const base = {
+            picker.addEventListener(
+                "input",
+                () => {
 
-            profile_type:
-                currentProfileType,
+                    const key =
+                        picker.dataset.themePicker;
 
 
-            template:
-                currentProfileType ===
-                    "personal"
-                        ? currentTemplate
-                        : currentProfileType,
+                    themeColors[key] =
+                        picker.value
+                            .toUpperCase();
 
 
-            avatar_type:
-                avatarType,
+                    refreshControls();
 
+                    sendThemeToPreview();
 
-            character_id:
-                avatarType ===
-                    "character"
-                        ? characterId
-                        : null,
-
-
-            avatar_url:
-                avatarType ===
-                    "upload"
-                        ? (
-                            currentAvatarUrl ||
-                            null
-                        )
-                        : null,
-
-
-            cover_image_url:
-                currentCoverUrl ||
-                null,
-
-
-            updated_at:
-                new Date()
-                    .toISOString()
-
-        };
-
-
-        if (
-            currentProfileType ===
-            "personal"
-        ) {
-
-            return {
-
-                ...base,
-
-                display_name:
-                    getValue(
-                        "personalName"
-                    ),
-
-
-                age:
-                    getValue(
-                        "age"
-                    )
-                        ? Number(
-                            getValue(
-                                "age"
-                            )
-                        )
-                        : null,
-
-
-                phone:
-                    getValue(
-                        "personalPhone"
-                    ),
-
-
-                bio:
-                    getValue(
-                        "personalBio"
-                    ),
-
-
-                facebook:
-                    getValue(
-                        "facebook"
-                    ),
-
-
-                instagram:
-                    getValue(
-                        "instagram"
-                    ),
-
-
-                tiktok:
-                    getValue(
-                        "tiktok"
-                    ),
-
-
-                youtube:
-                    getValue(
-                        "youtube"
-                    ),
-
-
-                whatsapp:
-                    getValue(
-                        "personalWhatsapp"
-                    ),
-
-
-                discord:
-                    getValue(
-                        "discord"
-                    ),
-
-
-                telegram:
-                    getValue(
-                        "telegram"
-                    )
-
-            };
-
-        }
-
-
-        if (
-            currentProfileType ===
-            "couple"
-        ) {
-
-            return {
-
-                ...base,
-
-                display_name:
-                    getValue(
-                        "coupleName"
-                    ),
-
-
-                bio:
-                    getValue(
-                        "coupleBio"
-                    ),
-
-
-                couple_name:
-                    getValue(
-                        "coupleName"
-                    ),
-
-
-                person1_name:
-                    getValue(
-                        "person1Name"
-                    ),
-
-
-                person2_name:
-                    getValue(
-                        "person2Name"
-                    ),
-
-
-                anniversary_date:
-                    getValue(
-                        "anniversaryDate"
-                    ) ||
-                    null,
-
-
-                our_story:
-                    getValue(
-                        "ourStory"
-                    ),
-
-
-                person1_instagram:
-                    getValue(
-                        "person1Instagram"
-                    ),
-
-
-                person2_instagram:
-                    getValue(
-                        "person2Instagram"
-                    ),
-
-
-                person1_tiktok:
-                    getValue(
-                        "person1Tiktok"
-                    ),
-
-
-                person2_tiktok:
-                    getValue(
-                        "person2Tiktok"
-                    ),
-
-
-                shared_youtube:
-                    getValue(
-                        "sharedYoutube"
-                    ),
-
-
-                whatsapp:
-                    getValue(
-                        "coupleWhatsapp"
-                    ),
-
-
-                other_social_links:
-                    getValue(
-                        "otherSocialLinks"
-                    )
-
-            };
-
-        }
-
-
-        return {
-
-            ...base,
-
-            display_name:
-                getValue(
-                    "businessName"
-                ),
-
-
-            bio:
-                getValue(
-                    "businessDescription"
-                ),
-
-
-            business_name:
-                getValue(
-                    "businessName"
-                ),
-
-
-            business_category:
-                getValue(
-                    "businessCategory"
-                ),
-
-
-            business_description:
-                getValue(
-                    "businessDescription"
-                ),
-
-
-            phone:
-                getValue(
-                    "businessPhone"
-                ),
-
-
-            whatsapp:
-                getValue(
-                    "businessWhatsapp"
-                ),
-
-
-            email:
-                getValue(
-                    "businessEmail"
-                ),
-
-
-            business_location:
-                getValue(
-                    "businessLocation"
-                ),
-
-
-            opening_hours:
-                getValue(
-                    "openingHours"
-                ),
-
-
-            website:
-                getValue(
-                    "website"
-                ),
-
-
-            facebook:
-                getValue(
-                    "businessFacebook"
-                ),
-
-
-            instagram:
-                getValue(
-                    "businessInstagram"
-                ),
-
-
-            tiktok:
-                getValue(
-                    "businessTiktok"
-                ),
-
-
-            youtube:
-                getValue(
-                    "businessYoutube"
-                ),
-
-
-            telegram:
-                getValue(
-                    "businessTelegram"
-                ),
-
-
-            linkedin:
-                getValue(
-                    "linkedin"
-                ),
-
-
-            google_maps:
-                getValue(
-                    "googleMaps"
-                ),
-
-
-            online_store:
-                getValue(
-                    "onlineStore"
-                ),
-
-
-            booking_url:
-                getValue(
-                    "bookingUrl"
-                ),
-
-
-            menu_url:
-                getValue(
-                    "menuUrl"
-                )
-
-        };
-
-    }
-
-
-    function fillProfile(
-        profile
-    ) {
-
-        currentProfileType =
-            normalizeProfileType(
-                profile.profile_type
+                }
             );
 
+        }
+    );
 
-        currentTemplate =
-            normalizeTemplate(
-                profile.template
+
+    hexInputs.forEach(
+        input => {
+
+            input.addEventListener(
+                "change",
+                () => {
+
+                    const key =
+                        input.dataset.themeHex;
+
+
+                    themeColors[key] =
+                        normalizeHex(
+                            input.value,
+                            themeColors[key]
+                        );
+
+
+                    refreshControls();
+
+                    sendThemeToPreview();
+
+                }
             );
 
-
-        avatarType =
-            profile.avatar_type ===
-                "character"
-                    ? "character"
-                    : "upload";
-
-
-        characterId =
-            profile.character_id ||
-            "";
-
-
-        currentAvatarUrl =
-            profile.avatar_url ||
-            "";
-
-
-        currentCoverUrl =
-            profile.cover_image_url ||
-            "";
-
-
-        setValue(
-            "personalName",
-            profile.display_name
-        );
-
-
-        setValue(
-            "age",
-            profile.age
-        );
-
-
-        setValue(
-            "personalPhone",
-            profile.phone
-        );
-
-
-        setValue(
-            "personalBio",
-            profile.bio
-        );
-
-
-        setValue(
-            "facebook",
-            profile.facebook
-        );
-
-
-        setValue(
-            "instagram",
-            profile.instagram
-        );
-
-
-        setValue(
-            "tiktok",
-            profile.tiktok
-        );
-
-
-        setValue(
-            "youtube",
-            profile.youtube
-        );
-
-
-        setValue(
-            "personalWhatsapp",
-            profile.whatsapp
-        );
-
-
-        setValue(
-            "discord",
-            profile.discord
-        );
-
-
-        setValue(
-            "telegram",
-            profile.telegram
-        );
-
-
-        setValue(
-            "coupleName",
-            profile.couple_name
-        );
-
-
-        setValue(
-            "person1Name",
-            profile.person1_name
-        );
-
-
-        setValue(
-            "person2Name",
-            profile.person2_name
-        );
-
-
-        setValue(
-            "anniversaryDate",
-            profile.anniversary_date
-        );
-
-
-        setValue(
-            "ourStory",
-            profile.our_story
-        );
-
-
-        setValue(
-            "coupleBio",
-            profile.bio
-        );
-
-
-        setValue(
-            "person1Instagram",
-            profile.person1_instagram
-        );
-
-
-        setValue(
-            "person2Instagram",
-            profile.person2_instagram
-        );
-
-
-        setValue(
-            "person1Tiktok",
-            profile.person1_tiktok
-        );
-
-
-        setValue(
-            "person2Tiktok",
-            profile.person2_tiktok
-        );
-
-
-        setValue(
-            "sharedYoutube",
-            profile.shared_youtube
-        );
-
-
-        setValue(
-            "coupleWhatsapp",
-            profile.whatsapp
-        );
-
-
-        setValue(
-            "otherSocialLinks",
-            profile.other_social_links
-        );
-
-
-        setValue(
-            "businessName",
-            profile.business_name ||
-            profile.display_name
-        );
-
-
-        setValue(
-            "businessCategory",
-            profile.business_category
-        );
-
-
-        setValue(
-            "businessDescription",
-            profile.business_description ||
-            profile.bio
-        );
-
-
-        setValue(
-            "businessPhone",
-            profile.phone
-        );
-
-
-        setValue(
-            "businessWhatsapp",
-            profile.whatsapp
-        );
-
-
-        setValue(
-            "businessEmail",
-            profile.email
-        );
-
-
-        setValue(
-            "businessLocation",
-            profile.business_location
-        );
-
-
-        setValue(
-            "openingHours",
-            profile.opening_hours
-        );
-
-
-        setValue(
-            "website",
-            profile.website
-        );
-
-
-        setValue(
-            "businessFacebook",
-            profile.facebook
-        );
-
-
-        setValue(
-            "businessInstagram",
-            profile.instagram
-        );
-
-
-        setValue(
-            "businessTiktok",
-            profile.tiktok
-        );
-
-
-        setValue(
-            "businessYoutube",
-            profile.youtube
-        );
-
-
-        setValue(
-            "businessTelegram",
-            profile.telegram
-        );
-
-
-        setValue(
-            "linkedin",
-            profile.linkedin
-        );
-
-
-        setValue(
-            "googleMaps",
-            profile.google_maps
-        );
-
-
-        setValue(
-            "onlineStore",
-            profile.online_store
-        );
-
-
-        setValue(
-            "bookingUrl",
-            profile.booking_url
-        );
-
-
-        setValue(
-            "menuUrl",
-            profile.menu_url
-        );
-
-
-        renderAll();
-
-    }
-
-
-    async function uploadAvatar(
-        file
-    ) {
-
-        if (
-            !file
-        ) {
-
-            return;
         }
+    );
 
 
-        if (
-            !ALLOWED_TYPES.has(
-                file.type
-            )
-        ) {
-
-            throw new Error(
-                "Only JPG, PNG and WEBP images are allowed."
-            );
-        }
-
-
-        if (
-            file.size >
-            MAX_FILE_SIZE
-        ) {
-
-            throw new Error(
-                "Image must be 1 MB or smaller."
-            );
-        }
-
+    async function getCurrentUser()
+    {
 
         const {
-            data:
-                sessionData,
-            error:
-                sessionError
+            data,
+            error
         } =
             await supabase.auth.getSession();
 
 
         if (
-            sessionError
-        ) {
+            error
+        )
+        {
 
-            throw new Error(
-                `Session error: ${sessionError.message}`
-            );
+            throw error;
+
         }
 
 
-        if (
-            !sessionData?.session
-        ) {
-
-            throw new Error(
-                "Your login session has expired."
-            );
-        }
-
-
-        uploadStatus.textContent =
-            "Preparing upload...";
-
-
-        const response =
-            await fetch(
-                AVATAR_UPLOAD_FUNCTION,
-                {
-
-                    method:
-                        "POST",
-
-                    headers: {
-
-                        "Authorization":
-                            `Bearer ${
-                                sessionData.session.access_token
-                            }`,
-
-                        "apikey":
-                            SUPABASE_PUBLISHABLE_KEY,
-
-                        "Content-Type":
-                            "application/json"
-
-                    },
-
-                    body:
-                        JSON.stringify(
-                            {
-
-                                fileName:
-                                    file.name,
-
-                                contentType:
-                                    file.type,
-
-                                fileSize:
-                                    file.size
-
-                            }
-                        )
-
-                }
-            );
-
-
-        let result;
-
-
-        try {
-
-            result =
-                await response.json();
-
-        } catch {
-
-            result =
-                null;
-        }
-
-
-        if (
-            !response.ok ||
-            !result?.success
-        ) {
-
-            throw new Error(
-                result?.message ||
-                `Upload URL request failed: ${response.status}`
-            );
-        }
-
-
-        uploadStatus.textContent =
-            "Uploading photo...";
-
-
-        const uploadResponse =
-            await fetch(
-                result.uploadUrl,
-                {
-
-                    method:
-                        "PUT",
-
-                    headers: {
-
-                        "Content-Type":
-                            file.type
-
-                    },
-
-                    body:
-                        file
-
-                }
-            );
-
-
-        if (
-            !uploadResponse.ok
-        ) {
-
-            throw new Error(
-                `R2 upload failed: ${uploadResponse.status}`
-            );
-        }
-
-
-        currentAvatarUrl =
-            `${R2_PUBLIC_URL}/${result.objectKey}`;
-
-
-        avatarType =
-            "upload";
-
-
-        renderAll();
-
-
-        uploadStatus.textContent =
-            "Photo uploaded. Click Save Profile.";
-
-
-        uploadStatus.style.color =
-            "#065f46";
+        return (
+            data?.session?.user ||
+            null
+        );
 
     }
 
 
-    async function uploadCoverImage(file) {
+    async function loadSavedTheme()
+    {
 
-        if (!file) {
-            return;
-        }
+        try
+        {
 
-        if (!ALLOWED_TYPES.has(file.type)) {
-            throw new Error("Only JPG, PNG and WEBP images are allowed.");
-        }
-
-        if (file.size > MAX_FILE_SIZE) {
-            throw new Error("Cover image must be 1 MB or smaller.");
-        }
-
-        const { data: sessionData, error: sessionError } =
-            await supabase.auth.getSession();
-
-        if (sessionError) {
-            throw new Error(`Session error: ${sessionError.message}`);
-        }
-
-        if (!sessionData?.session) {
-            throw new Error("Your login session has expired.");
-        }
-
-        coverStatus.textContent = "Preparing cover upload...";
-        coverStatus.style.color = "#6b7280";
-
-        const response = await fetch(
-            AVATAR_UPLOAD_FUNCTION,
-            {
-                method: "POST",
-                headers: {
-                    "Authorization": `Bearer ${sessionData.session.access_token}`,
-                    "apikey": SUPABASE_PUBLISHABLE_KEY,
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    fileName: file.name,
-                    contentType: file.type,
-                    fileSize: file.size
-                })
-            }
-        );
-
-        let result = null;
-
-        try {
-            result = await response.json();
-        } catch {}
-
-        if (!response.ok || !result?.success) {
-            throw new Error(
-                result?.message ||
-                `Upload URL request failed: ${response.status}`
-            );
-        }
-
-        coverStatus.textContent = "Uploading cover image...";
-
-        const uploadResponse = await fetch(
-            result.uploadUrl,
-            {
-                method: "PUT",
-                headers: {
-                    "Content-Type": file.type
-                },
-                body: file
-            }
-        );
-
-        if (!uploadResponse.ok) {
-            throw new Error(`R2 upload failed: ${uploadResponse.status}`);
-        }
-
-        currentCoverUrl =
-            `${R2_PUBLIC_URL}/${result.objectKey}`;
-
-        renderAll();
-
-        coverStatus.textContent =
-            "Cover uploaded. Click Save Profile.";
-
-        coverStatus.style.color = "#065f46";
-    }
-
-
-    async function loadDashboard() {
-
-        try {
-
-            loading.textContent =
-                "Checking login session...";
-
-
-            const {
-                data:
-                    sessionData,
-                error:
-                    sessionError
-            } =
-                await supabase.auth.getSession();
+            const user =
+                await getCurrentUser();
 
 
             if (
-                sessionError
-            ) {
-
-                throw new Error(
-                    `Session error: ${sessionError.message}`
-                );
-            }
-
-
-            const session =
-                sessionData?.session;
-
-
-            if (
-                !session?.user
-            ) {
-
-                window.location.replace(
-                    "/E-Tag/"
-                );
+                !user
+            )
+            {
 
                 return;
+
             }
-
-
-            currentUser =
-                session.user;
-
-
-            loading.textContent =
-                "Finding your E-Tag...";
 
 
             const {
-                data:
-                    tag,
-                error:
-                    tagError
-            } =
-                await supabase
-                    .from(
-                        "nfc_tags"
-                    )
-                    .select(
-                        "id,tag_code,owner_id,active"
-                    )
-                    .eq(
-                        "owner_id",
-                        currentUser.id
-                    )
-                    .eq(
-                        "active",
-                        true
-                    )
-                    .limit(1)
-                    .maybeSingle();
-
-
-            if (
-                tagError
-            ) {
-
-                throw new Error(
-                    `E-Tag lookup failed: ${tagError.message}`
-                );
-            }
-
-
-            if (
-                !tag
-            ) {
-
-                throw new Error(
-                    "No active E-Tag was found for this account."
-                );
-            }
-
-
-            currentTag =
-                tag;
-
-
-            tagBadge.textContent =
-                tag.tag_code;
-
-
-            loading.textContent =
-                "Loading your profile...";
-
-
-            const {
-                data:
-                    profile,
-                error:
-                    profileError
+                data,
+                error
             } =
                 await supabase
                     .from(
                         "profiles"
                     )
                     .select(
-                        "*"
+                        "theme_colors"
                     )
                     .eq(
                         "id",
-                        currentUser.id
+                        user.id
                     )
                     .maybeSingle();
 
 
             if (
-                profileError
-            ) {
+                error
+            )
+            {
 
-                throw new Error(
-                    `Profile lookup failed: ${profileError.message}`
+                console.error(
+                    "Theme color load error:",
+                    error
                 );
+
+                return;
+
             }
 
 
             if (
-                profile
-            ) {
+                data?.theme_colors &&
+                typeof data.theme_colors ===
+                    "object"
+            )
+            {
 
-                profileExists =
-                    true;
+                themeColors =
+                {
 
+                    ...DEFAULT_THEME,
 
-                fillProfile(
-                    profile
-                );
-
-            } else {
-
-                profileExists =
-                    false;
-
-
-                currentProfileType =
-                    "personal";
-
-
-                currentTemplate =
-                    "men";
-
-
-                avatarType =
-                    "upload";
-
-
-                characterId =
-                    "";
-
-
-                currentAvatarUrl =
-                    "";
-
-
-                renderAll();
-            }
-
-
-            /*
-             * Permanent public E-Tag URL.
-             */
-
-            openPublicButton.onclick =
-                () => {
-
-                    const publicUrl =
-                        `${window.location.origin}/E-Tag/?tag=${encodeURIComponent(
-                            currentTag.tag_code
-                        )}`;
-
-
-                    window.open(
-                        publicUrl,
-                        "_blank",
-                        "noopener,noreferrer"
-                    );
+                    ...data.theme_colors
 
                 };
 
-
-            loading.classList.add(
-                "hidden"
-            );
+            }
 
 
-            dashboard.classList.remove(
-                "hidden"
-            );
+            refreshControls();
 
+            sendThemeToPreview();
 
-        } catch (
+        }
+        catch (
             error
-        ) {
+        )
+        {
 
             console.error(
-                "DASHBOARD LOAD ERROR:",
+                "Theme color loading failed:",
                 error
             );
-
-
-            loading.textContent =
-                `Dashboard failed to load: ${
-                    error?.message ||
-                    "Unknown error"
-                }`;
-
-
-            loading.style.color =
-                "#991b1b";
-
-
-            loading.style.background =
-                "#fef2f2";
-
-
-            loading.style.borderColor =
-                "#fecaca";
 
         }
 
     }
 
 
-    async function saveProfile() {
+    async function saveTheme()
+    {
 
-        if (
-            !currentUser
-        ) {
-
-            showMessage(
-                "No logged-in user found.",
-                "error"
+        const saveButton =
+            document.getElementById(
+                "etagThemeSave"
             );
 
-            return;
+
+        if (
+            saveButton
+        )
+        {
+
+            saveButton.disabled =
+                true;
+
+            saveButton.textContent =
+                "Saving...";
+
         }
 
 
-        saveButton.disabled =
-            true;
+        try
+        {
 
-
-        saveButton.textContent =
-            "Saving...";
-
-
-        try {
-
-            const data =
-                buildProfileData();
+            const user =
+                await getCurrentUser();
 
 
             if (
-                profileExists
-            ) {
+                !user
+            )
+            {
 
-                const {
-                    error
-                } =
-                    await supabase
-                        .from(
-                            "profiles"
-                        )
-                        .update(
-                            data
-                        )
-                        .eq(
-                            "id",
-                            currentUser.id
-                        );
+                throw new Error(
+                    "You must be logged in."
+                );
 
-
-                if (
-                    error
-                ) {
-
-                    throw new Error(
-                        `Profile update failed: ${error.message}`
-                    );
-                }
-
-            } else {
-
-                const {
-                    error
-                } =
-                    await supabase
-                        .from(
-                            "profiles"
-                        )
-                        .insert(
-                            {
-
-                                id:
-                                    currentUser.id,
-
-                                ...data,
-
-                                created_at:
-                                    new Date()
-                                        .toISOString()
-
-                            }
-                        );
-
-
-                if (
-                    error
-                ) {
-
-                    throw new Error(
-                        `Profile creation failed: ${error.message}`
-                    );
-                }
-
-
-                profileExists =
-                    true;
             }
 
 
-            showMessage(
-                "Profile saved successfully.",
-                "success"
+            const {
+                error
+            } =
+                await supabase
+                    .from(
+                        "profiles"
+                    )
+                    .update(
+                        {
+
+                            theme_colors:
+                                {
+                                    ...themeColors
+                                },
+
+                            updated_at:
+                                new Date()
+                                    .toISOString()
+
+                        }
+                    )
+                    .eq(
+                        "id",
+                        user.id
+                    );
+
+
+            if (
+                error
+            )
+            {
+
+                throw error;
+
+            }
+
+
+            if (
+                saveButton
+            )
+            {
+
+                saveButton.textContent =
+                    "Saved";
+
+            }
+
+
+            setTimeout(
+                () => {
+
+                    if (
+                        saveButton
+                    )
+                    {
+
+                        saveButton.textContent =
+                            "Save Theme";
+
+                    }
+
+                },
+                1300
             );
 
-
-        } catch (
+        }
+        catch (
             error
-        ) {
+        )
+        {
 
             console.error(
-                "PROFILE SAVE ERROR:",
+                "Theme color save error:",
                 error
             );
 
 
-            showMessage(
-                error.message ||
-                "Failed to save profile.",
-                "error"
+            if (
+                saveButton
+            )
+            {
+
+                saveButton.disabled =
+                    false;
+
+                saveButton.textContent =
+                    "Save Theme";
+
+            }
+
+            alert(
+                error?.message ||
+                "Failed to save theme colors."
             );
 
 
-        } finally {
+            return;
+
+        }
+
+
+        if (
+            saveButton
+        )
+        {
 
             saveButton.disabled =
                 false;
 
-
-            saveButton.textContent =
-                "Save Profile";
         }
 
     }
 
 
-    /*
-     * PROFILE TYPE
-     */
+    document
+        .getElementById(
+            "etagThemeSave"
+        )
+        ?.addEventListener(
+            "click",
+            saveTheme
+        );
 
-    profileTypeChoices.forEach(
-        choice => {
 
-            choice.addEventListener(
-                "click",
-                () => {
+    document
+        .getElementById(
+            "etagThemeReset"
+        )
+        ?.addEventListener(
+            "click",
+            () => {
 
-                    currentProfileType =
-                        normalizeProfileType(
-                            choice.dataset.type
-                        );
+                themeColors =
+                {
 
+                    ...DEFAULT_THEME
 
-                    if (
-                        currentProfileType ===
-                        "couple"
-                    ) {
+                };
 
-                        currentTemplate =
-                            "couple";
 
-                    } else if (
-                        currentProfileType ===
-                        "business"
-                    ) {
+                refreshControls();
 
-                        currentTemplate =
-                            "business";
-
-                    } else if (
-                        ![
-                            "men",
-                            "women"
-                        ].includes(
-                            currentTemplate
-                        )
-                    ) {
-
-                        currentTemplate =
-                            "men";
-                    }
-
-
-                    characterId =
-                        "";
-
-
-                    renderAll();
-
-                }
-            );
-
-        }
-    );
-
-
-    /*
-     * PERSONAL THEME
-     */
-
-    personalThemeChoices.forEach(
-        choice => {
-
-            choice.addEventListener(
-                "click",
-                () => {
-
-                    currentTemplate =
-                        normalizeTemplate(
-                            choice.dataset.template
-                        );
-
-
-                    if (
-                        avatarType ===
-                        "character"
-                    ) {
-
-                        characterId =
-                            "";
-                    }
-
-
-                    renderAll();
-
-                }
-            );
-
-        }
-    );
-
-
-    /*
-     * AVATAR MODE
-     */
-
-    avatarModeChoices.forEach(
-        choice => {
-
-            choice.addEventListener(
-                "click",
-                () => {
-
-                    avatarType =
-                        choice.dataset.avatarType ===
-                            "character"
-                                ? "character"
-                                : "upload";
-
-
-                    renderAvatarMode();
-
-
-                    if (
-                        avatarType ===
-                        "character"
-                    ) {
-
-                        renderCharacters();
-
-                    } else {
-
-                        renderAvatar(
-                            avatar,
-                            getDisplayName(),
-                            currentAvatarUrl
-                        );
-                    }
-
-
-                    updatePreview();
-
-                }
-            );
-
-        }
-    );
-
-
-    /*
-     * AVATAR UPLOAD
-     */
-
-    avatarFile.addEventListener(
-        "change",
-        async () => {
-
-            const file =
-                avatarFile.files?.[0];
-
-
-            if (
-                !file
-            ) {
-
-                return;
-            }
-
-
-            try {
-
-                uploadStatus.style.color =
-                    "#6b7280";
-
-
-                await uploadAvatar(
-                    file
-                );
-
-            } catch (
-                error
-            ) {
-
-                console.error(
-                    "AVATAR ERROR:",
-                    error
-                );
-
-
-                uploadStatus.textContent =
-                    error.message ||
-                    "Upload failed.";
-
-
-                uploadStatus.style.color =
-                    "#991b1b";
-
-
-                avatarFile.value =
-                    "";
-            }
-
-        }
-    );
-
-
-    coverFile.addEventListener(
-        "change",
-        async () => {
-
-            const file = coverFile.files?.[0];
-
-            if (!file) {
-                return;
-            }
-
-            try {
-                await uploadCoverImage(file);
-            } catch (error) {
-                console.error("COVER ERROR:", error);
-                coverStatus.textContent =
-                    error.message || "Cover upload failed.";
-                coverStatus.style.color = "#991b1b";
-                coverFile.value = "";
-            }
-
-        }
-    );
-
-
-    /*
-     * LIVE PREVIEW
-     */
-
-    fieldIds.forEach(
-        id => {
-
-            if (
-                fields[id]
-            ) {
-
-                fields[id].addEventListener(
-                    "input",
-                    updatePreview
-                );
-
-
-                fields[id].addEventListener(
-                    "change",
-                    updatePreview
-                );
-            }
-
-        }
-    );
-
-
-    window.addEventListener("message", event => {
-
-        if (
-            event.origin === window.location.origin &&
-            event.data?.type === "etag-men-preview-ready"
-        ) {
-            updatePreview();
-        }
-
-    });
-
-
-    /*
-     * SAVE
-     */
-
-    saveButton.addEventListener(
-        "click",
-        saveProfile
-    );
-
-
-    /*
-     * LOGOUT
-     */
-
-    logoutButton.addEventListener(
-        "click",
-        async () => {
-
-            const tagCode =
-                currentTag?.tag_code;
-
-
-            try {
-
-                await supabase.auth.signOut();
-
-            } finally {
-
-                if (
-                    tagCode
-                ) {
-
-                    window.location.replace(
-                        `/E-Tag/?tag=${encodeURIComponent(
-                            tagCode
-                        )}`
-                    );
-
-                } else {
-
-                    window.location.replace(
-                        "/E-Tag/"
-                    );
-                }
-
-            }
-
-        }
-    );
-
-
-    /*
-     * AUTH STATE
-     */
-
-    supabase.auth.onAuthStateChange(
-        event => {
-
-            if (
-                event ===
-                "SIGNED_OUT"
-            ) {
-
-                const tagCode =
-                    currentTag?.tag_code;
-
-
-                if (
-                    tagCode
-                ) {
-
-                    window.location.replace(
-                        `/E-Tag/?tag=${encodeURIComponent(
-                            tagCode
-                        )}`
-                    );
-
-                } else {
-
-                    window.location.replace(
-                        "/E-Tag/"
-                    );
-                }
-
-            }
-
-        }
-    );
-
-
-    /*
-     * START DASHBOARD
-     */
-
-    loadDashboard()
-        .catch(
-            error => {
-
-                console.error(
-                    "FATAL DASHBOARD ERROR:",
-                    error
-                );
-
-
-                loading.textContent =
-                    `Dashboard failed to load: ${
-                        error?.message ||
-                        "Unknown error"
-                    }`;
-
-
-                loading.style.color =
-                    "#991b1b";
-
-
-                loading.style.background =
-                    "#fef2f2";
-
-
-                loading.style.borderColor =
-                    "#fecaca";
+                sendThemeToPreview();
 
             }
         );
+
+
+    const originalSave =
+        document.getElementById(
+            "saveButton"
+        );
+
+
+    if (
+        originalSave
+    )
+    {
+
+        originalSave.addEventListener(
+            "click",
+            () => {
+
+                setTimeout(
+                    saveTheme,
+                    700
+                );
+
+            }
+        );
+
+    }
+
+
+    window.addEventListener(
+        "message",
+        event => {
+
+            if (
+                event.origin !==
+                window.location.origin
+            )
+            {
+
+                return;
+
+            }
+
+
+            if (
+                event.data?.type ===
+                "etag-men-preview-ready"
+            )
+            {
+
+                sendThemeToPreview();
+
+            }
+
+        }
+    );
+
+
+    window.addEventListener(
+        "load",
+        () => {
+
+            setTimeout(
+                () => {
+
+                    createPanel();
+
+                    loadSavedTheme();
+
+                },
+                700
+            );
+
+        }
+    );
+
+    if (
+        document.readyState !==
+        "loading"
+    )
+    {
+
+        setTimeout(
+            () => {
+
+                createPanel();
+
+                loadSavedTheme();
+
+            },
+            700
+        );
+
+    }
+
+</script>
+
+`;
+
+
+        const insertBefore =
+            "</body>";
+
+
+        html =
+            html.replace(
+                insertBefore,
+                extraScript +
+                insertBefore
+            );
+
+
+        document.open();
+
+        document.write(
+            html
+        );
+
+        document.close();
+
+    }
+)
+.catch(
+    error => {
+
+        document.body.innerHTML = `
+
+            <div
+                style="
+                    min-height:100vh;
+                    display:flex;
+                    align-items:center;
+                    justify-content:center;
+                    padding:24px;
+                    font-family:system-ui,sans-serif;
+                    color:#253027;
+                    background:#d3dbc8;
+                    text-align:center;
+                "
+            >
+
+                Unable to load dashboard.
+
+                <br>
+
+                ${String(error?.message || "")}
+
+            </div>
+
+        `;
+
+    }
+);
 
 </script>
 
