@@ -12,1863 +12,955 @@
 
     <title>E-Tag · Men</title>
 
-    <style>
-
-        * {
-            box-sizing: border-box;
-        }
-
-        :root {
-            --main: #d3dbc8;
-            --main-light: #e5eadf;
-            --main-soft: rgba(211, 219, 200, .72);
-            --main-glass: rgba(211, 219, 200, .30);
-            --main-border: rgba(255, 255, 255, .48);
-            --text: #253027;
-            --text-soft: rgba(37, 48, 39, .68);
-            --text-muted: rgba(37, 48, 39, .50);
-            --white: #ffffff;
-            --shadow:
-                0 20px 55px
-                rgba(43, 57, 45, .14);
-        }
-
-        html,
-        body {
-            width: 100%;
-            height: 100%;
-            margin: 0;
-            overflow: hidden;
-        }
-
-        body {
-            min-height: 100dvh;
-            font-family:
-                Inter,
-                system-ui,
-                -apple-system,
-                BlinkMacSystemFont,
-                "Segoe UI",
-                sans-serif;
-            color: var(--text);
-            background:
-                radial-gradient(
-                    ellipse at 70% 18%,
-                    rgba(255,255,255,.92)
-                    0%,
-                    rgba(255,255,255,.45)
-                    27%,
-                    transparent 57%
-                ),
-                radial-gradient(
-                    ellipse at 15% 75%,
-                    rgba(194,207,184,.60)
-                    0%,
-                    rgba(211,219,200,.38)
-                    35%,
-                    transparent 70%
-                ),
-                linear-gradient(
-                    135deg,
-                    #c3cdb8 0%,
-                    #d3dbc8 38%,
-                    #e1e7da 68%,
-                    #cbd5c2 100%
-                );
-            -webkit-font-smoothing: antialiased;
-            text-rendering: optimizeLegibility;
-            overscroll-behavior: none;
-        }
-
-        body::before {
-            content: "";
-            position: fixed;
-            inset: 0;
-            pointer-events: none;
-            background:
-                radial-gradient(
-                    ellipse at 72% 24%,
-                    rgba(255,255,255,.40),
-                    transparent 32%
-                ),
-                radial-gradient(
-                    ellipse at 20% 15%,
-                    rgba(255,255,255,.26),
-                    transparent 22%
-                );
-            z-index: 0;
-        }
-
-        body::after {
-            content: "";
-            position: fixed;
-            inset: 0;
-            pointer-events: none;
-            background:
-                linear-gradient(
-                    90deg,
-                    rgba(255,255,255,.08),
-                    transparent 40%
-                );
-            z-index: 0;
-        }
-
-        a {
-            color: inherit;
-            text-decoration: none;
-        }
-
-        button {
-            font: inherit;
-        }
-
-        .app {
-            position: relative;
-            z-index: 1;
-            width: 100%;
-            height: 100dvh;
-            min-height: 100dvh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding:
-                max(10px, env(safe-area-inset-top))
-                max(10px, env(safe-area-inset-right))
-                max(10px, env(safe-area-inset-bottom))
-                max(10px, env(safe-area-inset-left));
-        }
-
-        .profile {
-            position: relative;
-            width: min(100%, 560px);
-            height: min(100%, 900px);
-            max-height: 100dvh;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-            background: rgba(255,255,255,.08);
-            border-radius: 30px;
-            box-shadow: var(--shadow);
-        }
-
-        .cover-image {
-            position: relative;
-            width: calc(100% + 48px);
-            height: 150px;
-            margin: -34px -24px 0;
-            border-radius: 0 0 24px 24px;
-            overflow: hidden;
-            display: none;
-            background: rgba(255,255,255,.28);
-            border: 1px solid rgba(255,255,255,.45);
-            box-shadow: 0 10px 24px rgba(55,69,57,.10);
-        }
-
-        .cover-image img {
-            width: 100%;
-            height: 100%;
-            display: block;
-            object-fit: cover;
-        }
-
-        .hero {
-            position: relative;
-            flex: 0 0 auto;
-            padding:
-                clamp(20px, 3.4vh, 34px)
-                24px
-                clamp(14px, 2.5vh, 23px);
-            text-align: center;
-        }
-
-        .hero::after {
-            content: "";
-            position: absolute;
-            width: 230px;
-            height: 150px;
-            top: -90px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(255,255,255,.38);
-            filter: blur(38px);
-            border-radius: 50%;
-            pointer-events: none;
-        }
-
-        .avatar {
-            position: relative;
-            z-index: 5;
-            width: clamp(70px, 10.5vh, 104px);
-            height: clamp(70px, 10.5vh, 104px);
-            margin: -52px auto clamp(8px, 1.5vh, 14px);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-            border-radius: 50%;
-            background: linear-gradient(145deg, #eef2e9, #c2cdb8);
-            border: 3px solid rgba(255,255,255,.70);
-            box-shadow: 0 12px 30px rgba(60,74,62,.16);
-            font-size: clamp(24px, 3.8vh, 34px);
-            font-weight: 800;
-            letter-spacing: -1px;
-            color: var(--text);
-        }
-
-        .avatar img {
-            width: 100%;
-            height: 100%;
-            display: block;
-            object-fit: cover;
-        }
-
-        .avatar.character img {
-            object-fit: contain;
-            padding: 7px;
-        }
-
-        h1 {
-            position: relative;
-            z-index: 1;
-            margin: 0;
-            font-size: clamp(23px, 3.3vh, 30px);
-            line-height: 1.12;
-            letter-spacing: -.7px;
-            color: var(--text);
-        }
-
-        .age {
-            position: relative;
-            z-index: 1;
-            margin-top: 5px;
-            color: var(--text-soft);
-            font-size: 12px;
-        }
-
-        .bio {
-            position: relative;
-            z-index: 1;
-            max-width: 430px;
-            margin: clamp(7px, 1.3vh, 12px) auto 0;
-            color: var(--text-soft);
-            font-size: clamp(11px, 1.65vh, 14px);
-            line-height: 1.42;
-            white-space: pre-line;
-        }
-
-        .content {
-            flex: 1 1 auto;
-            min-height: 0;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-        }
-
-        .section {
-            padding: clamp(12px, 2.1vh, 22px) 20px 0;
-        }
-
-        .section-header {
-            margin-bottom: clamp(7px, 1.25vh, 12px);
-        }
-
-        .section-title {
-            margin: 0;
-            color: var(--text);
-            font-size: clamp(17px, 2.6vh, 21px);
-            line-height: 1.15;
-            letter-spacing: -.35px;
-        }
-
-        .section-subtitle {
-            margin: 3px 0 0;
-            color: var(--text-muted);
-            font-size: 11px;
-        }
-
-        .contacts {
-            display: flex;
-            flex-direction: column;
-            gap: clamp(5px, .8vh, 8px);
-        }
-
-        .contact-item {
-            width: 100%;
-            min-height: clamp(45px, 6.3vh, 60px);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 7px 14px;
-            border: 1px solid var(--main-border);
-            border-radius: 16px;
-            background: linear-gradient(100deg, rgba(255,255,255,.48), rgba(211,219,200,.68));
-            box-shadow: 0 7px 18px rgba(54,67,56,.10);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            transition: transform .2s ease, box-shadow .2s ease, background .2s ease;
-        }
-
-        .contact-item:hover {
-            background: linear-gradient(100deg, rgba(255,255,255,.62), rgba(211,219,200,.82));
-            box-shadow: 0 10px 22px rgba(54,67,56,.14);
-        }
-
-        .contact-item:active {
-            transform: scale(.985);
-        }
-
-        .contact-inner {
-            width: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 11px;
-            text-align: center;
-        }
-
-        .contact-icon {
-            width: 36px;
-            height: 36px;
-            flex: 0 0 36px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 10px;
-            background: rgba(255,255,255,.46);
-            border: 1px solid rgba(255,255,255,.48);
-            overflow: hidden;
-        }
-
-        .contact-icon img {
-            width: 21px;
-            height: 21px;
-            object-fit: contain;
-            display: block;
-        }
-
-        .contact-info {
-            min-width: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .contact-label {
-            margin-bottom: 2px;
-            color: var(--text-muted);
-            font-size: 9px;
-            line-height: 1.15;
-        }
-
-        .contact-value {
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            color: var(--text);
-            font-size: 12px;
-            font-weight: 700;
-        }
-
-        .social-section {
-            flex: 1 1 auto;
-            min-height: 0;
-            display: flex;
-            flex-direction: column;
-            padding-top: clamp(10px, 1.8vh, 18px);
-        }
-
-        .social-section .section-header {
-            flex: 0 0 auto;
-        }
-
-        .social-window {
-            position: relative;
-            width: calc(100% + 40px);
-            margin-left: -20px;
-            flex: 0 0 auto;
-            overflow: hidden;
-            padding: 10px 0 10px;
-            touch-action: pan-y;
-            user-select: none;
-            -webkit-user-select: none;
-            overscroll-behavior: contain;
-        }
-
-        .social-track {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 16px;
-            width: max-content;
-            padding: 8px 0;
-            will-change: transform;
-            cursor: grab;
-            transform: translate3d(0,0,0);
-            backface-visibility: hidden;
-            -webkit-backface-visibility: hidden;
-        }
-
-        .social-track.dragging {
-            cursor: grabbing;
-        }
-
-        .social-item {
-            position: relative;
-            width: 66px;
-            height: 66px;
-            flex: 0 0 66px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 1px solid rgba(255,255,255,.58);
-            padding: 0;
-            border-radius: 50%;
-            background: linear-gradient(145deg, rgba(255,255,255,.72), rgba(211,219,200,.82));
-            box-shadow: 0 8px 20px rgba(55,69,57,.13);
-            cursor: pointer;
-            -webkit-tap-highlight-color: transparent;
-            transition: transform .34s cubic-bezier(.22,.8,.25,1), opacity .28s ease, box-shadow .28s ease;
-        }
-
-        .social-item img {
-            width: 35px;
-            height: 35px;
-            object-fit: contain;
-            pointer-events: none;
-            transition: width .34s cubic-bezier(.22,.8,.25,1), height .34s cubic-bezier(.22,.8,.25,1);
-        }
-
-        .social-item.active {
-            width: 76px;
-            height: 76px;
-            flex-basis: 76px;
-            transform: translateY(-3px);
-            background: linear-gradient(145deg, rgba(255,255,255,.94), rgba(211,219,200,.94));
-            box-shadow: 0 15px 30px rgba(55,69,57,.18);
-            z-index: 3;
-        }
-
-        .social-item.active img {
-            width: 44px;
-            height: 44px;
-        }
-
-        .social-item.near {
-            transform: scale(.90);
-        }
-
-        .social-item.hidden-social {
-            opacity: 0;
-            pointer-events: none;
-        }
-
-        .social-info {
-            flex: 0 0 44px;
-            height: 44px;
-            min-height: 44px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            overflow: hidden;
-            margin-top: -1px;
-            transition: opacity .16s ease, transform .16s ease;
-        }
-
-        .social-info.changing {
-            opacity: 0;
-            transform: translateY(4px);
-        }
-
-        .social-name {
-            width: 100%;
-            margin: 0;
-            color: var(--text);
-            font-size: 14px;
-            font-weight: 800;
-            line-height: 17px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .social-username {
-            width: 100%;
-            margin: 2px 0 0;
-            color: var(--text-muted);
-            font-size: 11px;
-            line-height: 14px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .swipe-hint {
-            flex: 0 0 17px;
-            height: 17px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-            color: var(--text-muted);
-            font-size: 9px;
-        }
-
-        .swipe-line {
-            width: 19px;
-            height: 1px;
-            background: rgba(37,48,39,.20);
-        }
-
-        .bottom {
-            position: absolute;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            z-index: 100;
-            height: 40px;
-            display: flex;
-            align-items: flex-start;
-            justify-content: center;
-            padding: 5px 20px max(6px, env(safe-area-inset-bottom));
-            pointer-events: none;
-        }
-
-        .edit-button {
-            pointer-events: auto;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 24px;
-            padding: 4px 9px;
-            border-radius: 999px;
-            background: rgba(255,255,255,.32);
-            border: 1px solid rgba(255,255,255,.40);
-            color: var(--text-muted);
-            font-size: 8px;
-            font-weight: 600;
-            letter-spacing: .1px;
-            opacity: .66;
-            transition: opacity .2s ease, background .2s ease, transform .2s ease;
-        }
-
-        .edit-button:hover {
-            opacity: 1;
-            background: rgba(255,255,255,.52);
-        }
-
-        .edit-button:active {
-            transform: scale(.96);
-        }
-
-        .loading {
-            position: fixed;
-            inset: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            color: var(--text);
-            font-size: 13px;
-        }
-
-        .loading::before {
-            content: "";
-            width: 28px;
-            height: 28px;
-            margin-right: 10px;
-            border: 3px solid rgba(37,48,39,.12);
-            border-top-color: rgba(37,48,39,.55);
-            border-radius: 50%;
-            animation: spin .8s linear infinite;
-        }
-
-        @keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
-        }
-
-        .error {
-            position: fixed;
-            inset: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 24px;
-            text-align: center;
-            color: var(--text);
-            font-size: 13px;
-            line-height: 1.5;
-        }
-
-        .hidden {
-            display: none !important;
-        }
-
-        @media (min-width: 601px) {
-            .app {
-                padding: 20px;
-            }
-            .profile {
-                height: min(calc(100dvh - 40px), 900px);
-            }
-        }
-
-        @media (max-width: 600px) {
-            .app {
-                padding: 0;
-            }
-            .profile {
-                width: 100%;
-                height: 100dvh;
-                min-height: 100dvh;
-                max-height: 100dvh;
-                border-radius: 0;
-                box-shadow: none;
-                background: transparent;
-            }
-            .hero {
-                padding-top: max(16px, env(safe-area-inset-top));
-                padding-left: 18px;
-                padding-right: 18px;
-            }
-
-            .cover-image {
-                width: calc(100% + 36px);
-                height: 125px;
-                margin-left: -18px;
-                margin-right: -18px;
-                border-radius: 0 0 22px 22px;
-            }
-
-            .avatar {
-                margin-top: -46px;
-            }
-
-            .cover-image {
-                width: calc(100% + 36px);
-                height: 125px;
-                margin-left: -18px;
-                margin-right: -18px;
-                border-radius: 0 0 22px 22px;
-            }
-
-            .avatar {
-                margin-top: -46px;
-            }
-
-            .cover-image {
-                width: calc(100% + 36px);
-                height: 125px;
-                margin-left: -18px;
-                margin-right: -18px;
-                border-radius: 0 0 22px 22px;
-            }
-
-            .avatar {
-                margin-top: -46px;
-            }
-
-            .cover-image {
-                width: calc(100% + 36px);
-                height: 125px;
-                margin-left: -18px;
-                margin-right: -18px;
-                border-radius: 0 0 22px 22px;
-            }
-
-            .avatar {
-                margin-top: -46px;
-            }
-
-            .cover-image {
-                width: calc(100% + 36px);
-                height: 125px;
-                margin-left: -18px;
-                margin-right: -18px;
-                border-radius: 0 0 22px 22px;
-            }
-
-            .avatar {
-                margin-top: -46px;
-            }
-
-            .cover-image {
-                width: calc(100% + 36px);
-                height: 125px;
-                margin-left: -18px;
-                margin-right: -18px;
-                border-radius: 0 0 22px 22px;
-            }
-
-            .avatar {
-                margin-top: -46px;
-            }
-
-            .cover-image {
-                width: calc(100% + 36px);
-                height: 125px;
-                margin-left: -18px;
-                margin-right: -18px;
-                border-radius: 0 0 22px 22px;
-            }
-
-            .avatar {
-                margin-top: -46px;
-            }
-
-            .cover-image {
-                width: calc(100% + 36px);
-                height: 125px;
-                margin-left: -18px;
-                margin-right: -18px;
-                border-radius: 0 0 22px 22px;
-            }
-
-            .avatar {
-                margin-top: -46px;
-            }
-
-            .cover-image {
-                width: calc(100% + 36px);
-                height: 125px;
-                margin-left: -18px;
-                margin-right: -18px;
-                border-radius: 0 0 22px 22px;
-            }
-
-            .avatar {
-                margin-top: -46px;
-            }
-
-            .cover-image {
-                width: calc(100% + 36px);
-                height: 125px;
-                margin-left: -18px;
-                margin-right: -18px;
-                border-radius: 0 0 22px 22px;
-            }
-
-            .avatar {
-                margin-top: -46px;
-            }
-
-            .cover-image {
-                width: calc(100% + 36px);
-                height: 125px;
-                margin-left: -18px;
-                margin-right: -18px;
-                border-radius: 0 0 22px 22px;
-            }
-
-            .avatar {
-                margin-top: -46px;
-            }
-
-            .cover-image {
-                width: calc(100% + 36px);
-                height: 125px;
-                margin-left: -18px;
-                margin-right: -18px;
-                border-radius: 0 0 22px 22px;
-            }
-
-            .avatar {
-                margin-top: -46px;
-            }
-
-            .cover-image {
-                width: calc(100% + 36px);
-                height: 125px;
-                margin-left: -18px;
-                margin-right: -18px;
-                border-radius: 0 0 22px 22px;
-            }
-
-            .avatar {
-                margin-top: -46px;
-            }
-            .section {
-                padding-left: 16px;
-                padding-right: 16px;
-            }
-            .social-window {
-                width: calc(100% + 32px);
-                margin-left: -16px;
-            }
-            .bottom {
-                position: fixed;
-                left: 50%;
-                right: auto;
-                bottom: 0;
-                width: 100%;
-                height: max(38px, calc(30px + env(safe-area-inset-bottom)));
-                transform: translateX(-50%);
-                padding: 5px 16px max(6px, env(safe-area-inset-bottom));
-                background: linear-gradient(180deg, rgba(211,219,200,0), rgba(211,219,200,.12));
-                backdrop-filter: blur(4px);
-                -webkit-backdrop-filter: blur(4px);
-            }
-            .edit-button {
-                position: relative;
-                z-index: 101;
-            }
-        }
-
-        @media (max-width: 600px) and (max-height: 740px) {
-            .hero {
-                padding-top: max(12px, env(safe-area-inset-top));
-                padding-bottom: 11px;
-            }
-            .avatar {
-                width: 62px;
-                height: 62px;
-                margin-bottom: 7px;
-                font-size: 21px;
-            }
-            h1 {
-                font-size: 22px;
-            }
-            .age {
-                margin-top: 3px;
-                font-size: 11px;
-            }
-            .bio {
-                margin-top: 6px;
-                font-size: 10.5px;
-                line-height: 1.3;
-            }
-            .section {
-                padding-top: 9px;
-            }
-            .section-header {
-                margin-bottom: 6px;
-            }
-            .section-title {
-                font-size: 16px;
-            }
-            .section-subtitle {
-                font-size: 10px;
-            }
-            .contacts {
-                gap: 5px;
-            }
-            .contact-item {
-                min-height: 42px;
-                padding: 5px 8px;
-            }
-            .contact-icon {
-                width: 30px;
-                height: 30px;
-                flex-basis: 30px;
-            }
-            .contact-icon img {
-                width: 18px;
-                height: 18px;
-            }
-            .contact-value {
-                font-size: 11px;
-            }
-            .social-section {
-                padding-top: 7px;
-            }
-            .social-window {
-                padding-top: 5px;
-                padding-bottom: 5px;
-            }
-            .social-track {
-                gap: 10px;
-                padding-top: 5px;
-                padding-bottom: 5px;
-            }
-            .social-item {
-                width: 54px;
-                height: 54px;
-                flex-basis: 54px;
-            }
-            .social-item img {
-                width: 29px;
-                height: 29px;
-            }
-            .social-item.active {
-                width: 66px;
-                height: 66px;
-                flex-basis: 66px;
-            }
-            .social-item.active img {
-                width: 38px;
-                height: 38px;
-            }
-            .social-info {
-                height: 39px;
-                min-height: 39px;
-                flex-basis: 39px;
-            }
-            .swipe-hint {
-                height: 14px;
-                min-height: 14px;
-                flex-basis: 14px;
-                font-size: 8px;
-            }
-            .bottom {
-                height: max(36px, calc(28px + env(safe-area-inset-bottom)));
-            }
-        }
-
-        @media (max-width: 600px) and (max-height: 620px) {
-            .hero {
-                padding-top: max(8px, env(safe-area-inset-top));
-                padding-bottom: 7px;
-            }
-            .avatar {
-                width: 50px;
-                height: 50px;
-                margin-bottom: 5px;
-                font-size: 17px;
-            }
-            h1 {
-                font-size: 19px;
-            }
-            .age {
-                font-size: 10px;
-            }
-            .bio {
-                display: none;
-            }
-            .section {
-                padding-top: 6px;
-            }
-            .section-header {
-                margin-bottom: 4px;
-            }
-            .contact-item {
-                min-height: 36px;
-            }
-            .contact-icon {
-                width: 27px;
-                height: 27px;
-                flex-basis: 27px;
-                border-radius: 8px;
-            }
-            .contact-icon img {
-                width: 16px;
-                height: 16px;
-            }
-            .social-item {
-                width: 48px;
-                height: 48px;
-                flex-basis: 48px;
-            }
-            .social-item img {
-                width: 27px;
-                height: 27px;
-            }
-            .social-item.active {
-                width: 60px;
-                height: 60px;
-                flex-basis: 60px;
-            }
-            .social-item.active img {
-                width: 36px;
-                height: 36px;
-            }
-            .social-info {
-                height: 35px;
-                min-height: 35px;
-                flex-basis: 35px;
-            }
-            .social-name {
-                font-size: 12px;
-                line-height: 14px;
-            }
-            .social-username {
-                font-size: 10px;
-                line-height: 12px;
-            }
-            .swipe-hint {
-                display: none;
-            }
-            .bottom {
-                height: max(34px, calc(26px + env(safe-area-inset-bottom)));
-                padding-top: 2px;
-                padding-bottom: max(3px, env(safe-area-inset-bottom));
-            }
-        }
-
-    </style>
-
 </head>
 
 <body>
 
-<div class="app">
+<script>
 
-    <main id="profile" class="profile hidden">
+const ORIGINAL_MEN_THEME =
+    "https://raw.githubusercontent.com/EMOON3D/E-Tag/ba3d4f1d06e91cf150402ab5ec32914d82bdaab9/themes/men.html";
 
-        <section class="hero">
 
-            <div
-                id="coverImage"
-                class="cover-image"
-            ></div>
-            <div id="avatar" class="avatar"></div>
-            <h1 id="name">E-Tag User</h1>
-            <div id="age" class="age"></div>
-            <p id="bio" class="bio"></p>
-        </section>
+fetch(
+    ORIGINAL_MEN_THEME,
+    {
+        cache: "no-store"
+    }
+)
+.then(
+    response => {
 
-        <div class="content">
+        if (
+            !response.ok
+        ) {
 
-            <section id="contactSection" class="section">
-                <div class="section-header">
-                    <h2 class="section-title">Contact</h2>
-                    <p class="section-subtitle">Get in touch</p>
-                </div>
-                <div id="contacts" class="contacts"></div>
-            </section>
+            throw new Error(
+                "Unable to load Men theme."
+            );
 
-            <section id="socialSection" class="section social-section hidden">
-                <div class="section-header">
-                    <h2 class="section-title">Social</h2>
-                    <p class="section-subtitle">Connect with me</p>
-                </div>
+        }
 
-                <div class="social-window" id="socialWindow">
-                    <div class="social-track" id="socialTrack"></div>
-                </div>
+        return response.text();
 
-                <div class="social-info" id="socialInfo">
-                    <p class="social-name" id="socialName"></p>
-                    <p class="social-username" id="socialUsername"></p>
-                </div>
+    }
+)
+.then(
+    html => {
 
-                <div class="swipe-hint">
-                    <span class="swipe-line"></span>
-                    <span>Swipe to explore</span>
-                    <span class="swipe-line"></span>
-                </div>
-            </section>
+        const extraStyle = `
 
-        </div>
+<style>
 
-        <div class="bottom">
-            <a id="editButton" class="edit-button" href="#">Edit My Profile</a>
-        </div>
+:root
+{
 
-    </main>
+    --etag-bg1:
+        #C3CDB8;
 
-</div>
+    --etag-bg2:
+        #D3DBC8;
 
-<div id="loading" class="loading">Loading profile...</div>
-<div id="error" class="error hidden"></div>
+    --etag-bg3:
+        #E1E7DA;
+
+    --etag-main:
+        #D3DBC8;
+
+    --etag-secondary:
+        #E5EADF;
+
+    --etag-glass:
+        #D3DBC8;
+
+    --etag-surface:
+        #FFFFFF;
+
+    --etag-border:
+        #FFFFFF;
+
+    --etag-accent:
+        #B8C9A8;
+
+    --etag-shadow:
+        #374539;
+
+}
+
+
+body
+{
+
+    background:
+
+        radial-gradient(
+            ellipse at 70% 18%,
+            rgba(255,255,255,.92)
+            0%,
+            rgba(255,255,255,.45)
+            27%,
+            transparent 57%
+        ),
+
+        radial-gradient(
+            ellipse at 15% 75%,
+            color-mix(
+                in srgb,
+                var(--etag-main) 42%,
+                white
+            )
+            0%,
+            color-mix(
+                in srgb,
+                var(--etag-secondary) 38%,
+                white
+            )
+            35%,
+            transparent 70%
+        ),
+
+        linear-gradient(
+            135deg,
+            color-mix(
+                in srgb,
+                var(--etag-bg1) 42%,
+                white
+            )
+            0%,
+
+            color-mix(
+                in srgb,
+                var(--etag-bg2) 52%,
+                white
+            )
+            38%,
+
+            color-mix(
+                in srgb,
+                var(--etag-bg3) 52%,
+                white
+            )
+            68%,
+
+            color-mix(
+                in srgb,
+                var(--etag-main) 38%,
+                white
+            )
+            100%
+        );
+
+}
+
+
+body::before
+{
+
+    background:
+
+        radial-gradient(
+            ellipse at 72% 24%,
+            color-mix(
+                in srgb,
+                var(--etag-accent) 22%,
+                white
+            ),
+            transparent 32%
+        ),
+
+        radial-gradient(
+            ellipse at 20% 15%,
+            rgba(
+                255,
+                255,
+                255,
+                .26
+            ),
+            transparent 22%
+        );
+
+}
+
+
+.profile
+{
+
+    background:
+
+        color-mix(
+            in srgb,
+            var(--etag-surface) 10%,
+            transparent
+        );
+
+}
+
+
+.hero::after
+{
+
+    background:
+
+        color-mix(
+            in srgb,
+            var(--etag-accent) 34%,
+            white
+        );
+
+}
+
+
+.avatar
+{
+
+    background:
+
+        linear-gradient(
+            145deg,
+
+            color-mix(
+                in srgb,
+                var(--etag-surface) 88%,
+                white
+            ),
+
+            color-mix(
+                in srgb,
+                var(--etag-main) 48%,
+                white
+            )
+        );
+
+}
+
+
+.cover-image
+{
+
+    background:
+
+        color-mix(
+            in srgb,
+            var(--etag-surface) 72%,
+            white
+        );
+
+    border-color:
+
+        color-mix(
+            in srgb,
+            var(--etag-border) 62%,
+            white
+        );
+
+    box-shadow:
+
+        0 10px 24px
+        color-mix(
+            in srgb,
+            var(--etag-shadow) 12%,
+            transparent
+        );
+
+}
+
+
+.contact-item
+{
+
+    background:
+
+        linear-gradient(
+            100deg,
+
+            color-mix(
+                in srgb,
+                var(--etag-surface) 86%,
+                white
+            ),
+
+            color-mix(
+                in srgb,
+                var(--etag-main) 38%,
+                white
+            )
+        );
+
+    border-color:
+
+        color-mix(
+            in srgb,
+            var(--etag-border) 52%,
+            var(--etag-accent)
+        );
+
+    box-shadow:
+
+        0 7px 18px
+        color-mix(
+            in srgb,
+            var(--etag-shadow) 11%,
+            transparent
+        );
+
+}
+
+
+.contact-item:hover
+{
+
+    background:
+
+        linear-gradient(
+            100deg,
+
+            color-mix(
+                in srgb,
+                var(--etag-surface) 94%,
+                white
+            ),
+
+            color-mix(
+                in srgb,
+                var(--etag-secondary) 46%,
+                white
+            )
+        );
+
+}
+
+
+.contact-icon
+{
+
+    background:
+
+        color-mix(
+            in srgb,
+            var(--etag-surface) 68%,
+            white
+        );
+
+    border-color:
+
+        color-mix(
+            in srgb,
+            var(--etag-border) 55%,
+            white
+        );
+
+}
+
+
+.social-item
+{
+
+    background:
+
+        linear-gradient(
+            145deg,
+
+            color-mix(
+                in srgb,
+                var(--etag-surface) 86%,
+                white
+            ),
+
+            color-mix(
+                in srgb,
+                var(--etag-secondary) 42%,
+                white
+            )
+        );
+
+    border-color:
+
+        color-mix(
+            in srgb,
+            var(--etag-border) 62%,
+            var(--etag-accent)
+        );
+
+    box-shadow:
+
+        0 8px 20px
+        color-mix(
+            in srgb,
+            var(--etag-shadow) 13%,
+            transparent
+        );
+
+}
+
+
+.social-item.active
+{
+
+    background:
+
+        linear-gradient(
+            145deg,
+
+            color-mix(
+                in srgb,
+                var(--etag-surface) 96%,
+                white
+            ),
+
+            color-mix(
+                in srgb,
+                var(--etag-main) 36%,
+                white
+            )
+        );
+
+    box-shadow:
+
+        0 15px 30px
+        color-mix(
+            in srgb,
+            var(--etag-shadow) 18%,
+            transparent
+        );
+
+}
+
+
+.contact-item:active
+{
+
+    box-shadow:
+
+        0 5px 13px
+        color-mix(
+            in srgb,
+            var(--etag-shadow) 12%,
+            transparent
+        );
+
+}
+
+
+.bottom
+{
+
+    background:
+
+        linear-gradient(
+            180deg,
+            rgba(
+                255,
+                255,
+                255,
+                0
+            ),
+
+            color-mix(
+                in srgb,
+                var(--etag-main) 8%,
+                transparent
+            )
+        );
+
+}
+
+
+.edit-button
+{
+
+    background:
+
+        color-mix(
+            in srgb,
+            var(--etag-surface) 30%,
+            transparent
+        );
+
+    border-color:
+
+        color-mix(
+            in srgb,
+            var(--etag-border) 34%,
+            transparent
+        );
+
+}
+
+
+.edit-button:hover
+{
+
+    background:
+
+        color-mix(
+            in srgb,
+            var(--etag-surface) 48%,
+            transparent
+        );
+
+}
+
+
+</style>
+
+`;
+
+
+        const extraScript = `
 
 <script type="module">
 
-    import {
-        createClient
-    } from "https://esm.sh/@supabase/supabase-js@2";
+import {
+    createClient
+}
+from
+    "https://esm.sh/@supabase/supabase-js@2";
 
-    const SUPABASE_URL =
-        "https://zuptxhcjzhqynrquyray.supabase.co";
 
-    const SUPABASE_PUBLISHABLE_KEY =
-        "sb_publishable_1sa0MtE83MZXETR5JLakJA_fRVrjDJI";
+const SUPABASE_URL =
+    "https://zuptxhcjzhqynrquyray.supabase.co";
 
-    const supabase = createClient(
+
+const SUPABASE_PUBLISHABLE_KEY =
+    "sb_publishable_1sa0MtE83MZXETR5JLakJA_fRVrjDJI";
+
+
+const supabase =
+    createClient(
         SUPABASE_URL,
         SUPABASE_PUBLISHABLE_KEY
     );
 
-    const profile = document.getElementById("profile");
-    const loading = document.getElementById("loading");
-    const errorBox = document.getElementById("error");
-    const avatar = document.getElementById("avatar");
-    const coverImage = document.getElementById("coverImage");
-    const name = document.getElementById("name");
-    const age = document.getElementById("age");
-    const bio = document.getElementById("bio");
-    const contactSection = document.getElementById("contactSection");
-    const contacts = document.getElementById("contacts");
-    const socialSection = document.getElementById("socialSection");
-    const socialWindow = document.getElementById("socialWindow");
-    const socialTrack = document.getElementById("socialTrack");
-    const socialInfo = document.getElementById("socialInfo");
-    const socialName = document.getElementById("socialName");
-    const socialUsername = document.getElementById("socialUsername");
-    const editButton = document.getElementById("editButton");
 
-    const CHARACTER_BASE = "/E-Tag/assets/characters/men/";
-    const ICON_BASE = "https://github.com/EMOON3D/E-Tag/blob/main/assets/icons/";
+const DEFAULT_THEME =
+{
 
-    const ICONS = {
-        call: `${ICON_BASE}call.png?raw=true`,
-        whatsapp: `${ICON_BASE}whatsapp.png?raw=true`,
-        email: `${ICON_BASE}email.png?raw=true`,
-        facebook: `${ICON_BASE}Facebook_Logo_2023.png?raw=true`,
-        instagram: `${ICON_BASE}Instagram_icon.png?raw=true`,
-        tiktok: `${ICON_BASE}tiktok.png?raw=true`,
-        youtube: `${ICON_BASE}youtube.png?raw=true`,
-        telegram: `${ICON_BASE}teligram.png?raw=true`,
-        discord: `${ICON_BASE}discoard.png?raw=true`,
-        linkedin: `${ICON_BASE}linkedin%20.png?raw=true`
+    background1:
+        "#C3CDB8",
+
+    background2:
+        "#D3DBC8",
+
+    background3:
+        "#E1E7DA",
+
+    main:
+        "#D3DBC8",
+
+    secondary:
+        "#E5EADF",
+
+    glass:
+        "#D3DBC8",
+
+    surface:
+        "#FFFFFF",
+
+    border:
+        "#FFFFFF",
+
+    accent:
+        "#B8C9A8",
+
+    shadow:
+        "#374539"
+
+};
+
+
+function normalizeColor(
+    value,
+    fallback
+)
+{
+
+    const text =
+        String(
+            value ||
+            ""
+        )
+        .trim()
+        .toUpperCase();
+
+
+    if (
+        /^#[0-9A-F]{6}$/.test(
+            text
+        )
+    )
+    {
+
+        return text;
+
+    }
+
+
+    return fallback;
+
+}
+
+
+function applyThemeColors(
+    colors
+)
+{
+
+    const palette =
+    {
+
+        ...DEFAULT_THEME,
+
+        ...(colors &&
+            typeof colors ===
+                "object"
+            ? colors
+            : {})
+
     };
 
-    function getTagCode() {
-        const url = new URL(window.location.href);
-        const tag = url.searchParams.get("tag");
-        if (!tag) {
-            return null;
-        }
-        return tag.trim().toUpperCase();
-    }
 
-    function clean(value) {
-        return String(value || "").trim();
-    }
-
-    function initials(value) {
-        const parts = clean(value).split(/\s+/).filter(Boolean);
-        if (parts.length === 0) {
-            return "?";
-        }
-        if (parts.length === 1) {
-            return parts[0].substring(0, 2).toUpperCase();
-        }
-        return (
-            parts[0][0] +
-            parts[parts.length - 1][0]
-        ).toUpperCase();
-    }
-
-    function username(value) {
-        return clean(value).replace(/^@/, "");
-    }
-
-    function renderAvatar(element, profileData) {
-        element.innerHTML = "";
-        element.classList.remove("character");
-
-        const displayName =
-            clean(profileData.display_name) ||
-            "E-Tag User";
-
-        if (
-            profileData.avatar_type === "character" &&
-            profileData.character_id
-        ) {
-            const image = document.createElement("img");
-            image.src = `${CHARACTER_BASE}${encodeURIComponent(profileData.character_id)}.svg`;
-            image.alt = "Character";
-            image.onerror = () => {
-                element.innerHTML = "";
-                element.classList.remove("character");
-                element.textContent = initials(displayName);
-            };
-            element.classList.add("character");
-            element.appendChild(image);
-            return;
-        }
-
-        if (profileData.avatar_url) {
-            const image = document.createElement("img");
-            image.src = profileData.avatar_url;
-            image.alt = "Profile photo";
-            image.onerror = () => {
-                element.innerHTML = "";
-                element.textContent = initials(displayName);
-            };
-            element.appendChild(image);
-            return;
-        }
-
-        element.textContent = initials(displayName);
-    }
-
-    function renderCoverImage(profileData) {
-        const url = clean(profileData?.cover_image_url);
-
-        coverImage.innerHTML = "";
-        coverImage.style.display = "none";
-
-        if (!url) {
-            return;
-        }
-
-        const image = document.createElement("img");
-        image.src = url;
-        image.alt = "Cover image";
-        image.onerror = () => {
-            coverImage.innerHTML = "";
-            coverImage.style.display = "none";
-        };
-
-        coverImage.appendChild(image);
-        coverImage.style.display = "block";
-    }
-
-
-    function addContact(label, value, href, iconUrl) {
-        const link = document.createElement("a");
-        link.className = "contact-item";
-        link.href = href;
-
-        if (
-            href.startsWith("http://") ||
-            href.startsWith("https://")
-        ) {
-            link.target = "_blank";
-            link.rel = "noopener noreferrer";
-        }
-
-        const inner = document.createElement("div");
-        inner.className = "contact-inner";
-
-        const icon = document.createElement("div");
-        icon.className = "contact-icon";
-
-        const image = document.createElement("img");
-        image.src = iconUrl;
-        image.alt = label;
-        icon.appendChild(image);
-
-        const info = document.createElement("div");
-        info.className = "contact-info";
-
-        const labelElement = document.createElement("div");
-        labelElement.className = "contact-label";
-        labelElement.textContent = label;
-
-        const valueElement = document.createElement("div");
-        valueElement.className = "contact-value";
-        valueElement.textContent = value;
-
-        info.appendChild(labelElement);
-        info.appendChild(valueElement);
-        inner.appendChild(icon);
-        inner.appendChild(info);
-        link.appendChild(inner);
-        contacts.appendChild(link);
-    }
-
-    const socialData = [];
-
-    function addSocial(platformName, platformUsername, href, iconUrl) {
-        if (!href) {
-            return;
-        }
-        socialData.push({
-            name: platformName,
-            username: platformUsername,
-            url: href,
-            icon: iconUrl
-        });
-    }
-
-    let items = [];
-    let count = 0;
-    let activeIndex = 0;
-    let currentOffset = 0;
-    let dragging = false;
-    let moved = false;
-    let startX = 0;
-    let startOffset = 0;
-    let suppressClick = false;
-    let infoTimer = null;
-    const copies = 7;
-
-    function buildSocialCarousel() {
-        socialTrack.innerHTML = "";
-
-        if (socialData.length === 0) {
-            socialSection.classList.add("hidden");
-            return;
-        }
-
-        socialSection.classList.remove("hidden");
-
-        for (let copy = 0; copy < copies; copy++) {
-            socialData.forEach((data, originalIndex) => {
-                const link = document.createElement("a");
-                link.className = "social-item";
-                link.href = data.url;
-                link.target = "_blank";
-                link.rel = "noopener noreferrer";
-                link.dataset.name = data.name;
-                link.dataset.username = data.username;
-                link.dataset.url = data.url;
-                link.dataset.originalIndex = String(originalIndex);
-
-                const image = document.createElement("img");
-                image.src = data.icon;
-                image.alt = data.name;
-                image.draggable = false;
-                link.appendChild(image);
-                socialTrack.appendChild(link);
-            });
-        }
-
-        items = Array.from(
-            socialTrack.querySelectorAll(".social-item")
-        );
-
-        count = socialData.length;
-        activeIndex = count * 3;
-
-        requestAnimationFrame(() => {
-            updateVisuals();
-            setOffset(getTargetOffset(activeIndex), false);
-            updateInformation(items[activeIndex], false);
-        });
-    }
-
-    function getTargetOffset(index) {
-        const item = items[index];
-        if (!item) {
-            return 0;
-        }
-        const windowWidth = socialWindow.clientWidth;
-        const itemCenter = item.offsetLeft + item.offsetWidth / 2;
-        return windowWidth / 2 - itemCenter;
-    }
-
-    function setOffset(offset, animate = true) {
-        socialTrack.style.transition = animate
-            ? "transform .42s cubic-bezier(.22,.8,.25,1)"
-            : "none";
-        socialTrack.style.transform = `translate3d(${offset}px,0,0)`;
-        currentOffset = offset;
-    }
-
-    function updateVisuals() {
-        items.forEach((item, index) => {
-            const distance = Math.abs(index - activeIndex);
-            item.classList.remove("active", "near", "hidden-social");
-
-            if (distance === 0) {
-                item.classList.add("active");
-            } else if (distance === 1) {
-                item.classList.add("near");
-            } else {
-                item.classList.add("hidden-social");
-            }
-        });
-    }
-
-    function updateInformation(item, animate = true) {
-        if (!item) {
-            return;
-        }
-
-        if (infoTimer) {
-            clearTimeout(infoTimer);
-        }
-
-        if (animate) {
-            socialInfo.classList.add("changing");
-        }
-
-        infoTimer = setTimeout(() => {
-            socialName.textContent = item.dataset.name;
-            socialUsername.textContent = item.dataset.username;
-            socialInfo.classList.remove("changing");
-        }, animate ? 100 : 0);
-    }
-
-    function normalizeInfinitePosition() {
-        if (count === 0) {
-            return;
-        }
-
-        const lower = count * 2;
-        const upper = count * 5;
-
-        if (activeIndex < lower) {
-            activeIndex += count * 3;
-            setOffset(getTargetOffset(activeIndex), false);
-            updateVisuals();
-            updateInformation(items[activeIndex], false);
-            return;
-        }
-
-        if (activeIndex >= upper) {
-            activeIndex -= count * 3;
-            setOffset(getTargetOffset(activeIndex), false);
-            updateVisuals();
-            updateInformation(items[activeIndex], false);
-        }
-    }
-
-    function selectIndex(index, animate = true) {
-        if (count === 0) {
-            return;
-        }
-
-        activeIndex = index;
-        updateVisuals();
-        setOffset(getTargetOffset(activeIndex), animate);
-        updateInformation(items[activeIndex], animate);
-
-        if (animate) {
-            setTimeout(normalizeInfinitePosition, 460);
-        } else {
-            normalizeInfinitePosition();
-        }
-    }
-
-    function getClosestIndex() {
-        if (count === 0) {
-            return 0;
-        }
-
-        const center = socialWindow.clientWidth / 2;
-        let closest = activeIndex;
-        let closestDistance = Infinity;
-
-        items.forEach((item, index) => {
-            const itemCenter = item.offsetLeft + item.offsetWidth / 2 + currentOffset;
-            const distance = Math.abs(center - itemCenter);
-
-            if (distance < closestDistance) {
-                closestDistance = distance;
-                closest = index;
-            }
-        });
-
-        return closest;
-    }
-
-    socialTrack.addEventListener("click", event => {
-        const item = event.target.closest(".social-item");
-        if (!item) {
-            return;
-        }
-
-        if (suppressClick || moved) {
-            event.preventDefault();
-            return;
-        }
-
-        const index = items.indexOf(item);
-
-        if (index !== activeIndex) {
-            event.preventDefault();
-            selectIndex(index);
-            return;
-        }
-
-        const url = item.dataset.url || item.href || "";
-
-        if (!url) {
-            event.preventDefault();
-            return;
-        }
-
-        event.preventDefault();
-
-        if (event.ctrlKey || event.metaKey) {
-            window.open(url, "_blank", "noopener");
-            return;
-        }
-
-        window.location.href = url;
-    });
-
-    socialWindow.addEventListener("pointerdown", event => {
-        if (count === 0) {
-            return;
-        }
-
-        dragging = true;
-        moved = false;
-        suppressClick = false;
-        startX = event.clientX;
-        startOffset = currentOffset;
-        socialTrack.classList.add("dragging");
-        socialTrack.style.transition = "none";
-
-        try {
-            socialWindow.setPointerCapture(event.pointerId);
-        } catch (error) {}
-    });
-
-    socialWindow.addEventListener("pointermove", event => {
-        if (!dragging || count === 0) {
-            return;
-        }
-
-        const delta = event.clientX - startX;
-
-        if (Math.abs(delta) > 5) {
-            moved = true;
-            suppressClick = true;
-        }
-
-        const newOffset = startOffset + delta;
-        socialTrack.style.transform = `translate3d(${newOffset}px,0,0)`;
-        currentOffset = newOffset;
-
-        const closest = getClosestIndex();
-
-        if (closest !== activeIndex) {
-            activeIndex = closest;
-            updateVisuals();
-            updateInformation(items[activeIndex], true);
-        }
-
-        if (activeIndex < count * 2) {
-            activeIndex += count * 3;
-            const normalizedOffset = getTargetOffset(activeIndex);
-            setOffset(normalizedOffset, false);
-            startOffset = normalizedOffset;
-            startX = event.clientX;
-            updateVisuals();
-            updateInformation(items[activeIndex], false);
-        }
-
-        if (activeIndex >= count * 5) {
-            activeIndex -= count * 3;
-            const normalizedOffset = getTargetOffset(activeIndex);
-            setOffset(normalizedOffset, false);
-            startOffset = normalizedOffset;
-            startX = event.clientX;
-            updateVisuals();
-            updateInformation(items[activeIndex], false);
-        }
-    });
-
-    function finishDrag(event) {
-        if (!dragging) {
-            return;
-        }
-
-        dragging = false;
-        socialTrack.classList.remove("dragging");
-
-        try {
-            socialWindow.releasePointerCapture(event.pointerId);
-        } catch (error) {}
-
-        const closest = getClosestIndex();
-        selectIndex(closest);
-
-        setTimeout(() => {
-            moved = false;
-            suppressClick = false;
-        }, 100);
-    }
-
-    socialWindow.addEventListener("pointerup", finishDrag);
-    socialWindow.addEventListener("pointercancel", finishDrag);
-
-    socialWindow.addEventListener("wheel", event => {
-        if (count === 0) {
-            return;
-        }
-
-        event.preventDefault();
-
-        const direction =
-            Math.abs(event.deltaX) > Math.abs(event.deltaY)
-                ? (event.deltaX > 0 ? 1 : -1)
-                : (event.deltaY > 0 ? 1 : -1);
-
-        selectIndex(activeIndex + direction);
-    }, { passive: false });
-
-    window.addEventListener("keydown", event => {
-        if (count === 0) {
-            return;
-        }
-
-        if (event.key === "ArrowRight") {
-            selectIndex(activeIndex + 1);
-        }
-
-        if (event.key === "ArrowLeft") {
-            selectIndex(activeIndex - 1);
-        }
-    });
-
-    let resizeFrame = null;
-
-    window.addEventListener("resize", () => {
-        if (resizeFrame) {
-            cancelAnimationFrame(resizeFrame);
-        }
-
-        resizeFrame = requestAnimationFrame(() => {
-            if (count > 0) {
-                setOffset(getTargetOffset(activeIndex), false);
-            }
-        });
-    });
-
-    async function getTag(tagCode) {
-        const { data, error } = await supabase
-            .from("nfc_tags")
-            .select("owner_id,active,tag_code")
-            .eq("tag_code", tagCode)
-            .maybeSingle();
-
-        if (error) {
-            throw new Error(`Unable to load this E-Tag: ${error.message}`);
-        }
-
-        if (!data) {
-            throw new Error(`E-Tag "${tagCode}" was not found.`);
-        }
-
-        return data;
-    }
-
-    async function load() {
-        try {
-            const tagCode = getTagCode();
-
-            if (!tagCode) {
-                throw new Error("Invalid E-Tag URL.");
-            }
-
-            const tag = await getTag(tagCode);
-
-            if (!tag.active || !tag.owner_id) {
-                throw new Error("This E-Tag has not been activated.");
-            }
-
-            const { data: profileData, error: profileError } = await supabase
-                .from("profiles")
-                .select("*")
-                .eq("id", tag.owner_id)
-                .maybeSingle();
-
-            if (profileError) {
-                throw new Error(`Unable to load profile: ${profileError.message}`);
-            }
-
-            if (!profileData) {
-                throw new Error("Public profile not found.");
-            }
-
-            const displayName = clean(profileData.display_name) || "E-Tag User";
-
-            name.textContent = displayName;
-            age.textContent = profileData.age ? `${profileData.age} years old` : "";
-            bio.textContent = clean(profileData.bio);
-
-            renderCoverImage(profileData);
-            renderAvatar(avatar, profileData);
-
-            contacts.innerHTML = "";
-
-            if (profileData.phone) {
-                addContact(
-                    "Call",
-                    "Call Me",
-                    `tel:${encodeURIComponent(profileData.phone)}`,
-                    ICONS.call
-                );
-            }
-
-            if (profileData.whatsapp) {
-                const number = clean(profileData.whatsapp).replace(/\D/g, "");
-
-                if (number) {
-                    addContact(
-                        "WhatsApp",
-                        "WhatsApp Me",
-                        `https://wa.me/${number}`,
-                        ICONS.whatsapp
-                    );
-                }
-            }
-
-            if (profileData.email) {
-                addContact(
-                    "Email",
-                    "Email Me",
-                    `mailto:${encodeURIComponent(profileData.email)}`,
-                    ICONS.email
-                );
-            }
-
-            if (contacts.children.length === 0) {
-                contactSection.classList.add("hidden");
-            } else {
-                contactSection.classList.remove("hidden");
-            }
-
-            socialData.length = 0;
-
-            if (profileData.facebook) {
-                const value = clean(profileData.facebook);
-                addSocial("Facebook", `@${username(value)}`, value, ICONS.facebook);
-            }
-
-            if (profileData.instagram) {
-                const value = clean(profileData.instagram);
-                addSocial("Instagram", `@${username(value)}`, value, ICONS.instagram);
-            }
-
-            if (profileData.tiktok) {
-                const value = clean(profileData.tiktok);
-                addSocial("TikTok", `@${username(value)}`, value, ICONS.tiktok);
-            }
-
-            if (profileData.youtube) {
-                const value = clean(profileData.youtube);
-                addSocial("YouTube", `@${username(value)}`, value, ICONS.youtube);
-            }
-
-            if (profileData.telegram) {
-                const value = clean(profileData.telegram);
-                addSocial("Telegram", `@${username(value)}`, value, ICONS.telegram);
-            }
-
-            if (profileData.discord) {
-                const value = clean(profileData.discord);
-                addSocial(
-                    "Discord",
-                    value ? `@${username(value)}` : "@discord",
-                    value,
-                    ICONS.discord
-                );
-            }
-
-            if (profileData.linkedin) {
-                const value = clean(profileData.linkedin);
-                addSocial("LinkedIn", `@${username(value)}`, value, ICONS.linkedin);
-            }
-
-            buildSocialCarousel();
-
-            editButton.href =
-                `/E-Tag/?tag=${encodeURIComponent(tag.tag_code)}&edit=1`;
-
-            loading.classList.add("hidden");
-            errorBox.classList.add("hidden");
-            profile.classList.remove("hidden");
-
-        } catch (error) {
-            console.error("Men theme load error:", error);
-            loading.classList.add("hidden");
-            errorBox.textContent = error.message || "Unable to load profile.";
-            errorBox.classList.remove("hidden");
-        }
-    }
-
-    const isPreviewMode =
-        new URLSearchParams(window.location.search).get("preview") === "1";
-
-    function renderPreviewProfile(profileData) {
-        const data = profileData || {};
-
-        const previewData = {
-            ...data
-        };
-
-        name.textContent = clean(previewData.display_name) || "E-Tag User";
-        age.textContent = previewData.age ? `${previewData.age} years old` : "";
-        bio.textContent = clean(previewData.bio);
-        renderCoverImage(previewData);
-        renderAvatar(avatar, previewData);
-
-        contacts.innerHTML = "";
-
-        if (previewData.phone) {
-            addContact(
-                "Call",
-                "Call Me",
-                `tel:${encodeURIComponent(previewData.phone)}`,
-                ICONS.call
+    const normalized =
+    {
+
+        background1:
+            normalizeColor(
+                palette.background1,
+                DEFAULT_THEME.background1
+            ),
+
+        background2:
+            normalizeColor(
+                palette.background2,
+                DEFAULT_THEME.background2
+            ),
+
+        background3:
+            normalizeColor(
+                palette.background3,
+                DEFAULT_THEME.background3
+            ),
+
+        main:
+            normalizeColor(
+                palette.main,
+                DEFAULT_THEME.main
+            ),
+
+        secondary:
+            normalizeColor(
+                palette.secondary,
+                DEFAULT_THEME.secondary
+            ),
+
+        glass:
+            normalizeColor(
+                palette.glass,
+                DEFAULT_THEME.glass
+            ),
+
+        surface:
+            normalizeColor(
+                palette.surface,
+                DEFAULT_THEME.surface
+            ),
+
+        border:
+            normalizeColor(
+                palette.border,
+                DEFAULT_THEME.border
+            ),
+
+        accent:
+            normalizeColor(
+                palette.accent,
+                DEFAULT_THEME.accent
+            ),
+
+        shadow:
+            normalizeColor(
+                palette.shadow,
+                DEFAULT_THEME.shadow
+            )
+
+    };
+
+
+    Object.entries(
+        normalized
+    )
+    .forEach(
+        (
+            [
+                key,
+                value
+            ]
+        ) => {
+
+            document.documentElement.style.setProperty(
+                `--etag-${key}`,
+                value
             );
+
         }
+    );
 
-        if (previewData.whatsapp) {
-            const number = clean(previewData.whatsapp).replace(/\D/g, "");
-            if (number) {
-                addContact(
-                    "WhatsApp",
-                    "WhatsApp Me",
-                    `https://wa.me/${number}`,
-                    ICONS.whatsapp
-                );
-            }
-        }
+}
 
-        if (previewData.email) {
-            addContact(
-                "Email",
-                "Email Me",
-                `mailto:${encodeURIComponent(previewData.email)}`,
-                ICONS.email
-            );
-        }
 
-        if (contacts.children.length === 0) {
-            contactSection.classList.add("hidden");
-        } else {
-            contactSection.classList.remove("hidden");
-        }
+function sendReady()
+{
 
-        socialData.length = 0;
+    try
+    {
 
-        const previewSocialFields = [
-            ["Facebook", "facebook", ICONS.facebook],
-            ["Instagram", "instagram", ICONS.instagram],
-            ["TikTok", "tiktok", ICONS.tiktok],
-            ["YouTube", "youtube", ICONS.youtube],
-            ["Telegram", "telegram", ICONS.telegram],
-            ["Discord", "discord", ICONS.discord],
-            ["LinkedIn", "linkedin", ICONS.linkedin]
-        ];
-
-        previewSocialFields.forEach(([platformName, fieldName, iconUrl]) => {
-            const value = clean(previewData[fieldName]);
-            if (!value) {
-                return;
-            }
-            addSocial(
-                platformName,
-                `@${username(value)}`,
-                value,
-                iconUrl
-            );
-        });
-
-        buildSocialCarousel();
-
-        editButton.classList.add("hidden");
-        errorBox.classList.add("hidden");
-        loading.classList.add("hidden");
-        profile.classList.remove("hidden");
-    }
-
-    if (isPreviewMode) {
-        window.addEventListener("message", event => {
-            if (event.origin !== window.location.origin) {
-                return;
-            }
-
-            if (event.data?.type !== "etag-dashboard-preview") {
-                return;
-            }
-
-            renderPreviewProfile(event.data.profile || {});
-        });
-
-        loading.textContent = "Loading preview...";
         window.parent.postMessage(
             {
-                type: "etag-men-preview-ready"
+                type:
+                    "etag-men-preview-ready"
             },
             window.location.origin
         );
-    } else {
-        load();
+
     }
+    catch (
+        error
+    )
+    {}
+
+}
+
+
+window.addEventListener(
+    "message",
+    event => {
+
+        if (
+            event.origin !==
+            window.location.origin
+        )
+        {
+
+            return;
+
+        }
+
+
+        if (
+            event.data?.type ===
+            "etag-theme-colors"
+        )
+        {
+
+            applyThemeColors(
+                event.data.colors
+            );
+
+        }
+
+
+    }
+);
+
+
+async function loadSavedTheme()
+{
+
+    try
+    {
+
+        const url =
+            new URL(
+                window.location.href
+            );
+
+
+        const tagCode =
+            url.searchParams.get(
+                "tag"
+            );
+
+
+        if (
+            !tagCode
+        )
+        {
+
+            sendReady();
+
+            return;
+
+        }
+
+
+        const {
+            data: tag,
+            error: tagError
+        } =
+            await supabase
+                .from(
+                    "nfc_tags"
+                )
+                .select(
+                    "owner_id,active"
+                )
+                .eq(
+                    "tag_code",
+                    tagCode
+                )
+                .maybeSingle();
+
+
+        if (
+            tagError ||
+            !tag ||
+            !tag.active ||
+            !tag.owner_id
+        )
+        {
+
+            sendReady();
+
+            return;
+
+        }
+
+
+        const {
+            data: profile,
+            error: profileError
+        } =
+            await supabase
+                .from(
+                    "profiles"
+                )
+                .select(
+                    "theme_colors"
+                )
+                .eq(
+                    "id",
+                    tag.owner_id
+                )
+                .maybeSingle();
+
+
+        if (
+            !profileError &&
+            profile?.theme_colors
+        )
+        {
+
+            applyThemeColors(
+                profile.theme_colors
+            );
+
+        }
+
+
+        sendReady();
+
+    }
+    catch (
+        error
+    )
+    {
+
+        console.error(
+            "Men theme color load error:",
+            error
+        );
+
+
+        sendReady();
+
+    }
+
+}
+
+
+if (
+    document.readyState ===
+    "loading"
+)
+{
+
+    document.addEventListener(
+        "DOMContentLoaded",
+        loadSavedTheme,
+        {
+            once: true
+        }
+    );
+
+}
+else
+{
+
+    loadSavedTheme();
+
+}
+
+</script>
+
+`;
+
+
+        html =
+            html.replace(
+                "</head>",
+                extraStyle +
+                "</head>"
+            );
+
+
+        html =
+            html.replace(
+                "</body>",
+                extraScript +
+                "</body>"
+            );
+
+
+        document.open();
+
+        document.write(
+            html
+        );
+
+        document.close();
+
+    }
+)
+.catch(
+    error => {
+
+        document.body.innerHTML = `
+
+            <div
+                style="
+                    min-height:100vh;
+                    display:flex;
+                    align-items:center;
+                    justify-content:center;
+                    padding:24px;
+                    font-family:system-ui,sans-serif;
+                    color:#253027;
+                    background:#d3dbc8;
+                    text-align:center;
+                "
+            >
+
+                Unable to load Men profile.
+
+                <br>
+
+                ${String(error?.message || "")}
+
+            </div>
+
+        `;
+
+    }
+);
 
 </script>
 
