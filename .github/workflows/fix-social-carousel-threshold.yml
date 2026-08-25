@@ -16,21 +16,35 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Add social threshold runtime
+      - name: Update Men social threshold
         shell: python
         run: |
           from pathlib import Path
 
           path = Path("themes/men.html")
           text = path.read_text(encoding="utf-8")
-          marker = "/* ETAG SOCIAL THRESHOLD V2 */"
 
+          # Existing V2 runtime: change the threshold from 4 to 3.
+          if "ETAG SOCIAL THRESHOLD V2" in text:
+              old = 'if (originalCount >= 4) {'
+              new = 'if (originalCount >= 3) {'
+
+              if old in text:
+                  text = text.replace(old, new, 1)
+                  path.write_text(text, encoding="utf-8")
+                  print("Changed carousel threshold from 4 to 3.")
+              else:
+                  print("V2 runtime found; threshold already updated or pattern differs.")
+              raise SystemExit(0)
+
+          # Fallback: install a V3 runtime if the old runtime is not present.
+          marker = "/* ETAG SOCIAL THRESHOLD V3 */"
           if marker in text:
-              print("Social threshold runtime already installed.")
+              print("V3 runtime already installed.")
               raise SystemExit(0)
 
           css = r'''<style>
-          /* ETAG SOCIAL THRESHOLD V2 */
+          /* ETAG SOCIAL THRESHOLD V3 */
           .social-track.etag-static-social {
               width: 100% !important;
               justify-content: center !important;
@@ -75,14 +89,13 @@ jobs:
           </style>'''
 
           js = r'''<script>
-          /* ETAG SOCIAL THRESHOLD V2 */
+          /* ETAG SOCIAL THRESHOLD V3 */
           (() => {
               const applyStaticSocial = () => {
                   const track = document.getElementById("socialTrack");
                   const windowElement = document.getElementById("socialWindow");
-                  const section = document.getElementById("socialSection");
 
-                  if (!track || !windowElement || !section) {
+                  if (!track || !windowElement) {
                       return;
                   }
 
@@ -92,152 +105,61 @@ jobs:
 
                   const originalCount =
                       new Set(
-                          icons.map(
-                              item => item.dataset.originalIndex
-                          )
+                          icons.map(item => item.dataset.originalIndex)
                       ).size;
 
                   if (originalCount === 0) {
                       return;
                   }
 
-                  if (originalCount >= 4) {
+                  if (originalCount >= 3) {
                       track.classList.remove("etag-static-social");
-                      windowElement.classList.remove(
-                          "etag-static-social-window"
-                      );
+                      windowElement.classList.remove("etag-static-social-window");
                       return;
                   }
 
-                  /* Keep exactly the real 1-3 links and discard carousel copies. */
-                  const kept = [];
                   const seen = new Set();
 
                   icons.forEach(item => {
                       const key = item.dataset.originalIndex || "";
 
-                      if (!seen.has(key)) {
-                          seen.add(key);
-                          kept.push(item);
-                      } else {
+                      if (seen.has(key)) {
                           item.remove();
+                      } else {
+                          seen.add(key);
                       }
                   });
 
                   track.classList.add("etag-static-social");
-                  windowElement.classList.add(
-                      "etag-static-social-window"
-                  );
-
+                  windowElement.classList.add("etag-static-social-window");
                   track.style.transition = "none";
                   track.style.transform = "none";
 
-                  kept.forEach(item => {
-                      item.classList.remove(
-                          "active",
-                          "near",
-                          "hidden-social"
-                      );
+                  track.querySelectorAll(".social-item").forEach(item => {
+                      item.classList.remove("active", "near", "hidden-social");
                   });
-
-                  /* No horizontal scroll/drag for 1-3 links. */
-                  const stopPointer = event => {
-                      event.stopImmediatePropagation();
-                  };
-
-                  if (!windowElement.dataset.etagStaticBound) {
-                      windowElement.addEventListener(
-                          "pointerdown",
-                          stopPointer,
-                          true
-                      );
-
-                      windowElement.addEventListener(
-                          "pointermove",
-                          stopPointer,
-                          true
-                      );
-
-                      windowElement.addEventListener(
-                          "wheel",
-                          stopPointer,
-                          true
-                      );
-
-                      windowElement.dataset.etagStaticBound = "1";
-                  }
-
-                  /* Normal click opens the exact stored social URL. */
-                  if (!track.dataset.etagStaticClickBound) {
-                      track.addEventListener(
-                          "click",
-                          event => {
-                              const item =
-                                  event.target.closest(
-                                      ".social-item"
-                                  );
-
-                              if (!item) {
-                                  return;
-                              }
-
-                              event.preventDefault();
-                              event.stopImmediatePropagation();
-
-                              const url =
-                                  item.dataset.url ||
-                                  item.href ||
-                                  "";
-
-                              if (!url) {
-                                  return;
-                              }
-
-                              const opened = window.open(
-                                  url,
-                                  "_blank",
-                                  "noopener,noreferrer"
-                              );
-
-                              if (!opened) {
-                                  window.location.href = url;
-                              }
-                          },
-                          true
-                      );
-
-                      track.dataset.etagStaticClickBound = "1";
-                  }
               };
 
-              const run = () => {
-                  applyStaticSocial();
-              };
+              const run = () => applyStaticSocial();
 
               if (document.readyState === "loading") {
-                  document.addEventListener("DOMContentLoaded", run, {
-                      once: true
-                  });
+                  document.addEventListener("DOMContentLoaded", run, { once: true });
               } else {
                   run();
               }
 
               let attempts = 0;
               const timer = setInterval(() => {
-                  applyStaticSocial();
+                  run();
                   attempts += 1;
-
-                  if (attempts >= 20) {
-                      clearInterval(timer);
-                  }
+                  if (attempts >= 20) clearInterval(timer);
               }, 250);
           })();
           </script>'''
 
-          addition = "\n" + css + "\n" + js + "\n"
-          text = text.replace("</body>", addition + "</body>", 1)
+          text = text.replace("</body>", "\n" + css + "\n" + js + "\n</body>", 1)
           path.write_text(text, encoding="utf-8")
-          print("Installed 1-3 static / 4+ carousel runtime.")
+          print("Installed V3 social threshold runtime.")
 
       - name: Commit patch
         run: |
@@ -250,5 +172,5 @@ jobs:
               exit 0
           fi
 
-          git commit -m "fix: static social icons for fewer than four links"
+          git commit -m "fix: enable social carousel from three links"
           git push
