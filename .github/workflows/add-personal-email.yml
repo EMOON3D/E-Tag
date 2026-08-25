@@ -1,0 +1,156 @@
+name: Add Personal Email Field
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  patch-dashboard:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Patch dashboard
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+
+          path = Path('dashboard.html')
+          text = path.read_text(encoding='utf-8')
+
+          personal_email_field = '''
+
+                        <div class="field">
+
+                            <label>
+                                Email
+                            </label>
+
+                            <input
+                                id="personalEmail"
+                                class="input"
+                                type="email"
+                                autocomplete="email"
+                                placeholder="you@example.com"
+                            >
+
+                        </div>
+'''
+
+          marker = '''
+
+                        <div class="field">
+
+                            <label>
+                                Short Bio
+                            </label>
+
+                            <textarea
+                                id="personalBio"
+                                class="textarea"
+                                maxlength="500"
+                            ></textarea>
+
+                        </div>
+'''
+
+          if 'id="personalEmail"' not in text:
+              if marker not in text:
+                  raise SystemExit('Personal bio marker not found.')
+              text = text.replace(marker, marker + personal_email_field, 1)
+
+          field_marker = '''
+        "personalPhone",
+        "personalBio",
+'''
+
+          if '"personalEmail"' not in text:
+              if field_marker not in text:
+                  raise SystemExit('fieldIds marker not found.')
+              text = text.replace(field_marker, '''
+        "personalPhone",
+        "personalEmail",
+        "personalBio",
+''', 1)
+
+          personal_data_marker = '''
+                phone:
+                    getValue(
+                        "personalPhone"
+                    ),
+
+
+                bio:
+'''
+
+          if 'getValue(\n                        "personalEmail"' not in text:
+              if personal_data_marker not in text:
+                  raise SystemExit('Personal profile data marker not found.')
+              text = text.replace(personal_data_marker, '''
+                phone:
+                    getValue(
+                        "personalPhone"
+                    ),
+
+
+                email:
+                    getValue(
+                        "personalEmail"
+                    ),
+
+
+                bio:
+''', 1)
+
+          fill_marker = '''
+        setValue(
+            "personalPhone",
+            profile.phone
+        );
+
+
+        setValue(
+            "personalBio",
+'''
+
+          if '"personalEmail",' not in text[text.find('function fillProfile'):text.find('async function uploadAvatar')]:
+              if fill_marker not in text:
+                  raise SystemExit('fillProfile marker not found.')
+              text = text.replace(fill_marker, '''
+        setValue(
+            "personalPhone",
+            profile.phone
+        );
+
+
+        setValue(
+            "personalEmail",
+            profile.email
+        );
+
+
+        setValue(
+            "personalBio",
+''', 1)
+
+          path.write_text(text, encoding='utf-8')
+          print('dashboard.html patched successfully')
+          PY
+
+      - name: Commit patch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add dashboard.html
+          if git diff --cached --quiet; then
+            echo "No changes needed."
+            exit 0
+          fi
+          git commit -m "Add Personal Email field to dashboard"
+          git push
