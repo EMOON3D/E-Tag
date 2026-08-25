@@ -1,0 +1,434 @@
+name: Apply Profile Color Customization
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  apply-profile-colors:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Patch dashboard and Men theme
+        shell: python
+        run: |
+          from pathlib import Path
+          import re
+
+          dashboard = Path('dashboard.html')
+          men = Path('themes/men.html')
+          d = dashboard.read_text(encoding='utf-8')
+          m = men.read_text(encoding='utf-8')
+
+          # -----------------------------
+          # Dashboard color editor UI
+          # -----------------------------
+          if 'id="profileColorsSection"' not in d:
+              marker = '                <div class="cover-upload-section">'
+              block = '''                <div
+                    id="profileColorsSection"
+                    class="subsection"
+                >
+
+                    <h3>
+                        Profile Colors
+                    </h3>
+
+                    <div class="field-help">
+                        Customize your profile colors. The Men theme stays bright and light even when you choose darker colors.
+                    </div>
+
+                    <div class="profile-color-grid">
+
+                        <div class="profile-color-row">
+                            <label for="colorMain">Main Color</label>
+                            <div class="profile-color-control">
+                                <input id="colorMain" type="color" value="#D3DBC8">
+                                <input id="colorMainHex" class="input" type="text" value="#D3DBC8" maxlength="7" spellcheck="false">
+                            </div>
+                        </div>
+
+                        <div class="profile-color-row">
+                            <label for="colorSecondary">Secondary Color</label>
+                            <div class="profile-color-control">
+                                <input id="colorSecondary" type="color" value="#E5EADF">
+                                <input id="colorSecondaryHex" class="input" type="text" value="#E5EADF" maxlength="7" spellcheck="false">
+                            </div>
+                        </div>
+
+                        <div class="profile-color-row">
+                            <label for="colorAccent">Accent Color</label>
+                            <div class="profile-color-control">
+                                <input id="colorAccent" type="color" value="#B8C9A8">
+                                <input id="colorAccentHex" class="input" type="text" value="#B8C9A8" maxlength="7" spellcheck="false">
+                            </div>
+                        </div>
+
+                        <div class="profile-color-row">
+                            <label for="colorSurface">Surface Color</label>
+                            <div class="profile-color-control">
+                                <input id="colorSurface" type="color" value="#FFFFFF">
+                                <input id="colorSurfaceHex" class="input" type="text" value="#FFFFFF" maxlength="7" spellcheck="false">
+                            </div>
+                        </div>
+
+                        <div class="profile-color-row">
+                            <label for="colorText">Text Color</label>
+                            <div class="profile-color-control">
+                                <input id="colorText" type="color" value="#253027">
+                                <input id="colorTextHex" class="input" type="text" value="#253027" maxlength="7" spellcheck="false">
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <button
+                        id="resetProfileColors"
+                        class="button secondary"
+                        type="button"
+                        style="margin-top:12px;"
+                    >
+                        Reset Colors
+                    </button>
+
+                </div>
+
+'''
+              if marker not in d:
+                  raise SystemExit('Cover section marker not found in dashboard.html')
+              d = d.replace(marker, block + marker, 1)
+
+          if '.profile-color-grid' not in d:
+              css_marker = '        .subsection {\n'
+              css = '''        .profile-color-grid {
+            display: grid;
+            gap: 12px;
+            margin-top: 14px;
+        }
+
+        .profile-color-row {
+            display: grid;
+            gap: 7px;
+        }
+
+        .profile-color-row > label {
+            margin: 0;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .profile-color-control {
+            display: grid;
+            grid-template-columns: 54px 1fr;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .profile-color-control input[type="color"] {
+            width: 54px;
+            height: 46px;
+            padding: 3px;
+            border: 1px solid #d1d5db;
+            border-radius: 11px;
+            background: #ffffff;
+            cursor: pointer;
+        }
+
+'''
+              if css_marker not in d:
+                  raise SystemExit('Dashboard CSS marker not found')
+              d = d.replace(css_marker, css + css_marker, 1)
+
+          # -----------------------------
+          # Dashboard JS: color state
+          # -----------------------------
+          if 'let currentThemeColors' not in d:
+              marker = '    let currentCoverUrl =\n        "";'
+              insert = '''    let currentCoverUrl =
+        "";
+
+    const DEFAULT_THEME_COLORS = {
+        main: "#D3DBC8",
+        secondary: "#E5EADF",
+        accent: "#B8C9A8",
+        surface: "#FFFFFF",
+        text: "#253027"
+    };
+
+    let currentThemeColors = {
+        ...DEFAULT_THEME_COLORS
+    };
+'''
+              if marker not in d:
+                  raise SystemExit('Dashboard cover state marker not found')
+              d = d.replace(marker, insert, 1)
+
+          # DOM references
+          if 'const colorMain =' not in d:
+              marker = '    const openPublicButton =\n        document.getElementById(\n            "openPublicButton"\n        );'
+              refs = '''    const openPublicButton =
+        document.getElementById(
+            "openPublicButton"
+        );
+
+    const colorMain = document.getElementById("colorMain");
+    const colorMainHex = document.getElementById("colorMainHex");
+    const colorSecondary = document.getElementById("colorSecondary");
+    const colorSecondaryHex = document.getElementById("colorSecondaryHex");
+    const colorAccent = document.getElementById("colorAccent");
+    const colorAccentHex = document.getElementById("colorAccentHex");
+    const colorSurface = document.getElementById("colorSurface");
+    const colorSurfaceHex = document.getElementById("colorSurfaceHex");
+    const colorText = document.getElementById("colorText");
+    const colorTextHex = document.getElementById("colorTextHex");
+    const resetProfileColors = document.getElementById("resetProfileColors");
+'''
+              if marker not in d:
+                  raise SystemExit('Dashboard openPublicButton marker not found')
+              d = d.replace(marker, refs, 1)
+
+          # Color helper functions
+          if 'function isHexColor' not in d:
+              marker = '    function normalizeTemplate('
+              helpers = '''    function isHexColor(value) {
+        return /^#[0-9A-Fa-f]{6}$/.test(String(value || "").trim());
+    }
+
+    function normalizeHexColor(value, fallback) {
+        const text = String(value || "").trim().toUpperCase();
+        return isHexColor(text) ? text : fallback;
+    }
+
+    function renderThemeColors() {
+        const bindings = [
+            [colorMain, colorMainHex, "main"],
+            [colorSecondary, colorSecondaryHex, "secondary"],
+            [colorAccent, colorAccentHex, "accent"],
+            [colorSurface, colorSurfaceHex, "surface"],
+            [colorText, colorTextHex, "text"]
+        ];
+
+        bindings.forEach(([picker, hexInput, key]) => {
+            if (!picker || !hexInput) return;
+            picker.value = currentThemeColors[key];
+            hexInput.value = currentThemeColors[key];
+        });
+    }
+
+    function updateThemeColor(key, value) {
+        const fallback = DEFAULT_THEME_COLORS[key];
+        const normalized = normalizeHexColor(value, fallback);
+        currentThemeColors[key] = normalized;
+        renderThemeColors();
+        updatePreview();
+    }
+
+'''
+              if marker not in d:
+                  raise SystemExit('Dashboard normalizeTemplate marker not found')
+              d = d.replace(marker, helpers + marker, 1)
+
+          # Include theme_colors in profile data.
+          if 'theme_colors:' not in d:
+              marker = '            cover_image_url:\n                currentCoverUrl ||\n                null,'
+              replacement = '''            cover_image_url:
+                currentCoverUrl ||
+                null,
+
+            theme_colors:
+                {
+                    ...currentThemeColors
+                },'''
+              if marker not in d:
+                  raise SystemExit('Dashboard cover_image_url marker not found')
+              d = d.replace(marker, replacement, 1)
+
+          # Load saved colors.
+          if 'profile.theme_colors' not in d:
+              marker = '        currentCoverUrl =\n            profile.cover_image_url ||\n            "";'
+              replacement = '''        currentCoverUrl =
+            profile.cover_image_url ||
+            "";
+
+        currentThemeColors = {
+            ...DEFAULT_THEME_COLORS,
+            ...(profile.theme_colors && typeof profile.theme_colors === "object"
+                ? profile.theme_colors
+                : {})
+        };
+'''
+              if marker not in d:
+                  raise SystemExit('Dashboard currentCoverUrl load marker not found')
+              d = d.replace(marker, replacement, 1)
+
+          # Render colors with existing UI render cycle.
+          if 'renderThemeColors();' not in d[d.find('function renderAll()'):d.find('function renderAll()') + 2500]:
+              marker = '        renderCoverPreview();'
+              d = d.replace(marker, marker + '\n\n        renderThemeColors();', 1)
+
+          # Color controls event listeners before LIVE PREVIEW block.
+          if 'colorMain.addEventListener' not in d:
+              marker = '    /*\n     * LIVE PREVIEW\n     */'
+              listeners = '''    colorMain?.addEventListener("input", event => updateThemeColor("main", event.target.value));
+    colorSecondary?.addEventListener("input", event => updateThemeColor("secondary", event.target.value));
+    colorAccent?.addEventListener("input", event => updateThemeColor("accent", event.target.value));
+    colorSurface?.addEventListener("input", event => updateThemeColor("surface", event.target.value));
+    colorText?.addEventListener("input", event => updateThemeColor("text", event.target.value));
+
+    colorMainHex?.addEventListener("change", event => updateThemeColor("main", event.target.value));
+    colorSecondaryHex?.addEventListener("change", event => updateThemeColor("secondary", event.target.value));
+    colorAccentHex?.addEventListener("change", event => updateThemeColor("accent", event.target.value));
+    colorSurfaceHex?.addEventListener("change", event => updateThemeColor("surface", event.target.value));
+    colorTextHex?.addEventListener("change", event => updateThemeColor("text", event.target.value));
+
+    resetProfileColors?.addEventListener("click", () => {
+        currentThemeColors = {
+            ...DEFAULT_THEME_COLORS
+        };
+        renderThemeColors();
+        updatePreview();
+    });
+
+'''
+              if marker not in d:
+                  raise SystemExit('Dashboard LIVE PREVIEW marker not found')
+              d = d.replace(marker, listeners + marker, 1)
+
+          # -----------------------------
+          # Men theme: light-safe custom colors
+          # -----------------------------
+          if '.custom-theme-colors' not in m:
+              marker = '        .cover-image img {\n'
+              css = '''        .custom-theme-colors body {
+            background:
+                radial-gradient(
+                    ellipse at 70% 18%,
+                    rgba(255,255,255,.92)
+                    0%,
+                    rgba(255,255,255,.45)
+                    27%,
+                    transparent 57%
+                ),
+                linear-gradient(
+                    135deg,
+                    color-mix(in srgb, var(--theme-main) 42%, white) 0%,
+                    color-mix(in srgb, var(--theme-secondary) 58%, white) 52%,
+                    color-mix(in srgb, var(--theme-main) 28%, white) 100%
+                );
+        }
+
+        .custom-theme-colors .contact-item {
+            background: linear-gradient(
+                100deg,
+                color-mix(in srgb, var(--theme-surface) 88%, white),
+                color-mix(in srgb, var(--theme-main) 32%, white)
+            );
+            border-color: color-mix(in srgb, var(--theme-accent) 42%, white);
+        }
+
+        .custom-theme-colors .social-item {
+            background: linear-gradient(
+                145deg,
+                color-mix(in srgb, var(--theme-surface) 92%, white),
+                color-mix(in srgb, var(--theme-main) 35%, white)
+            );
+            border-color: color-mix(in srgb, var(--theme-accent) 38%, white);
+        }
+
+        .custom-theme-colors .social-item.active {
+            background: linear-gradient(
+                145deg,
+                color-mix(in srgb, var(--theme-surface) 96%, white),
+                color-mix(in srgb, var(--theme-secondary) 48%, white)
+            );
+            box-shadow: 0 15px 30px color-mix(in srgb, var(--theme-accent) 18%, transparent);
+        }
+
+        .custom-theme-colors .avatar {
+            background: linear-gradient(
+                145deg,
+                color-mix(in srgb, var(--theme-surface) 90%, white),
+                color-mix(in srgb, var(--theme-main) 50%, white)
+            );
+        }
+
+        .custom-theme-colors h1,
+        .custom-theme-colors .section-title,
+        .custom-theme-colors .contact-value,
+        .custom-theme-colors .social-name {
+            color: var(--theme-text);
+        }
+
+'''
+              if marker not in m:
+                  raise SystemExit('Men CSS marker not found')
+              m = m.replace(marker, css + marker, 1)
+
+          # Add runtime color application function before isPreviewMode.
+          if 'function applyThemeColors' not in m:
+              marker = '    const isPreviewMode ='
+              fn = '''    const DEFAULT_THEME_COLORS = {
+        main: "#D3DBC8",
+        secondary: "#E5EADF",
+        accent: "#B8C9A8",
+        surface: "#FFFFFF",
+        text: "#253027"
+    };
+
+    function applyThemeColors(colors) {
+        const palette = {
+            ...DEFAULT_THEME_COLORS,
+            ...(colors && typeof colors === "object" ? colors : {})
+        };
+
+        document.documentElement.style.setProperty("--theme-main", palette.main);
+        document.documentElement.style.setProperty("--theme-secondary", palette.secondary);
+        document.documentElement.style.setProperty("--theme-accent", palette.accent);
+        document.documentElement.style.setProperty("--theme-surface", palette.surface);
+        document.documentElement.style.setProperty("--theme-text", palette.text);
+        document.body.classList.add("custom-theme-colors");
+        document.documentElement.style.setProperty("--text", palette.text);
+        document.documentElement.style.setProperty("--main", palette.main);
+        document.documentElement.style.setProperty("--main-light", palette.secondary);
+    }
+
+'''
+              if marker not in m:
+                  raise SystemExit('Men isPreviewMode marker not found')
+              m = m.replace(marker, fn + marker, 1)
+
+          # Apply to normal public profile and preview profile.
+          if 'applyThemeColors(profileData.theme_colors)' not in m:
+              marker = '            const displayName = clean(profileData.display_name) || "E-Tag User";'
+              if marker not in m:
+                  raise SystemExit('Men profile display marker not found')
+              m = m.replace(marker, '            applyThemeColors(profileData.theme_colors);\n\n' + marker, 1)
+
+          if 'applyThemeColors(previewData.theme_colors)' not in m:
+              marker = '        name.textContent = clean(previewData.display_name) || "E-Tag User";'
+              if marker not in m:
+                  raise SystemExit('Men preview display marker not found')
+              m = m.replace(marker, '        applyThemeColors(previewData.theme_colors);\n\n' + marker, 1)
+
+          dashboard.write_text(d, encoding='utf-8')
+          men.write_text(m, encoding='utf-8')
+          print('Profile color customization applied.')
+
+      - name: Commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add dashboard.html themes/men.html
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+            exit 0
+          fi
+          git commit -m "Add profile color customization"
+          git push
