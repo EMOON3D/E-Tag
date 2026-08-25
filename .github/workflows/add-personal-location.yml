@@ -2,9 +2,6 @@ name: Add Personal Location
 
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - main
 
 permissions:
   contents: write
@@ -17,10 +14,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Patch dashboard and Men theme
+      - name: Patch current dashboard and Men files
         shell: python
         run: |
           from pathlib import Path
+          import re
 
           # -----------------------------
           # dashboard.html
@@ -29,109 +27,42 @@ jobs:
           text = dashboard.read_text(encoding="utf-8")
 
           if 'id="personalLocation"' not in text:
-              marker = '''                        <div class="field">
+              phone_field_pattern = re.compile(
+                  r'(\s*<div class="field">\s*<label>\s*Phone Number\s*</label>\s*<input\s+id="personalPhone"[\s\S]*?</div>)',
+                  re.MULTILINE
+              )
 
-                            <label>
-                                Phone Number
-                            </label>
+              addition = r'''\n\n                        <div class="field">\n\n                            <label>\n                                Location\n                            </label>\n\n                            <input\n                                id="personalLocation"\n                                class="input"\n                                type="text"\n                                maxlength="120"\n                                placeholder="Colombo, Sri Lanka"\n                            >\n\n                            <div class="field-help">\n                                Enter your city or location as plain text.\n                            </div>\n\n                        </div>'''
 
-                            <input
-                                id="personalPhone"
-                                class="input"
-                                type="tel"
-                                maxlength="30"
-                                placeholder="+94..."
-                            >
+              text, count = phone_field_pattern.subn(
+                  lambda m: m.group(1) + addition,
+                  text,
+                  count=1
+              )
 
-                        </div>
-'''
-
-              addition = '''
-
-                        <div class="field">
-
-                            <label>
-                                Location
-                            </label>
-
-                            <input
-                                id="personalLocation"
-                                class="input"
-                                type="text"
-                                maxlength="120"
-                                placeholder="Colombo, Sri Lanka"
-                            >
-
-                            <div class="field-help">
-                                Enter your city or location as plain text.
-                            </div>
-
-                        </div>
-'''
-
-              if marker not in text:
-                  raise SystemExit("Personal phone field marker not found")
-
-              text = text.replace(marker, marker + addition, 1)
+              if count != 1:
+                  raise SystemExit("Could not find Personal Phone field in dashboard.html")
 
           if '"personalLocation"' not in text:
               text = text.replace(
-                  '        "personalPhone",\n        "personalBio",',
-                  '        "personalPhone",\n        "personalLocation",\n        "personalBio",',
+                  '"personalPhone",\n        "personalBio",',
+                  '"personalPhone",\n        "personalLocation",\n        "personalBio",',
                   1
               )
 
-          if 'location:\n                    getValue(\n                        "personalLocation"' not in text:
-              text = text.replace(
-                  '''                phone:
-                    getValue(
-                        "personalPhone"
-                    ),
-
-
-                bio:''',
-                  '''                phone:
-                    getValue(
-                        "personalPhone"
-                    ),
-
-
-                location:
-                    getValue(
-                        "personalLocation"
-                    ),
-
-
-                bio:''',
-                  1
-              )
+          if 'getValue(\n                        "personalLocation"' not in text:
+              phone_data = '''phone:\n                    getValue(\n                        "personalPhone"\n                    ),'''
+              replacement = '''phone:\n                    getValue(\n                        "personalPhone"\n                    ),\n\n\n                location:\n                    getValue(\n                        "personalLocation"\n                    ),'''
+              if phone_data not in text:
+                  raise SystemExit("Could not find Personal phone data block")
+              text = text.replace(phone_data, replacement, 1)
 
           if '"personalLocation",\n            profile.location' not in text:
-              text = text.replace(
-                  '''        setValue(
-            "personalPhone",
-            profile.phone
-        );
-
-
-        setValue(
-            "personalBio",''',
-                  '''        setValue(
-            "personalPhone",
-            profile.phone
-        );
-
-
-        setValue(
-            "personalLocation",
-            profile.location
-        );
-
-
-        setValue(
-            "personalBio",''',
-                  1
-              )
+              profile_phone = '''setValue(\n            "personalPhone",\n            profile.phone\n        );'''
+              profile_replacement = '''setValue(\n            "personalPhone",\n            profile.phone\n        );\n\n\n        setValue(\n            "personalLocation",\n            profile.location\n        );'''
+              if profile_phone not in text:
+                  raise SystemExit("Could not find Personal phone profile load block")
+              text = text.replace(profile_phone, profile_replacement, 1)
 
           dashboard.write_text(text, encoding="utf-8")
 
@@ -142,108 +73,83 @@ jobs:
           text = men.read_text(encoding="utf-8")
 
           if 'id="location"' not in text:
-              hero_marker = '''            <div
-                id="age"
-                class="age"
-            ></div>
-'''
+              age_marker = re.compile(
+                  r'(\s*<div\s+id="age"\s+class="age"\s*>\s*</div>)',
+                  re.MULTILINE
+              )
 
-              hero_addition = '''
+              location_html = r'''\n\n            <div\n                id="location"\n                class="location hidden"\n            ></div>'''
 
-            <div
-                id="location"
-                class="location hidden"
-            ></div>
-'''
+              text, count = age_marker.subn(
+                  lambda m: m.group(1) + location_html,
+                  text,
+                  count=1
+              )
 
-              if hero_marker not in text:
-                  raise SystemExit("Men age marker not found")
-
-              text = text.replace(hero_marker, hero_marker + hero_addition, 1)
+              if count != 1:
+                  raise SystemExit("Could not find Men age element")
 
           if '.location {' not in text:
-              css_marker = '''        .age {'''
-              css = '''        .location {
-            position: relative;
-            z-index: 1;
-            margin-top: 5px;
-            color: var(--text-soft);
-            font-size: 11px;
-            line-height: 1.3;
-        }
-
-        .location::before {
-            content: "📍";
-            margin-right: 4px;
-        }
-
-'''
+              css_marker = '.age {'
+              css = '''.location {\n            position: relative;\n            z-index: 1;\n            margin-top: 5px;\n            color: var(--text-soft);\n            font-size: 11px;\n            line-height: 1.3;\n        }\n\n        .location::before {\n            content: "📍";\n            margin-right: 4px;\n        }\n\n        '''
               if css_marker not in text:
-                  raise SystemExit("Men age CSS marker not found")
+                  raise SystemExit("Could not find Men age CSS block")
               text = text.replace(css_marker, css + css_marker, 1)
 
-          load_marker = '''            const displayName =
-                clean(
-                    profileData.display_name
-                ) ||
-                "E-Tag User";
-'''
+          if 'const location = document.getElementById("location")' not in text:
+              display_marker = 'const displayName = clean(profileData.display_name) || "E-Tag User";'
+              location_ref = '''const location = document.getElementById("location");'''
+              if display_marker not in text:
+                  raise SystemExit("Could not find Men displayName line")
+              text = text.replace(display_marker, display_marker + '\n            ' + location_ref, 1)
 
-          if 'const location =' not in text:
-              location_ref = '''
-
-            const location =
-                document.getElementById(
-                    "location"
-                );
-'''
-              if load_marker not in text:
-                  raise SystemExit("Men displayName marker not found")
-              text = text.replace(load_marker, load_marker + location_ref, 1)
-
-          location_render_marker = '''            age.textContent =
-                profileData.age
-                    ? `${profileData.age} years old`
-                    : "";
-
-
-            bio.textContent ='''
-
-          location_render = '''            age.textContent =
-                profileData.age
-                    ? `${profileData.age} years old`
-                    : "";
-
-
-            location.textContent =
-                clean(
-                    profileData.location
-                );
-
-
-            location.classList.toggle(
-                "hidden",
-                !clean(profileData.location)
-            );
-
-
-            bio.textContent ='''
-
-          if 'profileData.location' not in text:
-              if location_render_marker not in text:
-                  raise SystemExit("Men age render marker not found")
-              text = text.replace(location_render_marker, location_render, 1)
+          if 'location.textContent' not in text:
+              age_render = 'age.textContent = profileData.age ? `${profileData.age} years old` : "";'
+              location_render = '''age.textContent = profileData.age ? `${profileData.age} years old` : "";\n            location.textContent = clean(profileData.location);\n            location.classList.toggle("hidden", !clean(profileData.location));'''
+              if age_render not in text:
+                  raise SystemExit("Could not find Men age render line")
+              text = text.replace(age_render, location_render, 1)
 
           men.write_text(text, encoding="utf-8")
 
-      - name: Commit changes
+      - name: Verify and commit
+        shell: python
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add dashboard.html themes/men.html
-          if git diff --cached --quiet; then
-            echo "No changes to commit."
-            exit 0
-          fi
-          git commit -m "feat: add personal location"
-          git push
+          from pathlib import Path
+          dashboard = Path("dashboard.html").read_text(encoding="utf-8")
+          men = Path("themes/men.html").read_text(encoding="utf-8")
+
+          required_dashboard = [
+              'id="personalLocation"',
+              '"personalLocation"',
+              '"location"'
+          ]
+
+          required_men = [
+              'id="location"',
+              'profileData.location',
+              '.location {'
+          ]
+
+          missing_dashboard = [x for x in required_dashboard if x not in dashboard]
+          missing_men = [x for x in required_men if x not in men]
+
+          if missing_dashboard or missing_men:
+              raise SystemExit(
+                  f"Location patch verification failed. dashboard={missing_dashboard}, men={missing_men}"
+              )
+
+          print("Personal Location patch verified successfully.")
+
+          import subprocess
+          subprocess.run(["git", "config", "user.name", "github-actions[bot]"], check=True)
+          subprocess.run(["git", "config", "user.email", "41898282+github-actions[bot]@users.noreply.github.com"], check=True)
+          subprocess.run(["git", "add", "dashboard.html", "themes/men.html"], check=True)
+          result = subprocess.run(["git", "diff", "--cached", "--quiet"])
+
+          if result.returncode == 0:
+              print("No changes needed; location patch is already installed.")
+              raise SystemExit(0)
+
+          subprocess.run(["git", "commit", "-m", "feat: add personal location field and Men display"], check=True)
+          subprocess.run(["git", "push"], check=True)
