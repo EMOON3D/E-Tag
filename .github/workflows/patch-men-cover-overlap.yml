@@ -16,24 +16,59 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Patch Men cover/avatar layout
+      - name: Patch Men cover/avatar layout and social links
         shell: python
         run: |
           from pathlib import Path
+          import re
 
           path = Path('themes/men.html')
           text = path.read_text(encoding='utf-8')
 
           text = text.replace('''        .cover-image {\n            width: 100%;\n            height: 125px;\n            margin: -6px auto 14px;\n            border-radius: 20px;\n            overflow: hidden;\n            display: none;\n            background: rgba(255,255,255,.28);\n            border: 1px solid rgba(255,255,255,.45);\n            box-shadow: 0 10px 24px rgba(55,69,57,.10);\n        }''', '''        .cover-image {\n            position: relative;\n            width: calc(100% + 48px);\n            height: 150px;\n            margin: -34px -24px 0;\n            border-radius: 0 0 24px 24px;\n            overflow: hidden;\n            display: none;\n            background: rgba(255,255,255,.28);\n            border: 1px solid rgba(255,255,255,.45);\n            box-shadow: 0 10px 24px rgba(55,69,57,.10);\n        }''')
 
-          text = text.replace('''        .hero {\n            position: relative;\n            flex: 0 0 auto;\n            padding:\n                clamp(20px, 3.4vh, 34px)\n                24px\n                clamp(14px, 2.5vh, 23px);\n            text-align: center;\n        }''', '''        .hero {\n            position: relative;\n            flex: 0 0 auto;\n            padding:\n                clamp(20px, 3.4vh, 34px)\n                24px\n                clamp(14px, 2.5vh, 23px);\n            text-align: center;\n        }''')
-
           text = text.replace('''        .avatar {\n            position: relative;\n            z-index: 1;\n            width: clamp(70px, 10.5vh, 104px);\n            height: clamp(70px, 10.5vh, 104px);\n            margin: 0 auto clamp(8px, 1.5vh, 14px);''', '''        .avatar {\n            position: relative;\n            z-index: 5;\n            width: clamp(70px, 10.5vh, 104px);\n            height: clamp(70px, 10.5vh, 104px);\n            margin: -52px auto clamp(8px, 1.5vh, 14px);''')
 
           text = text.replace('''            .hero {\n                padding-top: max(16px, env(safe-area-inset-top));\n                padding-left: 18px;\n                padding-right: 18px;\n            }''', '''            .hero {\n                padding-top: max(16px, env(safe-area-inset-top));\n                padding-left: 18px;\n                padding-right: 18px;\n            }\n\n            .cover-image {\n                width: calc(100% + 36px);\n                height: 125px;\n                margin-left: -18px;\n                margin-right: -18px;\n                border-radius: 0 0 22px 22px;\n            }\n\n            .avatar {\n                margin-top: -46px;\n            }''')
 
+          pattern = re.compile(
+              r'''    socialTrack\.addEventListener\("click", event => \{.*?\n    \}\);''',
+              re.S,
+          )
+
+          replacement = '''    socialTrack.addEventListener("click", event => {
+        const item = event.target.closest(".social-item");
+        if (!item) {
+            return;
+        }
+
+        if (suppressClick || moved) {
+            event.preventDefault();
+            return;
+        }
+
+        const index = items.indexOf(item);
+
+        if (index !== activeIndex) {
+            event.preventDefault();
+            selectIndex(index);
+            return;
+        }
+
+        /*
+         * Active social icons are normal anchors.
+         * Keep the browser's default action so the exact
+         * stored profile URL opens in target="_blank".
+         */
+    });'''
+
+          text, click_count = pattern.subn(replacement, text, count=1)
+
+          if click_count != 1:
+              raise SystemExit('Men social click handler was not found.')
+
           path.write_text(text, encoding='utf-8')
-          print('Men cover/avatar overlap layout patched.')
+          print('Men cover/avatar and social click fixes applied.')
 
       - name: Commit
         run: |
@@ -44,5 +79,5 @@ jobs:
             echo "No changes needed."
             exit 0
           fi
-          git commit -m "Make Men cover overlap profile avatar"
+          git commit -m "Fix Men cover overlap and social icon links"
           git push
