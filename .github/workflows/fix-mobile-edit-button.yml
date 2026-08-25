@@ -25,10 +25,6 @@ jobs:
           text = path.read_text(encoding="utf-8")
           marker = "/* ETAG MOBILE EDIT BUTTON FIX */"
 
-          if marker in text:
-              print("Already installed.")
-              raise SystemExit(0)
-
           css = '''
 <style>
 /* ETAG MOBILE EDIT BUTTON FIX */
@@ -37,7 +33,7 @@ jobs:
         position: fixed !important;
         left: 0 !important;
         right: 0 !important;
-        bottom: 0 !important;
+        bottom: 52px !important;
         z-index: 9999 !important;
         width: 100% !important;
         height: auto !important;
@@ -45,7 +41,7 @@ jobs:
         display: flex !important;
         align-items: flex-start !important;
         justify-content: center !important;
-        padding: 6px 16px max(8px, env(safe-area-inset-bottom)) !important;
+        padding: 6px 16px !important;
         pointer-events: none !important;
         overflow: visible !important;
     }
@@ -65,7 +61,17 @@ jobs:
 </style>
 '''
 
-          text = text.replace("</head>", css + "</head>", 1)
+          if marker in text:
+              start = text.find("<style>\n/* ETAG MOBILE EDIT BUTTON FIX */")
+              end = text.find("</style>", start)
+              if start != -1 and end != -1:
+                  end += len("</style>")
+                  text = text[:start] + css.strip() + text[end:]
+              else:
+                  text = text.replace("</head>", css + "</head>", 1)
+          else:
+              text = text.replace("</head>", css + "</head>", 1)
+
           path.write_text(text, encoding="utf-8")
 
       - name: Commit
@@ -73,5 +79,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add themes/men.html
-          git commit -m "fix: show edit button on mobile" || exit 0
+          git commit -m "fix: raise mobile edit button" || exit 0
           git push
