@@ -1,31 +1,30 @@
-name: Restore Exact Men Design
+name: Restore Men Theme Preview
 
 on:
   push:
-    branches:
-      - main
+    branches: [main]
 
 permissions:
   contents: write
 
 jobs:
   restore-men:
-    if: github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository history
+      - name: Checkout repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Restore exact Men design
+      - name: Restore exact Men design with preview bridge
         shell: python
         run: |
           import subprocess
           from pathlib import Path
 
           path = Path("themes/men.html")
+
           exact = subprocess.check_output(
               [
                   "git",
@@ -35,15 +34,12 @@ jobs:
               text=True
           )
 
-          # Keep the exact visual/design source and only add the
-          # technical preview bridge required by dashboard.html.
-          if "etag-men-preview" not in exact:
-              injection = r'''
+          marker = "/* E-TAG MEN PREVIEW MODE */"
 
-    /* =========================================================
-       DASHBOARD LIVE PREVIEW BRIDGE
-       Visual design remains unchanged.
-    ========================================================= */
+          if marker not in exact:
+              bridge = r'''
+
+    /* E-TAG MEN PREVIEW MODE */
 
     const isPreviewMode =
         new URLSearchParams(
@@ -216,16 +212,16 @@ jobs:
 
 '''
 
-              marker = "    load();\n\n</script>"
+              load_marker = "    load();\n\n</script>"
 
-              if marker not in exact:
+              if load_marker not in exact:
                   raise SystemExit(
-                      "Expected Men load marker was not found."
+                      "Could not find Men load marker."
                   )
 
               exact = exact.replace(
-                  marker,
-                  injection +
+                  load_marker,
+                  bridge +
                   "    if (!isPreviewMode) {\n\n        load();\n\n    }\n\n</script>",
                   1
               )
@@ -235,16 +231,15 @@ jobs:
               encoding="utf-8"
           )
 
-      - name: Remove temporary Men preview patch workflow
-        shell: bash
-        run: |
-          rm -f .github/workflows/patch-men-preview.yml
-
-      - name: Commit exact Men restoration
+      - name: Commit Men theme
         shell: bash
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add themes/men.html .github/workflows/patch-men-preview.yml .github/workflows/restore-men-exact-design.yml
-          git commit -m "Restore exact Men profile design and preview bridge"
+          git add themes/men.html
+          if git diff --cached --quiet; then
+            echo "No Men theme changes."
+            exit 0
+          fi
+          git commit -m "Restore exact Men theme and fix live preview mode"
           git push
