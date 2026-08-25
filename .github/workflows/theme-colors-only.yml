@@ -1,21 +1,68 @@
 name: Enforce Theme Colors Only
 
 on:
-  workflow_run:
-    workflows: ["Apply Profile Color Customization"]
-    types: [completed]
+  push:
+    branches: [main]
 
 permissions:
   contents: write
+  actions: read
 
 jobs:
   theme-colors-only:
     if: >-
-      github.event.workflow_run.conclusion == 'success' &&
-      !contains(github.event.workflow_run.head_commit.message, 'Enforce theme colors only')
+      !contains(github.event.head_commit.message, 'Enforce theme colors only')
     runs-on: ubuntu-latest
 
     steps:
+      - name: Wait for the existing profile-color workflow
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          COMMIT_SHA: ${{ github.sha }}
+        run: |
+          for i in {1..60}; do
+            RUNS=$(curl -fsSL \
+              -H "Authorization: Bearer ${GH_TOKEN}" \
+              -H "Accept: application/vnd.github+json" \
+              "https://api.github.com/repos/${REPO}/actions/workflows/apply-profile-colors.yml/runs?head_sha=${COMMIT_SHA}&per_page=10")
+
+            RUN_ID=$(python - <<'PY'
+          import json, os
+          data = json.loads(os.environ.get('RUNS_JSON', '{}'))
+          runs = data.get('workflow_runs', [])
+          print(runs[0]['id'] if runs else '')
+          PY
+            )
+
+            if [ -z "$RUN_ID" ]; then
+              echo "Waiting for Apply Profile Color Customization to start..."
+              sleep 2
+              continue
+            fi
+
+            STATUS=$(curl -fsSL \
+              -H "Authorization: Bearer ${GH_TOKEN}" \
+              -H "Accept: application/vnd.github+json" \
+              "https://api.github.com/repos/${REPO}/actions/runs/${RUN_ID}" \
+              | python -c 'import json,sys; print(json.load(sys.stdin).get("status", ""))')
+
+            CONCLUSION=$(curl -fsSL \
+              -H "Authorization: Bearer ${GH_TOKEN}" \
+              -H "Accept: application/vnd.github+json" \
+              "https://api.github.com/repos/${REPO}/actions/runs/${RUN_ID}" \
+              | python -c 'import json,sys; print(json.load(sys.stdin).get("conclusion", ""))')
+
+            if [ "$STATUS" = "completed" ]; then
+              echo "Apply Profile Color Customization finished with: $CONCLUSION"
+              break
+            fi
+
+            echo "Existing customization workflow is still running..."
+            sleep 2
+          done
+
       - name: Checkout main
         uses: actions/checkout@v4
         with:
@@ -33,19 +80,13 @@ jobs:
           d = dashboard.read_text(encoding="utf-8")
           m = men.read_text(encoding="utf-8")
 
-          # ------------------------------------------------------------
-          # DASHBOARD
-          # Keep the existing editor UI, but expose ONLY theme colors.
-          # Text color remains fixed at the original Men theme color.
-          # ------------------------------------------------------------
-
-          # Rename the section from Profile Colors to Theme Colors.
+          # Dashboard: rename the existing color editor to Theme Colors.
           d = d.replace(
               "                        Profile Colors\n",
               "                        Theme Colors\n"
           )
 
-          # Hide the Text Color row from the existing editor.
+          # Hide ONLY the Text Color control. The other theme controls remain.
           if "#etag-theme-colors-only-css" not in d:
               css = r'''
 
@@ -59,13 +100,12 @@ jobs:
               if marker in d:
                   d = d.replace(marker, css + "\n" + marker, 1)
 
-          # Explain that the controls are theme colors only.
           d = d.replace(
               "Customize your profile colors. The Men theme stays bright and light even when you choose darker colors.",
-              "Customize the Men theme palette. Text and icon colors stay unchanged, and the light/glass design remains.")
+              "Customize the Men theme palette. Text and icon colors stay unchanged, and the light/glass design remains."
+          )
 
-          # Force the hidden/unused text palette back to the original Men color
-          # immediately before Save Profile executes.
+          # Keep the existing text-color value fixed at the original theme value.
           if "#etag-theme-colors-only-js" not in d:
               js = r'''
 
@@ -94,12 +134,7 @@ jobs:
               if marker in d:
                   d = d.replace(marker, js + "\n\n</script>", 1)
 
-          # ------------------------------------------------------------
-          # MEN THEME
-          # Only the theme palette changes. Text remains the original
-          # Men theme color #253027 regardless of saved palette data.
-          # ------------------------------------------------------------
-
+          # Men theme: theme palette changes remain, but text stays original.
           if "#etag-theme-colors-only-men-css" not in m:
               css = r'''
 
@@ -121,8 +156,6 @@ jobs:
               if marker in m:
                   m = m.replace(marker, css + "\n" + marker, 1)
 
-          # On both public profile and dashboard live preview, restore only
-          # the original text color after the old palette handler runs.
           if "#etag-theme-colors-only-men-js" not in m:
               js = r'''
 
@@ -162,7 +195,6 @@ jobs:
 
           dashboard.write_text(d, encoding="utf-8")
           men.write_text(m, encoding="utf-8")
-
           print("Theme-colors-only cleanup applied.")
 
       - name: Commit theme-only result
