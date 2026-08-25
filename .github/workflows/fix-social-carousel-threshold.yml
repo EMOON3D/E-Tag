@@ -1,0 +1,166 @@
+name: Fix Social Carousel Threshold
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Patch Men social behavior
+        shell: python
+        run: |
+          from pathlib import Path
+
+          path = Path("themes/men.html")
+          text = path.read_text(encoding="utf-8")
+          original = text
+
+          # 1) Add threshold state and static-layout CSS.
+          marker = '        .hidden { display: none !important; }\n'
+          css = '''\n        /* Social layout threshold: 1-3 links are static; 4+ uses carousel. */\n        .social-track.no-carousel {\n            width: 100%;\n            justify-content: center;\n            transform: none !important;\n            cursor: default;\n            gap: 16px;\n        }\n\n        .social-track.no-carousel .social-item {\n            opacity: 1 !important;\n            pointer-events: auto !important;\n            transform: none !important;\n            width: 66px;\n            height: 66px;\n            flex: 0 0 66px;\n        }\n\n        .social-track.no-carousel .social-item.active {\n            width: 66px;\n            height: 66px;\n            flex-basis: 66px;\n            transform: none;\n            z-index: 1;\n        }\n\n        .social-track.no-carousel .social-item.active img {\n            width: 35px;\n            height: 35px;\n        }\n\n        .social-track.no-carousel .social-item.near,\n        .social-track.no-carousel .social-item.hidden-social {\n            opacity: 1;\n            pointer-events: auto;\n        }\n\n        .social-window.no-carousel {\n            touch-action: auto;\n            user-select: auto;\n            -webkit-user-select: auto;\n        }\n'''
+          if css not in text:
+              text = text.replace(marker, marker + css, 1)
+
+          # 2) Replace buildSocialCarousel with threshold-aware version.
+          start = text.find('    function buildSocialCarousel() {')
+          end = text.find('\n    function getTargetOffset(index) {', start)
+          if start == -1 or end == -1:
+              raise SystemExit('buildSocialCarousel boundaries not found')
+
+          new_build = '''    function buildSocialCarousel() {
+        socialTrack.innerHTML = "";
+        socialTrack.classList.remove("no-carousel");
+        socialWindow.classList.remove("no-carousel");
+
+        if (socialData.length === 0) {
+            socialSection.classList.add("hidden");
+            return;
+        }
+
+        socialSection.classList.remove("hidden");
+
+        const useCarousel = socialData.length >= 4;
+        const renderCopies = useCarousel ? copies : 1;
+
+        for (let copy = 0; copy < renderCopies; copy++) {
+            socialData.forEach((data, originalIndex) => {
+                const link = document.createElement("a");
+                link.className = "social-item";
+                link.href = data.url;
+                link.target = "_blank";
+                link.rel = "noopener noreferrer";
+                link.dataset.name = data.name;
+                link.dataset.username = data.username;
+                link.dataset.url = data.url;
+                link.dataset.originalIndex = String(originalIndex);
+
+                const image = document.createElement("img");
+                image.src = data.icon;
+                image.alt = data.name;
+                image.draggable = false;
+                link.appendChild(image);
+                socialTrack.appendChild(link);
+            });
+        }
+
+        items = Array.from(socialTrack.querySelectorAll(".social-item"));
+        count = socialData.length;
+
+        if (!useCarousel) {
+            socialTrack.classList.add("no-carousel");
+            socialWindow.classList.add("no-carousel");
+            activeIndex = Math.floor((count - 1) / 2);
+            currentOffset = 0;
+            socialTrack.style.transition = "none";
+            socialTrack.style.transform = "none";
+            items.forEach((item, index) => {
+                item.classList.remove("active", "near", "hidden-social");
+                item.dataset.index = String(index);
+            });
+
+            requestAnimationFrame(() => {
+                updateInformation(items[activeIndex], false);
+            });
+            return;
+        }
+
+        activeIndex = count * 3;
+
+        requestAnimationFrame(() => {
+            updateVisuals();
+            setOffset(getTargetOffset(activeIndex), false);
+            updateInformation(items[activeIndex], false);
+        });
+    }
+'''
+          text = text[:start] + new_build + text[end:]
+
+          # 3) Make visual updates keep all 1-3 items visible.
+          old_update = '''    function updateVisuals() {
+        items.forEach((item, index) => {
+            const distance = Math.abs(index - activeIndex);
+            item.classList.remove("active", "near", "hidden-social");
+            if (distance === 0) item.classList.add("active");
+            else if (distance === 1) item.classList.add("near");
+            else item.classList.add("hidden-social");
+        });
+    }
+'''
+          new_update = '''    function updateVisuals() {
+        if (count < 4) {
+            items.forEach(item => {
+                item.classList.remove("active", "near", "hidden-social");
+            });
+            return;
+        }
+
+        items.forEach((item, index) => {
+            const distance = Math.abs(index - activeIndex);
+            item.classList.remove("active", "near", "hidden-social");
+            if (distance === 0) item.classList.add("active");
+            else if (distance === 1) item.classList.add("near");
+            else item.classList.add("hidden-social");
+        });
+    }
+'''
+          if old_update not in text:
+              raise SystemExit('updateVisuals block not found')
+          text = text.replace(old_update, new_update, 1)
+
+          # 4) Disable drag/swipe/wheel for fewer than 4 links.
+          text = text.replace('''        if (!dragging || count === 0) return;\n''', '''        if (!dragging || count < 4) return;\n''', 1)
+          text = text.replace('''        if (count === 0) return;\n        event.preventDefault();\n''', '''        if (count < 4) return;\n        event.preventDefault();\n''', 1)
+          text = text.replace('''        if (count === 0) return;\n        if (event.key === "ArrowRight")\n''', '''        if (count < 4) return;\n        if (event.key === "ArrowRight")\n''', 1)
+
+          # 5) Prevent pointerdown from starting a carousel for 1-3 links.
+          text = text.replace('''    socialWindow.addEventListener("pointerdown", event => {\n        if (count === 0) return;\n''', '''    socialWindow.addEventListener("pointerdown", event => {\n        if (count < 4) return;\n''', 1)
+
+          # 6) Avoid resize recentering the static layout.
+          text = text.replace('''            if (count > 0) setOffset(getTargetOffset(activeIndex), false);\n''', '''            if (count >= 4) setOffset(getTargetOffset(activeIndex), false);\n''', 1)
+
+          if text == original:
+              print('No changes made; patch may already be applied.')
+          else:
+              path.write_text(text, encoding="utf-8")
+              print('Patched themes/men.html')
+
+      - name: Commit patch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add themes/men.html
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+            exit 0
+          fi
+          git commit -m "fix: hide social carousel for fewer than four links"
+          git push
