@@ -1,6 +1,8 @@
 name: Apply Profile Color Customization
 
 on:
+  push:
+    branches: [main]
   workflow_dispatch:
 
 permissions:
@@ -8,26 +10,609 @@ permissions:
 
 jobs:
   apply-profile-colors:
+    if: github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Confirm color customization implementation
-        shell: bash
+      - name: Apply real color customization to dashboard and Men theme
+        shell: python
         run: |
-          echo "Profile color customization implementation commit is already present."
-          echo "This workflow is provided so the customization can be run manually from GitHub Actions."
+          from pathlib import Path
 
-      - name: Commit marker if needed
+          dashboard = Path("dashboard.html")
+          men = Path("themes/men.html")
+
+          d = dashboard.read_text(encoding="utf-8")
+          m = men.read_text(encoding="utf-8")
+
+          # ------------------------------------------------------------
+          # DASHBOARD: CSS
+          # ------------------------------------------------------------
+          if "/* E-TAG PROFILE COLOR EDITOR */" not in d:
+              css_marker = "    </style>"
+
+              color_css = r'''
+
+        /* E-TAG PROFILE COLOR EDITOR */
+
+        .profile-color-section {
+            margin-top: 18px;
+            padding-top: 20px;
+            border-top: 1px solid #e5e7eb;
+        }
+
+        .profile-color-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 10px;
+        }
+
+        .profile-color-control {
+            border: 1px solid #e5e7eb;
+            border-radius: 14px;
+            padding: 12px;
+            background: #fafbfc;
+        }
+
+        .profile-color-top {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 9px;
+        }
+
+        .profile-color-picker {
+            width: 42px;
+            height: 42px;
+            padding: 0;
+            border: 0;
+            border-radius: 11px;
+            background: transparent;
+            cursor: pointer;
+        }
+
+        .profile-color-picker::-webkit-color-swatch-wrapper {
+            padding: 0;
+        }
+
+        .profile-color-picker::-webkit-color-swatch {
+            border: 0;
+            border-radius: 10px;
+        }
+
+        .profile-color-picker::-moz-color-swatch {
+            border: 0;
+            border-radius: 10px;
+        }
+
+        .profile-color-name {
+            font-size: 12px;
+            font-weight: 800;
+            color: #111827;
+        }
+
+        .profile-color-hex {
+            width: 100%;
+            min-width: 0;
+            padding: 9px 10px;
+            border: 1px solid #d1d5db;
+            border-radius: 9px;
+            font: 600 12px Inter, system-ui, sans-serif;
+            color: #111827;
+            background: #ffffff;
+            outline: none;
+            text-transform: uppercase;
+        }
+
+        .profile-color-hex:focus {
+            border-color: #111827;
+            box-shadow: 0 0 0 3px rgba(17,24,39,.08);
+        }
+
+        .profile-color-help {
+            margin-top: 9px;
+            color: #6b7280;
+            font-size: 11px;
+            line-height: 1.5;
+        }
+
+        .profile-color-actions {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 10px;
+        }
+
+        .profile-color-reset {
+            border: 0;
+            padding: 7px 10px;
+            border-radius: 999px;
+            background: #eef2f7;
+            color: #374151;
+            font-size: 11px;
+            font-weight: 800;
+            cursor: pointer;
+        }
+
+        @media (max-width: 600px) {
+            .profile-color-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+'''
+
+              if css_marker not in d:
+                  raise SystemExit("Dashboard style marker not found")
+              d = d.replace(css_marker, color_css + "\n" + css_marker, 1)
+
+          # ------------------------------------------------------------
+          # DASHBOARD: HTML
+          # ------------------------------------------------------------
+          if 'id="profileColorSection"' not in d:
+              marker = '''                <!-- IMAGE TYPE -->'''
+
+              color_html = r'''
+
+                <!-- PROFILE COLORS -->
+
+                <div
+                    id="profileColorSection"
+                    class="profile-color-section"
+                >
+
+                    <div class="subsection" style="margin-top:0; padding-top:0; border-top:0;">
+
+                        <h3>
+                            Profile Colors
+                        </h3>
+
+                        <div class="profile-color-grid">
+
+                            <div class="profile-color-control">
+                                <div class="profile-color-top">
+                                    <input id="colorMainPicker" class="profile-color-picker" type="color" value="#D3DBC8">
+                                    <div class="profile-color-name">Main Color</div>
+                                </div>
+                                <input id="colorMainHex" class="profile-color-hex" type="text" value="#D3DBC8" maxlength="7" spellcheck="false" autocomplete="off">
+                            </div>
+
+                            <div class="profile-color-control">
+                                <div class="profile-color-top">
+                                    <input id="colorSecondaryPicker" class="profile-color-picker" type="color" value="#E5EADF">
+                                    <div class="profile-color-name">Secondary Color</div>
+                                </div>
+                                <input id="colorSecondaryHex" class="profile-color-hex" type="text" value="#E5EADF" maxlength="7" spellcheck="false" autocomplete="off">
+                            </div>
+
+                            <div class="profile-color-control">
+                                <div class="profile-color-top">
+                                    <input id="colorAccentPicker" class="profile-color-picker" type="color" value="#B8C9A8">
+                                    <div class="profile-color-name">Accent Color</div>
+                                </div>
+                                <input id="colorAccentHex" class="profile-color-hex" type="text" value="#B8C9A8" maxlength="7" spellcheck="false" autocomplete="off">
+                            </div>
+
+                            <div class="profile-color-control">
+                                <div class="profile-color-top">
+                                    <input id="colorSurfacePicker" class="profile-color-picker" type="color" value="#FFFFFF">
+                                    <div class="profile-color-name">Surface Color</div>
+                                </div>
+                                <input id="colorSurfaceHex" class="profile-color-hex" type="text" value="#FFFFFF" maxlength="7" spellcheck="false" autocomplete="off">
+                            </div>
+
+                            <div class="profile-color-control">
+                                <div class="profile-color-top">
+                                    <input id="colorTextPicker" class="profile-color-picker" type="color" value="#253027">
+                                    <div class="profile-color-name">Text Color</div>
+                                </div>
+                                <input id="colorTextHex" class="profile-color-hex" type="text" value="#253027" maxlength="7" spellcheck="false" autocomplete="off">
+                            </div>
+
+                        </div>
+
+                        <div class="profile-color-help">
+                            Choose a color visually or enter an exact HEX value. The Men theme keeps its bright glass/light system while applying your selected palette.
+                        </div>
+
+                        <div class="profile-color-actions">
+                            <button id="resetProfileColors" class="profile-color-reset" type="button">
+                                Reset Colors
+                            </button>
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+'''
+
+              if marker not in d:
+                  raise SystemExit("Dashboard image-type marker not found")
+              d = d.replace(marker, color_html + marker, 1)
+
+          # ------------------------------------------------------------
+          # DASHBOARD: JS STATE + CONTROLS
+          # ------------------------------------------------------------
+          if "const profileColorControls" not in d:
+              marker = '''    const fieldIds = ['''
+
+              color_state = r'''
+
+    const profileColorControls = {
+        main: {
+            picker: document.getElementById("colorMainPicker"),
+            hex: document.getElementById("colorMainHex")
+        },
+        secondary: {
+            picker: document.getElementById("colorSecondaryPicker"),
+            hex: document.getElementById("colorSecondaryHex")
+        },
+        accent: {
+            picker: document.getElementById("colorAccentPicker"),
+            hex: document.getElementById("colorAccentHex")
+        },
+        surface: {
+            picker: document.getElementById("colorSurfacePicker"),
+            hex: document.getElementById("colorSurfaceHex")
+        },
+        text: {
+            picker: document.getElementById("colorTextPicker"),
+            hex: document.getElementById("colorTextHex")
+        }
+    };
+
+    const resetProfileColorsButton =
+        document.getElementById("resetProfileColors");
+
+    const DEFAULT_PROFILE_COLORS = {
+        main: "#D3DBC8",
+        secondary: "#E5EADF",
+        accent: "#B8C9A8",
+        surface: "#FFFFFF",
+        text: "#253027"
+    };
+
+    let currentThemeColors = {
+        ...DEFAULT_PROFILE_COLORS
+    };
+
+    function normalizeHex(value, fallback) {
+        const normalized = String(value || "")
+            .trim()
+            .toUpperCase();
+
+        if (/^#[0-9A-F]{6}$/i.test(normalized)) {
+            return normalized;
+        }
+
+        return fallback;
+    }
+
+    function renderProfileColors() {
+        Object.entries(profileColorControls).forEach(
+            ([key, control]) => {
+                const value = normalizeHex(
+                    currentThemeColors[key],
+                    DEFAULT_PROFILE_COLORS[key]
+                );
+
+                currentThemeColors[key] = value;
+
+                if (control.picker) {
+                    control.picker.value = value;
+                }
+
+                if (control.hex) {
+                    control.hex.value = value;
+                }
+            }
+        );
+    }
+
+    function emitProfileColorsPreview() {
+        const frame = document.getElementById("themePreviewFrame");
+
+        if (!frame?.contentWindow) {
+            return;
+        }
+
+        frame.contentWindow.postMessage(
+            {
+                type: "etag-dashboard-theme-colors",
+                theme_colors: {
+                    ...currentThemeColors
+                }
+            },
+            "*"
+        );
+    }
+
+    function updateProfileColor(key, value) {
+        const normalized = normalizeHex(
+            value,
+            DEFAULT_PROFILE_COLORS[key]
+        );
+
+        currentThemeColors[key] = normalized;
+        renderProfileColors();
+        emitProfileColorsPreview();
+
+        if (typeof updatePreview === "function") {
+            updatePreview();
+        }
+    }
+
+    Object.entries(profileColorControls).forEach(
+        ([key, control]) => {
+            control.picker?.addEventListener(
+                "input",
+                event => updateProfileColor(key, event.target.value)
+            );
+
+            control.hex?.addEventListener(
+                "input",
+                event => {
+                    const value = String(event.target.value || "").trim().toUpperCase();
+                    if (/^#[0-9A-F]{6}$/i.test(value)) {
+                        updateProfileColor(key, value);
+                    }
+                }
+            );
+
+            control.hex?.addEventListener(
+                "blur",
+                () => renderProfileColors()
+            );
+        }
+    );
+
+    resetProfileColorsButton?.addEventListener(
+        "click",
+        () => {
+            currentThemeColors = {
+                ...DEFAULT_PROFILE_COLORS
+            };
+            renderProfileColors();
+            emitProfileColorsPreview();
+            if (typeof updatePreview === "function") {
+                updatePreview();
+            }
+        }
+    );
+'''
+
+              if marker not in d:
+                  raise SystemExit("Dashboard fieldIds marker not found")
+              d = d.replace(marker, color_state + "\n" + marker, 1)
+
+          # Add theme_colors to the profile payload.
+          if "theme_colors:\n                currentThemeColors" not in d:
+              marker = '''            updated_at:\n                new Date()\n                    .toISOString()'''
+              replacement = '''            updated_at:\n                new Date()\n                    .toISOString(),\n\n            theme_colors:\n                {\n                    ...currentThemeColors\n                }'''
+              if marker in d:
+                  d = d.replace(marker, replacement, 1)
+              else:
+                  raise SystemExit("Dashboard buildProfileData marker not found")
+
+          # Load saved colors.
+          if "profile.theme_colors" not in d:
+              marker = '''        currentCoverImageUrl =\n            profile.cover_image_url ||\n            "";'''
+              replacement = marker + '''\n\n        currentThemeColors = {\n            ...DEFAULT_PROFILE_COLORS,\n            ...(profile.theme_colors || {})\n        };\n\n        renderProfileColors();'''
+              if marker in d:
+                  d = d.replace(marker, replacement, 1)
+              else:
+                  raise SystemExit("Dashboard cover profile marker not found")
+
+          # New profiles should use defaults.
+          if 'currentThemeColors = {\n                    ...DEFAULT_PROFILE_COLORS' not in d:
+              marker = '''                currentCoverImageUrl =\n                    "";'''
+              if marker in d:
+                  d = d.replace(
+                      marker,
+                      marker + '''\n\n                currentThemeColors = {\n                    ...DEFAULT_PROFILE_COLORS\n                };\n\n                renderProfileColors();''',
+                      1
+                  )
+
+          # Send colors whenever the iframe loads, making the preview reliable.
+          if "themePreviewFrame.addEventListener" not in d:
+              marker = '''    loadDashboard()'''
+              listener = r'''
+
+    const themePreviewFrame =
+        document.getElementById("themePreviewFrame");
+
+    themePreviewFrame?.addEventListener(
+        "load",
+        () => emitProfileColorsPreview()
+    );
+
+'''
+              if marker not in d:
+                  raise SystemExit("Dashboard loadDashboard marker not found")
+              d = d.replace(marker, listener + marker, 1)
+
+          # ------------------------------------------------------------
+          # MEN THEME: COLOR VARIABLES + PREVIEW/DB APPLY
+          # ------------------------------------------------------------
+          if "/* E-TAG CUSTOM PROFILE COLORS */" not in m:
+              style_marker = "    </style>"
+              color_css = r'''
+
+        /* E-TAG CUSTOM PROFILE COLORS */
+        :root {
+            --e-user-main: #D3DBC8;
+            --e-user-secondary: #E5EADF;
+            --e-user-accent: #B8C9A8;
+            --e-user-surface: #FFFFFF;
+            --e-user-text: #253027;
+        }
+
+        body {
+            color: var(--e-user-text);
+            background:
+                radial-gradient(
+                    ellipse at 70% 18%,
+                    color-mix(in srgb, var(--e-user-surface) 92%, white) 0%,
+                    color-mix(in srgb, var(--e-user-surface) 65%, transparent) 27%,
+                    transparent 57%
+                ),
+                radial-gradient(
+                    ellipse at 15% 75%,
+                    color-mix(in srgb, var(--e-user-main) 55%, white) 0%,
+                    color-mix(in srgb, var(--e-user-secondary) 52%, transparent) 35%,
+                    transparent 70%
+                ),
+                linear-gradient(
+                    135deg,
+                    color-mix(in srgb, var(--e-user-main) 55%, white),
+                    color-mix(in srgb, var(--e-user-main) 35%, white),
+                    color-mix(in srgb, var(--e-user-secondary) 62%, white),
+                    color-mix(in srgb, var(--e-user-main) 38%, white)
+                );
+        }
+
+        h1,
+        .section-title,
+        .social-name,
+        .contact-value {
+            color: var(--e-user-text);
+        }
+
+        .age,
+        .bio,
+        .section-subtitle,
+        .contact-label,
+        .social-username,
+        .swipe-hint {
+            color: color-mix(in srgb, var(--e-user-text) 62%, transparent);
+        }
+
+        .profile {
+            background: color-mix(in srgb, var(--e-user-surface) 12%, transparent);
+        }
+
+        .avatar,
+        .contact-item,
+        .social-item {
+            background:
+                linear-gradient(
+                    145deg,
+                    color-mix(in srgb, var(--e-user-surface) 92%, white),
+                    color-mix(in srgb, var(--e-user-main) 52%, white)
+                );
+        }
+
+        .avatar {
+            border-color: color-mix(in srgb, var(--e-user-surface) 80%, white);
+        }
+
+        .contact-item {
+            border-color: color-mix(in srgb, var(--e-user-surface) 58%, transparent);
+        }
+
+        .social-item {
+            border-color: color-mix(in srgb, var(--e-user-surface) 68%, transparent);
+        }
+
+        .social-item.active {
+            background:
+                linear-gradient(
+                    145deg,
+                    color-mix(in srgb, var(--e-user-surface) 98%, white),
+                    color-mix(in srgb, var(--e-user-main) 68%, white)
+                );
+            box-shadow:
+                0 15px 30px
+                color-mix(in srgb, var(--e-user-accent) 32%, transparent);
+        }
+
+        .swipe-line {
+            background: color-mix(in srgb, var(--e-user-accent) 42%, transparent);
+        }
+'''
+              if style_marker not in m:
+                  raise SystemExit("Men style marker not found")
+              m = m.replace(style_marker, color_css + "\n" + style_marker, 1)
+
+          if "function applyProfileColors" not in m:
+              marker = '''    function getTagCode() {'''
+              color_js = r'''
+
+    const DEFAULT_PROFILE_COLORS = {
+        main: "#D3DBC8",
+        secondary: "#E5EADF",
+        accent: "#B8C9A8",
+        surface: "#FFFFFF",
+        text: "#253027"
+    };
+
+    function normalizeProfileColors(value) {
+        return {
+            ...DEFAULT_PROFILE_COLORS,
+            ...(value || {})
+        };
+    }
+
+    function applyProfileColors(value) {
+        const colors = normalizeProfileColors(value);
+
+        Object.entries(colors).forEach(
+            ([key, color]) => {
+                if (/^#[0-9A-F]{6}$/i.test(String(color || ""))) {
+                    document.documentElement.style.setProperty(
+                        `--e-user-${key}`,
+                        String(color).toUpperCase()
+                    );
+                }
+            }
+        );
+    }
+
+    window.addEventListener(
+        "message",
+        event => {
+            if (
+                !event.data ||
+                event.data.type !== "etag-dashboard-theme-colors"
+            ) {
+                return;
+            }
+
+            applyProfileColors(
+                event.data.theme_colors
+            );
+        }
+    );
+'''
+              if marker not in m:
+                  raise SystemExit("Men getTagCode marker not found")
+              m = m.replace(marker, color_js + "\n" + marker, 1)
+
+          # Apply saved colors during normal public load.
+          if "applyProfileColors(profileData.theme_colors)" not in m:
+              marker = '''            renderAvatar(\n                avatar,\n                profileData\n            );'''
+              replacement = marker + '''\n\n            applyProfileColors(\n                profileData.theme_colors\n            );'''
+              if marker in m:
+                  m = m.replace(marker, replacement, 1)
+              else:
+                  raise SystemExit("Men normal avatar marker not found")
+
+          dashboard.write_text(d, encoding="utf-8")
+          men.write_text(m, encoding="utf-8")
+          print("Real profile color customization applied.")
+
+      - name: Commit changes
         shell: bash
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add .
+          git add dashboard.html themes/men.html
           if git diff --cached --quiet; then
-            echo "No additional changes are required."
+            echo "Color customization already applied."
             exit 0
           fi
-          git commit -m "Add profile color customization workflow"
+          git commit -m "Apply real profile color customization"
           git push
