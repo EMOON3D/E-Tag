@@ -1,0 +1,138 @@
+name: Add Cover Image Support
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Patch dashboard and Men theme
+        shell: python
+        run: |
+          from pathlib import Path
+
+          dashboard = Path('dashboard.html')
+          men = Path('themes/men.html')
+
+          d = dashboard.read_text(encoding='utf-8')
+          m = men.read_text(encoding='utf-8')
+
+          # ---------------- DASHBOARD ----------------
+          if 'id="coverFile"' not in d:
+              d = d.replace(
+                  '        .subsection {',
+                  '''        .cover-upload-section {\n            margin-top: 18px;\n            padding-top: 18px;\n            border-top: 1px solid #e5e7eb;\n        }\n\n        .cover-preview {\n            width: 100%;\n            height: 120px;\n            margin-bottom: 12px;\n            border-radius: 14px;\n            overflow: hidden;\n            background: #eef2f7;\n            display: flex;\n            align-items: center;\n            justify-content: center;\n            color: #6b7280;\n            font-size: 12px;\n            font-weight: 700;\n        }\n\n        .cover-preview img {\n            width: 100%;\n            height: 100%;\n            object-fit: cover;\n            display: block;\n        }\n\n        .subsection {''',
+                  1
+              )
+
+              d = d.replace(
+                  '                <!-- CHARACTERS -->',
+                  '''                <div class="cover-upload-section">\n\n                    <label>\n                        Cover Image\n                    </label>\n\n                    <div\n                        id="coverPreview"\n                        class="cover-preview"\n                    >\n                        No cover image selected\n                    </div>\n\n                    <label\n                        for="coverFile"\n                        class="upload-label"\n                    >\n                        Upload Cover Image\n                    </label>\n\n                    <input\n                        id="coverFile"\n                        class="file-input"\n                        type="file"\n                        accept="image/jpeg,image/png,image/webp"\n                    >\n\n                    <div class="upload-help">\n                        JPG, PNG or WEBP. Maximum 1 MB.\n                    </div>\n\n                    <div\n                        id="coverStatus"\n                        class="upload-status"\n                    ></div>\n\n                </div>\n\n\n                <!-- CHARACTERS -->''',
+                  1
+              )
+
+              d = d.replace(
+                  '    const uploadStatus =\n        document.getElementById(\n            "uploadStatus"\n        );',
+                  '''    const uploadStatus =\n        document.getElementById(\n            "uploadStatus"\n        );\n\n    const coverFile =\n        document.getElementById(\n            "coverFile"\n        );\n\n    const coverPreview =\n        document.getElementById(\n            "coverPreview"\n        );\n\n    const coverStatus =\n        document.getElementById(\n            "coverStatus"\n        );''',
+                  1
+              )
+
+              d = d.replace(
+                  '    let currentAvatarUrl =\n        "";',
+                  '''    let currentAvatarUrl =\n        "";\n\n    let currentCoverUrl =\n        "";''',
+                  1
+              )
+
+              d = d.replace(
+                  '    function renderAll() {',
+                  '''    function renderCoverPreview() {\n\n        coverPreview.innerHTML = "";\n\n        if (currentCoverUrl) {\n\n            const image = document.createElement("img");\n\n            image.src = currentCoverUrl;\n            image.alt = "Cover image";\n\n            image.onerror = () => {\n                coverPreview.textContent = "Cover image unavailable";\n            };\n\n            coverPreview.appendChild(image);\n            return;\n        }\n\n        coverPreview.textContent = "No cover image selected";\n    }\n\n\n    function renderAll() {''',
+                  1
+              )
+
+              d = d.replace(
+                  '        renderCharacters();\n\n\n        renderAvatar(',
+                  '        renderCharacters();\n\n        renderCoverPreview();\n\n\n        renderAvatar(',
+                  1
+              )
+
+              d = d.replace(
+                  '            avatar_url:\n                avatarType ===\n                    "upload"\n                        ? (\n                            currentAvatarUrl ||\n                            null\n                        )\n                        : null,',
+                  '''            avatar_url:\n                avatarType ===\n                    "upload"\n                        ? (\n                            currentAvatarUrl ||\n                            null\n                        )\n                        : null,\n\n\n            cover_image_url:\n                currentCoverUrl ||\n                null,''',
+                  1
+              )
+
+              d = d.replace(
+                  '        currentAvatarUrl =\n            profile.avatar_url ||\n            "";',
+                  '''        currentAvatarUrl =\n            profile.avatar_url ||\n            "";\n\n\n        currentCoverUrl =\n            profile.cover_image_url ||\n            "";''',
+                  1
+              )
+
+              marker = '    async function loadDashboard() {'
+              upload_fn = '''    async function uploadCoverImage(file) {\n\n        if (!file) {\n            return;\n        }\n\n        if (!ALLOWED_TYPES.has(file.type)) {\n            throw new Error("Only JPG, PNG and WEBP images are allowed.");\n        }\n\n        if (file.size > MAX_FILE_SIZE) {\n            throw new Error("Cover image must be 1 MB or smaller.");\n        }\n\n        const { data: sessionData, error: sessionError } =\n            await supabase.auth.getSession();\n\n        if (sessionError) {\n            throw new Error(`Session error: ${sessionError.message}`);\n        }\n\n        if (!sessionData?.session) {\n            throw new Error("Your login session has expired.");\n        }\n\n        coverStatus.textContent = "Preparing cover upload...";\n        coverStatus.style.color = "#6b7280";\n\n        const response = await fetch(\n            AVATAR_UPLOAD_FUNCTION,\n            {\n                method: "POST",\n                headers: {\n                    "Authorization": `Bearer ${sessionData.session.access_token}`,\n                    "apikey": SUPABASE_PUBLISHABLE_KEY,\n                    "Content-Type": "application/json"\n                },\n                body: JSON.stringify({\n                    fileName: file.name,\n                    contentType: file.type,\n                    fileSize: file.size\n                })\n            }\n        );\n\n        let result = null;\n\n        try {\n            result = await response.json();\n        } catch {}\n\n        if (!response.ok || !result?.success) {\n            throw new Error(\n                result?.message ||\n                `Upload URL request failed: ${response.status}`\n            );\n        }\n\n        coverStatus.textContent = "Uploading cover image...";\n\n        const uploadResponse = await fetch(\n            result.uploadUrl,\n            {\n                method: "PUT",\n                headers: {\n                    "Content-Type": file.type\n                },\n                body: file\n            }\n        );\n\n        if (!uploadResponse.ok) {\n            throw new Error(`R2 upload failed: ${uploadResponse.status}`);\n        }\n\n        currentCoverUrl =\n            `${R2_PUBLIC_URL}/${result.objectKey}`;\n\n        renderAll();\n\n        coverStatus.textContent =\n            "Cover uploaded. Click Save Profile.";\n\n        coverStatus.style.color = "#065f46";\n    }\n\n\n'''
+              if 'async function uploadCoverImage' not in d:
+                  d = d.replace(marker, upload_fn + marker, 1)
+
+              d = d.replace(
+                  '    /*\n     * LIVE PREVIEW\n     */',
+                  '''    coverFile.addEventListener(\n        "change",\n        async () => {\n\n            const file = coverFile.files?.[0];\n\n            if (!file) {\n                return;\n            }\n\n            try {\n                await uploadCoverImage(file);\n            } catch (error) {\n                console.error("COVER ERROR:", error);\n                coverStatus.textContent =\n                    error.message || "Cover upload failed.";\n                coverStatus.style.color = "#991b1b";\n                coverFile.value = "";\n            }\n\n        }\n    );\n\n\n    /*\n     * LIVE PREVIEW\n     */''',
+                  1
+              )
+
+          # ---------------- MEN THEME ----------------
+          if 'id="coverImage"' not in m:
+              m = m.replace(
+                  '        .hero {',
+                  '''        .cover-image {\n            width: 100%;\n            height: 125px;\n            margin: -6px auto 14px;\n            border-radius: 20px;\n            overflow: hidden;\n            display: none;\n            background: rgba(255,255,255,.28);\n            border: 1px solid rgba(255,255,255,.45);\n            box-shadow: 0 10px 24px rgba(55,69,57,.10);\n        }\n\n        .cover-image img {\n            width: 100%;\n            height: 100%;\n            display: block;\n            object-fit: cover;\n        }\n\n        .hero {''',
+                  1
+              )
+
+              m = m.replace(
+                  '        <section class="hero">',
+                  '''        <section class="hero">\n\n            <div\n                id="coverImage"\n                class="cover-image"\n            ></div>''',
+                  1
+              )
+
+              m = m.replace(
+                  '    const avatar = document.getElementById("avatar");',
+                  '''    const avatar = document.getElementById("avatar");\n    const coverImage = document.getElementById("coverImage");''',
+                  1
+              )
+
+              m = m.replace(
+                  '    function addContact(label, value, href, iconUrl) {',
+                  '''    function renderCoverImage(profileData) {\n        const url = clean(profileData?.cover_image_url);\n\n        coverImage.innerHTML = "";\n        coverImage.style.display = "none";\n\n        if (!url) {\n            return;\n        }\n\n        const image = document.createElement("img");\n        image.src = url;\n        image.alt = "Cover image";\n        image.onerror = () => {\n            coverImage.innerHTML = "";\n            coverImage.style.display = "none";\n        };\n\n        coverImage.appendChild(image);\n        coverImage.style.display = "block";\n    }\n\n\n    function addContact(label, value, href, iconUrl) {''',
+                  1
+              )
+
+              m = m.replace(
+                  '            renderAvatar(avatar, profileData);',
+                  '            renderCoverImage(profileData);\n            renderAvatar(avatar, profileData);',
+                  1
+              )
+
+              m = m.replace(
+                  '        renderAvatar(avatar, previewData);',
+                  '        renderCoverImage(previewData);\n        renderAvatar(avatar, previewData);',
+                  1
+              )
+
+          dashboard.write_text(d, encoding='utf-8')
+          men.write_text(m, encoding='utf-8')
+
+      - name: Commit changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add dashboard.html themes/men.html
+          git diff --cached --quiet && exit 0
+          git commit -m "Add profile cover image support"
+          git push
