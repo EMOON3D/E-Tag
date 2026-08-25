@@ -1,0 +1,87 @@
+name: Fix Men Social Link Click
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Patch social click handler
+        shell: python
+        run: |
+          from pathlib import Path
+          import re
+
+          path = Path('themes/men.html')
+          text = path.read_text(encoding='utf-8')
+
+          pattern = re.compile(
+              r'''    socialTrack\.addEventListener\(\n        ["']click["'],\n        event => \{.*?\n    \}\);''',
+              re.S,
+          )
+
+          replacement = '''    socialTrack.addEventListener(
+        "click",
+        event => {
+
+            const item =
+                event.target.closest(
+                    ".social-item"
+                );
+
+            if (!item) {
+                return;
+            }
+
+            if (
+                suppressClick ||
+                moved
+            ) {
+                event.preventDefault();
+                return;
+            }
+
+            const index =
+                items.indexOf(item);
+
+            if (
+                index !== activeIndex
+            ) {
+                event.preventDefault();
+                selectIndex(index);
+                return;
+            }
+
+            /*
+             * The active icon is a normal anchor.
+             * Do not cancel its default action.
+             * The browser will open the exact stored
+             * URL in the target="_blank" tab.
+             */
+        }
+    );'''
+
+          patched, count = pattern.subn(replacement, text, count=1)
+
+          if count != 1:
+              raise SystemExit('Men social click handler was not found.')
+
+          path.write_text(patched, encoding='utf-8')
+          print('Men social click handler patched.')
+
+      - name: Commit patch and remove temporary workflow
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add themes/men.html
+          git commit -m "Fix Men social icon link clicks"
+          git push
