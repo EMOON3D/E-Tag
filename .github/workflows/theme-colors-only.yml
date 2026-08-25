@@ -11,11 +11,12 @@ permissions:
 jobs:
   theme-colors-only:
     if: >-
-      !contains(github.event.head_commit.message, 'Enforce theme colors only')
+      !contains(github.event.head_commit.message, 'Enforce theme colors only') &&
+      !contains(github.event.head_commit.message, 'Fix theme colors only automation')
     runs-on: ubuntu-latest
 
     steps:
-      - name: Wait for the existing profile-color workflow
+      - name: Wait for existing profile-color workflow
         shell: bash
         env:
           GH_TOKEN: ${{ github.token }}
@@ -23,18 +24,11 @@ jobs:
           COMMIT_SHA: ${{ github.sha }}
         run: |
           for i in {1..60}; do
-            RUNS=$(curl -fsSL \
+            RUN_ID=$(curl -fsSL \
               -H "Authorization: Bearer ${GH_TOKEN}" \
               -H "Accept: application/vnd.github+json" \
-              "https://api.github.com/repos/${REPO}/actions/workflows/apply-profile-colors.yml/runs?head_sha=${COMMIT_SHA}&per_page=10")
-
-            RUN_ID=$(python - <<'PY'
-          import json, os
-          data = json.loads(os.environ.get('RUNS_JSON', '{}'))
-          runs = data.get('workflow_runs', [])
-          print(runs[0]['id'] if runs else '')
-          PY
-            )
+              "https://api.github.com/repos/${REPO}/actions/workflows/apply-profile-colors.yml/runs?head_sha=${COMMIT_SHA}&per_page=10" \
+              | python -c 'import json,sys; d=json.load(sys.stdin); r=d.get("workflow_runs",[]); print(r[0]["id"] if r else "")')
 
             if [ -z "$RUN_ID" ]; then
               echo "Waiting for Apply Profile Color Customization to start..."
@@ -86,7 +80,7 @@ jobs:
               "                        Theme Colors\n"
           )
 
-          # Hide ONLY the Text Color control. The other theme controls remain.
+          # Hide ONLY Text Color. Main/Secondary/Accent/Surface stay visible.
           if "#etag-theme-colors-only-css" not in d:
               css = r'''
 
@@ -105,7 +99,7 @@ jobs:
               "Customize the Men theme palette. Text and icon colors stay unchanged, and the light/glass design remains."
           )
 
-          # Keep the existing text-color value fixed at the original theme value.
+          # Keep text color fixed to the original Men theme color.
           if "#etag-theme-colors-only-js" not in d:
               js = r'''
 
@@ -134,7 +128,8 @@ jobs:
               if marker in d:
                   d = d.replace(marker, js + "\n\n</script>", 1)
 
-          # Men theme: theme palette changes remain, but text stays original.
+          # Men theme: preserve theme/background/surface palette customization.
+          # Text and icon colors remain the original design values.
           if "#etag-theme-colors-only-men-css" not in m:
               css = r'''
 
@@ -202,7 +197,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add dashboard.html themes/men.html .github/workflows/theme-colors-only.yml
+          git add dashboard.html themes/men.html
           if git diff --cached --quiet; then
             echo "No changes required."
             exit 0
