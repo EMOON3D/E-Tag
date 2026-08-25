@@ -1,0 +1,242 @@
+name: Add Personal Location
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Patch dashboard and Men theme
+        shell: python
+        run: |
+          from pathlib import Path
+
+          # -----------------------------
+          # dashboard.html
+          # -----------------------------
+          dashboard = Path("dashboard.html")
+          text = dashboard.read_text(encoding="utf-8")
+
+          if 'id="personalLocation"' not in text:
+              marker = '''                        <div class="field">
+
+                            <label>
+                                Phone Number
+                            </label>
+
+                            <input
+                                id="personalPhone"
+                                class="input"
+                                type="tel"
+                                maxlength="30"
+                                placeholder="+94..."
+                            >
+
+                        </div>
+'''
+
+              addition = '''
+
+                        <div class="field">
+
+                            <label>
+                                Location
+                            </label>
+
+                            <input
+                                id="personalLocation"
+                                class="input"
+                                type="text"
+                                maxlength="120"
+                                placeholder="Colombo, Sri Lanka"
+                            >
+
+                            <div class="field-help">
+                                Enter your city or location as plain text.
+                            </div>
+
+                        </div>
+'''
+
+              if marker not in text:
+                  raise SystemExit("Personal phone field marker not found")
+
+              text = text.replace(marker, marker + addition, 1)
+
+          text = text.replace(
+              '        "personalPhone",\n        "personalBio",',
+              '        "personalPhone",\n        "personalLocation",\n        "personalBio",',
+              1
+          )
+
+          text = text.replace(
+              '''                phone:
+                    getValue(
+                        "personalPhone"
+                    ),
+
+
+                bio:''',
+              '''                phone:
+                    getValue(
+                        "personalPhone"
+                    ),
+
+
+                location:
+                    getValue(
+                        "personalLocation"
+                    ),
+
+
+                bio:''',
+              1
+          )
+
+          text = text.replace(
+              '''        setValue(
+            "personalPhone",
+            profile.phone
+        );
+
+
+        setValue(
+            "personalBio",''',
+              '''        setValue(
+            "personalPhone",
+            profile.phone
+        );
+
+
+        setValue(
+            "personalLocation",
+            profile.location
+        );
+
+
+        setValue(
+            "personalBio",''',
+              1
+          )
+
+          dashboard.write_text(text, encoding="utf-8")
+
+          # -----------------------------
+          # themes/men.html
+          # -----------------------------
+          men = Path("themes/men.html")
+          text = men.read_text(encoding="utf-8")
+
+          if 'id="location"' not in text:
+              hero_marker = '''            <div
+                id="age"
+                class="age"
+            ></div>
+'''
+
+              hero_addition = '''
+
+            <div
+                id="location"
+                class="location hidden"
+            ></div>
+'''
+
+              if hero_marker not in text:
+                  raise SystemExit("Men age marker not found")
+
+              text = text.replace(hero_marker, hero_marker + hero_addition, 1)
+
+          if '.location {' not in text:
+              css_marker = '''        .age {'''
+              css = '''        .location {
+            position: relative;
+            z-index: 1;
+            margin-top: 5px;
+            color: var(--text-soft);
+            font-size: 11px;
+            line-height: 1.3;
+        }
+
+        .location::before {
+            content: "📍";
+            margin-right: 4px;
+        }
+
+'''
+              if css_marker not in text:
+                  raise SystemExit("Men age CSS marker not found")
+              text = text.replace(css_marker, css + css_marker, 1)
+
+          load_marker = '''            const displayName =
+                clean(
+                    profileData.display_name
+                ) ||
+                "E-Tag User";
+'''
+
+          if 'const location = document.getElementById("location")' not in text:
+              location_ref = '''
+
+            const location =
+                document.getElementById(
+                    "location"
+                );
+'''
+              if load_marker not in text:
+                  raise SystemExit("Men displayName marker not found")
+              text = text.replace(load_marker, load_marker + location_ref, 1)
+
+          location_render_marker = '''            age.textContent =
+                profileData.age
+                    ? `${profileData.age} years old`
+                    : "";
+
+
+            bio.textContent ='''
+
+          location_render = '''            age.textContent =
+                profileData.age
+                    ? `${profileData.age} years old`
+                    : "";
+
+
+            location.textContent =
+                clean(
+                    profileData.location
+                );
+
+
+            location.classList.toggle(
+                "hidden",
+                !clean(profileData.location)
+            );
+
+
+            bio.textContent ='''
+
+          if location_render_marker not in text:
+              raise SystemExit("Men age render marker not found")
+          text = text.replace(location_render_marker, location_render, 1)
+
+          men.write_text(text, encoding="utf-8")
+
+      - name: Commit changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add dashboard.html themes/men.html
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+            exit 0
+          fi
+          git commit -m "feat: add personal location"
+          git push
