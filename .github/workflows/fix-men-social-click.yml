@@ -1,6 +1,7 @@
 name: Fix Men Social Link Click
 
 on:
+  workflow_dispatch:
   push:
     branches: [main]
 
