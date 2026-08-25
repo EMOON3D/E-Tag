@@ -151,6 +151,25 @@
             box-shadow: var(--shadow);
         }
 
+        .cover-image {
+            width: 100%;
+            height: 125px;
+            margin: -6px auto 14px;
+            border-radius: 20px;
+            overflow: hidden;
+            display: none;
+            background: rgba(255,255,255,.28);
+            border: 1px solid rgba(255,255,255,.45);
+            box-shadow: 0 10px 24px rgba(55,69,57,.10);
+        }
+
+        .cover-image img {
+            width: 100%;
+            height: 100%;
+            display: block;
+            object-fit: cover;
+        }
+
         .hero {
             position: relative;
             flex: 0 0 auto;
@@ -833,6 +852,11 @@
     <main id="profile" class="profile hidden">
 
         <section class="hero">
+
+            <div
+                id="coverImage"
+                class="cover-image"
+            ></div>
             <div id="avatar" class="avatar"></div>
             <h1 id="name">E-Tag User</h1>
             <div id="age" class="age"></div>
@@ -905,6 +929,7 @@
     const loading = document.getElementById("loading");
     const errorBox = document.getElementById("error");
     const avatar = document.getElementById("avatar");
+    const coverImage = document.getElementById("coverImage");
     const name = document.getElementById("name");
     const age = document.getElementById("age");
     const bio = document.getElementById("bio");
@@ -1004,6 +1029,29 @@
 
         element.textContent = initials(displayName);
     }
+
+    function renderCoverImage(profileData) {
+        const url = clean(profileData?.cover_image_url);
+
+        coverImage.innerHTML = "";
+        coverImage.style.display = "none";
+
+        if (!url) {
+            return;
+        }
+
+        const image = document.createElement("img");
+        image.src = url;
+        image.alt = "Cover image";
+        image.onerror = () => {
+            coverImage.innerHTML = "";
+            coverImage.style.display = "none";
+        };
+
+        coverImage.appendChild(image);
+        coverImage.style.display = "block";
+    }
+
 
     function addContact(label, value, href, iconUrl) {
         const link = document.createElement("a");
@@ -1453,6 +1501,7 @@
             age.textContent = profileData.age ? `${profileData.age} years old` : "";
             bio.textContent = clean(profileData.bio);
 
+            renderCoverImage(profileData);
             renderAvatar(avatar, profileData);
 
             contacts.innerHTML = "";
@@ -1566,6 +1615,7 @@
         name.textContent = clean(previewData.display_name) || "E-Tag User";
         age.textContent = previewData.age ? `${previewData.age} years old` : "";
         bio.textContent = clean(previewData.bio);
+        renderCoverImage(previewData);
         renderAvatar(avatar, previewData);
 
         contacts.innerHTML = "";
