@@ -1,0 +1,140 @@
+name: Apply Cover Image Support
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  apply-cover-image:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Patch dashboard and Men theme
+        shell: python
+        run: |
+          from pathlib import Path
+
+          dashboard = Path('dashboard.html')
+          men = Path('themes/men.html')
+
+          d = dashboard.read_text(encoding='utf-8')
+          m = men.read_text(encoding='utf-8')
+
+          # ------------------------------
+          # Dashboard: cover-image editor
+          # ------------------------------
+          if 'id="coverFile"' not in d:
+              needle = '''                <div\n                    id="uploadSection"\n                    class="field"\n                >'''
+
+              cover_block = '''                <div\n                    id="coverSection"\n                    class="field"\n                >\n\n                    <div class="subsection" style="margin-top:0;">\n\n                        <h3>\n                            Cover Image\n                        </h3>\n\n                        <div\n                            id="coverPreview"\n                            style="\n                                width:100%;\n                                aspect-ratio:16 / 6;\n                                border-radius:14px;\n                                overflow:hidden;\n                                background:linear-gradient(135deg,#eef2f7,#d9e0d4);\n                                border:1px solid #e5e7eb;\n                                display:flex;\n                                align-items:center;\n                                justify-content:center;\n                                color:#6b7280;\n                                margin-bottom:10px;\n                                font-size:12px;\n                                font-weight:700;\n                            "\n                        >\n                            No cover image\n                        </div>\n\n                        <label\n                            for="coverFile"\n                            class="upload-label"\n                        >\n                            Upload Cover Image\n                        </label>\n\n                        <input\n                            id="coverFile"\n                            class="file-input"\n                            type="file"\n                            accept="image/jpeg,image/png,image/webp"\n                        >\n\n                        <div class="upload-help">\n                            JPG, PNG or WEBP. Maximum 1 MB.\n                        </div>\n\n                        <div\n                            id="coverUploadStatus"\n                            class="upload-status"\n                        ></div>\n\n                    </div>\n\n                </div>\n\n\n'''
+              if needle not in d:
+                  raise SystemExit('Dashboard uploadSection marker not found')
+              d = d.replace(needle, cover_block + needle, 1)
+
+              d = d.replace(
+                  '    const uploadStatus =\n        document.getElementById(\n            "uploadStatus"\n        );',
+                  '    const uploadStatus =\n        document.getElementById(\n            "uploadStatus"\n        );\n\n    const coverFile =\n        document.getElementById(\n            "coverFile"\n        );\n\n    const coverPreview =\n        document.getElementById(\n            "coverPreview"\n        );\n\n    const coverUploadStatus =\n        document.getElementById(\n            "coverUploadStatus"\n        );',
+                  1
+              )
+
+              d = d.replace(
+                  '    let currentAvatarUrl =\n        "";',
+                  '    let currentAvatarUrl =\n        "";\n\n    let currentCoverImageUrl =\n        "";',
+                  1
+              )
+
+              d = d.replace(
+                  '    function renderAll() {\n\n        renderProfileType();',
+                  '    function renderCoverPreview() {\n\n        if (!coverPreview) {\n            return;\n        }\n\n        if (currentCoverImageUrl) {\n            coverPreview.style.backgroundImage = `url("${currentCoverImageUrl}")`;\n            coverPreview.style.backgroundSize = "cover";\n            coverPreview.style.backgroundPosition = "center";\n            coverPreview.textContent = "";\n        } else {\n            coverPreview.style.backgroundImage = "";\n            coverPreview.textContent = "No cover image";\n        }\n    }\n\n\n    function renderAll() {\n\n        renderProfileType();',
+                  1
+              )
+
+              d = d.replace(
+                  '        renderAvatarMode();\n\n        renderCharacters();',
+                  '        renderAvatarMode();\n\n        renderCharacters();\n\n        renderCoverPreview();',
+                  1
+              )
+
+              d = d.replace(
+                  '            updated_at:\n                new Date()\n                    .toISOString()\n\n        };',
+                  '            updated_at:\n                new Date()\n                    .toISOString(),\n\n            cover_image_url:\n                currentCoverImageUrl ||\n                null\n\n        };',
+                  1
+              )
+
+              d = d.replace(
+                  '        currentAvatarUrl =\n            profile.avatar_url ||\n            "";',
+                  '        currentAvatarUrl =\n            profile.avatar_url ||\n            "";\n\n        currentCoverImageUrl =\n            profile.cover_image_url ||\n            "";',
+                  1
+              )
+
+              # Make the existing secure upload endpoint usable for cover images too.
+              cover_function = '''\n\n    async function uploadCoverImage(file) {\n\n        if (!file) {\n            return;\n        }\n\n        if (!ALLOWED_TYPES.has(file.type)) {\n            throw new Error("Only JPG, PNG and WEBP images are allowed.");\n        }\n\n        if (file.size > MAX_FILE_SIZE) {\n            throw new Error("Image must be 1 MB or smaller.");\n        }\n\n        const { data: sessionData, error: sessionError } =\n            await supabase.auth.getSession();\n\n        if (sessionError) {\n            throw new Error(`Session error: ${sessionError.message}`);\n        }\n\n        if (!sessionData?.session) {\n            throw new Error("Your login session has expired.");\n        }\n\n        coverUploadStatus.textContent = "Preparing cover upload...";\n\n        const response = await fetch(\n            AVATAR_UPLOAD_FUNCTION,\n            {\n                method: "POST",\n                headers: {\n                    "Authorization": `Bearer ${sessionData.session.access_token}`,\n                    "apikey": SUPABASE_PUBLISHABLE_KEY,\n                    "Content-Type": "application/json"\n                },\n                body: JSON.stringify({\n                    fileName: `cover-${file.name}`,\n                    contentType: file.type,\n                    fileSize: file.size\n                })\n            }\n        );\n\n        let result;\n        try {\n            result = await response.json();\n        } catch {\n            result = null;\n        }\n\n        if (!response.ok || !result?.success) {\n            throw new Error(\n                result?.message ||\n                `Upload URL request failed: ${response.status}`\n            );\n        }\n\n        coverUploadStatus.textContent = "Uploading cover image...";\n\n        const uploadResponse = await fetch(\n            result.uploadUrl,\n            {\n                method: "PUT",\n                headers: {\n                    "Content-Type": file.type\n                },\n                body: file\n            }\n        );\n\n        if (!uploadResponse.ok) {\n            throw new Error(`R2 upload failed: ${uploadResponse.status}`);\n        }\n\n        currentCoverImageUrl =\n            `${R2_PUBLIC_URL}/${result.objectKey}`;\n\n        renderCoverPreview();\n        updatePreview();\n\n        coverUploadStatus.textContent =\n            "Cover image uploaded. Click Save Profile.";\n\n        coverUploadStatus.style.color = "#065f46";\n    }\n'''
+              marker = '\n\n    async function loadDashboard() {'
+              if marker not in d:
+                  raise SystemExit('loadDashboard marker not found')
+              d = d.replace(marker, cover_function + marker, 1)
+
+              upload_listener = '''\n\n    coverFile.addEventListener(\n        "change",\n        async () => {\n\n            const file = coverFile.files?.[0];\n\n            if (!file) {\n                return;\n            }\n\n            try {\n                coverUploadStatus.style.color = "#6b7280";\n                await uploadCoverImage(file);\n            } catch (error) {\n                console.error("COVER IMAGE ERROR:", error);\n                coverUploadStatus.textContent =\n                    error.message || "Cover upload failed.";\n                coverUploadStatus.style.color = "#991b1b";\n                coverFile.value = "";\n            }\n        }\n    );\n'''
+              marker2 = '\n\n    /*\n     * LIVE PREVIEW\n     */'
+              if marker2 not in d:
+                  raise SystemExit('live preview marker not found')
+              d = d.replace(marker2, upload_listener + marker2, 1)
+
+          # ------------------------------
+          # Men theme: cover image
+          # ------------------------------
+          if 'id="coverImage"' not in m:
+              hero_marker = '''        <section class="hero">'''
+              cover_html = '''        <section class="hero">\n\n            <div\n                id="coverImage"\n                class="cover-image hidden"\n            ></div>'''
+              if hero_marker not in m:
+                  raise SystemExit('Men hero marker not found')
+              m = m.replace(hero_marker, cover_html, 1)
+
+              css_marker = '        .avatar {\n'
+              css = '''        .cover-image {\n            position: relative;\n            width: 100%;\n            height: clamp(90px, 16vh, 150px);\n            margin: -34px 0 14px;\n            border-radius: 0 0 22px 22px;\n            background-position: center;\n            background-size: cover;\n            background-repeat: no-repeat;\n            box-shadow: 0 10px 24px rgba(60,74,62,.12);\n        }\n\n        .cover-image::after {\n            content: "";\n            position: absolute;\n            inset: 0;\n            background: linear-gradient(180deg, rgba(255,255,255,0), rgba(255,255,255,.14));\n            pointer-events: none;\n        }\n\n'''
+              if css_marker not in m:
+                  raise SystemExit('Men avatar CSS marker not found')
+              m = m.replace(css_marker, css + css_marker, 1)
+
+              var_marker = '    const editButton = document.getElementById("editButton");'
+              var_add = '    const coverImage = document.getElementById("coverImage");\n'
+              if var_marker not in m:
+                  raise SystemExit('Men editButton marker not found')
+              m = m.replace(var_marker, var_add + var_marker, 1)
+
+              render_marker = '        renderAvatar(avatar, previewData);\n'
+              render_add = '''        if (previewData.cover_image_url) {\n            coverImage.style.backgroundImage = `url("${previewData.cover_image_url}")`;\n            coverImage.classList.remove("hidden");\n        } else {\n            coverImage.style.backgroundImage = "";\n            coverImage.classList.add("hidden");\n        }\n\n'''
+              if render_marker not in m:
+                  raise SystemExit('Men preview render marker not found')
+              m = m.replace(render_marker, render_add + render_marker, 1)
+
+              normal_render_marker = '            renderAvatar(avatar, profileData);'
+              if normal_render_marker in m:
+                  m = m.replace(
+                      normal_render_marker,
+                      normal_render_marker + '''\n\n            if (profileData.cover_image_url) {\n                coverImage.style.backgroundImage = `url("${profileData.cover_image_url}")`;\n                coverImage.classList.remove("hidden");\n            } else {\n                coverImage.style.backgroundImage = "";\n                coverImage.classList.add("hidden");\n            }''',
+                      1
+                  )
+
+          dashboard.write_text(d, encoding='utf-8')
+          men.write_text(m, encoding='utf-8')
+          print('Patched dashboard.html and themes/men.html')
+
+      - name: Commit changes
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add dashboard.html themes/men.html
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+            exit 0
+          fi
+          git commit -m "Add cover image profile support"
+          git push
