@@ -152,10 +152,11 @@
         }
 
         .cover-image {
-            width: 100%;
-            height: 125px;
-            margin: -6px auto 14px;
-            border-radius: 20px;
+            position: relative;
+            width: calc(100% + 48px);
+            height: 150px;
+            margin: -34px -24px 0;
+            border-radius: 0 0 24px 24px;
             overflow: hidden;
             display: none;
             background: rgba(255,255,255,.28);
@@ -196,10 +197,10 @@
 
         .avatar {
             position: relative;
-            z-index: 1;
+            z-index: 5;
             width: clamp(70px, 10.5vh, 104px);
             height: clamp(70px, 10.5vh, 104px);
-            margin: 0 auto clamp(8px, 1.5vh, 14px);
+            margin: -52px auto clamp(8px, 1.5vh, 14px);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -633,6 +634,18 @@
                 padding-top: max(16px, env(safe-area-inset-top));
                 padding-left: 18px;
                 padding-right: 18px;
+            }
+
+            .cover-image {
+                width: calc(100% + 36px);
+                height: 125px;
+                margin-left: -18px;
+                margin-right: -18px;
+                border-radius: 0 0 22px 22px;
+            }
+
+            .avatar {
+                margin-top: -46px;
             }
             .section {
                 padding-left: 16px;
