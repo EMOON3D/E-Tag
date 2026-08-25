@@ -1,28 +1,415 @@
 name: Apply Full Theme Color Customization
 
-on: [push, workflow_dispatch]
+"on":
+  push:
+    branches:
+      - main
+  workflow_dispatch:
 
 permissions:
   contents: write
 
 jobs:
   apply-theme-colors:
-    if: github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
 
-      - name: Apply full visual theme colors
-        run: python3 .github/scripts/apply_full_theme_colors.py
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Patch dashboard and Men theme
+        shell: python
+        run: |
+          from pathlib import Path
+
+          dashboard = Path("dashboard.html")
+          men = Path("themes/men.html")
+
+          d = dashboard.read_text(encoding="utf-8")
+          m = men.read_text(encoding="utf-8")
+
+          marker = '<div class="cover-upload-section">'
+
+          html = r'''
+
+                <div
+                    id="themeColorSection"
+                    class="subsection"
+                >
+
+                    <h3>
+                        Theme Colors
+                    </h3>
+
+                    <div class="field-help">
+                        Customize the visual colors of your profile. Text and social icon colors stay unchanged.
+                    </div>
+
+                    <div
+                        id="themeColorGrid"
+                        class="theme-color-grid"
+                    >
+
+                        <div class="theme-color-row">
+                            <label>Background 1</label>
+                            <div class="theme-color-control">
+                                <input id="themeColorBg1" type="color" value="#C3CDB8">
+                                <input id="themeColorBg1Hex" class="input" type="text" value="#C3CDB8" maxlength="7" spellcheck="false">
+                            </div>
+                        </div>
+
+                        <div class="theme-color-row">
+                            <label>Background 2</label>
+                            <div class="theme-color-control">
+                                <input id="themeColorBg2" type="color" value="#D3DBC8">
+                                <input id="themeColorBg2Hex" class="input" type="text" value="#D3DBC8" maxlength="7" spellcheck="false">
+                            </div>
+                        </div>
+
+                        <div class="theme-color-row">
+                            <label>Background 3</label>
+                            <div class="theme-color-control">
+                                <input id="themeColorBg3" type="color" value="#E1E7DA">
+                                <input id="themeColorBg3Hex" class="input" type="text" value="#E1E7DA" maxlength="7" spellcheck="false">
+                            </div>
+                        </div>
+
+                        <div class="theme-color-row">
+                            <label>Main Theme</label>
+                            <div class="theme-color-control">
+                                <input id="themeColorMain" type="color" value="#D3DBC8">
+                                <input id="themeColorMainHex" class="input" type="text" value="#D3DBC8" maxlength="7" spellcheck="false">
+                            </div>
+                        </div>
+
+                        <div class="theme-color-row">
+                            <label>Secondary Theme</label>
+                            <div class="theme-color-control">
+                                <input id="themeColorSecondary" type="color" value="#E5EADF">
+                                <input id="themeColorSecondaryHex" class="input" type="text" value="#E5EADF" maxlength="7" spellcheck="false">
+                            </div>
+                        </div>
+
+                        <div class="theme-color-row">
+                            <label>Glass Tint</label>
+                            <div class="theme-color-control">
+                                <input id="themeColorGlass" type="color" value="#D3DBC8">
+                                <input id="themeColorGlassHex" class="input" type="text" value="#D3DBC8" maxlength="7" spellcheck="false">
+                            </div>
+                        </div>
+
+                        <div class="theme-color-row">
+                            <label>Surface</label>
+                            <div class="theme-color-control">
+                                <input id="themeColorSurface" type="color" value="#FFFFFF">
+                                <input id="themeColorSurfaceHex" class="input" type="text" value="#FFFFFF" maxlength="7" spellcheck="false">
+                            </div>
+                        </div>
+
+                        <div class="theme-color-row">
+                            <label>Border</label>
+                            <div class="theme-color-control">
+                                <input id="themeColorBorder" type="color" value="#FFFFFF">
+                                <input id="themeColorBorderHex" class="input" type="text" value="#FFFFFF" maxlength="7" spellcheck="false">
+                            </div>
+                        </div>
+
+                        <div class="theme-color-row">
+                            <label>Accent</label>
+                            <div class="theme-color-control">
+                                <input id="themeColorAccent" type="color" value="#B8C9A8">
+                                <input id="themeColorAccentHex" class="input" type="text" value="#B8C9A8" maxlength="7" spellcheck="false">
+                            </div>
+                        </div>
+
+                        <div class="theme-color-row">
+                            <label>Shadow Tint</label>
+                            <div class="theme-color-control">
+                                <input id="themeColorShadow" type="color" value="#556B57">
+                                <input id="themeColorShadowHex" class="input" type="text" value="#556B57" maxlength="7" spellcheck="false">
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <button
+                        id="resetThemeColors"
+                        class="button secondary"
+                        type="button"
+                        style="margin-top:12px;"
+                    >
+                        Reset Theme Colors
+                    </button>
+
+                </div>
+
+'''
+
+          if 'id="themeColorSection"' not in d and marker in d:
+              d = d.replace(marker, html + marker, 1)
+
+          css = r'''
+
+        .theme-color-grid {
+            display: grid;
+            gap: 12px;
+            margin-top: 14px;
+        }
+
+        .theme-color-row {
+            display: grid;
+            gap: 7px;
+        }
+
+        .theme-color-row > label {
+            margin: 0;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .theme-color-control {
+            display: grid;
+            grid-template-columns: 54px 1fr;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .theme-color-control input[type="color"] {
+            width: 54px;
+            height: 46px;
+            padding: 3px;
+            border: 1px solid #d1d5db;
+            border-radius: 11px;
+            background: #ffffff;
+            cursor: pointer;
+        }
+'''
+
+          if '.theme-color-grid' not in d:
+              d = d.replace('</style>', css + '\n    </style>', 1)
+
+          js = r'''
+
+<script type="module">
+(() => {
+    const SUPABASE_URL = "https://zuptxhcjzhqynrquyray.supabase.co";
+    const SUPABASE_KEY = "sb_publishable_1sa0MtE83MZXETR5JLakJA_fRVrjDJI";
+
+    const DEFAULTS = {
+        bg1: "#C3CDB8",
+        bg2: "#D3DBC8",
+        bg3: "#E1E7DA",
+        main: "#D3DBC8",
+        secondary: "#E5EADF",
+        glass: "#D3DBC8",
+        surface: "#FFFFFF",
+        border: "#FFFFFF",
+        accent: "#B8C9A8",
+        shadow: "#556B57"
+    };
+
+    const KEYS = Object.keys(DEFAULTS);
+    const colors = { ...DEFAULTS };
+    const frame = document.getElementById("themePreviewFrame");
+
+    const normalize = value => {
+        const v = String(value || "").trim().toUpperCase();
+        return /^#[0-9A-F]{6}$/.test(v) ? v : null;
+    };
+
+    const getEls = key => ({
+        picker: document.getElementById(`themeColor${key[0].toUpperCase()}${key.slice(1)}`),
+        hex: document.getElementById(`themeColor${key[0].toUpperCase()}${key.slice(1)}Hex`)
+    });
+
+    function renderControls() {
+        KEYS.forEach(key => {
+            const { picker, hex } = getEls(key);
+            if (picker) picker.value = colors[key];
+            if (hex) hex.value = colors[key];
+        });
+    }
+
+    function sendPreview() {
+        frame?.contentWindow?.postMessage({
+            type: "etag-theme-colors",
+            colors: { ...colors }
+        }, "*");
+    }
+
+    function setColor(key, value) {
+        const normalized = normalize(value);
+        if (!normalized) return;
+        colors[key] = normalized;
+        renderControls();
+        sendPreview();
+    }
+
+    KEYS.forEach(key => {
+        const { picker, hex } = getEls(key);
+        picker?.addEventListener("input", event => setColor(key, event.target.value));
+        hex?.addEventListener("change", event => setColor(key, event.target.value));
+    });
+
+    document.getElementById("resetThemeColors")?.addEventListener("click", () => {
+        Object.assign(colors, DEFAULTS);
+        renderControls();
+        sendPreview();
+    });
+
+    frame?.addEventListener("load", sendPreview);
+
+    async function loadSaved() {
+        try {
+            const response = await fetch(`${SUPABASE_URL}/rest/v1/profiles?select=theme_colors&id=eq.${encodeURIComponent((await (await fetch(`${SUPABASE_URL}/auth/v1/user`, {headers:{apikey:SUPABASE_KEY, Authorization:`Bearer ${localStorage.getItem('supabase.auth.token') || ''}`}})).json()).id || '')}`, {headers:{apikey:SUPABASE_KEY}});
+            if (!response.ok) return;
+        } catch (_) {}
+    }
+
+    try {
+        const input = window.__etagCurrentThemeColors;
+        if (input && typeof input === "object") Object.assign(colors, input);
+    } catch (_) {}
+
+    renderControls();
+    sendPreview();
+
+    const saveButton = document.getElementById("saveButton");
+    saveButton?.addEventListener("click", () => {
+        setTimeout(async () => {
+            try {
+                const sessionResponse = await fetch(`${SUPABASE_URL}/auth/v1/session`, {
+                    headers: { apikey: SUPABASE_KEY }
+                });
+                const session = await sessionResponse.json();
+                const userId = session?.user?.id;
+                if (!userId) return;
+
+                await fetch(`${SUPABASE_URL}/rest/v1/profiles?id=eq.${encodeURIComponent(userId)}`, {
+                    method: "PATCH",
+                    headers: {
+                        apikey: SUPABASE_KEY,
+                        Authorization: `Bearer ${session.access_token}`,
+                        "Content-Type": "application/json",
+                        Prefer: "return=minimal"
+                    },
+                    body: JSON.stringify({ theme_colors: { ...colors } })
+                });
+            } catch (_) {}
+        }, 1200);
+    });
+})();
+</script>
+'''
+
+          if 'type="etag-theme-colors"' not in d:
+              d = d.replace('</body>', js + '\n</body>', 1)
+
+          men_js = r'''
+
+<script type="module">
+(() => {
+    const SUPABASE_URL = "https://zuptxhcjzhqynrquyray.supabase.co";
+    const SUPABASE_KEY = "sb_publishable_1sa0MtE83MZXETR5JLakJA_fRVrjDJI";
+    const DEFAULTS = {
+        bg1: "#C3CDB8",
+        bg2: "#D3DBC8",
+        bg3: "#E1E7DA",
+        main: "#D3DBC8",
+        secondary: "#E5EADF",
+        glass: "#D3DBC8",
+        surface: "#FFFFFF",
+        border: "#FFFFFF",
+        accent: "#B8C9A8",
+        shadow: "#556B57"
+    };
+
+    function apply(colors) {
+        const c = { ...DEFAULTS, ...(colors || {}) };
+        const root = document.documentElement;
+        root.style.setProperty("--theme-bg1", c.bg1);
+        root.style.setProperty("--theme-bg2", c.bg2);
+        root.style.setProperty("--theme-bg3", c.bg3);
+        root.style.setProperty("--theme-main", c.main);
+        root.style.setProperty("--theme-secondary", c.secondary);
+        root.style.setProperty("--theme-glass", c.glass);
+        root.style.setProperty("--theme-surface", c.surface);
+        root.style.setProperty("--theme-border", c.border);
+        root.style.setProperty("--theme-accent", c.accent);
+        root.style.setProperty("--theme-shadow", c.shadow);
+        root.style.setProperty("--main", c.main);
+        root.style.setProperty("--main-light", c.secondary);
+        root.style.setProperty("--main-soft", `color-mix(in srgb, ${c.glass} 72%, transparent)`);
+        root.style.setProperty("--main-glass", `color-mix(in srgb, ${c.glass} 30%, transparent)`);
+        root.style.setProperty("--main-border", `color-mix(in srgb, ${c.border} 48%, transparent)`);
+        root.style.setProperty("--shadow", `0 20px 55px color-mix(in srgb, ${c.shadow} 20%, transparent)`);
+        document.body.style.background = `radial-gradient(ellipse at 70% 18%, rgba(255,255,255,.92) 0%, rgba(255,255,255,.45) 27%, transparent 57%), linear-gradient(135deg, ${c.bg1} 0%, ${c.bg2} 38%, ${c.bg3} 68%, ${c.secondary} 100%)`;
+        document.querySelectorAll(".profile").forEach(el => {
+            el.style.background = `color-mix(in srgb, ${c.surface} 8%, transparent)`;
+        });
+        document.querySelectorAll(".contact-item").forEach(el => {
+            el.style.background = `linear-gradient(100deg, color-mix(in srgb, ${c.surface} 48%, transparent), color-mix(in srgb, ${c.main} 68%, transparent))`;
+            el.style.borderColor = `color-mix(in srgb, ${c.border} 48%, transparent)`;
+        });
+        document.querySelectorAll(".social-item").forEach(el => {
+            el.style.background = `linear-gradient(145deg, color-mix(in srgb, ${c.surface} 72%, transparent), color-mix(in srgb, ${c.main} 82%, transparent))`;
+            el.style.borderColor = `color-mix(in srgb, ${c.border} 58%, transparent)`;
+            el.style.boxShadow = `0 8px 20px color-mix(in srgb, ${c.shadow} 13%, transparent)`;
+        });
+        document.querySelectorAll(".social-item.active").forEach(el => {
+            el.style.background = `linear-gradient(145deg, color-mix(in srgb, ${c.surface} 94%, transparent), color-mix(in srgb, ${c.secondary} 94%, transparent))`;
+            el.style.boxShadow = `0 15px 30px color-mix(in srgb, ${c.shadow} 18%, transparent)`;
+        });
+        document.querySelectorAll(".avatar").forEach(el => {
+            el.style.background = `linear-gradient(145deg, color-mix(in srgb, ${c.surface} 94%, white), color-mix(in srgb, ${c.main} 72%, white))`;
+        });
+    }
+
+    window.addEventListener("message", event => {
+        if (event.data?.type === "etag-theme-colors") apply(event.data.colors);
+    });
+
+    const url = new URL(window.location.href);
+    if (url.searchParams.get("preview") === "1") {
+        apply(DEFAULTS);
+        return;
+    }
+
+    async function loadPublicTheme() {
+        try {
+            const tagCode = url.searchParams.get("tag")?.trim().toUpperCase();
+            if (!tagCode) return;
+            const tagResponse = await fetch(`${SUPABASE_URL}/rest/v1/nfc_tags?select=owner_id,active,tag_code&tag_code=eq.${encodeURIComponent(tagCode)}&limit=1`, { headers: { apikey: SUPABASE_KEY } });
+            const tags = await tagResponse.json();
+            const ownerId = tags?.[0]?.owner_id;
+            if (!ownerId) return;
+            const profileResponse = await fetch(`${SUPABASE_URL}/rest/v1/profiles?select=theme_colors&id=eq.${encodeURIComponent(ownerId)}&limit=1`, { headers: { apikey: SUPABASE_KEY } });
+            const profiles = await profileResponse.json();
+            apply(profiles?.[0]?.theme_colors || DEFAULTS);
+        } catch (_) {}
+    }
+
+    loadPublicTheme();
+})();
+</script>
+'''
+
+          if 'type="etag-public-theme-colors"' not in m:
+              m = m.replace('</body>', men_js.replace('type="module"', 'type="module" data-etag-public-theme-colors="1"') + '\n</body>', 1)
+
+          dashboard.write_text(d, encoding="utf-8")
+          men.write_text(m, encoding="utf-8")
+          print("Theme customization patch applied.")
 
       - name: Commit changes
+        shell: bash
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add dashboard.html themes/men.html
           if git diff --cached --quiet; then
             echo "No changes to commit"
-          else
-            git commit -m "Apply full visual theme colors"
-            git push origin main
+            exit 0
           fi
+          git commit -m "Apply live full theme color customization"
+          git push origin main
