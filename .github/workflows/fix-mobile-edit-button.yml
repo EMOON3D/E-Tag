@@ -16,53 +16,77 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Patch Men mobile edit button
+      - name: Patch Men edit button position
         shell: python
         run: |
           from pathlib import Path
 
           path = Path("themes/men.html")
           text = path.read_text(encoding="utf-8")
-          marker = "/* ETAG MOBILE EDIT BUTTON FIX */"
+          marker = "/* ETAG COVER EDIT BUTTON FIX */"
 
           css = '''
 <style>
-/* ETAG MOBILE EDIT BUTTON FIX */
+/* ETAG COVER EDIT BUTTON FIX */
+.bottom {
+    position: absolute !important;
+    top: 14px !important;
+    right: 14px !important;
+    left: auto !important;
+    bottom: auto !important;
+    width: auto !important;
+    height: auto !important;
+    z-index: 9999 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-end !important;
+    padding: 0 !important;
+    pointer-events: none !important;
+}
+
+.edit-button {
+    pointer-events: auto !important;
+    position: relative !important;
+    z-index: 10000 !important;
+    display: inline-flex !important;
+    visibility: visible !important;
+    min-height: 22px !important;
+    padding: 3px 8px !important;
+    border-radius: 999px !important;
+    background: rgba(255,255,255,.16) !important;
+    border: 1px solid rgba(255,255,255,.22) !important;
+    color: rgba(37,48,39,.58) !important;
+    font-size: 8px !important;
+    font-weight: 600 !important;
+    opacity: .58 !important;
+    box-shadow: none !important;
+    backdrop-filter: blur(8px) !important;
+    -webkit-backdrop-filter: blur(8px) !important;
+}
+
+.edit-button:hover {
+    opacity: .78 !important;
+    background: rgba(255,255,255,.24) !important;
+}
+
 @media (max-width: 600px) {
     .bottom {
-        position: fixed !important;
-        left: 0 !important;
-        right: 0 !important;
-        bottom: 52px !important;
-        z-index: 9999 !important;
-        width: 100% !important;
-        height: auto !important;
-        min-height: 42px !important;
-        display: flex !important;
-        align-items: flex-start !important;
-        justify-content: center !important;
-        padding: 6px 16px !important;
-        pointer-events: none !important;
-        overflow: visible !important;
+        top: max(10px, env(safe-area-inset-top)) !important;
+        right: 12px !important;
     }
 
     .edit-button {
-        pointer-events: auto !important;
-        position: relative !important;
-        z-index: 10000 !important;
-        display: inline-flex !important;
-        visibility: visible !important;
-        opacity: .78 !important;
-        min-height: 28px !important;
-        padding: 5px 11px !important;
-        font-size: 9px !important;
+        min-height: 22px !important;
+        padding: 3px 8px !important;
+        font-size: 8px !important;
+        opacity: .58 !important;
     }
 }
 </style>
 '''
 
           if marker in text:
-              start = text.find("<style>\n/* ETAG MOBILE EDIT BUTTON FIX */")
+              start = text.find("<style>\n/* ETAG COVER EDIT BUTTON FIX */")
               end = text.find("</style>", start)
               if start != -1 and end != -1:
                   end += len("</style>")
@@ -79,5 +103,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add themes/men.html
-          git commit -m "fix: raise mobile edit button" || exit 0
+          git commit -m "fix: move edit button onto cover" || exit 0
           git push
