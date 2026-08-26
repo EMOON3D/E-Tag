@@ -1,0 +1,51 @@
+name: Remove Dashboard Choice Emojis
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Remove emoji choice icons
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+
+          path = Path("dashboard.html")
+          text = path.read_text(encoding="utf-8")
+
+          replacements = {
+              '''<div class="choice-icon">\n                                👤\n                            </div>\n\n                            ''': '',
+              '''<div class="choice-icon">\n                                ❤️\n                            </div>\n\n                            ''': '',
+              '''<div class="choice-icon">\n                                🏢\n                            </div>\n\n                            ''': '',
+              '''<div class="avatar-mode-icon">\n                                📷\n                            </div>\n\n                            ''': '',
+              '''<div class="avatar-mode-icon">\n                                🎨\n                            </div>\n\n                            ''': '',
+          }
+
+          original = text
+          for old, new in replacements.items():
+              text = text.replace(old, new)
+
+          if text == original:
+              raise SystemExit("No matching emoji markup found in dashboard.html")
+
+          path.write_text(text, encoding="utf-8")
+          PY
+
+      - name: Commit dashboard change
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add dashboard.html
+          git diff --cached --quiet && exit 0
+          git commit -m "Remove emoji icons from dashboard choices"
+          git push
