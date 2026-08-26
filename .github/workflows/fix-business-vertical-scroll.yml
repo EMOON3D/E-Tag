@@ -1,0 +1,83 @@
+name: Fix Business Vertical Scroll
+
+on:
+  push:
+    paths:
+      - '.github/workflows/fix-business-vertical-scroll.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  fix-business-scroll:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Patch Business theme
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+
+          path = Path('themes/business.html')
+          text = path.read_text(encoding='utf-8')
+
+          old = 'html,body{width:100%;height:100%;margin:0;overflow:hidden}'
+          new = 'html,body{width:100%;min-height:100%;margin:0;overflow-x:hidden;overflow-y:auto}'
+
+          if old in text:
+              text = text.replace(old, new, 1)
+
+          old = '.app{position:relative;z-index:1;width:100%;height:100dvh;min-height:100dvh;display:flex;align-items:center;justify-content:center;'
+          new = '.app{position:relative;z-index:1;width:100%;min-height:100dvh;display:flex;align-items:flex-start;justify-content:center;'
+
+          if old in text:
+              text = text.replace(old, new, 1)
+
+          old = 'padding:max(10px,env(safe-area-inset-top)) max(10px,env(safe-area-inset-right)) max(10px,env(safe-area-inset-bottom)) max(10px,env(safe-area-inset-left))}'
+          new = 'padding:max(10px,env(safe-area-inset-top)) max(10px,env(safe-area-inset-right)) max(24px,env(safe-area-inset-bottom)) max(10px,env(safe-area-inset-left))}'
+
+          if old in text:
+              text = text.replace(old, new, 1)
+
+          old = '.profile{position:relative;width:min(100%,560px);height:min(100%,900px);max-height:100dvh;display:flex;flex-direction:column;overflow:hidden;'
+          new = '.profile{position:relative;width:min(100%,560px);min-height:100dvh;display:flex;flex-direction:column;overflow:visible;'
+
+          if old in text:
+              text = text.replace(old, new, 1)
+
+          old = '.content{flex:1 1 auto;min-height:0;display:flex;flex-direction:column;overflow:hidden}'
+          new = '.content{flex:1 1 auto;min-height:0;display:flex;flex-direction:column;overflow:visible}'
+
+          if old in text:
+              text = text.replace(old, new, 1)
+
+          old = '@media(min-width:601px){.app{padding:20px}.profile{height:min(calc(100dvh - 40px),900px)}}'
+          new = '@media(min-width:601px){.app{padding:20px 20px 40px}.profile{min-height:calc(100dvh - 40px)}}'
+
+          if old in text:
+              text = text.replace(old, new, 1)
+
+          old = '@media(max-width:600px){.app{padding:0}.profile{width:100%;height:100dvh;min-height:100dvh;max-height:100dvh;border-radius:0;box-shadow:none;background:transparent}'
+          new = '@media(max-width:600px){.app{padding:0 0 28px}.profile{width:100%;min-height:100dvh;border-radius:0;box-shadow:none;background:transparent}'
+
+          if old in text:
+              text = text.replace(old, new, 1)
+
+          path.write_text(text, encoding='utf-8')
+
+          print('Business vertical-scroll patch applied.')
+          PY
+
+      - name: Commit patched Business theme
+        shell: bash
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add themes/business.html
+          git diff --cached --quiet && exit 0
+          git commit -m 'Enable vertical scrolling for Business theme'
+          git push
