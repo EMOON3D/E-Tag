@@ -16,161 +16,48 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Update Men social threshold
+      - name: Round Business profile card
         shell: python
         run: |
           from pathlib import Path
-
-          path = Path("themes/men.html")
+          path = Path("themes/business.html")
           text = path.read_text(encoding="utf-8")
+          marker = "/* ETAG BUSINESS ROUNDED CARD */"
 
-          # Existing V2 runtime: change the threshold from 4 to 3.
-          if "ETAG SOCIAL THRESHOLD V2" in text:
-              old = 'if (originalCount >= 4) {'
-              new = 'if (originalCount >= 3) {'
-
-              if old in text:
-                  text = text.replace(old, new, 1)
-                  path.write_text(text, encoding="utf-8")
-                  print("Changed carousel threshold from 4 to 3.")
-              else:
-                  print("V2 runtime found; threshold already updated or pattern differs.")
-              raise SystemExit(0)
-
-          # Fallback: install a V3 runtime if the old runtime is not present.
-          marker = "/* ETAG SOCIAL THRESHOLD V3 */"
           if marker in text:
-              print("V3 runtime already installed.")
-              raise SystemExit(0)
-
-          css = r'''<style>
-          /* ETAG SOCIAL THRESHOLD V3 */
-          .social-track.etag-static-social {
-              width: 100% !important;
-              justify-content: center !important;
-              transform: none !important;
-              cursor: default !important;
-              gap: 16px !important;
-          }
-
-          .social-track.etag-static-social .social-item {
-              opacity: 1 !important;
-              pointer-events: auto !important;
-              transform: none !important;
-              width: 66px !important;
-              height: 66px !important;
-              flex: 0 0 66px !important;
-          }
-
-          .social-track.etag-static-social .social-item.active {
-              width: 66px !important;
-              height: 66px !important;
-              flex-basis: 66px !important;
-              transform: none !important;
-              z-index: 1 !important;
-          }
-
-          .social-track.etag-static-social .social-item.active img {
-              width: 35px !important;
-              height: 35px !important;
-          }
-
-          .social-track.etag-static-social .social-item.near,
-          .social-track.etag-static-social .social-item.hidden-social {
-              opacity: 1 !important;
-              pointer-events: auto !important;
-          }
-
-          .social-window.etag-static-social-window {
-              touch-action: auto !important;
-              user-select: auto !important;
-              -webkit-user-select: auto !important;
-          }
-          </style>'''
-
-          js = r'''<script>
-          /* ETAG SOCIAL THRESHOLD V3 */
-          (() => {
-              const applyStaticSocial = () => {
-                  const track = document.getElementById("socialTrack");
-                  const windowElement = document.getElementById("socialWindow");
-
-                  if (!track || !windowElement) {
-                      return;
-                  }
-
-                  const icons = Array.from(
-                      track.querySelectorAll(".social-item")
-                  );
-
-                  const originalCount =
-                      new Set(
-                          icons.map(item => item.dataset.originalIndex)
-                      ).size;
-
-                  if (originalCount === 0) {
-                      return;
-                  }
-
-                  if (originalCount >= 3) {
-                      track.classList.remove("etag-static-social");
-                      windowElement.classList.remove("etag-static-social-window");
-                      return;
-                  }
-
-                  const seen = new Set();
-
-                  icons.forEach(item => {
-                      const key = item.dataset.originalIndex || "";
-
-                      if (seen.has(key)) {
-                          item.remove();
-                      } else {
-                          seen.add(key);
-                      }
-                  });
-
-                  track.classList.add("etag-static-social");
-                  windowElement.classList.add("etag-static-social-window");
-                  track.style.transition = "none";
-                  track.style.transform = "none";
-
-                  track.querySelectorAll(".social-item").forEach(item => {
-                      item.classList.remove("active", "near", "hidden-social");
-                  });
-              };
-
-              const run = () => applyStaticSocial();
-
-              if (document.readyState === "loading") {
-                  document.addEventListener("DOMContentLoaded", run, { once: true });
-              } else {
-                  run();
+              print("Business rounded-card patch already installed.")
+          else:
+              css = r'''<style>
+              /* ETAG BUSINESS ROUNDED CARD */
+              .profile {
+                  border-radius: 42px !important;
+                  overflow: hidden !important;
               }
 
-              let attempts = 0;
-              const timer = setInterval(() => {
-                  run();
-                  attempts += 1;
-                  if (attempts >= 20) clearInterval(timer);
-              }, 250);
-          })();
-          </script>'''
+              @media (max-width: 600px) {
+                  .profile {
+                      border-radius: 28px !important;
+                  }
+              }
+              </style>'''
 
-          text = text.replace("</body>", "\n" + css + "\n" + js + "\n</body>", 1)
-          path.write_text(text, encoding="utf-8")
-          print("Installed V3 social threshold runtime.")
+              if "</style>" not in text:
+                  raise SystemExit("Could not locate closing style tag in themes/business.html")
+
+              text = text.replace("</style>", "</style>\n" + css, 1)
+              path.write_text(text, encoding="utf-8")
+              print("Applied rounded Business profile corners.")
 
       - name: Commit patch
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add themes/men.html
+          git add themes/business.html
 
           if git diff --cached --quiet; then
               echo "No changes to commit."
               exit 0
           fi
 
-          git commit -m "fix: enable social carousel from three links"
+          git commit -m "fix: round business profile card corners"
           git push
