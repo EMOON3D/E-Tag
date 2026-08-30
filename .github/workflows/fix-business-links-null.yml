@@ -1,0 +1,72 @@
+name: Fix Business Links Null Error
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Restore required Business DOM containers and disable removed links
+        shell: python
+        run: |
+          from pathlib import Path
+          import re
+
+          path = Path("themes/business.html")
+          text = path.read_text(encoding="utf-8")
+          original = text
+
+          # The JavaScript still expects these elements to exist.
+          # Keep them in the DOM but hidden, so removed Business Links
+          # cannot cause a null-reference crash.
+          if 'id="linksSection"' not in text or 'id="businessLinks"' not in text:
+              marker = '<div class="bottom"><a id="editButton" class="edit-button" href="#">Edit My Profile</a></div>'
+              block = '''<section id="linksSection" class="section hidden" aria-hidden="true" style="display:none !important;">
+              <div id="businessLinks" class="business-links"></div>
+          </section>
+          '''
+              if marker in text:
+                  text = text.replace(marker, block + marker, 1)
+              else:
+                  raise SystemExit("Could not find Business edit-button marker")
+
+          # Prevent the three removed Business link types from being rendered.
+          text = text.replace('if (\n            data.online_store\n        ) {', 'if (false && data.online_store\n        ) {')
+          text = text.replace('if (\n            data.booking_url\n        ) {', 'if (false && data.booking_url\n        ) {')
+          text = text.replace('if (\n            data.menu_url\n        ) {', 'if (false && data.menu_url\n        ) {')
+
+          # Also support compact/minified versions.
+          text = re.sub(r'if\s*\(\s*data\.online_store\s*\)\s*\{', 'if (false && data.online_store) {', text)
+          text = re.sub(r'if\s*\(\s*data\.booking_url\s*\)\s*\{', 'if (false && data.booking_url) {', text)
+          text = re.sub(r'if\s*\(\s*data\.menu_url\s*\)\s*\{', 'if (false && data.menu_url) {', text)
+
+          if text == original:
+              raise SystemExit("Business links null fix found no changes to apply")
+
+          if 'id="businessLinks"' not in text:
+              raise SystemExit("businessLinks container was not restored")
+
+          path.write_text(text, encoding="utf-8")
+          print("Business links null-reference fix applied.")
+
+      - name: Commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add themes/business.html
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+            exit 0
+          fi
+          git commit -m "fix: restore business links DOM container"
+          git push
