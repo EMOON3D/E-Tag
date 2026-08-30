@@ -109,6 +109,40 @@ h1{position:relative;z-index:1;margin:0;font-size:clamp(23px,3.3vh,30px);line-he
     }
 }
 </style>
+
+<style id="etagBusinessGoogleMapsContact">
+.business-map-contact {
+    padding: 0 !important;
+    margin-top: 8px !important;
+}
+
+.business-map-contact .business-links {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: clamp(5px,.8vh,8px) !important;
+}
+
+.business-map-contact .business-link {
+    width: 100% !important;
+    min-height: clamp(45px,6.3vh,60px) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 7px 14px !important;
+    border: 1px solid var(--main-border) !important;
+    border-radius: 16px !important;
+    background: linear-gradient(100deg,rgba(255,255,255,.48),rgba(211,219,200,.68)) !important;
+    box-shadow: 0 7px 18px rgba(54,67,56,.10) !important;
+    font-size: 12px !important;
+    font-weight: 700 !important;
+}
+
+@media (max-width:600px) {
+    .business-map-contact {
+        margin-top: 6px !important;
+    }
+}
+</style>
 </head>
 <body>
 <div class="app">
@@ -123,15 +157,17 @@ h1{position:relative;z-index:1;margin:0;font-size:clamp(23px,3.3vh,30px);line-he
 <div class="content">
 <section id="contactSection" class="section"><div class="section-header"><h2 class="section-title">Contact</h2><p class="section-subtitle">Get in touch</p></div><div id="contacts" class="contacts"></div><div id="location" class="location"></div>
 
+
+<section id="linksSection" class="section hidden business-map-contact" aria-hidden="true" style="display:none !important;">
+    <div id="businessLinks" class="business-links"></div>
+</section>
 </section>
 <section id="hoursSection" class="section hidden"><div class="section-header"><h2 class="section-title">Opening Hours</h2><p class="section-subtitle">Business hours</p></div><div id="hours" class="hours"></div></section>
 <section id="socialSection" class="section social-section hidden"><div class="section-header"><h2 class="section-title">Social</h2><p class="section-subtitle">Connect with us</p></div><div id="socialWindow" class="social-window"><div id="socialTrack" class="social-track"></div></div><div id="socialInfo" class="social-info"><p id="socialName" class="social-name"></p><p id="socialUsername" class="social-username"></p></div><div class="swipe-hint"><span class="swipe-line"></span><span>Swipe to explore</span><span class="swipe-line"></span></div></section>
 
 </div>
 
-<section id="linksSection" class="section hidden" aria-hidden="true" style="display:none !important;">
-    <div id="businessLinks" class="business-links"></div>
-</section>
+
 <div class="bottom"><a id="editButton" class="edit-button" href="#">Edit My Profile</a></div>
 </main>
 </div>
