@@ -1,0 +1,40 @@
+name: Hide Personal Style Selector
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Hide Men/Women selector for Personal profiles
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          path = Path("dashboard.html")
+          text = path.read_text(encoding="utf-8")
+          marker = "/* E-Tag: hide Men/Women Personal Style selector */"
+          style = f'''\n\n<style id="etagHidePersonalStyleSelector">\n{marker}\n#personalThemeSection {{\n    display: none !important;\n}}\n</style>\n'''
+          if marker not in text:
+              if "</head>" not in text:
+                  raise SystemExit("dashboard.html has no </head> marker")
+              text = text.replace("</head>", style + "</head>", 1)
+              path.write_text(text, encoding="utf-8")
+          PY
+
+      - name: Commit dashboard change
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add dashboard.html
+          git diff --cached --quiet && exit 0
+          git commit -m "Hide Men and Women selector for Personal profiles"
+          git push
