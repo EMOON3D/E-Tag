@@ -1,0 +1,53 @@
+name: Remove Business Location Text
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Hide Business Location text only
+        shell: python
+        run: |
+          from pathlib import Path
+          import re
+
+          path = Path("themes/business.html")
+          text = path.read_text(encoding="utf-8")
+          original = text
+
+          # Keep the location element and all profile data/logic intact,
+          # but hide only the visible Business Location/address text.
+          if 'id="etagHideBusinessLocationText"' not in text:
+              style = '''\n<style id="etagHideBusinessLocationText">\n#location {\n    display: none !important;\n}\n</style>\n'''
+              if '</head>' not in text:
+                  raise SystemExit("Could not find </head> in themes/business.html")
+              text = text.replace('</head>', style + '</head>', 1)
+
+          if text == original:
+              print("Business Location text is already hidden.")
+          else:
+              path.write_text(text, encoding="utf-8")
+              print("Business Location text hidden successfully.")
+
+      - name: Commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add themes/business.html
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+            exit 0
+          fi
+          git commit -m "hide: business location text"
+          git push
