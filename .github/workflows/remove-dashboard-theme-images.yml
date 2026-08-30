@@ -1,0 +1,74 @@
+name: Remove Dashboard Theme Images
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Remove theme selector icons and images
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re
+
+          path = Path('dashboard.html')
+          html = path.read_text(encoding='utf-8')
+
+          css = '''
+          /* E-Tag dashboard: text-only profile/theme selectors */
+          .choice-icon,
+          .theme-icon,
+          .avatar-mode-icon,
+          .theme-option img,
+          .choice img,
+          .avatar-mode img {
+              display: none !important;
+          }
+
+          .theme-option,
+          .choice,
+          .avatar-mode {
+              min-height: 52px !important;
+              display: flex !important;
+              flex-direction: column !important;
+              align-items: center !important;
+              justify-content: center !important;
+          }
+          '''
+
+          marker = '/* E-Tag dashboard: text-only profile/theme selectors */'
+          if marker not in html:
+              match = re.search(r'</style>', html, flags=re.I)
+              if not match:
+                  raise SystemExit('Could not find a closing </style> tag in dashboard.html')
+              html = html[:match.start()] + css + '\n' + html[match.start():]
+
+          path.write_text(html, encoding='utf-8')
+          print('Dashboard theme/choice images hidden successfully.')
+          PY
+
+      - name: Commit dashboard change
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add dashboard.html
+          if git diff --cached --quiet; then
+            echo "No dashboard changes were necessary."
+            exit 0
+          fi
+          git commit -m "Make dashboard theme selectors text-only"
+          git push
