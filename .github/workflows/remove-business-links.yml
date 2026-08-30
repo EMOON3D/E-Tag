@@ -1,0 +1,96 @@
+name: Remove Unneeded Business Links
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Patch dashboard and business theme
+        shell: python
+        run: |
+          from pathlib import Path
+          import re
+
+          # ---------------------------
+          # Dashboard
+          # ---------------------------
+          path = Path("dashboard.html")
+          text = path.read_text(encoding="utf-8")
+          original = text
+
+          # Hide the three obsolete Business Link fields without affecting
+          # the rest of the dashboard UI.
+          for field_id in ("onlineStore", "bookingUrl", "menuUrl"):
+              patterns = [
+                  rf'<div class="field">\s*<label>\s*(?:Online Store|Booking Link|Menu / Catalogue)\s*</label>.*?<input[^>]*id="{field_id}"[^>]*>.*?</div>',
+              ]
+              for pattern in patterns:
+                  text = re.sub(pattern, '', text, count=1, flags=re.S)
+
+          # Remove the three fields from fieldIds so they no longer participate
+          # in live updates/validation.
+          for entry in ('"onlineStore",', '"bookingUrl",', '"menuUrl",'):
+              text = text.replace(entry, '')
+
+          # Stop saving the three removed values from Business profiles.
+          for key, expr in (
+              ('online_store', 'getValue("onlineStore")'),
+              ('booking_url', 'getValue("bookingUrl")'),
+              ('menu_url', 'getValue("menuUrl")'),
+          ):
+              text = re.sub(
+                  rf'\n\s*{re.escape(key)}:\s*{re.escape(expr)}\s*,?',
+                  '', text, count=1
+              )
+
+          if text != original:
+              path.write_text(text, encoding="utf-8")
+
+          # ---------------------------
+          # Public Business theme
+          # ---------------------------
+          path = Path("themes/business.html")
+          text = path.read_text(encoding="utf-8")
+          original = text
+
+          # Remove the entire Business Links section from the HTML.
+          text = re.sub(
+              r'<section id="linksSection".*?</section>',
+              '', text, count=1, flags=re.S
+          )
+
+          # Remove the three JS render blocks.
+          for key in ("online_store", "booking_url", "menu_url"):
+              pattern = rf'\n\s*if\s*\(\s*data\.{key}\s*\)\s*\{{.*?\n\s*\}}'
+              text = re.sub(pattern, '', text, count=1, flags=re.S)
+
+          # Remove leftover businessLinks references only where harmless.
+          text = text.replace(
+              'const businessLinks =\n        document.getElementById(\n            "businessLinks"\n        );',
+              ''
+          )
+
+          if text != original:
+              path.write_text(text, encoding="utf-8")
+
+      - name: Commit changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add dashboard.html themes/business.html
+          if git diff --cached --quiet; then
+            echo "No changes needed."
+            exit 0
+          fi
+          git commit -m "Remove unnecessary business links"
+          git push
