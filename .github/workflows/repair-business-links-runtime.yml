@@ -1,0 +1,73 @@
+name: Repair Business Links Runtime Error
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  repair:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Make businessLinks null-safe
+        shell: python
+        run: |
+          from pathlib import Path
+          import re
+
+          path = Path("themes/business.html")
+          text = path.read_text(encoding="utf-8")
+          original = text
+
+          # Make the existing JavaScript safe even when the HTML container
+          # is missing because of an earlier DOM patch.
+          pattern = re.compile(
+              r'(const|let|var)\s+businessLinks\s*=\s*document\.getElementById\(\s*["\']businessLinks["\']\s*\)\s*;'
+          )
+
+          replacement = '''\\1 businessLinks =
+        document.getElementById("businessLinks") ||
+        (() => {
+            const fallback = document.createElement("div");
+            fallback.id = "businessLinks";
+            fallback.style.display = "none";
+            document.body.appendChild(fallback);
+            return fallback;
+        })();'''
+
+          text, count = pattern.subn(replacement, text, count=1)
+
+          # Also guarantee the hidden container exists in the HTML for any
+          # other code that queries it later.
+          if 'id="businessLinks"' not in text:
+              marker = '<div class="bottom"><a id="editButton" class="edit-button" href="#">Edit My Profile</a></div>'
+              block = '''<div id="businessLinks" class="business-links" style="display:none !important;"></div>
+          '''
+              if marker in text:
+                  text = text.replace(marker, block + marker, 1)
+
+          if text == original:
+              print("No runtime patch needed.")
+              raise SystemExit(0)
+
+          path.write_text(text, encoding="utf-8")
+          print(f"Applied null-safe businessLinks runtime patch. JS replacements: {count}")
+
+      - name: Commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add themes/business.html
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+            exit 0
+          fi
+          git commit -m "fix: make businessLinks runtime null-safe"
+          git push
