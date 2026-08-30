@@ -1,4 +1,4 @@
-name: Remove Unneeded Business Links
+name: Move Google Maps Into Business Contact
 
 on:
   workflow_dispatch:
@@ -26,62 +26,103 @@ jobs:
           # ---------------------------
           path = Path("dashboard.html")
           text = path.read_text(encoding="utf-8")
-          original = text
 
-          # Hide the three obsolete Business Link fields without affecting
-          # the rest of the dashboard UI.
-          for field_id in ("onlineStore", "bookingUrl", "menuUrl"):
-              patterns = [
-                  rf'<div class="field">\s*<label>\s*(?:Online Store|Booking Link|Menu / Catalogue)\s*</label>.*?<input[^>]*id="{field_id}"[^>]*>.*?</div>',
-              ]
-              for pattern in patterns:
-                  text = re.sub(pattern, '', text, count=1, flags=re.S)
+          # Keep Google Maps, but move it out of the Business Links area and
+          # place it directly after Business Location in the Business section.
+          google_pattern = re.compile(
+              r'<div class="field">\s*<label>\s*Google Maps\s*</label>\s*'
+              r'<input\s+id="googleMaps"[^>]*>\s*</div>',
+              re.S
+          )
 
-          # Remove the three fields from fieldIds so they no longer participate
-          # in live updates/validation.
-          for entry in ('"onlineStore",', '"bookingUrl",', '"menuUrl",'):
-              text = text.replace(entry, '')
+          google_match = google_pattern.search(text)
+          if google_match:
+              google_block = google_match.group(0)
+              text = text[:google_match.start()] + text[google_match.end():]
 
-          # Stop saving the three removed values from Business profiles.
-          for key, expr in (
-              ('online_store', 'getValue("onlineStore")'),
-              ('booking_url', 'getValue("bookingUrl")'),
-              ('menu_url', 'getValue("menuUrl")'),
-          ):
-              text = re.sub(
-                  rf'\n\s*{re.escape(key)}:\s*{re.escape(expr)}\s*,?',
-                  '', text, count=1
+              location_end = re.search(
+                  r'(<div class="field">\s*<label>\s*Business Location\s*</label>\s*'
+                  r'<input\s+id="businessLocation"[^>]*>\s*</div>)',
+                  text,
+                  re.S
               )
 
-          if text != original:
-              path.write_text(text, encoding="utf-8")
+              if location_end:
+                  text = (
+                      text[:location_end.end()]
+                      + "\n\n"
+                      + google_block
+                      + text[location_end.end():]
+                  )
+
+          # Remove the now-empty Business Links subsection if it still exists.
+          text = re.sub(
+              r'\s*<!-- BUSINESS LINKS -->\s*<div class="subsection">\s*<h3>\s*Business Links\s*</h3>.*?</div>\s*</div>',
+              '',
+              text,
+              count=1,
+              flags=re.S
+          )
+
+          path.write_text(text, encoding="utf-8")
 
           # ---------------------------
           # Public Business theme
           # ---------------------------
           path = Path("themes/business.html")
           text = path.read_text(encoding="utf-8")
-          original = text
 
-          # Remove the entire Business Links section from the HTML.
-          text = re.sub(
-              r'<section id="linksSection".*?</section>',
-              '', text, count=1, flags=re.S
+          # Make the existing businessLinks container live inside Contact.
+          # The existing JS can continue writing google_maps into it, so no
+          # profile-data or routing logic needs to change.
+          contact_close = re.search(
+              r'(<section id="contactSection".*?</section>)',
+              text,
+              flags=re.S
           )
 
-          # Remove the three JS render blocks.
-          for key in ("online_store", "booking_url", "menu_url"):
-              pattern = rf'\n\s*if\s*\(\s*data\.{key}\s*\)\s*\{{.*?\n\s*\}}'
-              text = re.sub(pattern, '', text, count=1, flags=re.S)
-
-          # Remove leftover businessLinks references only where harmless.
-          text = text.replace(
-              'const businessLinks =\n        document.getElementById(\n            "businessLinks"\n        );',
-              ''
+          links_section = re.search(
+              r'<section id="linksSection"[^>]*>.*?<div id="businessLinks"[^>]*>.*?</div>.*?</section>',
+              text,
+              flags=re.S
           )
 
-          if text != original:
-              path.write_text(text, encoding="utf-8")
+          if contact_close and links_section:
+              moved_links = links_section.group(0)
+              text = text[:links_section.start()] + text[links_section.end():]
+
+              # Strip the Business Links heading so Google Maps appears as a
+              # contact-style item rather than a separate links section.
+              moved_links = re.sub(
+                  r'<div class="section-header">.*?</div>',
+                  '',
+                  moved_links,
+                  count=1,
+                  flags=re.S
+              )
+              moved_links = moved_links.replace(
+                  'class="section hidden"',
+                  'class="section hidden business-map-contact"'
+              )
+
+              text = text.replace(
+                  contact_close.group(1),
+                  contact_close.group(1).replace(
+                      '</section>',
+                      '\n' + moved_links + '\n</section>'
+                  ),
+                  1
+              )
+
+          # Style the moved container so the Google Maps result matches the
+          # existing Contact cards and remove its section padding.
+          if 'business-map-contact' not in text:
+              raise SystemExit('Business Google Maps contact container was not installed')
+
+          style = '''\n<style id="etagBusinessGoogleMapsContact">\n.business-map-contact {\n    padding: 0 !important;\n    margin-top: 8px !important;\n}\n\n.business-map-contact .business-links {\n    display: flex !important;\n    flex-direction: column !important;\n    gap: clamp(5px,.8vh,8px) !important;\n}\n\n.business-map-contact .business-link {\n    width: 100% !important;\n    min-height: clamp(45px,6.3vh,60px) !important;\n    display: flex !important;\n    align-items: center !important;\n    justify-content: center !important;\n    padding: 7px 14px !important;\n    border: 1px solid var(--main-border) !important;\n    border-radius: 16px !important;\n    background: linear-gradient(100deg,rgba(255,255,255,.48),rgba(211,219,200,.68)) !important;\n    box-shadow: 0 7px 18px rgba(54,67,56,.10) !important;\n    font-size: 12px !important;\n    font-weight: 700 !important;\n}\n\n@media (max-width:600px) {\n    .business-map-contact {\n        margin-top: 6px !important;\n    }\n}\n</style>\n'''
+
+          text = text.replace('</head>', style + '</head>', 1)
+          path.write_text(text, encoding="utf-8")
 
       - name: Commit changes
         run: |
@@ -92,5 +133,5 @@ jobs:
             echo "No changes needed."
             exit 0
           fi
-          git commit -m "Remove unnecessary business links"
+          git commit -m "Move Google Maps into Business Contact section"
           git push
