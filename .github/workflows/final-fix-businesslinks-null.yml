@@ -1,0 +1,77 @@
+name: Final Fix Business Links Null
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Make businessLinks null-safe
+        shell: python
+        run: |
+          from pathlib import Path
+          import re
+
+          path = Path("themes/business.html")
+          text = path.read_text(encoding="utf-8")
+          original = text
+
+          # Ensure a safe hidden DOM container exists before any Business JS can run.
+          if 'id="businessLinks"' not in text and "id='businessLinks'" not in text:
+              body_match = re.search(r'(<body\\b[^>]*>)', text, flags=re.I)
+              if not body_match:
+                  raise SystemExit("Could not find <body> in themes/business.html")
+              fallback = '\n<div id="businessLinks" style="display:none!important"></div>\n'
+              text = text[:body_match.end()] + fallback + text[body_match.end():]
+
+          # Make common businessLinks declarations safe even if the container is ever absent.
+          patterns = [
+              (r"const\\s+businessLinks\\s*=\\s*document\\.getElementById\\(\\s*['\"]businessLinks['\"]\\s*\\)\\s*;",
+               "const businessLinks = document.getElementById('businessLinks') || document.createElement('div');"),
+              (r"let\\s+businessLinks\\s*=\\s*document\\.getElementById\\(\\s*['\"]businessLinks['\"]\\s*\\)\\s*;",
+               "let businessLinks = document.getElementById('businessLinks') || document.createElement('div');"),
+              (r"var\\s+businessLinks\\s*=\\s*document\\.getElementById\\(\\s*['\"]businessLinks['\"]\\s*\\)\\s*;",
+               "var businessLinks = document.getElementById('businessLinks') || document.createElement('div');"),
+          ]
+
+          for pattern, replacement in patterns:
+              text = re.sub(pattern, replacement, text, flags=re.I)
+
+          # If a fallback div is used, keep it hidden so the removed Business link section
+          # never reappears visually.
+          marker = "const businessLinks = document.getElementById('businessLinks') || document.createElement('div');"
+          if marker in text and "businessLinks.style.display = 'none'" not in text:
+              text = text.replace(
+                  marker,
+                  marker + "\\nbusinessLinks.style.display = 'none';",
+                  1
+              )
+
+          if text == original:
+              print("No Business Links null-safety changes were necessary.")
+              raise SystemExit(0)
+
+          path.write_text(text, encoding="utf-8")
+          print("Business Links null-safety patch applied.")
+
+      - name: Commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add themes/business.html
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+            exit 0
+          fi
+          git commit -m "fix: make businessLinks null-safe"
+          git push
