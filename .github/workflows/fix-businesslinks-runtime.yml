@@ -1,0 +1,83 @@
+name: Fix Business Links Runtime Crash
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Make businessLinks runtime-safe
+        shell: python
+        run: |
+          from pathlib import Path
+          import re
+
+          path = Path("themes/business.html")
+          text = path.read_text(encoding="utf-8")
+          original = text
+
+          # Ensure the required container exists in the actual Business theme.
+          if 'id="businessLinks"' not in text:
+              marker = '<div class="bottom"'
+              pos = text.find(marker)
+              if pos < 0:
+                  raise SystemExit("Could not find stable Business bottom marker")
+              block = '\n<div id="businessLinks" class="business-links" style="display:none !important"></div>\n'
+              text = text[:pos] + block + text[pos:]
+
+          # Guard every direct innerHTML assignment against a missing element.
+          text = re.sub(
+              r'([A-Za-z_$][A-Za-z0-9_$]*)\.innerHTML\s*=\s*',
+              r'if (\1) \1.innerHTML = ',
+              text
+          )
+
+          # Most importantly, make the canonical businessLinks variable safe.
+          text = re.sub(
+              r'const\s+businessLinks\s*=\s*document\.getElementById\(["\']businessLinks["\']\)\s*;',
+              'const businessLinks = document.getElementById("businessLinks") || document.createElement("div");',
+              text
+          )
+          text = re.sub(
+              r'let\s+businessLinks\s*=\s*document\.getElementById\(["\']businessLinks["\']\)\s*;',
+              'let businessLinks = document.getElementById("businessLinks") || document.createElement("div");',
+              text
+          )
+          text = re.sub(
+              r'var\s+businessLinks\s*=\s*document\.getElementById\(["\']businessLinks["\']\)\s*;',
+              'var businessLinks = document.getElementById("businessLinks") || document.createElement("div");',
+              text
+          )
+
+          # Add one final defensive guard before common assignment patterns.
+          if 'id="etagBusinessLinksRuntimeGuard"' not in text:
+              guard = '''\n<script id="etagBusinessLinksRuntimeGuard">\n(function(){\n  function ensure(){\n    var el=document.getElementById('businessLinks');\n    if(!el){\n      el=document.createElement('div');\n      el.id='businessLinks';\n      el.className='business-links';\n      el.style.display='none';\n      document.body.appendChild(el);\n    }\n    return el;\n  }\n  window.addEventListener('error',function(e){\n    if(String(e&&e.message||'').toLowerCase().includes('businesslinks') && String(e&&e.message||'').toLowerCase().includes('innerhtml')){\n      ensure();\n    }\n  });\n  ensure();\n})();\n</script>\n'''
+              text = text.replace('</body>', guard + '</body>', 1)
+
+          if 'id="businessLinks"' not in text:
+              raise SystemExit("businessLinks container still missing")
+
+          path.write_text(text, encoding="utf-8")
+          print("Business Links runtime guard installed.")
+
+      - name: Commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add themes/business.html
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+            exit 0
+          fi
+          git commit -m "fix: prevent businessLinks null innerHTML crash"
+          git push
