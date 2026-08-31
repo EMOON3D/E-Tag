@@ -1,0 +1,174 @@
+name: Final Business Hours Cleanup
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Replace Business Hours editor
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re
+
+          path = Path('dashboard.html')
+          text = path.read_text(encoding='utf-8')
+
+          # Remove all previous Business Hours injected CSS/scripts.
+          text = re.sub(r'<style\\b[^>]*\\bid=["\']etagBusinessHours[^"\']*["\'][^>]*>.*?</style>\\s*', '', text, flags=re.S|re.I)
+          text = re.sub(r'<script\\b[^>]*\\bid=["\']etagBusinessHours[^"\']*["\'][^>]*>.*?</script>\\s*', '', text, flags=re.S|re.I)
+
+          pos = text.find('id="openingHours"')
+          if pos < 0:
+              raise SystemExit('openingHours field not found')
+
+          field_re = re.compile(r'<div\\b[^>]*\\bclass=["\'][^"\']*\\bfield\\b[^"\']*["\'][^>]*>', re.I)
+          matches = list(field_re.finditer(text, 0, pos))
+          if not matches:
+              raise SystemExit('Opening Hours parent field not found')
+          start = matches[-1].start()
+
+          token_re = re.compile(r'<div\\b[^>]*>|</div>', re.I)
+          depth = 0
+          end = None
+          for m in token_re.finditer(text, start):
+              token = m.group(0)
+              if token.lower().startswith('</div'):
+                  depth -= 1
+                  if depth == 0:
+                      end = m.end()
+                      break
+              else:
+                  depth += 1
+          if end is None:
+              raise SystemExit('Could not determine Opening Hours field boundary')
+
+          field = r'''<div class="field etag-business-hours-field" id="etagBusinessHoursField">
+              <label>Opening Hours</label>
+              <div class="bh-mode-grid" role="group" aria-label="Opening Hours type">
+                  <button type="button" class="bh-mode active" data-mode="selected">Open for selected hours</button>
+                  <button type="button" class="bh-mode" data-mode="always">Always open</button>
+                  <button type="button" class="bh-mode" data-mode="appointments">Appointments only</button>
+              </div>
+              <div class="bh-days">
+                  <div class="bh-day" data-day="Monday"><div class="bh-day-head"><span>Monday</span><label class="bh-switch"><input type="checkbox" class="bh-toggle"><span></span></label></div><div class="bh-times"><label>Opening time<input type="time" class="bh-open" value="09:00"></label><label>Closing time<input type="time" class="bh-close" value="17:00"></label></div></div>
+                  <div class="bh-day" data-day="Tuesday"><div class="bh-day-head"><span>Tuesday</span><label class="bh-switch"><input type="checkbox" class="bh-toggle"><span></span></label></div><div class="bh-times"><label>Opening time<input type="time" class="bh-open" value="09:00"></label><label>Closing time<input type="time" class="bh-close" value="17:00"></label></div></div>
+                  <div class="bh-day" data-day="Wednesday"><div class="bh-day-head"><span>Wednesday</span><label class="bh-switch"><input type="checkbox" class="bh-toggle"><span></span></label></div><div class="bh-times"><label>Opening time<input type="time" class="bh-open" value="09:00"></label><label>Closing time<input type="time" class="bh-close" value="17:00"></label></div></div>
+                  <div class="bh-day" data-day="Thursday"><div class="bh-day-head"><span>Thursday</span><label class="bh-switch"><input type="checkbox" class="bh-toggle"><span></span></label></div><div class="bh-times"><label>Opening time<input type="time" class="bh-open" value="09:00"></label><label>Closing time<input type="time" class="bh-close" value="17:00"></label></div></div>
+                  <div class="bh-day" data-day="Friday"><div class="bh-day-head"><span>Friday</span><label class="bh-switch"><input type="checkbox" class="bh-toggle"><span></span></label></div><div class="bh-times"><label>Opening time<input type="time" class="bh-open" value="09:00"></label><label>Closing time<input type="time" class="bh-close" value="17:00"></label></div></div>
+                  <div class="bh-day" data-day="Saturday"><div class="bh-day-head"><span>Saturday</span><label class="bh-switch"><input type="checkbox" class="bh-toggle"><span></span></label></div><div class="bh-times"><label>Opening time<input type="time" class="bh-open" value="09:00"></label><label>Closing time<input type="time" class="bh-close" value="17:00"></label></div></div>
+                  <div class="bh-day" data-day="Sunday"><div class="bh-day-head"><span>Sunday</span><label class="bh-switch"><input type="checkbox" class="bh-toggle"><span></span></label></div><div class="bh-times"><label>Opening time<input type="time" class="bh-open" value="09:00"></label><label>Closing time<input type="time" class="bh-close" value="17:00"></label></div></div>
+              </div>
+              <textarea id="openingHours" aria-hidden="true" tabindex="-1" style="display:none !important;"></textarea>
+          </div>'''
+
+          text = text[:start] + field + text[end:]
+
+          css = r'''<style id="etagBusinessHoursFinalStyle">
+          #etagBusinessHoursField{margin-bottom:16px}
+          #etagBusinessHoursField>label{display:block;margin-bottom:8px;font-size:13px;font-weight:700}
+          .bh-mode-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:10px}
+          .bh-mode{border:2px solid #e5e7eb;border-radius:12px;background:#fff;padding:12px 10px;text-align:center;cursor:pointer;font:inherit;font-size:12px;font-weight:800;color:#111827;min-height:50px}
+          .bh-mode.active{border-color:#111827;background:#f3f4f6}
+          .bh-days{display:grid;gap:8px}
+          .bh-day{border:1px solid #e5e7eb;border-radius:13px;background:#fff;padding:11px}
+          .bh-day-head{display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:13px;font-weight:800}
+          .bh-times{display:none;grid-template-columns:1fr 1fr;gap:8px;margin-top:9px}
+          #etagBusinessHoursField[data-mode="selected"] .bh-day.is-on .bh-times{display:grid}
+          .bh-times label{font-size:10px;color:#6b7280;font-weight:700}
+          .bh-times input{display:block;width:100%;margin-top:4px;border:1px solid #d1d5db;border-radius:10px;padding:9px;background:#fff;font:inherit;font-size:13px}
+          .bh-switch{position:relative;width:48px;height:28px;display:block;flex:0 0 48px}
+          .bh-switch input{position:absolute;opacity:0;width:0;height:0}
+          .bh-switch span{position:absolute;inset:0;background:#d1d5db;border-radius:999px;cursor:pointer;transition:.18s}
+          .bh-switch span:before{content:"";position:absolute;width:22px;height:22px;left:3px;top:3px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.16);transition:.18s}
+          .bh-switch input:checked+span{background:#111827}
+          .bh-switch input:checked+span:before{transform:translateX(20px)}
+          @media(max-width:700px){.bh-mode-grid{grid-template-columns:1fr}.bh-times{grid-template-columns:1fr 1fr}}
+          </style>'''
+          js = r'''<script id="etagBusinessHoursFinalScript">
+          (function(){
+            function boot(){
+              const root=document.getElementById('etagBusinessHoursField');
+              if(!root) return;
+              const legacy=document.getElementById('openingHours');
+              const modes=[...root.querySelectorAll('.bh-mode')];
+              const days=[...root.querySelectorAll('.bh-day')];
+              root.dataset.mode='selected';
+
+              function fmt(v){
+                if(!v) return '';
+                const [hh,mm]=v.split(':').map(Number);
+                const ap=hh>=12?'PM':'AM';
+                const h=hh%12||12;
+                return `${h}:${String(mm).padStart(2,'0')} ${ap}`;
+              }
+              function sync(){
+                if(!legacy) return;
+                const mode=root.dataset.mode;
+                legacy.value=days.map(day=>{
+                  const name=day.dataset.day;
+                  const on=day.querySelector('.bh-toggle').checked;
+                  if(mode==='always') return `${name}: ${on?'24 Hours':'Closed'}`;
+                  if(mode==='appointments') return `${name}: ${on?'Appointments only':'Closed'}`;
+                  const open=day.querySelector('.bh-open').value;
+                  const close=day.querySelector('.bh-close').value;
+                  return `${name}: ${on&&open&&close?fmt(open)+' - '+fmt(close):'Closed'}`;
+                }).join('\\n');
+              }
+              function render(){
+                const mode=root.dataset.mode;
+                modes.forEach(btn=>btn.classList.toggle('active',btn.dataset.mode===mode));
+                days.forEach(day=>{
+                  const on=day.querySelector('.bh-toggle').checked;
+                  day.classList.toggle('is-on',on);
+                });
+                sync();
+              }
+              modes.forEach(btn=>btn.addEventListener('click',()=>{root.dataset.mode=btn.dataset.mode;render();}));
+              days.forEach(day=>{
+                day.querySelector('.bh-toggle').addEventListener('change',render);
+                day.querySelector('.bh-open').addEventListener('change',sync);
+                day.querySelector('.bh-close').addEventListener('change',sync);
+              });
+              document.addEventListener('click',e=>{
+                const b=e.target.closest&&e.target.closest('button');
+                if(b && /save/i.test(b.textContent||'')) sync();
+              },true);
+              render();
+            }
+            if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',boot,{once:true}); else boot();
+          })();
+          </script>'''
+          text = text.replace('</head>', css + '</head>', 1)
+          text = text.replace('</body>', js + '</body>', 1)
+          path.write_text(text, encoding='utf-8')
+          print('Final three-mode Business Hours UI installed.')
+          PY
+
+          rm -f .github/workflows/business-hours-builder.yml
+          rm -f .github/workflows/business-hours-modes.yml
+          rm -f .github/workflows/fix-business-hours-rows.yml
+          rm -f .github/workflows/repair-business-hours-ui.yml
+
+      - name: Commit final cleanup
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "No changes needed."
+            exit 0
+          fi
+          git commit -m "fix: finalize business opening hours editor"
+          git push
